@@ -37,16 +37,12 @@
                                     </div>
                                     <h3 class="profile-username text-center">{{ $professor['name'] }}</h3>
                                     <p class="text-muted text-center">{{ $professor['title'] }}</p>
-                                    <a href="{{ route('perfiles.show', $professor['name']) }}">{{ $professor['name'] }}</a>
+                                    <a href="{{ route('perfiles.show', $professor['name']) }}" class="btn btn-primary d-block">{{ $professor['name'] }}</a>
                                 </div>
                                 <!-- /.card-body -->
                             </div>
                             <!-- About Me Box -->
                             <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">Sobre mí</h3>
-                                </div>
-                                <!-- /.card-header -->
                                 <div class="card-body">
                                     <strong><i class="fas fa-book mr-1"></i> Educación</strong>
                                     <p class="text-muted">
