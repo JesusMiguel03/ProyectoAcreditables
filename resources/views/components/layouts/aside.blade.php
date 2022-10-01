@@ -50,6 +50,12 @@
                           <p>Perfiles de profesores</p>
                       </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="courses" class="nav-link{{ request()->routeIs('courses.index') ? ' active' : '' }}">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>Listado de estudiantes</p>
+                    </a>
+                </li>
               </ul>
           </nav>
           <!-- /.sidebar-menu -->

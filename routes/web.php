@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ProfessorProfilesController;
 
 /*
@@ -15,7 +16,10 @@ use App\Http\Controllers\ProfessorProfilesController;
 */
 
 Route::view('/', 'welcome')->name('home');
-Route::view('/cursos', 'courses')->name('cursos');
+Route::resource('/cursos', CoursesController::class, [
+    'names' => 'cursos',
+    'parameters' => ['course' => 'curso']
+]);
 Route::resource('/perfiles', ProfessorProfilesController::class, [
     'names' => 'perfiles',
     'parameters' => ['profile' => 'perfil']
