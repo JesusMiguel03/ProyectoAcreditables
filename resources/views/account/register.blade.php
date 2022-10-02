@@ -47,7 +47,7 @@
             @enderror
         </div>
         <div class="input-group">
-            <input type="password" class="form-control" placeholder="Repetir Contraseña" name="password_confirmation">
+            <input type="password" class="form-control" placeholder="Confirmar Contraseña" name="password_confirmation">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>

@@ -15,9 +15,12 @@ class ForgotPasswordController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255']
-        ]);
+        $request->validate(
+            [
+                'email' => ['required', 'string', 'email', 'max:255']
+            ],
+            ['email.required' => 'El campo correo electrónico es necesario']
+        );
 
         return redirect()->action([RecoverPasswordController::class, 'store']);
     }

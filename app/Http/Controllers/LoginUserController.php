@@ -15,10 +15,14 @@ class LoginUserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'cedula' => ['required', 'numeric', 'digits_between:7,8'],
-            'password' => ['required', Rules\Password::defaults()],
-        ]);
+        $request->validate(
+            [
+                'cedula' => ['required', 'numeric', 'digits_between:7,8'],
+                'password' => ['required', Rules\Password::defaults()],
+            ],
+            ['password.required' => 'El campo contraseña es necesario']
+        );
+
 
         $cedula = $request->cedula;
         $password = $request->password;

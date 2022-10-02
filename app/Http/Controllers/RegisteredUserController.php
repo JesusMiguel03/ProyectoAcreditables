@@ -15,13 +15,18 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'cedula' => ['required', 'numeric', 'digits_between:7,8'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'password_confirmation' => ['required', Rules\Password::defaults()],
-        ]);
-        
+        $request->validate(
+            [
+                'cedula' => ['required', 'numeric', 'digits_between:7,8'],
+                'email' => ['required', 'string', 'email', 'max:255'],
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
+                'password_confirmation' => ['required', Rules\Password::defaults()],
+            ],
+            ['email.required' => 'El campo correo electrónico es necesario'],
+            ['password.required' => 'El campo contraseña es necesario'],
+            ['password_confirmation.required' => 'El campo confirmar contraseña es necesario']
+        );
+
         return redirect('/login');
     }
 }
