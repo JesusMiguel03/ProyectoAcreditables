@@ -13,16 +13,24 @@ class UserController extends Controller
     {
         return view('account.login', ['data' => $this->loadUsersData()]);
     }
+
     public function create()
     {
         return view('account.register', ['data' => $this->loadUsersData()]);
     }
+
     public function edit()
     {
         return view('account.forgot-password', ['data' => $this->loadUsersData()]);
     }
+
     public function update()
     {
         return view('account.recover-password', ['data' => $this->loadUsersData()]);
+    }
+
+    public function destroy()
+    {
+        return view('account.login', ['data' => $this->loadUsersData()]);
     }
 }

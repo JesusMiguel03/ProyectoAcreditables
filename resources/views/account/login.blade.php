@@ -4,21 +4,22 @@
 @section('content')
     <p class="login-box-msg">Inicia sesión para acceder</p>
 
-    <form action="{{ url('/') }}" method="post">
+
+    <form action="{{ url('') }}" method="post">
         @csrf
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Cédula" name="ide" value="{{ old('ide') }}">
+            <input type="text" class="form-control" placeholder="Cédula" name="cedula" value="{{ isset($request->cedula) ? $request->cedula : old('cedula') }}">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
                 </div>
             </div>
-            @error('ide')
+            @error('cedula')
                 <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
         <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Contraseña" name="password">
+            <input type="password" class="form-control" placeholder="Contraseña" name="password" value="{{ isset($request->cedula) ? $request->password : "" }}">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
@@ -46,7 +47,7 @@
     </form>
 
     <p class="mb-1">
-        <a href="forgot-password.html">Olvidé mi contraseña</a>
+        <a href="{{ route('forgotPassword') }}">Olvidé mi contraseña</a>
     </p>
     <p class="mb-0">
         <a href="{{ route('register') }}" class="text-center">Registrarme</a>

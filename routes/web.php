@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ProfessorProfilesController;
@@ -18,7 +19,7 @@ use App\Http\Controllers\FAQController;
 |
 */
 
-Route::view('/', 'welcome')->name('home');
+Route::resource('/', HomeController::class);
 Route::resource('/cursos', CoursesController::class, [
     'names' => 'cursos',
     'parameters' => ['course' => 'curso']
@@ -35,7 +36,10 @@ Route::resource('/faq', FAQController::class);
 
 Route::view('/login', 'account.login')->name('login');
 Route::post('/login', [RegisteredUserController::class, 'store']);
-Route::post('/login', [RegisteredUserController::class, 'destroy'])->name('logout');
 
 Route::view('/register', 'account.register')->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
+
+Route::view('/forgot-password', 'account.forgot-password')->name('forgotPassword');
+
+Route::view('/recover-password', 'account.register')->name('recoverPassword');

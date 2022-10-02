@@ -4,7 +4,7 @@
 @section('content')
     <p class="login-box-msg">Registrarse como nuevo usuario</p>
 
-    <form action="{{ route('register') }}" method="post">
+    <form action="{{ route('login') }}" method="post">
         @csrf
         <div class="input-group">
             <input type="number" class="form-control" placeholder="Cédula" name="cedula" value="{{ old('cedula') }}">
@@ -34,7 +34,7 @@
             @enderror
         </div>
         <div class="input-group">
-            <input type="password" class="form-control" placeholder="Contraseña">
+            <input type="password" class="form-control" placeholder="Contraseña" name="password">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
@@ -47,7 +47,7 @@
             @enderror
         </div>
         <div class="input-group">
-            <input type="password" class="form-control" placeholder="Repetir Contraseña">
+            <input type="password" class="form-control" placeholder="Repetir Contraseña" name="password_confirmation">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="mb-3">
-            @error('password')
+            @error('password_confirmation')
                 <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
