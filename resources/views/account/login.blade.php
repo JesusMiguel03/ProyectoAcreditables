@@ -4,27 +4,30 @@
 @section('content')
     <p class="login-box-msg">Inicia sesión para acceder</p>
 
-
-    <form action="{{ url('') }}" method="post">
+    <form action="{{ route('login') }}" method="post">
         @csrf
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Cédula" name="cedula" value="{{ isset($request->cedula) ? $request->cedula : old('cedula') }}">
+        <div class="input-group">
+            <input type="number" class="form-control" placeholder="Cédula" name="cedula" value="{{ isset($request->cedula) ? $request->cedula : old('cedula') }}">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
                 </div>
             </div>
+        </div>
+        <div class="mb-3">
             @error('cedula')
                 <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
-        <div class="input-group mb-3">
+        <div class="input-group">
             <input type="password" class="form-control" placeholder="Contraseña" name="password" value="{{ isset($request->cedula) ? $request->password : "" }}">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
                 </div>
             </div>
+        </div>
+        <div class="mb-3">
             @error('password')
                 <small class="text-danger">{{ $message }}</small>
             @enderror

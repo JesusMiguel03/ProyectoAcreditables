@@ -9,7 +9,7 @@
                 <img src="{{ asset('/dist/img/user2-128x128.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block font-weight-bold text-primary">Usuario</a>
+                <a href="{{ route('login') }}" class="d-block font-weight-bold">Usuario</a>
             </div>
         </div>
 
@@ -32,9 +32,10 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
-                {{ dump(request()->route()->getName()) }}
+                {{-- {{ dump(request()->route()->getName()) }} --}}
                 <li class="nav-item">
-                    <a href="{{ route('index') }}" class="nav-link{{ request()->routeIs('index') ? ' active' : '' }}">
+                    <a href="{{ route('index') }}"
+                        class="nav-link{{ (request()->routeIs('index') ? ' active' : '' || request()->routeIs('store')) ? ' active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Página Principal</p>
                     </a>
@@ -62,7 +63,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('faq.index') }}"
-                        class="nav-link{{ request()->routeIs('dudas') ? ' active' : '' }}">
+                        class="nav-link{{ request()->routeIs('faq.*') ? ' active' : '' }}">
                         <i class="nav-icon fas fa-question"></i>
                         <p>Preguntas Frecuentes</p>
                     </a>

@@ -4,30 +4,6 @@ namespace App\Traits;
 
 trait DataTrait
 {
-    public function loadUsersData()
-    {
-        $users = [
-            [
-                'id' => 0,
-                'name' => 'Coordinación',
-                'nick' => 'root',
-                'pass' => 'root'
-            ],
-            [
-                'id' => 1,
-                'name' => 'Fredy Alvarez',
-                'nick' => 'prof1',
-                'pass' => 'prof1'
-            ],
-            [
-                'id' => 2,
-                'name' => 'Anibal Cartas',
-                'nick' => 'prof2',
-                'pass' => 'prof2'
-            ],
-        ];
-        return $users;
-    }
     public function loadProfessorsData()
     {
         $professors = [

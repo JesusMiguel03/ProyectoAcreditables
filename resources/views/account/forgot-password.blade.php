@@ -1,12 +1,12 @@
-@section('description', 'Registro, Coordinación de Acreditables.')
-@section('title', 'Registrar Usuario')
+@section('description', 'Olvidé mi contraseña, Coordinación de Acreditables.')
+@section('title', 'Olvidé mi contraseña')
 
 @section('content')
     <p class="login-box-msg">¿Olvidaste tu contraseña? Solicita una clave temporal.</p>
 
-    <form action="#" method="post">
+    <form action="{{ route('forgotPassword') }}" method="post">
         @csrf
-        <div class="input-group mb-3">
+        <div class="input-group">
             <input type="email" class="form-control" placeholder="Correo Electrónico" name="email">
             <div class="input-group-append">
                 <div class="input-group-text">

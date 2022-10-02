@@ -4,7 +4,7 @@
 @section('content')
     <p class="login-box-msg">Registrarse como nuevo usuario</p>
 
-    <form action="{{ route('login') }}" method="post">
+    <form action="{{ route('register') }}" method="post">
         @csrf
         <div class="input-group">
             <input type="number" class="form-control" placeholder="Cédula" name="cedula" value="{{ old('cedula') }}">
