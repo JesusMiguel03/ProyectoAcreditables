@@ -2,9 +2,8 @@
 @section('title', 'Cursos')
 
 @section('links')
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <!-- Slick CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('/carousel/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('/carousel/carousel.css') }}">
 @endsection
 
@@ -36,7 +35,7 @@
                     @foreach ($courses as $index => $course)
                         <div class="slide">
                             <div class="card mt-3">
-                                <img src="{{ asset('/img/banners/img'.$index.'.png') }}" class="card-img-top rounded"
+                                <img src="{{ asset('/img/banners/img' . $index . '.png') }}" class="card-img-top rounded"
                                     alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title mb-2 h2 fw-bold">{{ $course['name'] }}</h5>
@@ -45,7 +44,8 @@
                                         </span>
                                     </h6>
                                     <p class="card-text text-truncate">{{ $course['description'] }}</p>
-                                    <a href="{{ route('cursos.show', $course['name']) }}" class="btn btn-primary d-block">Ver curso</a>
+                                    <a href="{{ route('cursos.show', $course['name']) }}"
+                                        class="btn btn-primary d-block">Ver curso</a>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
 
 @section('scripts')
     <!-- Slick jQuery min -->
-    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="{{ asset('/carousel/slick.min.js') }}"></script>
     <script src="{{ asset('/carousel/carousel.js') }}"></script>
 @endsection
 

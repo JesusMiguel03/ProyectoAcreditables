@@ -33,7 +33,8 @@
                                     <div class="card-body box-profile">
                                         <div class="text-center">
                                             <img class="profile-user-img img-fluid img-circle"
-                                                src="{{ asset('/dist/img/user'.($index+1).'-128x128.jpg') }}" alt="User profile picture">
+                                                src="{{ asset('/dist/img/user' . ($index + 1) . '-128x128.jpg') }}"
+                                                alt="User profile picture">
                                         </div>
                                         <h3 class="profile-username text-center">{{ $professor['name'] }}</h3>
                                         <p class="text-muted text-center">{{ $professor['title'] }}</p>
@@ -46,7 +47,8 @@
                             <div class="col-sm-12 col-md-9">
                                 @foreach ($courses as $courseInner)
                                     @if ($courseInner['name'] === $course)
-                                        <h2>Cupos disponibles: <span class="text-info">{{ $courseInner['quotes'] }}</span></h2>
+                                        <h2>Cupos disponibles: <span class="text-info">{{ $courseInner['quotes'] }}</span>
+                                        </h2>
                                         <p class="p-3 text-justify text-muted">{{ $courseInner['longDescription'] }}</p>
                                     @endif
                                 @endforeach

@@ -13,8 +13,9 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
+                            {{-- @dd( request()->route()->getName() ) --}}
                             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
-                            <li class="breadcrumb-item"><a href="../perfiles">Perfiles</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('perfiles.index') }}">Perfiles</a></li>
                             <li class="breadcrumb-item"><a href="">{{ $profile }}</a></li>
                         </ol>
                     </div><!-- /.col -->
@@ -33,7 +34,7 @@
                                     <div class="card-body box-profile">
                                         <div class="text-center">
                                             <img class="profile-user-img img-fluid img-circle"
-                                                src="{{ asset('/dist/img/user'. ($index + 1) .'-128x128.jpg') }}"
+                                                src="{{ asset('/dist/img/user' . ($index + 1) . '-128x128.jpg') }}"
                                                 alt="User profile picture">
                                         </div>
                                     </div>
@@ -44,7 +45,8 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
                                         <h3 class="profile-username">Cursos que imparto</h3>
-                                        <a href="{{ route('cursos.show', $professor['courses']) }}">{{ $professor['courses'] }}</a>
+                                        <a
+                                            href="{{ route('cursos.show', $professor['courses']) }}">{{ $professor['courses'] }}</a>
                                     </div>
                                     <!-- /.card-body -->
                                 </div>

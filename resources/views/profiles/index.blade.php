@@ -14,7 +14,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
-                            <li class="breadcrumb-item"><a href="/">Perfiles</a></li>
+                            <li class="breadcrumb-item"><a href="">Perfiles</a></li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -32,12 +32,13 @@
                                 <div class="card-body box-profile">
                                     <div class="text-center">
                                         <img class="profile-user-img img-fluid img-circle"
-                                            src="../../dist/img/user{{ $index + 1 }}-128x128.jpg"
+                                            src="{{ asset('/dist/img/user' . ($index + 1) . '-128x128.jpg') }}"
                                             alt="User profile picture">
                                     </div>
                                     <h3 class="profile-username text-center">{{ $professor['name'] }}</h3>
                                     <p class="text-muted text-center">{{ $professor['title'] }}</p>
-                                    <a href="{{ route('perfiles.show', $professor['name']) }}" class="btn btn-primary d-block">{{ $professor['name'] }}</a>
+                                    <a href="{{ route('perfiles.show', $professor['name']) }}"
+                                        class="btn btn-primary d-block">{{ $professor['name'] }}</a>
                                 </div>
                                 <!-- /.card-body -->
                             </div>

@@ -7,7 +7,8 @@
     <form action="{{ route('login') }}" method="post">
         @csrf
         <div class="input-group">
-            <input type="number" class="form-control" placeholder="Cédula" name="cedula" value="{{ isset($request->cedula) ? $request->cedula : old('cedula') }}">
+            <input type="number" class="form-control" placeholder="Cédula" name="cedula"
+                value="{{ isset($request->cedula) ? $request->cedula : old('cedula') }}">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
@@ -20,7 +21,8 @@
             @enderror
         </div>
         <div class="input-group">
-            <input type="password" class="form-control" placeholder="Contraseña" name="password" value="{{ isset($request->cedula) ? $request->password : "" }}">
+            <input type="password" class="form-control" placeholder="Contraseña" name="password"
+                value="{{ isset($request->cedula) ? $request->password : '' }}">
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
