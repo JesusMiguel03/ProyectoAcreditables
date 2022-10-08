@@ -101,11 +101,7 @@
     opacity: 0.75;
 }
 
-.card:hover .card-img-top {
-    background-color: #ccc;
-    transform: scale(1.10);
-}
-
 .card:hover {
+    border: 1px solid #555;
     background-color: #ccc;
 }

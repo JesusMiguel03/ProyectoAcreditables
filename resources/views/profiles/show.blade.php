@@ -2,28 +2,26 @@
 @section('title', $profile . ' - Perfil')
 
 @section('content')
-    <!-- Content Wrapper. Contains page content -->
+    {{-- Page top --}}
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Perfil | {{ $profile }}</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
+                        <h1 class="m-0">Coordinación de Acreditables | {{ $profile }}</h1>
+                    </div>
+                    <div class="col-sm-4">
                         <ol class="breadcrumb float-sm-right">
-                            {{-- @dd( request()->route()->getName() ) --}}
                             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('perfiles.index') }}">Perfiles</a></li>
                             <li class="breadcrumb-item"><a href="">{{ $profile }}</a></li>
                         </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.content-header -->
-        <!-- Main content -->
+        
+        {{-- Page content --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -38,7 +36,6 @@
                                                 alt="User profile picture">
                                         </div>
                                     </div>
-                                    <!-- /.card-body -->
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-9">
@@ -48,16 +45,13 @@
                                         <a
                                             href="{{ route('cursos.show', $professor['courses']) }}">{{ $professor['courses'] }}</a>
                                     </div>
-                                    <!-- /.card-body -->
                                 </div>
                             </div>
                         @endif
                     @endforeach
                 </div>
-            </div><!-- /.container-fluid -->
+            </div>
         </section>
-        <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
 @endsection
 <x-layouts.app />

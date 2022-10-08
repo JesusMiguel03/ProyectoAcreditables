@@ -68,19 +68,15 @@
                     </label>
                 </div>
             </div>
-            <!-- /.col -->
             <div class="col-5">
                 <button type="submit" class="btn btn-primary btn-block">Registrarme</button>
             </div>
-            <!-- /.col -->
         </div>
     </form>
 
     <a href="{{ route('login') }}" class="text-center">Ya estoy registrado</a>
     </div>
-    <!-- /.form-box -->
-    </div><!-- /.card -->
     </div>
-    <!-- /.register-box -->
+    </div>
 @endsection()
 <x-account.app />

@@ -7,14 +7,14 @@
     <meta name="description" content="@yield('description')">
     <title>Acreditables | @yield('title')</title>
 
-    <!-- Google Font: Source Sans Pro -->
+    {{-- Google Font: Source Sans Pro --}}
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
+        href="{{ asset('/fonts/fonts.css') }}">
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="{{ asset('/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- icheck bootstrap -->
+    {{-- icheck bootstrap --}}
     <link rel="stylesheet" href="{{ asset('/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- Theme style -->
+    {{-- Theme style --}}
     <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
 </head>
 
@@ -23,6 +23,5 @@
         <div class="login-logo">
             <h2>Coordinación de Acreditables</h2>
         </div>
-        <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">

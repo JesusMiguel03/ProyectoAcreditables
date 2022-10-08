@@ -43,11 +43,9 @@
                     </label>
                 </div>
             </div>
-            <!-- /.col -->
             <div class="col-5">
                 <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
             </div>
-            <!-- /.col -->
         </div>
     </form>
 
@@ -58,9 +56,7 @@
         <a href="{{ route('register') }}" class="text-center">Registrarme</a>
     </p>
     </div>
-    <!-- /.login-card-body -->
     </div>
     </div>
-    <!-- /.login-box -->
 @endsection()
 <x-account.app />

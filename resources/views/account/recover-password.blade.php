@@ -36,7 +36,6 @@
             <div class="col-12">
                 <button type="submit" class="btn btn-primary btn-block">Cambiar Contraseña</button>
             </div>
-            <!-- /.col -->
         </div>
     </form>
 
@@ -44,9 +43,7 @@
         <a href="{{ route('login') }}">Iniciar Sesión</a>
     </p>
     </div>
-    <!-- /.login-card-body -->
     </div>
     </div>
-    <!-- /.login-box -->
 @endsection()
 <x-account.app />

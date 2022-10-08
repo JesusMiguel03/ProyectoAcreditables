@@ -2,110 +2,96 @@
 @section('title', 'Inicio')
 
 @section('content')
-    <!-- Content Wrapper. Contains page content -->
+{{-- Page Top --}}
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Página Principal</h1>
-                    </div><!-- /.col -->
+                        <h1 class="m-0">Coordinación de Acreditables</h1>
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
                         </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.content-header -->
 
-        <!-- Main content -->
+        {{-- Main content --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-12 col-md-3">
+                    <div class="col-sm-12 col-md-4">
                         <div class="card card-secondary card-outline">
-                            <div class="card-body box-profile">
+                            <div class="card-body">
                                 <div class="text-center">
-                                    <h4 class="text-secondary">¡Bienvenido!</h4>
-                                    <img class="profile-user-img img-fluid img-circle"
-                                        src="{{ asset('/dist/img/avatar.png') }}" alt="User profile picture">
+                                    <h4>¡Curso de Panadería añadido!</h4>
+                                    <img class="img-fluid rounded" src="{{ asset('/img/banners/img5.png') }}"
+                                        alt="Course picture">
+                                    @foreach ($data as $course)
+                                        @if ($course['name'] === 'Panadería')
+                                            <a href="{{ route('cursos.show', $course['name']) }}"
+                                                class="btn btn-primary d-block mt-3 font-weight-bold">Ver detalles</a>
+                                        @endif
+                                    @endforeach
                                 </div>
                             </div>
-                            <!-- /.card-body -->
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-9">
+                    <div class="col-sm-12 col-md-8">
                         <div class="card card-secondary card-outline">
-                            <div class="card-body box-profile">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-4">
-                                        <div class="list-group" id="list-tab" role="tablist">
-                                            <a class="list-group-item list-group-item-action active" id="list-home-list"
-                                                data-toggle="list" href="#list-home" role="tab"
-                                                aria-controls="home">¿Qué son?</a>
-                                            <a class="list-group-item list-group-item-action" id="list-how-work-list"
-                                                data-toggle="list" href="#list-how-work" role="tab"
-                                                aria-controls="how-work">¿Cómo funcionan?</a>
-                                            <a class="list-group-item list-group-item-action" id="list-study-list"
-                                                data-toggle="list" href="#list-study" role="tab"
-                                                aria-controls="study">¿Cómo me afectan?</a>
-                                            <a class="list-group-item list-group-item-action" id="list-options-list"
-                                                data-toggle="list" href="#list-options" role="tab"
-                                                aria-controls="options">¿Cuales son las opciones?</a>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-8">
-                                        <div class="tab-content text-justify" id="nav-tabContent">
-                                            <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                                aria-labelledby="list-home-list">
-                                                <span class="font-weight-bold">Acreditable</span> es según el Ministerio
-                                                popular para la Educación universitaria como una formación con enfoque
-                                                curricular asumido por los diferentes programas nacionales de formación a
-                                                ser impartidos en las instituciones de educación universitaria, comprende el
-                                                acercamiento de sus participantes a todas las manifestaciones artísticas y
-                                                culturales, así como su riqueza.
-                                            </div>
-                                            <div class="tab-pane fade" id="list-study" role="tabpanel"
-                                                aria-labelledby="list-study-list">
-                                                Para optar por tu título de TSU debes cursar (2) acreditables en cualquiera
-                                                de los
-                                                (3) trimestres que componen el año académico y otras (2) acreditables para
-                                                culminar
-                                                la carrera.
-                                            </div>
-                                            <div class="tab-pane fade" id="list-options" role="tabpanel"
-                                                aria-labelledby="list-options-list">
-                                                Las acreditables se aperturan al inicio de cada trimestre y tienen una
-                                                duración de
-                                                (3) meses. Las opciones varían por trayecto.
-                                                <ul class="list-group mt-3">
-                                                    @foreach ($data as $el)
-                                                        <a href="{{ route('cursos.show', $el['name']) }}"
-                                                            class="list-group-item">{{ $el['name'] }}</a>
-                                                    @endforeach
-                                                    <ul>
-                                            </div>
-                                            <div class="tab-pane fade" id="list-how-work" role="tabpanel"
-                                                aria-labelledby="list-how-work-list">
-                                                Estas se consideran como cualquier otra unidad curricular, pueden ser tanto
-                                                prácticas, teóricas o ambas, en base a la metodología que desee emplear el
-                                                profesor encargado.
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="card-body">
+                                <div>
+                                    <h4 class="text-center">¡Comunicado!</h4>
+                                    <p class="text-justify">Se prevee para la próxima semana, el día martes, se añadan
+                                        nuevos cursos prácticos, que sean de provecho para todo el estudiantado.</p>
                                 </div>
                             </div>
-                            <!-- /.card-body -->
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="card card-secondary card-outline">
+                            <div class="card-body">
+                                <div>
+                                    <h4 class="text-center">¡Posibles cambios!</h4>
+                                    <p class="text-justify">En vista de la gran demanda que han tenido los cursos de:
+                                        <strong>Ajedrez y Fútbol</strong>, se plantea aumentar los cupos disponibles para el
+                                        siguiente trimestre.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="card card-secondary card-outline">
+                            <div class="card-body">
+                                <div>
+                                    <h4 class="text-center">¡Aviso!</h4>
+                                    <p class="text-justify">Por temas personales los encargados de las acreditables de:
+                                        <strong>Primeros Auxilios y Baloncesto</strong> no podrán asistir a la universidad
+                                        durante la semana del 27-09 al 08-10.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <div class="card card-secondary card-outline">
+                            <div class="card-body">
+                                <div>
+                                    <h4 class="text-center">¡Curso no disponible!</h4>
+                                    <p class="text-justify">El facilitador encargado previamente del curso de
+                                        <strong>Coral</strong> que nos acompañó durante este periodo académico 2021-2022 no
+                                        podrá apoyarnos durante el siguiente trimestre a causa de problemas de salud,
+                                        esperamos se recupere pronto y el estudiantado pueda optar por otros cursos
+                                        disponibles.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
+            </div>
         </section>
-        <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
 @endsection
 <x-layouts.app />

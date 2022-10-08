@@ -23,16 +23,6 @@ class LoginUserController extends Controller
             ['password.required' => 'El campo contraseña es necesario']
         );
 
-
-        $cedula = $request->cedula;
-        $password = $request->password;
-
-        if ($cedula === '25976987' && $password = '123123123') {
-            return redirect('/admin');
-        } else  if ($cedula === '30255192' && $password = '123123123') {
-            return redirect('/professor');
-        } else {
-            return redirect('/');
-        }
+        return redirect('/');
     }
 }

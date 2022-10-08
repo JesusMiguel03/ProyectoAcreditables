@@ -2,33 +2,31 @@
 @section('title', 'Cursos')
 
 @section('links')
-    <!-- Slick CSS -->
+    {{-- Slick CSS --}}
     <link rel="stylesheet" href="{{ asset('/carousel/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('/carousel/carousel.css') }}">
 @endsection
 
 @section('content')
-    <!-- Content Wrapper. Contains page content -->
+    {{-- Page top --}}
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Cursos</h1>
-                    </div><!-- /.col -->
+                        <h1 class="m-0">Coordinación de Acreditables</h1>
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
                             <li class="breadcrumb-item active"><a href="cursos">Cursos</a></li>
                         </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.content-header -->
-
-        <!-- Main content -->
+        
+        {{-- Page content --}}
         <section class="content">
             <div class="container-fluid">
                 <div id="slick" class="px-5">
@@ -53,13 +51,11 @@
                 </div>
             </div>
         </section>
-        <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
 @endsection
 
 @section('scripts')
-    <!-- Slick jQuery min -->
+    {{-- Slick jQuery --}}
     <script src="{{ asset('/carousel/slick.min.js') }}"></script>
     <script src="{{ asset('/carousel/carousel.js') }}"></script>
 @endsection

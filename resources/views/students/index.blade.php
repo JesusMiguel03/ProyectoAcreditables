@@ -1,27 +1,26 @@
 @section('description', 'Página de estudiantes , Coordinación de Acreditables.')
-@section('title', 'Listado de estudiantes')
+@section('title', 'Estudiantes')
 
 @section('content')
-    <!-- Content Wrapper. Contains page content -->
+    {{-- Page Top --}}
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Estudiantes</h1>
-                    </div><!-- /.col -->
+                        <h1 class="m-0">Coordinación de Acreditables</h1>
+                    </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
                             <li class="breadcrumb-item"><a href="">Listado de estudiantes</a></li>
                         </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /.content-header -->
-        <!-- Main content -->
+
+        {{-- Page content --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="btn-group dropright my-2">
@@ -66,10 +65,8 @@
                         </div>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
+            </div>
         </section>
-        <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
 @endsection
 <x-layouts.app />

@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\ProfessorUserController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\LoginUserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -25,8 +23,6 @@ use App\Http\Controllers\FAQController;
 */
 
 Route::resource('/', HomeController::class);
-Route::resource('/admin', AdminUserController::class);
-Route::resource('/professor', ProfessorUserController::class);
 
 Route::resource('/cursos', CoursesController::class, [
     'names' => 'cursos',
