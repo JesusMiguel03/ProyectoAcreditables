@@ -69,7 +69,7 @@
                 <li class="nav-item">
                     <a href="{{ route('login') }}" class="nav-link">
                         <img style="width: 1.4rem; filter: invert(0.8); margin-top: -5px"
-                            src="{{ asset('/assets/img/icons/sign-out.svg') }}">
+                            src="{{ asset('/assets/img/icons/sign-out.svg') }}" class="mr-2">
                         <p>Cerrar Sesión</p>
                     </a>
                 </li>
