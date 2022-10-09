@@ -3,8 +3,8 @@
 
 @section('links')
     {{-- Slick CSS --}}
-    <link rel="stylesheet" href="{{ asset('/carousel/slick.css') }}">
-    <link rel="stylesheet" href="{{ asset('/carousel/carousel.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/carousel/slick.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/carousel/carousel.css') }}">
 @endsection
 
 @section('content')
@@ -33,7 +33,7 @@
                     @foreach ($courses as $index => $course)
                         <div class="slide">
                             <div class="card mt-3">
-                                <img src="{{ asset('/img/banners/img' . $index . '.png') }}" class="card-img-top rounded"
+                                <img src="{{ asset('/assets/img/banners/img' . $index . '.png') }}" class="card-img-top rounded"
                                     alt="...">
                                 <div class="card-body">
                                     <h5 class="card-title mb-2 h2 fw-bold">{{ $course['name'] }}</h5>
@@ -56,8 +56,8 @@
 
 @section('scripts')
     {{-- Slick jQuery --}}
-    <script src="{{ asset('/carousel/slick.min.js') }}"></script>
-    <script src="{{ asset('/carousel/carousel.js') }}"></script>
+    <script src="{{ asset('/assets/carousel/slick.min.js') }}"></script>
+    <script src="{{ asset('/assets/carousel/carousel.js') }}"></script>
 @endsection
 
 <x-layouts.app />

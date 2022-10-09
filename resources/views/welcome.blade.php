@@ -28,7 +28,7 @@
                             <div class="card-body">
                                 <div class="text-center">
                                     <h4>¡Curso de Panadería añadido!</h4>
-                                    <img class="img-fluid rounded" src="{{ asset('/img/banners/img5.png') }}"
+                                    <img class="img-fluid rounded" src="{{ asset('/assets/img/banners/img5.png') }}"
                                         alt="Course picture">
                                     @foreach ($data as $course)
                                         @if ($course['name'] === 'Panadería')

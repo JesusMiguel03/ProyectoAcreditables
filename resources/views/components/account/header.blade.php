@@ -11,11 +11,11 @@
     <link rel="stylesheet"
         href="{{ asset('/fonts/fonts.css') }}">
     {{-- Font Awesome --}}
-    <link rel="stylesheet" href="{{ asset('/plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/plugins/fontawesome-free/css/all.min.css') }}">
     {{-- icheck bootstrap --}}
-    <link rel="stylesheet" href="{{ asset('/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     {{-- Theme style --}}
-    <link rel="stylesheet" href="{{ asset('/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets/dist/css/adminlte.min.css') }}">
 </head>
 
 <body class="hold-transition login-page">

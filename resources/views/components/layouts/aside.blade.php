@@ -4,10 +4,11 @@
         {{-- User --}}
         <div class="user-panel my-2 pb-2 d-flex align-items-center">
             <div class="image">
-                <img src="{{ asset('/dist/img/user2-128x128.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ asset('/assets/dist/img/user2-128x128.jpg') }}" class="img-circle elevation-2"
+                    alt="User Image">
             </div>
             <div class="info">
-                <a href="{{ route('login') }}" class="d-block font-weight-bold" style="margin-bottom: -0.5rem">Luis
+                <a href="#" class="d-block font-weight-bold" style="margin-bottom: -0.5rem">Luis
                     Montes</a>
                 <small class="text-muted font-weight-bold">Estudiante</small>
             </div>
@@ -17,6 +18,7 @@
         <nav class="mt-3">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+                <li class="nav-header">PRINCIPAL</li>
                 <li class="nav-item">
                     <a href="{{ route('index') }}"
                         class="nav-link{{ (request()->routeIs('index') ? ' active' : '' || request()->routeIs('store')) ? ' active' : '' }}">
@@ -24,6 +26,10 @@
                         <p>Inicio</p>
                     </a>
                 </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li class="nav-header">ACREDITABLES DISPONIBLES</li>
                 <li class="nav-item">
                     <a href="{{ route('cursos.index') }}"
                         class="nav-link{{ request()->routeIs('cursos.*') ? ' active' : '' }}">
@@ -45,11 +51,26 @@
                         <p>Perfiles de profesores</p>
                     </a>
                 </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li class="nav-header">INFORMACIÓN</li>
                 <li class="nav-item">
                     <a href="{{ route('faq.index') }}"
                         class="nav-link{{ request()->routeIs('faq.*') ? ' active' : '' }}">
                         <i class="nav-icon fas fa-question"></i>
-                        <p>¿Sabias que...?</p>
+                        <p>Acerca de</p>
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li class="nav-header">CUENTA</li>
+                <li class="nav-item">
+                    <a href="{{ route('login') }}" class="nav-link">
+                        <img style="width: 1.4rem; filter: invert(0.8); margin-top: -5px"
+                            src="{{ asset('/assets/img/icons/sign-out.svg') }}">
+                        <p>Cerrar Sesión</p>
                     </a>
                 </li>
             </ul>

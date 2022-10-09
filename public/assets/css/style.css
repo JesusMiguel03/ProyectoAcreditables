@@ -1,0 +1,6 @@
+hr.dropdown-divider {
+    border: 2px solid;
+    border-radius: 5px;
+    border-color: #6c757d;
+    opacity: 0.50;
+}

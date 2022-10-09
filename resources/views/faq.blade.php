@@ -30,7 +30,7 @@
                                 <div class="text-center">
                                     <h4 class="text-secondary">¡Bienvenido!</h4>
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="{{ asset('/dist/img/avatar.png') }}" alt="User profile picture">
+                                        src="{{ asset('/assets/dist/img/avatar.png') }}" alt="User profile picture">
                                 </div>
                             </div>
                         </div>

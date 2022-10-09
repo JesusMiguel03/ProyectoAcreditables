@@ -11,7 +11,7 @@ const addZero = (time) => {
 };
 
 const [day, month] = [
-    ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"],
+    ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
     [
         "Ene",
         "Feb",
@@ -32,10 +32,10 @@ const update = () => {
     if (displayTime !== "") {
         const time = new Date();
         displayTime.innerHTML = `${
-            day[time.getDay() - 1]
+            day[time.getDay()]
         }, ${time.getDate()} de ${
             month[time.getMonth()]
-        } de ${time.getFullYear()} - ${addZero(time.getHours() - 12)}:${addZero(
+        } de ${time.getFullYear()} - ${addZero(time.getHours() > 12 ? time.getHours()- 12 : time.getHours())}:${addZero(
             time.getMinutes()
         )} ${time.getHours() > 12 ? "PM" : "AM"}`;
     }
