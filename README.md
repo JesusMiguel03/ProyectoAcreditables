@@ -31,11 +31,11 @@ Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas,
 - Php.
 
 **Librerías**
-- jQuery.
+- [jQuery](https://jquery.com/download/).
 
 **Plugins**
 - *Proximamente*...
 
 **Frameworks**
-- Bootstrap (Frontend).
-- Laravel (Backend).
+- [Bootstrap (Frontend)](https://getbootstrap.com/docs/4.6/getting-started/introduction/).
+- [Laravel (Backend)](https://laravel.com/docs/8.x/installation).
