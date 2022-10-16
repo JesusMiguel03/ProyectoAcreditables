@@ -4,7 +4,8 @@
 
 Para clonar y trabajar con el repositorio seguir las siguientes instrucciones:
 ```
-1. git clone https://github.com/JesusMiguel03/ProyectoAcreditables.git - En el escritorio o en la carpeta /htdocs en xampp, /www en laragon, el resto de comandos dentro de la carpeta recien creada
+1. git clone https://github.com/JesusMiguel03/ProyectoAcreditables.git - En el escritorio o en la carpeta /htdocs en xampp,
+/www en laragon, el resto de comandos dentro de la carpeta recien creada
 2. composer install
 3. cp .env.example .env
 4. php artisan key:generate
