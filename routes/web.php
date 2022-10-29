@@ -1,15 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\RegisteredUserController;
-use App\Http\Controllers\LoginUserController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\RecoverPasswordController;
-use App\Http\Controllers\CoursesController;
-use App\Http\Controllers\ProfessorProfilesController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\FAQController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,32 +13,23 @@ use App\Http\Controllers\FAQController;
 |
 */
 
-Route::resource('/', HomeController::class);
+Route::get('/', function () {
+    return view('auth.login');
+});
 
-Route::resource('/cursos', CoursesController::class, [
-    'names' => 'cursos',
-    'parameters' => ['course' => 'curso']
-]);
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/Inicio', function () {
+        return view('welcome');
+    })->name('home');
+});
 
-Route::resource('/perfiles', ProfessorProfilesController::class, [
-    'names' => 'perfiles',
-    'parameters' => ['profile' => 'perfil']
-]);
-Route::resource('/estudiantes', StudentController::class, [
-    'names' => 'estudiantes',
-    'parameters' => ['student' => 'estudiante']
-]);
 
-Route::resource('/faq', FAQController::class);
+Route::resource('/Cursos', 'App\Http\Controllers\CourseController');
 
-Route::view('/register', 'account.register')->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
-
-Route::view('/login', 'account.login')->name('login');
-Route::post('/login', [LoginUserController::class, 'store']);
-
-Route::view('/forgot-password', 'account.forgot-password')->name('forgotPassword');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'store']);
-
-Route::view('/recover-password', 'account.recover-password')->name('recoverPassword');
-Route::post('/recover-password', [RecoverPasswordController::class, 'store']);
+Route::get('/Preguntas-frecuentes', function () {
+    return view('faq');
+})->name('Preguntas frecuentes')->middleware('auth');
