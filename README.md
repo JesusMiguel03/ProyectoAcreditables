@@ -3,21 +3,32 @@
 ## Código
 
 Para clonar y trabajar con el repositorio seguir las siguientes instrucciones:
+En el escritorio o carpeta correspondiente (/htdocs en xampp, /www en laragon y wampp)
 ```
-1. git clone https://github.com/JesusMiguel03/ProyectoAcreditables.git - En el escritorio o en la carpeta /htdocs en xampp,
-/www en laragon, el resto de comandos dentro de la carpeta recien creada
-2. composer install
-3. cp .env.example .env
-4. php artisan key:generate
-5. php artisan migrate | Actualmente presenta fallos - Se recomienda no usar
-6. php artisan serve
+git clone https://github.com/JesusMiguel03/ProyectoAcreditables.git
+```
+```
+composer install
+```
+```
+cp .env.example .env
+```
+```
+php artisan key:generate
+```
+```
+php artisan migrate
+```
+```
+php artisan serve
 ```
 Para recibir las actualizaciones:
+Dentro de la carpeta donde se encuentra el proyecto
 ```
-1. git pull - Dentro de la carpeta donde se encuentra el proyecto
+git pull
 ```
 
-## <img src="./public/assets/img/logo.png" width="25"> Sobre el proyecto
+## <img src="./public/vendor/img/logo.png" width="25"> Sobre el proyecto
 
 Componente web diseñado para la gestión administrativa de procesos dentro de la Coordinación de Acreditables, como bien son:
 
