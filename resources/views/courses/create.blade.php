@@ -26,57 +26,58 @@
                 <div class="card-body">
                     <form action="/Cursos" method="post">
                         @csrf
-    
+
                         {{-- Name field --}}
                         <div class="input-group mb-3">
                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                 value="{{ old('name') }}" placeholder="{{ __('Nombre del curso') }}" autofocus>
-    
+
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-    
+
                         {{-- Professor field --}}
                         <div class="input-group mb-3">
-                            <input type="text" name="professor" class="form-control @error('professor') is-invalid @enderror"
-                                value="{{ old('professor') }}" placeholder="{{ __('Profesor encargado') }}" autofocus>
-    
+                            <input type="text" name="professor"
+                                class="form-control @error('professor') is-invalid @enderror" value="{{ old('professor') }}"
+                                placeholder="{{ __('Profesor encargado') }}" autofocus>
+
                             @error('professor')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-    
+
                         {{-- Quotas_available field --}}
                         <div class="input-group mb-3">
                             <input type="text" name="quotas_available"
                                 class="form-control @error('quotas_available') is-invalid @enderror"
                                 value="{{ old('quotas_available') }}" placeholder="{{ __('Cupos disponibles') }}" autofocus>
-    
+
                             @error('quotas_available')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-    
+
                         {{-- Description field --}}
                         <div class="input-group mb-3">
                             <input type="text" name="description"
                                 class="form-control @error('description') is-invalid @enderror"
                                 value="{{ old('description') }}" placeholder="{{ __('Descripción') }}" autofocus>
-    
+
                             @error('description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-    
+
                         {{-- Login field --}}
                         <div class="row">
                             <div class="col-6">
@@ -90,7 +91,7 @@
                                 </button>
                             </div>
                         </div>
-    
+
                     </form>
                 </div>
             </div>
@@ -99,3 +100,12 @@
 @stop
 
 @section('footer')
+
+@section('js')
+    <script>
+        document.querySelectorAll('p').forEach(item => {
+            item.innerText === 'Cursos' ?
+                item.parentNode.classList.add('active') : ""
+        })
+    </script>
+@stop

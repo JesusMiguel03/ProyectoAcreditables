@@ -18,14 +18,14 @@
 
 @section('content')
     {{-- Page content --}}
-    <a href="{{ route('Cursos.create') }}" class="btn btn-primary">Crear cursos</a>
+    {{-- <a href="{{ route('Cursos.create') }}" class="btn btn-primary">Crear cursos</a> --}}
     <section class="content">
         <div class="container-fluid">
             <div id="slick" class="px-5">
                 @foreach ($courses as $course)
                     <div class="slide">
                         <div class="card mt-3">
-                            <img src="{{ asset('vendor/img/banners/' . $course['name'] . '.png') }}"
+                            <img src="{{ asset('vendor/img/banners/' . $course['name'] . '.webp') }}"
                                 class="card-img-top rounded" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title mb-2 h2 fw-bold">{{ $course['name'] }}</h5>
@@ -34,8 +34,9 @@
                                     </span>
                                 </h6>
                                 <p class="card-text text-truncate">{{ $course['description'] }}</p>
-                                {{-- <a href="{{ route('Cursos.show'), $course['name'] }}" class="btn btn-primary d-block">Ver
-                                    curso</a> --}}
+                                <a href="{{ route('Cursos.show', $course['id']) }}" class="btn btn-primary d-block">
+                                    Ver curso
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -53,6 +54,12 @@
 @stop
 
 @section('js')
+    <script>
+        document.querySelectorAll('p').forEach(item => {
+            item.innerText === 'Cursos' ?
+                item.parentNode.classList.add('active') : ""
+        })
+    </script>
     <script src="{{ asset('vendor/carousel/slick.min.js') }}"></script>
     <script src="{{ asset('vendor/carousel/carousel.js') }}"></script>
 @stop
