@@ -22,7 +22,9 @@ class CreateCoursesTable extends Migration
             $table->string('category');
             $table->string('type');
             $table->string('description', 2000);
+            $table->string('image');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -28,12 +28,12 @@
                         <div class="card-body box-profile">
                             <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle"
-                                    src="{{ asset('/vendor/img/profs/user' . $course['id'] . '.jpg') }}"
+                                    {{-- src="{{ asset('/vendor/img/profs/user' . $course['id'] . '.jpg') }}" --}}
                                     alt="User profile picture">
                             </div>
                             <h3 class="profile-username text-center">{{ $course['professor'] }}</h3>
                             {{-- <p class="text-muted text-center">{{ $course['title'] }}</p> --}}
-                            <a href="" class="btn btn-primary d-block">{{ $course['professor'] }}</a>
+                            <a href="" class="btn btn-primary d-block">Ver perfil</a>
                         </div>
                     </div>
                 </div>
@@ -42,6 +42,12 @@
                         [<span class="text-info">{{ $course['quotas_available'] }}</span>
                         /
                         <span class="text-info">{{ $course['quotas'] }}</span>]
+                        <form action="{{ route('Cursos.destroy', $course['id']) }}" method="post">
+                            <a href="{{ route('Cursos.edit', $course['id']) }}" class="btn btn-warning">✏</a> | 
+                            @csrf
+                            {{ method_field('DELETE') }}
+                            <button type="submit" class="btn btn-danger">❌</button>
+                        </form>
                     </h2>
                     <p class="text-justify text-muted">{{ $course['description'] }}</p>
                 </div>
@@ -57,13 +63,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for ($i = 1; $i < 100; $i++)
+                                {{-- @for ($i = 1; $i < 100; $i++)
                                     <tr>
                                         <th scope="col">{{ $i }}</th>
                                         <th scope="col">Lucas Gómez</th>
                                         <th scope="col">Mecánica</th>
                                     </tr>
-                                @endfor
+                                @endfor --}}
                             </tbody>
                         </table>
                     </div>

@@ -27,9 +27,8 @@ Route::middleware([
     })->name('home');
 });
 
-
 Route::resource('/Cursos', 'App\Http\Controllers\CourseController');
 
 Route::get('/Preguntas-frecuentes', function () {
     return view('faq');
-})->name('Preguntas frecuentes')->middleware('auth');
+})->name('faq')->middleware('auth');

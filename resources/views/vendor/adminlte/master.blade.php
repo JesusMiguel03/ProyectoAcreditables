@@ -27,11 +27,36 @@
 
     {{-- Hr style --}}
     <style>
-        hr.dropdown-divider {
+        /* hr.dropdown-divider {
+            position: relative;
+            width: 80%;
+            margin: 0.5rem auto;
+            opacity: 0.5;
+            overflow: initial;
+        }
+        hr.dropdown-divider::after {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            top: -6px;
+            left: calc(50% - 7px);
+            width: 14px;
+            height: 12px;
+            background-color: #343a40;
+            border-left: 1px solid rgb(255, 255, 255);
+            border-right: 1px solid rgb(255, 255, 255);
+        } */
+
+        /* hr.dropdown-divider {
             border: 2px solid;
             border-radius: 5px;
             border-color: #6c757d;
             opacity: 0.50;
+        } */
+        hr.dropdown-divider {
+            width: 80%;
+            margin: 0.5rem auto;
+            opacity: 0.5;
         }
     </style>
 
