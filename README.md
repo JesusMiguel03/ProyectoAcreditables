@@ -19,6 +19,10 @@ php artisan key:generate
 ```
 php artisan migrate
 ```
+Crea un enlace en /public para guardar las imagenes de cursoss
+```
+php artisan storage:link
+```
 ```
 php artisan serve
 ```
@@ -50,7 +54,10 @@ Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas,
 - [jQuery](https://jquery.com/download/).
 
 **Plugins**
-- *Proximamente*...
+- [SweetAlert2](https://sweetalert2.github.io).
+- [DataTables](https://datatables.net).
+- [Bs stepper](https://johann-s.github.io/bs-stepper/).
+- [Slick](http://kenwheeler.github.io/slick/).
 
 **Frameworks**
 - [Bootstrap (Frontend)](https://getbootstrap.com/docs/4.6/getting-started/introduction/).
