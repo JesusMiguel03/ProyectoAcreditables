@@ -1,6 +1,10 @@
 <h1 align="center">Proyecto de Acreditables</h1>
 
-## Código
+<p align="center">
+    <img src="./public/vendor/img/logo.png" width="120" height="150">
+</p>
+
+## 🖥Código
 
 Para clonar y trabajar con el repositorio seguir las siguientes instrucciones:
 En el escritorio o carpeta correspondiente (/htdocs en xampp, /www en laragon y wampp)
@@ -19,7 +23,7 @@ php artisan key:generate
 ```
 php artisan migrate
 ```
-Crea un enlace en /public para guardar las imagenes de cursoss
+Crea un enlace en /public para guardar las imagenes de cursos
 ```
 php artisan storage:link
 ```
@@ -32,7 +36,7 @@ Dentro de la carpeta donde se encuentra el proyecto
 git pull
 ```
 
-## <img src="./public/vendor/img/logo.png" width="25"> Sobre el proyecto
+## Sobre el proyecto
 
 Componente web diseñado para la gestión administrativa de procesos dentro de la Coordinación de Acreditables, como bien son:
 
