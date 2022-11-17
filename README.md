@@ -1,6 +1,10 @@
 <h1 align="center">Proyecto de Acreditables</h1>
 
-## Código
+<p align="center">
+    <img src="./public/vendor/img/logo.png" width="120" height="150">
+</p>
+
+## 🖥Código
 
 Para clonar y trabajar con el repositorio seguir las siguientes instrucciones:
 En el escritorio o carpeta correspondiente (/htdocs en xampp, /www en laragon y wampp)
@@ -19,6 +23,10 @@ php artisan key:generate
 ```
 php artisan migrate
 ```
+Crea un enlace en /public para guardar las imagenes de cursos
+```
+php artisan storage:link
+```
 ```
 php artisan serve
 ```
@@ -28,7 +36,7 @@ Dentro de la carpeta donde se encuentra el proyecto
 git pull
 ```
 
-## <img src="./public/vendor/img/logo.png" width="25"> Sobre el proyecto
+## Sobre el proyecto
 
 Componente web diseñado para la gestión administrativa de procesos dentro de la Coordinación de Acreditables, como bien son:
 
@@ -50,7 +58,10 @@ Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas,
 - [jQuery](https://jquery.com/download/).
 
 **Plugins**
-- *Proximamente*...
+- [SweetAlert2](https://sweetalert2.github.io).
+- [DataTables](https://datatables.net).
+- [Bs stepper](https://johann-s.github.io/bs-stepper/).
+- [Slick](http://kenwheeler.github.io/slick/).
 
 **Frameworks**
 - [Bootstrap (Frontend)](https://getbootstrap.com/docs/4.6/getting-started/introduction/).
