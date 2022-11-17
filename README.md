@@ -35,6 +35,12 @@ Dentro de la carpeta donde se encuentra el proyecto
 ```
 git pull
 ```
+```
+composer update
+```
+```
+php artisan migrate:fresh --seed
+```
 
 ## Sobre el proyecto
 
