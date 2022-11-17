@@ -2,17 +2,16 @@
 
     {{-- Sidebar menu --}}
     <div class="sidebar">
-        
+
         {{-- Sidebar User --}}
         <div class="user-panel my-2 pb-2 d-flex align-items-center">
             <div class="image">
-                <img src="{{ asset('vendor/img/profs/user6.jpg') }}" class="img-circle elevation-2"
-                    alt="User Image">
+                <img src="{{ asset('vendor/img/profs/user6.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <p class="d-block font-weight-bold" style="margin-bottom: -0.5rem; color: #c2c7d0">
                     {{ Auth::user()->name }}</p>
-                <small class="text-muted font-weight-bold">Estudiante</small>
+                <small class="text-muted font-weight-bold">{{ Auth::user()->getRoleNames()[0] }}</small>
             </div>
         </div>
 

@@ -9,7 +9,7 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('student.index') }}">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Cursos</a></li>
             </ol>
         </div>
@@ -18,10 +18,11 @@
 
 @section('content')
     {{-- Page content --}}
-    <a href="{{ route('Cursos.create') }}" class="btn btn-primary">Crear cursos</a>
     <section class="content">
         <div class="container-fluid">
-
+            @can('courses.create')
+                <a href="{{ route('courses.create') }}" class="btn btn-primary">Crear curso</a>
+            @endcan
             <div id="slick" class="px-5">
                 @foreach ($courses as $course)
                     <div class="slide">
@@ -35,7 +36,7 @@
                                     </span>
                                 </h6>
                                 <p class="card-text text-truncate">{{ $course['description'] }}</p>
-                                <a href="{{ route('Cursos.show', $course['id']) }}" class="btn btn-primary d-block">
+                                <a href="{{ route('courses.show', $course['id']) }}" class="btn btn-primary d-block">
                                     Ver curso
                                 </a>
                             </div>

@@ -9,7 +9,7 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('student.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Inicio</a></li>
             </ol>
         </div>
     </div>
@@ -117,8 +117,6 @@
         </div>
     </section>
 @stop
-
-@section('footer')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/carousel/slick.css') }}">

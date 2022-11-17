@@ -9,7 +9,7 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-primary">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('student.index') }}" class="text-primary">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="" class="text-primary">Mi cuenta</a></li>
             </ol>
         </div>
@@ -34,7 +34,7 @@
                             @livewire('profile.update-password-form')
                         </div>
 
-                        {{-- <x-jet-section-border /> --}}
+                        <x-jet-section-border />
                     @endif
 
                     {{-- TwoFactor --}}

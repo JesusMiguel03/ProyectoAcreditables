@@ -1,10 +1,11 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
 
+    {{-- @dd(request()->route()->getName()) --}}
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 mt-2 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
-                {{ __('home') }}
+            <x-jet-responsive-nav-link href="{{ route('student.index') }}" :active="request()->routeIs('student.index')">
+                {{ __('student.index') }}
             </x-jet-responsive-nav-link>
         </div>
 

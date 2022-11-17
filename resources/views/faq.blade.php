@@ -9,7 +9,7 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('student.index') }}">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Preguntas frecuentes</a></li>
             </ol>
         </div>
@@ -90,7 +90,7 @@
                                             Las acreditables se aperturan al inicio de cada trimestre y tienen una
                                             duración de
                                             (3) meses cada una, estas pueden ser teóricas, prácticas o una combinación de ambas. Si quires saber cuales son, has clic en el siguiente botón.
-                                            <a href="{{ route('Cursos.index') }}" class="mt-2 btn btn-primary btn-block">Cursos</a>
+                                            <a href="{{ route('courses.index') }}" class="mt-2 btn btn-primary btn-block">Cursos</a>
                                         </div>
                                         <div class="tab-pane fade" id="list-how-work" role="tabpanel"
                                             aria-labelledby="list-how-work-list">
@@ -101,7 +101,7 @@
                                         <div class="tab-pane fade" id="list-note" role="tabpanel"
                                             aria-labelledby="list-note-list">
                                             Para consultar tu nota, accede a la pestaña de <strong><a
-                                                    href="{{ route('Cursos.index') }}">Cursos</a></strong> una vez
+                                                    href="{{ route('courses.index') }}">Cursos</a></strong> una vez
                                             finalizado el trimestre y podrás visualizar tu nota, si tienes algún
                                             inconveniente, comunícate con el profesor para solventarlo. Una vez publicadas
                                             las notas <strong>tienen 1 semana para corroborarlas</strong>, transcurrida la

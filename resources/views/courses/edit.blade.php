@@ -9,8 +9,8 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-                <li class="breadcrumb-item active"><a href="{{ route('Cursos.index') }}">Cursos</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('student.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item active"><a href="{{ route('courses.index') }}">Cursos</a></li>
                 <li class="breadcrumb-item active"><a href="">Editar Curso</a></li>
             </ol>
         </div>
@@ -27,7 +27,7 @@
     
                         <h2 class="card-header">Editar Curso</h2>
     
-                        <form action="{{ url('/Cursos/' . $course->id) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ url('/cursos/' . $course->id) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             {{ method_field('PATCH') }}
     
@@ -157,7 +157,7 @@
                                                 <option {{ $course['type'] === 'Teórico' ? 'selected' : '' }}>Teórico</option>
                                                 <option {{ $course['type'] === 'Práctico' ? 'selected' : '' }}>Práctico
                                                 </option>
-                                                <option {{ $course['type'] === 'Teórico - práctico' ? 'selected' : '' }}>
+                                                <option {{ $course['type'] === 'Teórico - Práctico' ? 'selected' : '' }}>
                                                     Teórico - práctico
                                                 </option>
                                             </select>
@@ -199,7 +199,7 @@
                                         {{-- Login field --}}
                                         <div class="row">
                                             <div class="col-6">
-                                                <a href="{{ route('Cursos.index') }}" class="btn btn-block btn-secondary">
+                                                <a href="{{ route('courses.index') }}" class="btn btn-block btn-secondary">
                                                     {{ __('Volver') }}
                                                 </a>
                                             </div>
@@ -242,13 +242,6 @@
                 linear: false,
                 animation: true
             })
-        })
-    </script>
-
-    <script>
-        document.querySelectorAll('p').forEach(item => {
-            item.innerText === 'Cursos' ?
-                item.parentNode.classList.add('active') : ""
         })
     </script>
     

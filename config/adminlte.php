@@ -294,21 +294,29 @@ return [
         ['header' => 'PRINCIPAL'],
         [
             'text'        => 'Inicio',
-            'url'         => '/Inicio',
+            'url'         => '/inicio',
             'icon'        => 'fas fa-home'
         ],
+        [
+            'text'        => 'Usuarios',
+            'url'         => '/usuarios',
+            'active'         => ['usuarios*'],
+            'icon'        => 'fas fa-users',
+            'can'         => 'coordinator.index',
+        ],
         ['hr'],
-        ['header' => 'ACREDITABLES DISPONIBLES'],
+        ['header' => 'ACREDITABLES'],
         [
             'text'        => 'Cursos',
-            'url'         => '/Cursos',
+            'url'         => '/cursos',
+            'active'      => ['cursos*'],
             'icon'        => 'fas fa-th-large',
         ],
         ['hr'],
         ['header' => 'INFORMACIÓN'],
         [
             'text'        => 'Acerca de',
-            'url'         => '/Preguntas-frecuentes',
+            'url'         => '/preguntas-frecuentes',
             'icon'        => 'fas fa-question'
         ],
         ['hr'],

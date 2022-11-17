@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Course;
+use App\Models\User;
 
 class CourseController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('can:coordinator.index')->only('create', 'edit', 'destroy');
     }
     
     /**
@@ -59,7 +61,7 @@ class CourseController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('Cursos/create')->withErrors($validator)->withInput();
+            return redirect('cursos/create')->withErrors($validator)->withInput();
         };
 
         if ($request->hasFile('image')) {
@@ -78,7 +80,7 @@ class CourseController extends Controller
         $course->image = $image;
         
         $course->save();
-        return redirect('Cursos')->with('create', 'created'); 
+        return redirect('cursos')->with('create', 'created'); 
     }
 
     /**
@@ -89,8 +91,9 @@ class CourseController extends Controller
      */
     public function show($id)
     {
+        $users = User::all();
         $course = Course::findOrFail($id);
-        return view('courses.show', ['course' => $course]);
+        return view('courses.show', ['course' => $course, 'users' => $users]);
     }
 
     /**
@@ -127,7 +130,7 @@ class CourseController extends Controller
         Course::where('id', '=', $id)->update($data);
         $course = Course::findOrFail($id);
 
-        return redirect('/Cursos')->with('update', 'updated');
+        return redirect('cursos')->with('update', 'updated');
     }
 
     /**
@@ -142,6 +145,6 @@ class CourseController extends Controller
 
         $course->delete();
 
-        return redirect('Cursos');
+        return redirect('cursos');
     }
 }

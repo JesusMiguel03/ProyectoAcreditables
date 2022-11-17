@@ -9,8 +9,8 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
-                <li class="breadcrumb-item active"><a href="{{ route('Cursos.index') }}">Cursos</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('student.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item active"><a href="{{ route('courses.index') }}">Cursos</a></li>
                 <li class="breadcrumb-item active"><a href="">{{ $course['name'] }}</a></li>
             </ol>
         </div>
@@ -19,87 +19,151 @@
 
 @section('content')
     {{-- Page content --}}
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                {{-- Course card --}}
-                <div class="col-sm-12 col-md-3">
-                    <div class="card card-primary card-outline">
-                        <div class="card-body box-profile">
-                            <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
-                                    {{-- src="{{ asset('/vendor/img/profs/user' . $course['id'] . '.jpg') }}" --}}
-                                    alt="User profile picture">
-                            </div>
-                            <h3 class="profile-username text-center">{{ $course['professor'] }}</h3>
-                            {{-- <p class="text-muted text-center">{{ $course['title'] }}</p> --}}
-                            <a href="" class="btn btn-primary d-block">Ver perfil</a>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
+            <div class="card">
+                @if ($course['professor'] !== 'Sin asignar')
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle"
+                                src="{{ asset('/vendor/img/profs/user0.jpg') }}" alt="User profile picture">
                         </div>
+                        <h3 class="profile-username text-center">{{ $course['professor'] }}</h3>
+
+                        <a href="" class="btn btn-primary d-block">Ver perfil</a>
                     </div>
+                @else
+                <div class="card-body text-center">
+                    <img class="profile-user-img img-fluid img-circle" src="{{ asset('/vendor/img/profs/user.webp') }}"
+                        alt="User profile picture">
                 </div>
-                <div class="col-sm-12 col-md-9">
-                    <h2>Cupos disponibles:
-                        [<span class="text-info">{{ $course['quotas_available'] }}</span>
-                        /
-                        <span class="text-info">{{ $course['quotas'] }}</span>]
-                        <form action="{{ route('Cursos.destroy', $course['id']) }}" method="post">
-                            <a href="{{ route('Cursos.edit', $course['id']) }}" class="btn btn-warning">✏</a> | 
-                            @csrf
-                            {{ method_field('DELETE') }}
-                            <button type="submit" class="btn btn-danger">❌</button>
-                        </form>
+                    <div class="card-footer" style="min-height: 4.77rem">
+                        <h6 class="text-muted text-justify">Actualmente no hay un profesor asignado.</h6>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-9">
+            <div class="card">
+                <div class="card-body" style="min-height: 9.65rem">
+
+                    <h2 class="d-none d-md-block">Cupos disponibles
+                        [ <span class="text-info">{{ $course['quotas_available'] }}</span> /
+                        <span class="text-info">{{ $course['quotas'] }}</span> ]
                     </h2>
+                    <h2 class="d-md-none">Cupos disponibles</h2>
+                    <h2 class="d-md-none">[ <span class="text-info">{{ $course['quotas_available'] }}</span> / <span
+                            class="text-info">{{ $course['quotas'] }}</span>]</h2>
+
                     <p class="text-justify text-muted">{{ $course['description'] }}</p>
                 </div>
-                {{-- Students table --}}
-                <div class="col-sm-12 col-md-12">
-                    <div class="table-responsive-sm mb-4">
-                        <table id='users' class="table table-striped">
-                            <thead>
-                                <tr class="bg-secondary">
-                                    <th scope="col">#</th>
-                                    <th scope="col">Nombre y Apellido</th>
-                                    <th scope="col">PNF</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{-- @for ($i = 1; $i < 100; $i++)
-                                    <tr>
-                                        <th scope="col">{{ $i }}</th>
-                                        <th scope="col">Lucas Gómez</th>
-                                        <th scope="col">Mecánica</th>
-                                    </tr>
-                                @endfor --}}
-                            </tbody>
-                        </table>
+
+
+                <div class="card-footer">
+                    @can('courses.edit')
+                        <div class="row">
+                            <h5 class="text-muted my-auto mr-2">Opciones de curso</h5>
+                            <form action="{{ route('courses.destroy', $course['id']) }}" method="post">
+                                <a href="{{ route('courses.edit', $course['id']) }}" class="btn btn-primary mr-3"
+                                    style="width: 5.5rem">Editar</a>
+                                @csrf
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-outline-danger" style="width: 5.5rem">Eliminar</button>
+                            </form>
+                        </div>
+                    @endcan
+                    @can('courses.show')
+                        @if (Auth::user()->getRoleNames()[0] === 'Estudiante')
+                            <div class="text-center">
+                                <form action="" method="post">
+                                    @csrf
+                                    {{ method_field('DELETE') }}
+                                    <button type="button" class="btn btn-outline-primary">Preinscribirme</button>
+                                </form>
+                            </div>
+                        @endif
+                    @endcan
+                </div>
+
+            </div>
+        </div>
+
+        <section class="col-12 border-bottom">
+            <div class="row">
+                <div class="col-sm-12 col-md-2">
+                    <div class="card pt-2 text-center">
+                        <strong>Modalidad</strong>
+                        <p>[ <span class="text-info">Presencial</span> ]</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <div
+                        class="card {{ $course['type'] === 'Sin asignar' ? 'border border-warning' : '' }} pt-2 text-center">
+                        <strong>Tipo</strong>
+                        <p>[ <span
+                                class="{{ $course['type'] === 'Sin asignar' ? 'text-muted' : 'text-info' }}">{{ $course['type'] }}</span>
+                            ]</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <div
+                        class="card {{ $course['category'] === 'Sin asignar' ? 'border border-warning' : '' }} pt-2 text-center">
+                        <strong>Categoria</strong>
+                        <p>[ <span
+                                class="{{ $course['category'] === 'Sin asignar' ? 'text-muted' : 'text-info' }}">{{ $course['category'] }}</span>
+                            ]</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <div class="card pt-2 text-center">
+                        <strong>Hora</strong>
+                        <p>[ <span class="text-info">11: 45 am</span> ]</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <div class="card pt-2 text-center">
+                        <strong>Lugar</strong>
+                        <p>[ <span class="text-info">Aula B5</span> ]</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                    <div class="card pt-2 text-center">
+                        <strong>Semana</strong>
+                        <p>[ <span class="text-info">10</span> / <span class="text-info">12</span> ]</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    {{-- <section class="content">
-        <div class="container-fluid">
-            <div id="slick" class="px-5">
-                    <div class="slide">
-                        <div class="card mt-3">
-                            <img src="{{ asset('/vendor/img/banners/' . $course['name'] . '.webp') }}" class="card-img-top rounded"
-                                alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title mb-2 h2 fw-bold">{{ $course['name'] }}</h5>
-                                <h6 class="card-text text-secondary">Cupos disponibles:
-                                    <span class="text-primary">{{ $course['quotes'] }}
-                                    </span>
-                                </h6>
-                                <p class="card-text text-truncate">{{ $course['description'] }}</p>
-                            </div>
-                        </div>
-                    </div>
+        </section>
+
+        {{-- Students table --}}
+        <div class="col-12 mt-4">
+            <div class="card table-responsive-sm p-3 mb-4">
+                <table id='users' class="table table-striped">
+                    <thead>
+                        <tr class="bg-secondary">
+                            <th>#</th>
+                            <th>Nombre y Apellido</th>
+                            <th>Fecha de ingreso</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach ($users as $user)
+                            <tr>
+                                <th>{{ $user->id }}</th>
+                                <th>{{ $user->name }}</th>
+                                <th>{{ $user->created_at }}</th>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-    </section> --}}
-@stop
 
-@section('footer')
+    </div>
+@stop
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />

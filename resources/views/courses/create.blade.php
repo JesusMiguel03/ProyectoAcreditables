@@ -9,7 +9,7 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('student.index') }}">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Crear curso</a></li>
             </ol>
         </div>
@@ -24,7 +24,7 @@
                 <h2 class="card-header">Nuevo curso</h2>
 
                 <div class="card-body">
-                    <form action="{{ url('/Cursos')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('cursos') }}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         {{-- Name field --}}
@@ -111,7 +111,7 @@
                         {{-- Login field --}}
                         <div class="row">
                             <div class="col-6">
-                                <a href="{{ route('Cursos.index') }}" class="btn btn-block btn-secondary">
+                                <a href="{{ route('courses.index') }}" class="btn btn-block btn-secondary">
                                     {{ __('Volver') }}
                                 </a>
                             </div>
