@@ -60,14 +60,13 @@ Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas,
 - JavaScript.
 - Php.
 
-**Librerías**
-- [jQuery](https://jquery.com/download/).
-
 **Plugins**
+- [jQuery](https://jquery.com/download/).
 - [SweetAlert2](https://sweetalert2.github.io).
 - [DataTables](https://datatables.net).
 - [Bs stepper](https://johann-s.github.io/bs-stepper/).
 - [Slick](http://kenwheeler.github.io/slick/).
+- [Spatie](https://spatie.be/docs/laravel-permission/v5/introduction).
 
 **Frameworks**
 - [Bootstrap (Frontend)](https://getbootstrap.com/docs/4.6/getting-started/introduction/).
