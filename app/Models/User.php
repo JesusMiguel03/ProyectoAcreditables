@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Profesor\Profesor;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,7 +27,8 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'nombre',
+        'apellido',
         'cedula',
         'email',
         'password',
@@ -61,4 +63,14 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function estudiante()
+    {
+        return $this->belongsToMany('App\Models\Estudiante');
+    }
+
+    public function profesor()
+    {
+        return $this->hasOne(Profesor::class, 'id');
+    }
 }

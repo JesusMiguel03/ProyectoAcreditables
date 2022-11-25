@@ -21,8 +21,8 @@
 
         {{-- Name field --}}
         <div class="input-group mb-3">
-            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                   value="{{ old('name') }}" placeholder="{{ __('Nombre y apellido') }}" autofocus>
+            <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
+                   value="{{ old('nombre') }}" placeholder="{{ __('Nombre') }}" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -30,7 +30,25 @@
                 </div>
             </div>
 
-            @error('name')
+            @error('nombre')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+
+        {{-- Name field --}}
+        <div class="input-group mb-3">
+            <input type="text" name="apellido" class="form-control @error('apellido') is-invalid @enderror"
+                   value="{{ old('apellido') }}" placeholder="{{ __('Apellido') }}" autofocus>
+
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                </div>
+            </div>
+
+            @error('apellido')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>

@@ -1,20 +1,14 @@
 <aside class="main-sidebar {{ config('adminlte.classes_sidebar', 'sidebar-dark-primary elevation-4') }}">
 
+    {{-- Sidebar brand logo --}}
+    @if(config('adminlte.logo_img_xl'))
+        @include('adminlte::partials.common.brand-logo-xl')
+    @else
+        @include('adminlte::partials.common.brand-logo-xs')
+    @endif
+
     {{-- Sidebar menu --}}
     <div class="sidebar">
-
-        {{-- Sidebar User --}}
-        <div class="user-panel my-2 pb-2 d-flex align-items-center">
-            <div class="image">
-                <img src="{{ asset('vendor/img/profs/user6.jpg') }}" class="img-circle elevation-2" alt="User Image">
-            </div>
-            <div class="info">
-                <p class="d-block font-weight-bold" style="margin-bottom: -0.5rem; color: #c2c7d0">
-                    {{ Auth::user()->name }}</p>
-                <small class="text-muted font-weight-bold">{{ Auth::user()->getRoleNames()[0] }}</small>
-            </div>
-        </div>
-
         <nav class="pt-2">
             <ul class="nav nav-pills nav-sidebar flex-column {{ config('adminlte.classes_sidebar_nav', '') }}"
                 data-widget="treeview" role="menu"

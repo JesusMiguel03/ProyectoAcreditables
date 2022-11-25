@@ -20,7 +20,8 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input)
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
+            'nombre' => ['required', 'string', 'max:20'],
+            'apellido' => ['required', 'string', 'max:20'],
             'cedula' => ['required', 'numeric', 'digits_between:7,8', 'unique:users'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
@@ -28,11 +29,12 @@ class CreateNewUser implements CreatesNewUsers
             'cedula.digits_between' => 'La cedula debe estar entre los 7 y 8 dígitos.'
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
+        return $usuario = User::create([
+            'nombre' => $input['nombre'],
+            'apellido' => $input['apellido'],
             'cedula' => $input['cedula'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-        ]);
+        ])->assignRole('Estudiante');
     }
 }

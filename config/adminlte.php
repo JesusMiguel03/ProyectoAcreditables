@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => 'Usuario',
-    'logo_img' => '/assets/img/profs/user0.jpg',
+    'logo' => '<b>Coord. Acreditables</b>',
+    'logo_img' => 'vendor/img/logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo_img_alt' => 'Logo de la universidad',
 
     /*
     |--------------------------------------------------------------------------
@@ -111,9 +111,9 @@ return [
         'img' => [
             'path' => 'vendor/img/logo.png',
             'alt' => 'Logo de la UPTA',
-            'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
+            'effect' => '',
+            'width' => 110,
+            'height' => 150,
         ],
     ],
 
@@ -130,8 +130,8 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
-    'usermenu_header_class' => 'bg-primary',
+    'usermenu_header' => true,
+    'usermenu_header_class' => 'bg-secondary',
     'usermenu_image' => false,
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
@@ -192,7 +192,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-light-primary elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -253,7 +253,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'inicio',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -298,18 +298,84 @@ return [
             'icon'        => 'fas fa-home'
         ],
         [
-            'text'        => 'Usuarios',
-            'url'         => '/usuarios',
-            'active'         => ['usuarios*'],
-            'icon'        => 'fas fa-users',
-            'can'         => 'coordinator.index',
+            'text'        => 'Perfiles',
+            'can'         => 'usuarios',
+            'submenu'         => [
+                [
+                    'text'        => 'Especialidad',
+                    'shift'       => 'ml-3',
+                    'url'         => '/especialidad',
+                    'active'         => ['especialidad*'],
+                    'icon'        => 'fas fa-users',
+                    'can'         => 'usuarios',
+                ],
+                [
+                    'text'        => 'Profesores',
+                    'shift'       => 'ml-3',
+                    'url'         => '/profesores',
+                    'active'         => ['profesores*'],
+                    'icon'        => 'fas fa-users',
+                    'can'         => 'usuarios',
+                ],
+                [
+                    'text'        => 'Usuarios',
+                    'shift'       => 'ml-3',
+                    'url'         => '/usuarios',
+                    'active'         => ['usuarios*'],
+                    'icon'        => 'fas fa-users',
+                    'can'         => 'usuarios',
+                ],
+            ],
         ],
         ['hr'],
         ['header' => 'ACREDITABLES'],
         [
-            'text'        => 'Cursos',
-            'url'         => '/cursos',
-            'active'      => ['cursos*'],
+            'text'        => 'Materias',
+            'shift'       => 'ml-3',
+            'url'         => '/materias',
+            'active'      => ['materias*'],
+            'icon'        => 'fas fa-th-large',
+            'can'         => 'preinscribir',
+        ],
+        [
+            'text'        => 'Gestionar',
+            'can'         => 'gestionar.materias',
+            'submenu'       => [
+                [
+                    'text'        => 'Materias',
+                    'shift'       => 'ml-3',
+                    'url'         => '/materias',
+                    'active'      => ['materias*'],
+                    'icon'        => 'fas fa-th-large',
+                ],
+                [
+                    'text'        => 'Categorias',
+                    'shift'       => 'ml-3',
+                    'url'         => '/categoria',
+                    'active'      => ['categoria*'],
+                    'icon'        => 'fas fa-th-large',
+                ],
+                // [
+                //     'text'        => 'Horario',
+                //     'shift'       => 'ml-3',
+                //     'url'         => '/horario',
+                //     'active'      => ['horario*'],
+                //     'icon'        => 'fas fa-th-large',
+                // ],
+            ],
+        ],
+        ['hr'],
+        ['header' => 'DATOS ACADEMICOS'],
+        [
+            'text'        => 'Pnf',
+            'url'         => '/pnf',
+            'active'      => ['pnf*'],
+            'icon'        => 'fas fa-th-large',
+        ],
+        [
+            'text'        => 'Trayecto',
+            'url'         => '/trayecto',
+            'active'      => ['trayecto*'],
             'icon'        => 'fas fa-th-large',
         ],
         ['hr'],
@@ -319,19 +385,10 @@ return [
             'url'         => '/preguntas-frecuentes',
             'icon'        => 'fas fa-question'
         ],
-        ['hr'],
-        ['header' => 'MI PERFIL'],
         [
-            'text'        => 'Cuenta',
-            'url'         => 'user/profile',
-            'icon'        => 'fas fa-cog',
-        ],
-        ['hr'],
-        ['header' => 'CUENTA'],
-        [
-            'text'        => 'Cerrar Sesión',
-            'url'         => 'logout',
-            'icon'        => 'fas fa-door-open'
+            'text'        => 'Noticias',
+            'url'         => '/noticias',
+            'icon'        => 'fas fa-question'
         ],
     ],
 

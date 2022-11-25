@@ -5,117 +5,91 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Coordinación de Acreditables</h1>
+            <h1 class="m-0">Inicio</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('student.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
             </ol>
         </div>
     </div>
 @stop
 
 @section('content')
-    <section class="content">
-        <div class="container-fluid">
-            <div id="slick" class="px-5 mb-5">
-                <div class="slide">
-                    <div class="card mt-3 text-black" style="height: 17rem;">
-                        <div class="card-body">
-                            <h5 class="text-center fw-bold">¡Curso añadido!</h5>
-                            <h6 class="text-muted">[Panaderia]</h6>
-                            <p class="card-text text-justify">Ahora el curso de Panaderia se encuentra disponible para
-                                todos los estudiantes pertenecientes al trayecto 2.</p>
+    <div class="container-fluid">
+        <div id="slick" class="px-5 mb-5">
+            @if (!$noticias->isEmpty())
+                @foreach ($noticias as $noticia)
+                    @if ($noticia->mostrar === 1)
+                        <div class="slide">
+                            <div class="card mt-3" style="height: 17rem;">
+                                <div class="card-body">
+                                    <h5 class="text-center fw-bold">{{ $noticia->encabezado }}</h5>
+                                    <h6 class="mb-2 text-muted">
+                                        [{{ explode('-', explode(' ', $noticia->created_at)[0])[2] }}
+                                        -{{ explode('-', explode(' ', $noticia->created_at)[0])[1] }}
+                                        -{{ explode('-', explode(' ', $noticia->created_at)[0])[0] }}]
+                                    </h6>
+                                    <p class="card-text text-justify">{{ $noticia->descripcion }}.</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="{{ route('courses.show', 1) }}">Ver curso</a>
+                    @endif
+                @endforeach
+            @else
+                <div class="slide">
+                    <div class="card mt-3" style="height: 10rem;">
+                        <div class="card-body">
+                            <h5 class="text-center fw-bold">Nada nuevo</h5>
+                            <p class="card-text text-justify">Parece que no hay noticias disponibles, puede que no haya nada que notificar por los momentos...</p>
                         </div>
                     </div>
                 </div>
-                <div class="slide">
-                    <div class="card mt-3" style="height: 17rem;">
-                        <div class="card-body">
-                            <h5 class="text-center fw-bold">¡Comunicado!</h5>
-                            <h6 class="mb-2 text-muted">[09-11-2022]</h6>
-                            <p class="card-text text-justify">Se prevee para la próxima semana, el día martes, se añadan
-                                nuevos cursos prácticos, que sean de provecho para toda la comunidad estudiantil.</p>
+            @endif
+        </div>
+
+        <section class="mt-4">
+
+            <h2>Acceso rápido</h2>
+            <div class="row">
+
+                <div class="col-sm-12 col-md-4">
+                    <a href="{{ route('materias.index') }}" class="small-box-footer">
+                        <div class="info-box bg-primary">
+                            <span class="info-box-icon"><i class="fas fa-th-large"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text font-weight-bold">Materias</span>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="slide">
-                    <div class="card mt-3" style="height: 17rem;">
-                        <div class="card-body">
-                            <h5 class="text-center fw-bold">¡Posibles Cambios!</h5>
-                            <h6 class="mb-2 text-muted">[09-11-2022]</h6>
-                            <p class="card-text text-justify">En vista de la gran demanda que han tenido los cursos de:
-                                <strong>Ajedrez y Fútbol</strong>, se plantea aumentar los cupos disponibles para el
-                                siguiente trimestre.
-                            </p>
+
+                <div class="col-sm-12 col-md-4">
+                    <a href="{{ route('preguntas.index') }}" class="small-box-footer">
+                        <div class="info-box bg-primary">
+                            <span class="info-box-icon"><i class="fas fa-question"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text font-weight-bold">Consultas</span>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                <div class="slide">
-                    <div class="card mt-3" style="height: 17rem;">
-                        <div class="card-body">
-                            <h5 class="text-center fw-bold">¡Aviso!</h5>
-                            <h6 class="mb-2 text-muted">[10-11-2022]</h6>
-                            <p class="card-text text-justify">Por temas personales los encargados de las acreditables de:
-                                <strong>Primeros Auxilios y Baloncesto</strong> no podrán asistir a la universidad
-                                durante la semana del 14-11 al 18-11.
-                            </p>
+
+                <div class="col-sm-12 col-md-4">
+                    <a href="{{ route('perfil.index') }}" class="small-box-footer">
+                        <div class="info-box bg-primary">
+                            <span class="info-box-icon"><i class="fas fa-cog"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text font-weight-bold">Perfil</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="slide">
-                    <div class="card mt-3" style="height: 17rem;">
-                        <div class="card-body">
-                            <h5 class="text-center fw-bold">¡Curso no disponible!</h5>
-                            <h6 class="mb-2 text-muted">[11-11-2022]</h6>
-                            <p class="card-text text-justify">El facilitador encargado del curso de
-                                <strong>Coral</strong> que nos acompañó este periodo académico 2021-2022 no
-                                podrá apoyarnos a causa de problemas de salud, esperamos se recupere pronto.
-                            </p>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             </div>
-            <section class="container mt-4">
-                <h2>Enlaces Directos:</h2>
-                <div class="row">
-                    <div class="col-sm-12 col-md-3">
-                        <a href="{{ route('courses.index') }}" class="small-box-footer">
-                            <div class="info-box bg-secondary">
-                                <span class="info-box-icon"><i class="fas fa-th-large"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Cursos</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-12 col-md-3">
-                        <a href="{{ route('faq') }}" class="small-box-footer">
-                            <div class="info-box bg-secondary">
-                                <span class="info-box-icon"><i class="fas fa-question"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Consultas</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-sm-12 col-md-3">
-                        <a href="user/profile" class="small-box-footer">
-                            <div class="info-box bg-secondary">
-                                <span class="info-box-icon"><i class="fas fa-cog"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Perfil</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
+
+        </section>
+
+    </div>
 @stop
 
 @section('footer')
@@ -125,7 +99,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/carousel/carousel.css') }}">
     <style>
         .info-box:hover {
-            background-color: #007bff!important;
+            background-color: #6c757d !important;
         }
     </style>
 @stop
@@ -133,6 +107,7 @@
 @section('js')
     <script src="{{ asset('vendor/carousel/slick.min.js') }}"></script>
     <script src="{{ asset('vendor/carousel/carousel.js') }}"></script>
+    {{-- Para limitar la longitud del texto a ver --}}
     {{-- <script>
         // Paragraph max length
         const truncate = 170

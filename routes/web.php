@@ -1,9 +1,21 @@
 <?php
 
+use App\Http\Controllers\Coordinador\EspecialidadController;
+use App\Http\Controllers\Coordinador\ProfesorController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\CourseController;
+use App\Http\Controllers\Coordinador\UsuarioController;
+use App\Http\Controllers\Materia\CategoriaController;
+use App\Http\Controllers\Materia\HorarioController;
+use App\Http\Controllers\Materia\PreinscripcionController;
+use App\Http\Controllers\DatosAcademicos\PnfController;
+use App\Http\Controllers\DatosAcademicos\TrayectoController;
+use App\Http\Controllers\Informacion\InicioController;
+use App\Http\Controllers\Informacion\NoticiasController;
+use App\Http\Controllers\Informacion\PreguntasFrecuentesController;
+use App\Http\Controllers\Materia\MateriaController;
+use App\Http\Controllers\PerfilController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,39 +27,77 @@ use App\Http\Controllers\CourseController;
 |
 */
 
-// Home
+// Iniciar sesion
 Route::get('/', function () {
     return view('auth.login');
 });
 
-// Student, professor, coordinator home
+// Inicio
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
     'prevent-back-history'
 ])->group(function () {
-    Route::get('/inicio', function () {
-        return view('welcome');
-    })->name('student.index');
+    Route::resource('/inicio', InicioController::class)->only([
+        'index'
+    ])->names('inicio');
 });
 
-Route::get('/coordinador', function () {
-    return view('coordinator.index');
-})->name('admin.index');
+// Usuarios [Solo para coordinador]
+Route::resource('/usuarios', UsuarioController::class)
+    ->middleware(['can:usuarios', 'prevent-back-history'])
+    ->names('coordinador.usuarios');
 
-// Users
-Route::resource('/usuarios', UserController::class)
-    ->middleware(['can:coordinator.index', 'prevent-back-history'])
-    ->names('coordinator.users');
-
-// Courses
-Route::resource('/cursos', CourseController::class)
+// Materias
+Route::resource('/materias', MateriaController::class)
+    ->except('create')
     ->middleware('prevent-back-history')
-    ->names('courses');
+    ->names('materias');
 
-// Frequently asked questions
-Route::get('/preguntas-frecuentes', function () {
-    return view('faq');
-})->middleware('prevent-back-history')
-    ->name('faq');
+// Categorias
+Route::resource('/categoria', CategoriaController::class)->middleware('prevent-back-history')->except([
+    'create', 'show', 'destroy'
+]);
+
+// Horario
+// Route::resource('/horario', HorarioController::class)->except([
+//     'create', 'show', 'destroy'
+// ]);
+
+// Especialidad
+Route::resource('/especialidad', EspecialidadController::class)->middleware('prevent-back-history')->except([
+    'create', 'show', 'destroy'
+]);
+
+// Profesor
+Route::resource('/profesores', ProfesorController::class)->middleware('prevent-back-history')->except([
+    'create', 'destroy'
+]);
+
+// Trayecto
+Route::resource('/trayecto', TrayectoController::class)->middleware('prevent-back-history')->except([
+    'create', 'show', 'destroy'
+]);
+
+// Pnf
+Route::resource('/pnf', PnfController::class)->middleware('prevent-back-history')->except([
+    'create', 'show', 'destroy'
+]);
+
+// Inscripcion
+Route::resource('/estudiante', PreinscripcionController::class)->middleware('prevent-back-history')->only('store');
+
+// Perfil
+Route::resource('/perfil', PerfilController::class)->middleware('prevent-back-history')->only('index', 'edit', 'update');
+
+// Noticias
+Route::resource('/noticias', NoticiasController::class)
+    ->middleware('prevent-back-history')
+    ->only('index', 'store', 'edit', 'update');
+
+// Preguntas frecuentes
+Route::resource('/preguntas-frecuentes', PreguntasFrecuentesController::class)
+    ->middleware('prevent-back-history')
+    ->only(['index', 'store', 'edit', 'update'])
+    ->names('preguntas');

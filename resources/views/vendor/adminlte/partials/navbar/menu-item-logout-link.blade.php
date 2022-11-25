@@ -16,7 +16,7 @@
         </button>
     </form>
 
-    {{-- <a class="nav-link" href="true" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <a class="nav-link" href="true" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         <i class="fa fa-fw fa-power-off text-red"></i>
         {{ __('adminlte::adminlte.log_out') }}
     </a>
@@ -25,5 +25,5 @@
             {{ method_field(config('adminlte.logout_method')) }}
         @endif
         {{ csrf_field() }}
-    </form> --}}
+    </form>
 </li>

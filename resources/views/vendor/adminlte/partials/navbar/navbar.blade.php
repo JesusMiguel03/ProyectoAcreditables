@@ -17,6 +17,8 @@
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
+        <div id="time" class="nav-item my-auto"></div>
+
         {{-- Custom right links --}}
         @yield('content_top_nav_right')
 
@@ -24,21 +26,18 @@
         @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-right'), 'item')
 
         {{-- User menu link --}}
-        {{-- @if (Auth::user())
+        @if (Auth::user())
             @if (config('adminlte.usermenu_enabled'))
                 @include('adminlte::partials.navbar.menu-item-dropdown-user-menu')
             @else
                 @include('adminlte::partials.navbar.menu-item-logout-link')
             @endif
-        @endif --}}
-
-        {{-- Right sidebar toggler link --}}
-        {{-- Time --}}
-        <div id="time" class="nav-item my-auto"></div>
-
-        @if (config('adminlte.right_sidebar'))
-            @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
         @endif
+        
+
+        {{-- @if (config('adminlte.right_sidebar'))
+            @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
+        @endif --}}
     </ul>
 
 </nav>
