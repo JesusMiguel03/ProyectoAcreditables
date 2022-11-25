@@ -21,7 +21,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 ```
-php artisan migrate
+php artisan migrate --seed
 ```
 Crea un enlace en /public para guardar las imagenes de cursos
 ```
@@ -34,6 +34,12 @@ Para recibir las actualizaciones:
 Dentro de la carpeta donde se encuentra el proyecto
 ```
 git pull
+```
+```
+composer update
+```
+```
+php artisan migrate:fresh --seed
 ```
 
 ## Sobre el proyecto
@@ -54,14 +60,13 @@ Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas,
 - JavaScript.
 - Php.
 
-**Librerías**
-- [jQuery](https://jquery.com/download/).
-
 **Plugins**
+- [jQuery](https://jquery.com/download/).
 - [SweetAlert2](https://sweetalert2.github.io).
 - [DataTables](https://datatables.net).
 - [Bs stepper](https://johann-s.github.io/bs-stepper/).
 - [Slick](http://kenwheeler.github.io/slick/).
+- [Spatie](https://spatie.be/docs/laravel-permission/v5/introduction).
 
 **Frameworks**
 - [Bootstrap (Frontend)](https://getbootstrap.com/docs/4.6/getting-started/introduction/).
