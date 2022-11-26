@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfesorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:perfiles');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +25,7 @@ class ProfesorController extends Controller
     {
         $profesores = Profesor::all();
         $usuarios = User::all();
-        return view('coordinador.profesor.index', compact('profesores', 'usuarios'));
+        return view('aside.principal.profesores.index', compact('profesores', 'usuarios'));
     }
 
     /**
@@ -77,7 +83,7 @@ class ProfesorController extends Controller
         $usuario = User::find($id);
         $profesor = Profesor::findOrFail($id);
 
-        return view('coordinador.profesor.show', compact('profesor', 'usuario'));
+        return view('aside.principal.profesores.show', compact('profesor', 'usuario'));
     }
 
     /**
@@ -90,7 +96,7 @@ class ProfesorController extends Controller
     {
         $usuario = User::find($id);
         $profesor = Profesor::findOrFail($id);
-        return view('coordinador.profesor.edit', compact('profesor', 'usuario'));
+        return view('aside.principal.profesores.edit', compact('profesor', 'usuario'));
     }
 
     /**

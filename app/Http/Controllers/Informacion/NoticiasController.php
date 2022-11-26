@@ -17,7 +17,7 @@ class NoticiasController extends Controller
     public function index()
     {
         $noticias = Noticia::all();
-        return view('coordinador.informacion.index', compact('noticias'));
+        return view('aside.informacion.noticias.index', compact('noticias'));
     }
 
     /**
@@ -29,11 +29,11 @@ class NoticiasController extends Controller
     public function store(Request $request)
     {
         $validador = Validator::make($request->all(), [
-            'encabezado' => ['required', 'string', 'max:40'],
-            'descripcion' => ['required', 'string', 'max:150'],
+            'encabezado' => ['required', 'string', 'max:25'],
+            'desc_noticia' => ['required', 'string', 'max:150'],
             'mostrar' => ['required', 'boolean'],
         ], [
-            'descripcion.max' => 'La descripcion no debe ser mayor a 150 carácteres.'
+            'desc_noticia.max' => 'La descripcion no debe ser mayor a 150 carácteres.'
         ]);
 
         if ($validador->fails()) {
@@ -47,7 +47,7 @@ class NoticiasController extends Controller
 
         $noticia = new Noticia();
         $noticia->encabezado = request('encabezado');
-        $noticia->descripcion = request('descripcion');
+        $noticia->desc_noticia = request('desc_noticia');
         $noticia->mostrar = request('mostrar');
         $noticia->save();
 
@@ -63,7 +63,7 @@ class NoticiasController extends Controller
     public function edit($id)
     {
         $noticia = Noticia::find($id);
-        return view('coordinador.informacion.edit', compact('noticia'));
+        return view('aside.informacion.noticias.edit', compact('noticia'));
     }
 
     /**
@@ -76,20 +76,16 @@ class NoticiasController extends Controller
     public function update(Request $request, $id)
     {
         $validador = Validator::make($request->all(), [
-            'encabezado' => ['required', 'string', 'max:40'],
-            'descripcion' => ['required', 'string', 'max:150'],
+            'encabezado' => ['required', 'string', 'max:25'],
+            'desc_noticia' => ['required', 'string', 'max:150'],
             'mostrar' => ['required', 'boolean'],
         ], [
-            'descripcion.max' => 'La descripcion no debe ser mayor a 150 carácteres.'
+            'desc_noticia.max' => 'La descripcion no debe ser mayor a 150 carácteres.'
         ]);
 
         if ($validador->fails()) {
             return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
         }
-
-        // if (Trayecto::where('numero', '=', $request->get('numero'))->first()) {
-        //     return redirect('trayecto')->with('registrada', 'Aula ocupada');
-        // }
 
         $informacion = request()->except(['_token', '_method']);
         Noticia::where('id', '=', $id)->update($informacion);

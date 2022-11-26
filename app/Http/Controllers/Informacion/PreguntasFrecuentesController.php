@@ -17,7 +17,7 @@ class PreguntasFrecuentesController extends Controller
     public function index()
     {
         $preguntas = Preguntas_frecuentes::all();
-        return view('preguntas_frecuentes.index', compact('preguntas'));
+        return view('aside.informacion.preguntas.index', compact('preguntas'));
     }
 
     /**
@@ -54,7 +54,7 @@ class PreguntasFrecuentesController extends Controller
     public function edit($id)
     {
         $pregunta = Preguntas_frecuentes::find($id);
-        return view('preguntas_frecuentes.edit', compact('pregunta'));
+        return view('aside.informacion.preguntas.edit', compact('pregunta'));
     }
 
     /**

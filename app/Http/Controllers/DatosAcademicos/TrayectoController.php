@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class TrayectoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:trayecto');
+    }
+
     /*
     * Display a listing of the resource.
     *
@@ -17,7 +23,7 @@ class TrayectoController extends Controller
     public function index()
     {
         $trayectos = Trayecto::all();
-        return view('academico.trayecto.index', compact('trayectos'));
+        return view('aside.academico.trayecto.index', compact('trayectos'));
     }
 
     /**
@@ -29,19 +35,19 @@ class TrayectoController extends Controller
     public function store(Request $request)
     {
         $validador = Validator::make($request->all(), [
-            'numero' => ['required', 'integer', 'max:4'],
+            'num_trayecto' => ['required', 'integer', 'max:4'],
         ]);
 
         if ($validador->fails()) {
             return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
         }
 
-        if (Trayecto::where('numero', '=', $request->get('numero'))->first()) {
+        if (Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))->first()) {
             return redirect('trayecto')->with('registrada', 'Aula ocupada');
         }
 
         $trayecto = new Trayecto();
-        $trayecto->numero = request('numero');
+        $trayecto->num_trayecto = request('num_trayecto');
         $trayecto->save();
 
         return redirect('trayecto')->with('creado', 'El aula fue encontrada exitosamente');
@@ -56,7 +62,7 @@ class TrayectoController extends Controller
     public function edit($id)
     {
         $trayecto = Trayecto::find($id);
-        return view('academico.trayecto.edit', compact('trayecto'));
+        return view('aside.academico.trayecto.edit', compact('trayecto'));
     }
 
     /**
@@ -69,14 +75,14 @@ class TrayectoController extends Controller
     public function update(Request $request, $id)
     {
         $validador = Validator::make($request->all(), [
-            'numero' => ['required', 'integer', 'max:4'],
+            'num_trayecto' => ['required', 'integer', 'max:4'],
         ]);
 
         if ($validador->fails()) {
             return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
         }
 
-        if (Trayecto::where('numero', '=', $request->get('numero'))->first()) {
+        if (Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))->first()) {
             return redirect('trayecto')->with('registrada', 'Aula ocupada');
         }
 

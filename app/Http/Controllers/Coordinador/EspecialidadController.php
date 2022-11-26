@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class EspecialidadController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:perfiles');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +23,7 @@ class EspecialidadController extends Controller
     public function index()
     {
         $especialidades = Especialidad::all();
-        return view('coordinador.especialidad.index', compact('especialidades'));
+        return view('aside.principal.especialidad.index', compact('especialidades'));
     }
 
     /**
@@ -29,7 +35,7 @@ class EspecialidadController extends Controller
     public function store(Request $request)
     {
         $validador = Validator::make($request->all(), [
-            'nombre' => ['required', 'string', 'max:50']
+            'nom_especialidad' => ['required', 'string', 'max:50']
         ]);
 
         if ($validador->fails())
@@ -37,14 +43,14 @@ class EspecialidadController extends Controller
             return redirect('especialidad/create')->withErrors($validador)->withInput();
         }
 
-        if (Especialidad::where('nombre', '=', $request->get('nombre'))->first())
+        if (Especialidad::where('nom_especialidad', '=', $request->get('nom_especialidad'))->first())
         {
             return redirect('especialidad')->with('error', 'categoria existente');
         }
 
 
         $especialidad = new Especialidad();
-        $especialidad->nombre = request('nombre');
+        $especialidad->nom_especialidad = request('nom_especialidad');
         $especialidad->save();
 
         return redirect('especialidad')->with('creado', 'La categoria fue creada exitosamente');
@@ -59,7 +65,7 @@ class EspecialidadController extends Controller
     public function edit($id)
     {
         $especialidad = Especialidad::findOrFail($id);
-        return view('coordinador.especialidad.edit', compact('especialidad'));
+        return view('aside.principal.especialidad.edit', compact('especialidad'));
     }
 
     /**

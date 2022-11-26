@@ -17,7 +17,7 @@
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
-        <div id="time" class="nav-item my-auto"></div>
+        <div id="time" class="nav-item my-auto mr-2"></div>
 
         {{-- Custom right links --}}
         @yield('content_top_nav_right')

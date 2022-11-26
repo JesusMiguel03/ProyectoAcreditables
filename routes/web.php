@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Coordinador\UsuarioController;
 use App\Http\Controllers\Materia\CategoriaController;
-use App\Http\Controllers\Materia\HorarioController;
 use App\Http\Controllers\Materia\PreinscripcionController;
 use App\Http\Controllers\DatosAcademicos\PnfController;
 use App\Http\Controllers\DatosAcademicos\TrayectoController;
@@ -46,7 +45,7 @@ Route::middleware([
 
 // Usuarios [Solo para coordinador]
 Route::resource('/usuarios', UsuarioController::class)
-    ->middleware(['can:usuarios', 'prevent-back-history'])
+    ->middleware('prevent-back-history')
     ->names('coordinador.usuarios');
 
 // Materias

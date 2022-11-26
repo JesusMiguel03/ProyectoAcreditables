@@ -10,6 +10,12 @@ use App\Models\Materia\Categoria;
 
 class CategoriaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:categorias');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +24,7 @@ class CategoriaController extends Controller
     public function index()
     {
         $categorias = Categoria::all();
-        return view('materias.informacion.categoria.index', compact('categorias'));
+        return view('aside.materias.categorias.index', compact('categorias'));
     }
 
     /**
@@ -60,7 +66,7 @@ class CategoriaController extends Controller
     public function edit($id)
     {
         $categoria = Categoria::findOrFail($id);
-        return view('materias.informacion.categoria.edit', compact('categoria'));
+        return view('aside.materias.categorias.edit', compact('categoria'));
     }
 
     /**

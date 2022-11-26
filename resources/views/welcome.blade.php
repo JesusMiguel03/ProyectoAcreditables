@@ -17,8 +17,25 @@
 
 @section('content')
     <div class="container-fluid">
-        <div id="slick" class="px-5 mb-5">
-            @if (!$noticias->isEmpty())
+
+        @if ($noticias->isEmpty())
+            <div class="col-4 mx-auto">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h5 class="text-center fw-bold">No hay noticias</h5>
+                    </div>
+
+                    <div class="card-body" style="min-height: 10rem">
+                        <p class="card-text text-justify px-2">Parece que no hay noticias disponibles, puede que no haya
+                            nada que
+                            notificar por los momentos...</p>
+                    </div>
+
+                </div>
+            </div>
+        @else
+            <div id="slick" class="px-5 mb-5">
                 @foreach ($noticias as $noticia)
                     @if ($noticia->mostrar === 1)
                         <div class="slide">
@@ -26,27 +43,18 @@
                                 <div class="card-body">
                                     <h5 class="text-center fw-bold">{{ $noticia->encabezado }}</h5>
                                     <h6 class="mb-2 text-muted">
-                                        [{{ explode('-', explode(' ', $noticia->created_at)[0])[2] }}
+                                        [ {{ explode('-', explode(' ', $noticia->created_at)[0])[2] }}
                                         -{{ explode('-', explode(' ', $noticia->created_at)[0])[1] }}
-                                        -{{ explode('-', explode(' ', $noticia->created_at)[0])[0] }}]
+                                        -{{ explode('-', explode(' ', $noticia->created_at)[0])[0] }} ]
                                     </h6>
-                                    <p class="card-text text-justify">{{ $noticia->descripcion }}.</p>
+                                    <p class="card-text text-justify">{{ $noticia->desc_noticia }}.</p>
                                 </div>
                             </div>
                         </div>
                     @endif
                 @endforeach
-            @else
-                <div class="slide">
-                    <div class="card mt-3" style="height: 10rem;">
-                        <div class="card-body">
-                            <h5 class="text-center fw-bold">Nada nuevo</h5>
-                            <p class="card-text text-justify">Parece que no hay noticias disponibles, puede que no haya nada que notificar por los momentos...</p>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        </div>
+            </div>
+        @endif
 
         <section class="mt-4">
 

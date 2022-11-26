@@ -299,7 +299,7 @@ return [
         ],
         [
             'text'        => 'Perfiles',
-            'can'         => 'usuarios',
+            'can'         => 'perfiles',
             'submenu'         => [
                 [
                     'text'        => 'Especialidad',
@@ -307,7 +307,7 @@ return [
                     'url'         => '/especialidad',
                     'active'         => ['especialidad*'],
                     'icon'        => 'fas fa-users',
-                    'can'         => 'usuarios',
+                    'can'         => 'perfiles',
                 ],
                 [
                     'text'        => 'Profesores',
@@ -315,7 +315,7 @@ return [
                     'url'         => '/profesores',
                     'active'         => ['profesores*'],
                     'icon'        => 'fas fa-users',
-                    'can'         => 'usuarios',
+                    'can'         => 'perfiles',
                 ],
                 [
                     'text'        => 'Usuarios',
@@ -323,7 +323,7 @@ return [
                     'url'         => '/usuarios',
                     'active'         => ['usuarios*'],
                     'icon'        => 'fas fa-users',
-                    'can'         => 'usuarios',
+                    'can'         => 'perfiles',
                 ],
             ],
         ],
@@ -331,21 +331,21 @@ return [
         ['header' => 'ACREDITABLES'],
         [
             'text'        => 'Materias',
-            'shift'       => 'ml-3',
             'url'         => '/materias',
             'active'      => ['materias*'],
             'icon'        => 'fas fa-th-large',
-            'can'         => 'preinscribir',
+            'can'         => 'materias',
         ],
         [
             'text'        => 'Gestionar',
-            'can'         => 'gestionar.materias',
+            'can'         => 'materias.gestion',
             'submenu'       => [
                 [
                     'text'        => 'Materias',
                     'shift'       => 'ml-3',
                     'url'         => '/materias',
                     'active'      => ['materias*'],
+                    'can'         => 'materias.gestion',
                     'icon'        => 'fas fa-th-large',
                 ],
                 [
@@ -353,6 +353,7 @@ return [
                     'shift'       => 'ml-3',
                     'url'         => '/categoria',
                     'active'      => ['categoria*'],
+                    'can'         => 'categorias',
                     'icon'        => 'fas fa-th-large',
                 ],
                 // [
@@ -364,18 +365,26 @@ return [
                 // ],
             ],
         ],
-        ['hr'],
-        ['header' => 'DATOS ACADEMICOS'],
         [
-            'text'        => 'Pnf',
+            'hr',
+            'can' => 'trayecto',
+        ],
+        [
+            'header' => 'DATOS ACADEMICOS',
+            'can'    => 'trayecto',
+        ],
+        [
+            'text'        => 'PNF',
             'url'         => '/pnf',
             'active'      => ['pnf*'],
+            'can'         => 'pnf',
             'icon'        => 'fas fa-th-large',
         ],
         [
             'text'        => 'Trayecto',
             'url'         => '/trayecto',
             'active'      => ['trayecto*'],
+            'can'         => 'trayecto',
             'icon'        => 'fas fa-th-large',
         ],
         ['hr'],
@@ -383,11 +392,13 @@ return [
         [
             'text'        => 'Acerca de',
             'url'         => '/preguntas-frecuentes',
+            'active'         => ['preguntas-frecuentes*'],
             'icon'        => 'fas fa-question'
         ],
         [
             'text'        => 'Noticias',
             'url'         => '/noticias',
+            'active'         => ['noticias*'],
             'icon'        => 'fas fa-question'
         ],
     ],

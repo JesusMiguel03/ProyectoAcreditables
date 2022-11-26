@@ -19,7 +19,7 @@ class MateriaController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('can:gestionar.materias')->only('create', 'edit', 'destroy');
+        $this->middleware('can:materias.gestion')->only('create', 'edit');
     }
 
     /**
@@ -30,7 +30,7 @@ class MateriaController extends Controller
     public function index()
     {
         $materias = Materia::all();
-        return view('materias.index', compact('materias'));
+        return view('aside.materias.acreditables.index', compact('materias'));
     }
 
     /**
@@ -97,7 +97,7 @@ class MateriaController extends Controller
             $validacion = ['Sin asignar'];
         }
 
-        return view('materias.show', compact('materia', 'validacion', 'datos_materia'));
+        return view('aside.materias.acreditables.show', compact('materia', 'validacion', 'datos_materia'));
     }
 
     /**
@@ -114,7 +114,7 @@ class MateriaController extends Controller
         $categorias = Categoria::all();
         $profesores = Profesor::all();
 
-        return view('materias.edit', compact('materia', 'categorias', 'profesores'));
+        return view('aside.materias.acreditables.edit', compact('materia', 'categorias', 'profesores'));
     }
 
     /**

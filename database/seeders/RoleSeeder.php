@@ -22,24 +22,28 @@ class RoleSeeder extends Seeder
         // Inicio
         Permission::create(['name' => 'home'])->syncRoles([$estudiante, $profesor, $coordinador]);
 
-        // Lista y gestión de usuarios
-        Permission::create(['name' => 'usuarios'])->syncRoles([$coordinador]);
+        // Perfiles
+        Permission::create(['name' => 'perfiles'])->syncRoles([$coordinador]);
 
-        // Materias
-        Permission::create(['name' => 'gestionar.materias'])->syncRoles([$coordinador]);
-        
-        Permission::create(['name' => 'materias.index'])->syncRoles([$estudiante, $profesor, $coordinador]);
-        Permission::create(['name' => 'materias.create'])->syncRoles([$coordinador]);
-        Permission::create(['name' => 'materias.store'])->syncRoles($coordinador);
-        Permission::create(['name' => 'materias.update'])->syncRoles([$coordinador]);
-        Permission::create(['name' => 'materias.show'])->syncRoles([$estudiante, $profesor, $coordinador]);
-        Permission::create(['name' => 'materias.edit'])->syncRoles([$coordinador]);
+        // Acreditables
+        Permission::create(['name' => 'materias.gestion'])->syncRoles([$coordinador]);
+        Permission::create(['name' => 'materias'])->syncRoles([$estudiante, $profesor]);
+
+        Permission::create(['name' => 'categorias'])->syncRoles([$coordinador]);
 
         // Preinscripcion en materia
         Permission::create(['name' => 'preinscribir'])->syncRoles([$estudiante]);
 
-        // Preguntas frecuentes
+        // Datos académicos
+        Permission::create(['name' => 'pnf'])->syncRoles([$coordinador]);
+        Permission::create(['name' => 'trayecto'])->syncRoles([$coordinador]);
+
+        // Información
+        Permission::create(['name' => 'preguntas.create'])->syncRoles([$coordinador]);
+        Permission::create(['name' => 'noticias.create'])->syncRoles([$coordinador]);
+        
         Permission::create(['name' => 'preguntas'])->syncRoles([$estudiante, $profesor, $coordinador]);
+        Permission::create(['name' => 'noticias'])->syncRoles([$estudiante, $profesor, $coordinador]);
 
         // Cuenta
         Permission::create(['name' => 'ver.perfil'])->syncRoles([$estudiante, $profesor, $coordinador]);

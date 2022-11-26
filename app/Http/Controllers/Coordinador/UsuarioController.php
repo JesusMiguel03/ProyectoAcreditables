@@ -11,10 +11,16 @@ use Spatie\Permission\Models\Role;
 
 class UsuarioController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:perfiles');
+    }
+
     public function index()
     {
         $usuarios = User::all();
-        return view('coordinador.users', compact('usuarios'));
+        return view('aside.principal.usuarios.index', compact('usuarios'));
     }
 
     public function edit($id)
@@ -29,7 +35,7 @@ class UsuarioController extends Controller
             array_push($relacion, $prof->pivot->especialidad_id);
         }
         
-        return view('coordinador.edit', compact('usuario', 'roles', 'especialidades', 'profesor', 'relacion'));
+        return view('aside.principal.usuarios.edit', compact('usuario', 'roles', 'especialidades', 'profesor', 'relacion'));
     }
 
     public function update(Request $request, $id)
@@ -45,38 +51,6 @@ class UsuarioController extends Controller
         $especialidades = request('especialidades');
 
         $profesor->especialidad()->sync($especialidades);
-
-        // Modelo relacion
-        // foreach ($especialidades as $especialidad) {
-            
-        // }
-        // $relacion = new Profesor_especialidad();
-        // $relacion->especialidad_id = $especialidades;
-        // $relacion->usuario_id = $profesor->id;
-        // dd($relacion);
-        // $relacion->save();
-
-        // $profesor->usuario_id = $id;
-
-        // if (request('especialidad')) {
-        //     $profesor->especialidad();
-        //     dd($profesor);
-        // }
-
-        // $profesor->especialidad_id = request('especialidad')[count(request('especialidad')) - 1];
-        // dd(count(request('especialidad')) > 1 ? count(request('especialidad')) - 1 : count(request('especialidad')));
-        // dd($profesor->especialidad_id);
-        // foreach (request('especialidad') as $especialidad) {
-        //     $profesor_especialidad = new Profesor();
-        //     $profesor_especialidad->usuario_id = $profesor;
-        //     $profesor_especialidad->especialidad_id = $especialidad;
-        //     $profesor_especialidad->save();
-        // }
-        // dd(json_encode(request('especialidad')));
-        // dd(request('especialidad'));
-        // dd(implode(',', request('especialidad')));
-        // $profesor->especialidad_id = implode(',',request('especialidad')); // = request('especialidad');
-        // $profesor->save();
 
         return redirect('usuarios')->with('creado', 'Roles añadidos exitosamente');
     }

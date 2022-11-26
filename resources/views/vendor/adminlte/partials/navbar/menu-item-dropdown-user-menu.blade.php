@@ -16,9 +16,9 @@
 <li class="nav-item dropdown user-menu d-flex align-items-center">
 
     {{-- User menu toggler --}}
-    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+    <a href="#" class="nav-link dropdown-toggle p-2" data-toggle="dropdown">
         <img src="{{ asset('vendor/img/profs/user6.jpg') }}" class="user-image img-circle" alt="Imagen de usuario">
-        <i class="fa fa-chevron-down" style="margin-left: -0.5rem; margin-top: -0.7rem;font-size: 0.7rem"></i>
+        {{-- <i class="fa fa-chevron-down" style="margin-left: -0.5rem; margin-top: -0.7rem;font-size: 0.7rem"></i> --}}
     </a>
 
     <div style="margin-top: -0.2rem">
@@ -28,17 +28,17 @@
     </div>
 
     {{-- User menu dropdown --}}
-    <ul class="dropdown-menu rounded" style="width: 11rem">
+    <ul class="dropdown-menu rounded" style="width: 9rem">
 
         {{-- User menu footer --}}
         <li class="user-footer rounded">
-            <a class="btn btn-outline-secondary btn-block mt-2" href="{{ route('perfil.index') }}">
-                <i class="fas fa-cog"></i>
+            <a class="d-block p-2 link-muted" href="{{ route('perfil.index') }}">
+                <i class="fas fa-cog mr-2"></i>
                 {{ __('Perfil') }}
             </a>
-            <a class="btn btn-outline-secondary btn-block mt-2" href="#"
+            <a class="d-block p-2 mt-2 link-muted" href="#"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-door-open"></i>
+                <i class="fas fa-door-open mr-2"></i>
                 {{ __('adminlte::adminlte.log_out') }}
             </a>
             <form id="logout-form" action="{{ $logout_url }}" method="POST" style="display: none;">
