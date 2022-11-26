@@ -43,7 +43,6 @@ class UserProfileController extends Controller
     {
         if (!$request->password === null)
         {
-            dd('test');
             $profile = Auth::user();
 
             $profile->name = $request->get('name');

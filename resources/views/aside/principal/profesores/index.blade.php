@@ -118,7 +118,7 @@
                                 <div class="form-group mb-3">
                                     <label>Número de contacto</label>
                                     <input type="tel" name="telefono"
-                                        class="form-control @error('estado') is-invalid @enderror"
+                                        class="form-control @error('estado') is-invalid @enderror" value="{{ old('telefono') }}"
                                         placeholder="{{ __('Número de teléfono, ej: 04124395155') }}" autofocus>
 
                                     @error('telefono')
@@ -133,7 +133,7 @@
                                     <label>Fecha de nacimiento</label>
                                     <div class="input-group date" id="fecha_nacimiento" data-target-input="nearest">
                                         <input type="text" name="fecha_de_nacimiento"
-                                            class="form-control datetimepicker-input" data-target="#fecha_nacimiento"
+                                            class="form-control datetimepicker-input" data-target="#fecha_nacimiento" value="{{ old('fecha_de_nacimiento') }}"
                                             placeholder="{{ __('Ej: 1983-09-06') }}" />
                                         <div class="input-group-append" data-target="#fecha_nacimiento"
                                             data-toggle="datetimepicker">
@@ -147,7 +147,7 @@
                                     <label>Fecha de ingreso al plantel</label>
                                     <div class="input-group date" id="fecha_ingreso" data-target-input="nearest">
                                         <input type="text" name="fecha_ingreso_plantel"
-                                            class="form-control datetimepicker-input" data-target="#fecha_ingreso"
+                                            class="form-control datetimepicker-input" data-target="#fecha_ingreso" value="{{ old('fecha_ingreso') }}"
                                             placeholder="{{ __('Ej: 2013-03-19') }}" />
                                         <div class="input-group-append" data-target="#fecha_ingreso"
                                             data-toggle="datetimepicker">
@@ -173,15 +173,15 @@
             </div>
         </div>
 
-        <div class="col-12 card table-responsive-sm p-3 mb-4">
+        <div class="col-12 card table-responsive-sm p-3 mt-3 mb-4">
 
             <table id='tabla' class="table table-striped">
                 <thead>
                     <tr class="bg-secondary">
                         <th>Nombre</th>
                         <th>Titulo</th>
-                        <th>Direccion</th>
                         <th>Telfono</th>
+                        <th>Estado</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -190,13 +190,19 @@
                         <tr>
                             <td>{{ $profesor->usuario->nombre }} {{ $profesor->usuario->apellido }}</td>
                             <td>{{ $profesor->titulo }}</td>
-                            <td>{{ $profesor->direccion }}/{{ $profesor->ciudad }}/{{ $profesor->estado }}
                             <td>{{ $profesor->telefono }}</td>
+                            <td>{{ $profesor->estado_profesor === 1 ? 'Activo' : 'Inactivo' }}</td>
                             <td>
-                                <a href="{{ route('profesores.show', $profesor) }}" class="btn btn-primary"
-                                    style="width: 5rem">Ver</a>
                                 <a href="{{ route('profesores.edit', $profesor) }}" class="btn btn-primary"
-                                    style="width: 5rem">Editar</a>
+                                    style="width: 7rem">
+                                    <i class="fas fa-edit mr-2"></i>
+                                    Editar
+                                </a>
+                                <a href="{{ route('profesores.show', $profesor) }}" class="btn btn-primary"
+                                    style="width: 7rem">
+                                    <i class="fas fa-eye mr-2"></i>
+                                    Ver
+                                </a>
                             </td>
                         </tr>
                     @endforeach

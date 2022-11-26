@@ -21,16 +21,17 @@ class Profesor extends Model
         'estado',
         'telefono',
         'fecha_de_nacimiento',
-        'fecha_ingreso_plantel',  
+        'fecha_ingreso_plantel',
+        'estado_profesor'
     ];
 
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(User::class, 'usuario_id', 'id');
     }
 
-    public function especialidad()
+    public function especialidades()
     {
-        return $this->belongsToMany(Especialidad::class, 'profesor_especialidad', 'usuario_id');
+        return $this->belongsToMany(Especialidad::class, 'profesor_especialidad', 'profesor_id', 'especialidad_id');
     }
 }

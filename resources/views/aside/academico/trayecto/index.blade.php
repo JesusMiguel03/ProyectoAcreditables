@@ -88,8 +88,12 @@
                             @foreach ($trayectos as $trayecto)
                                 <tr>
                                     <th>{{ $trayecto->num_trayecto }}</th>
-                                    <th width="10"><a href="{{ route('trayecto.edit', $trayecto->id) }}"
-                                            class="btn btn-primary">Editar</a></th>
+                                    <th><a href="{{ route('trayecto.edit', $trayecto->id) }}"
+                                            class="btn btn-primary">
+                                            <i class="fas fa-edit mr-2"></i>
+                                            Editar
+                                        </a>
+                                    </th>
                                 </tr>
                             @endforeach
                         </tbody>

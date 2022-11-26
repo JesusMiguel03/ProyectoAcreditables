@@ -23,10 +23,10 @@
 
         <div class="row">
             <div class="col-sm-12 col-md-3">
-                <div class="card">
+                <div class="card" style="height: 13.52rem;">
                     @if (!empty($materia->info))
-                        <div class="card-body box-profile" style="min-height: 15.895rem">
-                            <div class="text-center" style="margin-top: 2.5rem">
+                        <div class="card-body box-profile">
+                            <div class="text-center mt-4">
                                 <img class="profile-user-img img-fluid img-circle"
                                     src="{{ asset('/vendor/img/profs/user0.jpg') }}" alt="User profile picture">
                             </div>

@@ -16,10 +16,9 @@ class CreateProfesorEspecialidadTable extends Migration
         Schema::create('profesor_especialidad', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('especialidad_id');
-            $table->unsignedBigInteger('usuario_id');
+            $table->unsignedBigInteger('profesor_id');
             $table->foreign('especialidad_id')->references('id')->on('especialidad')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreign('profesor_id')->references('id')->on('profesores')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

@@ -203,9 +203,15 @@
                                 <td class="text-justify" style="width: 21rem">{{ $materia->desc_materia }}</td>
                                 <td>
                                     <a href="{{ route('materias.edit', $materia) }}" class="btn btn-primary"
-                                        style="width: 5rem">Editar</a>
+                                        style="width: 7rem">
+                                        <i class="fas fa-edit mr-2"></i>
+                                        Editar
+                                        </a>
                                     <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary"
-                                        style="width: 5rem">Ver</a>
+                                        style="width: 7rem">
+                                        <i class="fas fa-eye mr-2"></i>
+                                        Ver
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

@@ -299,11 +299,12 @@ return [
         ],
         [
             'text'        => 'Perfiles',
+            'icon'        => 'fas fa-folder',
             'can'         => 'perfiles',
             'submenu'         => [
                 [
                     'text'        => 'Especialidad',
-                    'shift'       => 'ml-3',
+                    'shift'       => 'ml-1',
                     'url'         => '/especialidad',
                     'active'         => ['especialidad*'],
                     'icon'        => 'fas fa-users',
@@ -311,7 +312,7 @@ return [
                 ],
                 [
                     'text'        => 'Profesores',
-                    'shift'       => 'ml-3',
+                    'shift'       => 'ml-1',
                     'url'         => '/profesores',
                     'active'         => ['profesores*'],
                     'icon'        => 'fas fa-users',
@@ -319,7 +320,7 @@ return [
                 ],
                 [
                     'text'        => 'Usuarios',
-                    'shift'       => 'ml-3',
+                    'shift'       => 'ml-1',
                     'url'         => '/usuarios',
                     'active'         => ['usuarios*'],
                     'icon'        => 'fas fa-users',
@@ -338,11 +339,12 @@ return [
         ],
         [
             'text'        => 'Gestionar',
+            'icon'        => 'fas fa-folder',
             'can'         => 'materias.gestion',
             'submenu'       => [
                 [
                     'text'        => 'Materias',
-                    'shift'       => 'ml-3',
+                    'shift'       => 'ml-1',
                     'url'         => '/materias',
                     'active'      => ['materias*'],
                     'can'         => 'materias.gestion',
@@ -350,19 +352,12 @@ return [
                 ],
                 [
                     'text'        => 'Categorias',
-                    'shift'       => 'ml-3',
+                    'shift'       => 'ml-1',
                     'url'         => '/categoria',
                     'active'      => ['categoria*'],
                     'can'         => 'categorias',
-                    'icon'        => 'fas fa-th-large',
+                    'icon'        => 'fas fa-tags',
                 ],
-                // [
-                //     'text'        => 'Horario',
-                //     'shift'       => 'ml-3',
-                //     'url'         => '/horario',
-                //     'active'      => ['horario*'],
-                //     'icon'        => 'fas fa-th-large',
-                // ],
             ],
         ],
         [
@@ -393,13 +388,13 @@ return [
             'text'        => 'Acerca de',
             'url'         => '/preguntas-frecuentes',
             'active'         => ['preguntas-frecuentes*'],
-            'icon'        => 'fas fa-question'
+            'icon'        => 'fas fa-question-circle'
         ],
         [
             'text'        => 'Noticias',
             'url'         => '/noticias',
             'active'         => ['noticias*'],
-            'icon'        => 'fas fa-question'
+            'icon'        => 'fas fa-exclamation-circle'
         ],
     ],
 

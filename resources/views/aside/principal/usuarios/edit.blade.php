@@ -5,7 +5,7 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Coordinación de Acreditables</h1>
+            <h1 class="m-0">Editar usuario</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -19,48 +19,70 @@
 @stop
 
 @section('content')
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-6 mx-auto">
-                    <div class="card p-4">
-                        <h5>Nombre:</h5>
-                        <p class="form-control">{{ $usuario->nombre }} {{ $usuario->apellido }}</p>
+    <div class="container-fluid">
 
-                        <h5>Listado de roles:</h5>
-                        <form action="{{ route('coordinador.usuarios.update', $usuario) }}" method="post">
-                            @csrf
-                            {{ method_field('PUT') }}
+        <div class="card col-6 mx-auto p-4">
+            <h2 class="card-header">Editar credenciales</h2>
 
-                            <select class="form-control mb-3" name="roles[]">
-                                <option>Seleccione un rol</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}"
-                                        {{ $usuario->roles->contains($role->id) ? 'selected' : '' }}>
-                                        {{ $role->name }}</option>
-                                @endforeach
-                            </select>
+            <div class="card-body">
+                <div class="form-group mb-3">
+                    <label>Nombre</label>
+                    <p class="form-control">{{ $usuario->nombre }} {{ $usuario->apellido }}</p>
+                </div>
 
-                            @if ($usuario->roles[0]->name === 'Profesor')
+
+                <form action="{{ route('coordinador.usuarios.update', $usuario) }}" method="post">
+                    @csrf
+                    {{ method_field('PUT') }}
+
+                    <div class="form-group mb-3">
+                        <label for="roles[]">Rol de usuario</label>
+                        <select class="form-control mb-3" name="roles[]">
+                            <option>Seleccione un rol</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}"
+                                    {{ $usuario->roles->contains($role->id) ? 'selected' : '' }}>
+                                    {{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    @if ($usuario->roles[0]->name === 'Profesor')
+                        <div class="form-group mb-3">
+                            <label>Especialidades</label>
+                            <div class="row">
                                 @foreach ($especialidades as $especialidad)
-                                    <div class="icheck-primary">
-                                        <input type="checkbox" name="especialidades[]" id="{{ $especialidad->id }}"
-                                            value="{{ $especialidad->id }}" {{ in_array($especialidad->id, $relacion) ? 'checked' : '' }}>
+                                    <div class="col-6">
+                                        <div class="icheck-primary">
+                                            <input type="checkbox" name="especialidades[]" id="{{ $especialidad->id }}"
+                                                value="{{ $especialidad->id }}"
+                                                {{ in_array($especialidad->id, $relacion) ? 'checked' : '' }}>
 
-                                        <label for="{{ $especialidad->id }}">
-                                            {{ __($especialidad->nombre) }}
-                                        </label>
+                                            <label for="{{ $especialidad->id }}">
+                                                {{ __($especialidad->nom_especialidad) }}
+                                            </label>
+                                        </div>
                                     </div>
                                 @endforeach
-                            @endif
+                            </div>
+                        </div>
+                    @endif
 
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="{{ route('coordinador.usuarios.index') }}" class="btn btn-block btn-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                {{ __('Volver') }}
+                            </a>
+                        </div>
 
-                            <button type="submit" class="btn btn-primary mt-2">Asignar rol</button>
-                        </form>
-
+                        <x-botones.guardar />
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 @stop
 
 @section('css')
@@ -76,15 +98,10 @@
                 icon: 'success',
                 title: '¡Cambio exitoso!',
                 html: 'Los roles han sido actualizados.',
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading()
-                    timerInterval = setInterval(() => {}, 100)
+                confirmButtonColor: '#6c757d',
+                customClass: {
+                    confirmButton: 'btn px-5'
                 },
-                willClose: () => {
-                    clearInterval(timerInterval)
-                }
             })
         @endif
     </script>

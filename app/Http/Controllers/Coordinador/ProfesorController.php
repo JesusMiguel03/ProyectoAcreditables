@@ -66,6 +66,7 @@ class ProfesorController extends Controller
             'telefono' => request('telefono'),
             'fecha_de_nacimiento' => request('fecha_de_nacimiento'),
             'fecha_ingreso_plantel' => request('fecha_ingreso_plantel'),
+            'estado_profesor' => 1
         ]);
         $profesor->save();
 
@@ -80,10 +81,9 @@ class ProfesorController extends Controller
      */
     public function show($id)
     {
-        $usuario = User::find($id);
-        $profesor = Profesor::findOrFail($id);
+        $profesor = Profesor::find($id);
 
-        return view('aside.principal.profesores.show', compact('profesor', 'usuario'));
+        return view('aside.principal.profesores.show', compact('profesor'));
     }
 
     /**
@@ -94,9 +94,8 @@ class ProfesorController extends Controller
      */
     public function edit($id)
     {
-        $usuario = User::find($id);
-        $profesor = Profesor::findOrFail($id);
-        return view('aside.principal.profesores.edit', compact('profesor', 'usuario'));
+        $profesor = Profesor::find($id);
+        return view('aside.principal.profesores.edit', compact('profesor'));
     }
 
     /**
@@ -116,6 +115,7 @@ class ProfesorController extends Controller
         $profesor->estado = request('estado');
         $profesor->fecha_de_nacimiento = request('fecha_de_nacimiento');
         $profesor->fecha_ingreso_plantel = request('fecha_ingreso_plantel');
+        $profesor->estado_profesor = request('estado_profesor');
         $profesor->save();
 
         return redirect('profesores')->with('actualizado', 'Curso actualizado exitosamente');

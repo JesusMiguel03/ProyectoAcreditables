@@ -79,6 +79,7 @@
                 </div>
             </div>
 
+            {{-- @dd($profesor->especialidades) --}}
             <div class="col-12">
 
                 <div class="card">
@@ -91,6 +92,11 @@
                                 <p class="font-weight-bold">
                                     Fecha de ingreso al plantel
                                 </p>
+                                @if (!empty($profesor->especialidades))
+                                    <p class="font-weight-bold">
+                                        Especialidades
+                                    </p>
+                                @endif
                             </div>
                             <div class="col-9">
                                 <p class="text-muted">
@@ -99,6 +105,13 @@
                                 <p class="text-muted">
                                     {{ $profesor->fecha_ingreso_plantel }}
                                 </p>
+                                @if (!empty($profesor->especialidades))
+                                    <p class="text-muted">
+                                        @foreach ($profesor->especialidades as $especialidad)
+                                            {{ $especialidad->nom_especialidad }} |
+                                        @endforeach
+                                    </p>
+                                @endif
                             </div>
                         </div>
                     </div>

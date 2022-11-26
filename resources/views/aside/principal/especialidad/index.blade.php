@@ -38,7 +38,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="campoespecialidad">Asignar hora disponible</h5>
+                        <h5 class="modal-title" id="campoespecialidad">Agregar especialidad</h5>
                     </div>
                     <div class="modal-body">
                         <div class="label-group mb-3">
@@ -46,7 +46,8 @@
                                 @csrf
 
                                 {{-- Campo de nombre --}}
-                                <div class="input-group mb-3">
+                                <div class="form-group mb-3">
+                                    <label for="nom_especialidad">Nombre</label>
                                     <input type="text" name="nom_especialidad" id="nom_especialidad"
                                         class="form-control @error('nom_especialidad') is-invalid @enderror"
                                         value="{{ old('nom_especialidad') }}" placeholder="{{ __('Nombre de la especialidad') }}"
@@ -89,7 +90,11 @@
                             <tr>
                                 <th>{{ $especialidad->nom_especialidad }}</th>
                                 <th><a href="{{ route('especialidad.edit', $especialidad->id) }}"
-                                        class="btn btn-primary">Editar</a></th>
+                                        class="btn btn-primary">
+                                        <i class="fas fa-edit mr-2"></i>
+                                        Editar
+                                    </a>
+                                </th>
                             </tr>
                         @endforeach
                     </tbody>

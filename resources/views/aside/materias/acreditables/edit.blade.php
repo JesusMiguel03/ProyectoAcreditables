@@ -22,195 +22,197 @@
 
         <div class="col-12">
 
-            <header class="card-header">
-                <div class="row">
-                    <h2>Editar materia - {{ $materia->nom_materia }}</h2>
+            <div class="card p-4">
 
-                    <a href="{{ route('materias.index') }}"
-                        class="btn btn-outline-secondary ml-auto float-right px-4">Volver</a>
-                </div>
-            </header>
+                <header class="card-header">
+                    <div class="row">
+                        <h2>Editar materia - {{ $materia->nom_materia }}</h2>
 
-            <main class="card-body">
-                <form action="{{ url('/materias/' . $materia->id) }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    {{ method_field('PATCH') }}
+                        <a href="{{ route('materias.index') }}"
+                            class="btn btn-outline-secondary ml-auto float-right px-4">Volver</a>
+                    </div>
+                </header>
 
-                    <div class="bs-stepper">
+                <main class="card-body">
+                    <form action="{{ url('/materias/' . $materia->id) }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        {{ method_field('PATCH') }}
 
-                        <div class="bs-stepper-header my-2" role="tablist">
+                        <div class="bs-stepper">
 
-                            {{-- Icono y burbujas de texto (pasos) --}}
-                            <div class="step" data-target="#basic-info">
-                                <button type="button" class="step-trigger" role="tab" aria-controls="basic-info"
-                                    id="basic-info-trigger">
-                                    <span class="bs-stepper-circle">1</span>
-                                    <span class="bs-stepper-label">Básico</span>
-                                </button>
-                            </div>
+                            <div class="bs-stepper-header my-2" role="tablist">
 
-                            <div class="line"></div>
-
-                            <div class="step" data-target="#course-details">
-                                <button type="button" class="step-trigger" role="tab" aria-controls="course-details"
-                                    id="course-details-trigger">
-                                    <span class="bs-stepper-circle">2</span>
-                                    <span class="bs-stepper-label">Detalles</span>
-                                </button>
-                            </div>
-
-                            <div class="line"></div>
-
-                            <div class="step" data-target="#image-details">
-                                <button type="button" class="step-trigger" role="tab" aria-controls="image-details"
-                                    id="image-details-trigger">
-                                    <span class="bs-stepper-circle">3</span>
-                                    <span class="bs-stepper-label">Final</span>
-                                </button>
-                            </div>
-
-                        </div>
-
-                        <div class="bs-stepper-content">
-
-                            {{--            Parte 1            --}}
-                            <div id="basic-info" class="content" role="tabpanel" aria-labelledby="basic-info-trigger">
-
-                                {{-- Nombre --}}
-                                <div class="form-group mb-3">
-                                    <label for="name">Nombre</label>
-                                    <input type="text" name="nom_materia" id="nom_materia"
-                                        class="form-control @error('nom_materia') is-invalid @enderror"
-                                        value="{{ $materia->nom_materia }}" placeholder="{{ __('Nombre de la materia') }}"
-                                        autofocus>
-
-                                    @error('nom_materia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                {{-- Icono y burbujas de texto (pasos) --}}
+                                <div class="step" data-target="#basic-info">
+                                    <button type="button" class="step-trigger" role="tab" aria-controls="basic-info"
+                                        id="basic-info-trigger">
+                                        <span class="bs-stepper-circle">1</span>
+                                        <span class="bs-stepper-label">Básico</span>
+                                    </button>
                                 </div>
 
-                                {{-- Cupos --}}
-                                <div class="form-group mb-3">
-                                    <label for="cupos">Cupos</label>
-                                    <input type="number" name="cupos" id="cupos"
-                                        class="form-control @error('cupos') is-invalid @enderror" id="cupos"
-                                        value="{{ $materia->cupos }}"
-                                        placeholder="{{ __('Cupos disponibles, límite: 50') }}" autofocus>
+                                <div class="line"></div>
 
-                                    @error('cupos')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                <div class="step" data-target="#course-details">
+                                    <button type="button" class="step-trigger" role="tab"
+                                        aria-controls="course-details" id="course-details-trigger">
+                                        <span class="bs-stepper-circle">2</span>
+                                        <span class="bs-stepper-label">Detalles</span>
+                                    </button>
                                 </div>
 
-                                {{-- Descripcion --}}
-                                <div class="form-group mb-3">
-                                    <label for="description">Descripción</label>
-                                    <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror"
-                                        placeholder="{{ __('Descripción') }}" autofocus spellcheck="false" style="min-height: 9rem; resize: none">{{ $materia->desc_materia }}</textarea>
+                                <div class="line"></div>
 
-                                    @error('desc_materia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                {{-- Estado --}}
-                                <div class="form-group mb-3">
-                                    <label for="description">Estado</label>
-                                    <select id="estado_materia"
-                                        class="form-control @error('estado_materia') is-invalid @enderror"
-                                        name="estado_materia">
-                                        <option>Seleccione el estado de la materia</option>
-                                        <option value="Inactivo"
-                                            {{ $materia->estado_materia === 'Inactivo' ? 'selected' : '' }}>
-                                            Inactivo</option>
-                                        <option value="Activo"
-                                            {{ $materia->estado_materia === 'Activo' ? 'selected' : '' }}>
-                                            Activo
-                                        </option>
-                                        <option value="En progreso"
-                                            {{ $materia->estado_materia === 'En progreso' ? 'selected' : '' }}>
-                                            En
-                                            progreso</option>
-                                        <option value="Finalizado"
-                                            {{ $materia->estado_materia === 'Finalizado' ? 'selected' : '' }}>
-                                            Finalizado</option>
-                                        <option value="Descontinuado"
-                                            {{ $materia->estado_materia === 'Descontinuado' ? 'selected' : '' }}>
-                                            Descontinuado</option>
-                                    </select>
-
-                                    @error('estado_materia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                <div class="step" data-target="#image-details">
+                                    <button type="button" class="step-trigger" role="tab" aria-controls="image-details"
+                                        id="image-details-trigger">
+                                        <span class="bs-stepper-circle">3</span>
+                                        <span class="bs-stepper-label">Final</span>
+                                    </button>
                                 </div>
 
                             </div>
 
-                            {{--            Parte 2            --}}
-                            <div id="course-details" class="content" role="tabpanel"
-                                aria-labelledby="course-details-trigger">
+                            <div class="bs-stepper-content">
 
-                                {{-- Categoria --}}
-                                <div class="form-group mb-3">
-                                    <label for="categoria">Categoria</label>
+                                {{--            Parte 1            --}}
+                                <div id="basic-info" class="content" role="tabpanel" aria-labelledby="basic-info-trigger">
 
-                                    @if ($categorias->isEmpty())
-                                        <input type="text" class="form-control"
-                                            placeholder="{{ __('No hay categorias añadidas') }}" disabled>
-                                    @else
-                                        <select id="categoria"
-                                            class="form-control @error('categoria') is-invalid @enderror"
-                                            name="categoria">
-                                            <option>Seleccione una categoria</option>
-                                            @foreach ($categorias as $categoria)
-                                                <option value="{{ $categoria->id }}"
-                                                    {{ !empty($materia->info) && $materia->info->categoria_id === $categoria->id ? 'selected' : '' }}>
-                                                    {{ $categoria->nom_categoria }}</option>
-                                            @endforeach
+                                    {{-- Nombre --}}
+                                    <div class="form-group mb-3">
+                                        <label for="name">Nombre</label>
+                                        <input type="text" name="nom_materia" id="nom_materia"
+                                            class="form-control @error('nom_materia') is-invalid @enderror"
+                                            value="{{ $materia->nom_materia }}"
+                                            placeholder="{{ __('Nombre de la materia') }}" autofocus>
+
+                                        @error('nom_materia')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Cupos --}}
+                                    <div class="form-group mb-3">
+                                        <label for="cupos">Cupos</label>
+                                        <input type="number" name="cupos" id="cupos"
+                                            class="form-control @error('cupos') is-invalid @enderror" id="cupos"
+                                            value="{{ $materia->cupos }}"
+                                            placeholder="{{ __('Cupos disponibles, límite: 50') }}" autofocus>
+
+                                        @error('cupos')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Descripcion --}}
+                                    <div class="form-group mb-3">
+                                        <label for="description">Descripción</label>
+                                        <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror"
+                                            placeholder="{{ __('Descripción') }}" autofocus spellcheck="false" style="min-height: 9rem; resize: none">{{ $materia->desc_materia }}</textarea>
+
+                                        @error('desc_materia')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Estado --}}
+                                    <div class="form-group mb-3">
+                                        <label for="description">Estado</label>
+                                        <select id="estado_materia"
+                                            class="form-control @error('estado_materia') is-invalid @enderror"
+                                            name="estado_materia">
+                                            <option>Seleccione el estado de la materia</option>
+                                            <option value="Inactivo"
+                                                {{ $materia->estado_materia === 'Inactivo' ? 'selected' : '' }}>
+                                                Inactivo</option>
+                                            <option value="Activo"
+                                                {{ $materia->estado_materia === 'Activo' ? 'selected' : '' }}>
+                                                Activo
+                                            </option>
+                                            <option value="En progreso"
+                                                {{ $materia->estado_materia === 'En progreso' ? 'selected' : '' }}>
+                                                En
+                                                progreso</option>
+                                            <option value="Finalizado"
+                                                {{ $materia->estado_materia === 'Finalizado' ? 'selected' : '' }}>
+                                                Finalizado</option>
+                                            <option value="Descontinuado"
+                                                {{ $materia->estado_materia === 'Descontinuado' ? 'selected' : '' }}>
+                                                Descontinuado</option>
                                         </select>
-                                    @endif
 
-                                    @error('categoria')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                        @error('estado_materia')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
                                 </div>
 
-                                {{-- Tipo --}}
-                                <div class="form-group mb-3">
-                                    <label for="tipo">Tipo</label>
-                                    <select id="tipo" class="form-control @error('tipo') is-invalid @enderror"
-                                        name="tipo">
-                                        <option>Seleccione el aprendizaje</option>
-                                        <option value="Teórico"
-                                            {{ !empty($materia->info) && $materia->info->metodologia_aprendizaje === 'Teórico' ? 'selected' : '' }}>
-                                            Teórico</option>
-                                        <option value="Práctico"
-                                            {{ !empty($materia->info) && $materia->info->metodologia_aprendizaje === 'Práctico' ? 'selected' : '' }}>
-                                            Prático</option>
-                                        <option value="Teórico-Práctico"
-                                            {{ !empty($materia->info) && $materia->info->metodologia_aprendizaje === 'Teórico-Práctico' ? 'selected' : '' }}>
-                                            Teórico-Práctico</option>
-                                    </select>
+                                {{--            Parte 2            --}}
+                                <div id="course-details" class="content" role="tabpanel"
+                                    aria-labelledby="course-details-trigger">
 
-                                    @error('tipo')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                                    {{-- Categoria --}}
+                                    <div class="form-group mb-3">
+                                        <label for="categoria">Categoria</label>
 
-                                {{-- Horario --}}
-                                {{-- <div class="form-group mb-3">
+                                        @if ($categorias->isEmpty())
+                                            <input type="text" class="form-control"
+                                                placeholder="{{ __('No hay categorias añadidas') }}" disabled>
+                                        @else
+                                            <select id="categoria"
+                                                class="form-control @error('categoria') is-invalid @enderror"
+                                                name="categoria">
+                                                <option>Seleccione una categoria</option>
+                                                @foreach ($categorias as $categoria)
+                                                    <option value="{{ $categoria->id }}"
+                                                        {{ !empty($materia->info) && $materia->info->categoria_id === $categoria->id ? 'selected' : '' }}>
+                                                        {{ $categoria->nom_categoria }}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+
+                                        @error('categoria')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Tipo --}}
+                                    <div class="form-group mb-3">
+                                        <label for="tipo">Tipo</label>
+                                        <select id="tipo" class="form-control @error('tipo') is-invalid @enderror"
+                                            name="tipo">
+                                            <option>Seleccione el aprendizaje</option>
+                                            <option value="Teórico"
+                                                {{ !empty($materia->info) && $materia->info->metodologia_aprendizaje === 'Teórico' ? 'selected' : '' }}>
+                                                Teórico</option>
+                                            <option value="Práctico"
+                                                {{ !empty($materia->info) && $materia->info->metodologia_aprendizaje === 'Práctico' ? 'selected' : '' }}>
+                                                Prático</option>
+                                            <option value="Teórico-Práctico"
+                                                {{ !empty($materia->info) && $materia->info->metodologia_aprendizaje === 'Teórico-Práctico' ? 'selected' : '' }}>
+                                                Teórico-Práctico</option>
+                                        </select>
+
+                                        @error('tipo')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Horario --}}
+                                    {{-- <div class="form-group mb-3">
                                             <label for="horario">Horario</label>
                                             @if ($horarios->isEmpty())
                                                 <input type="text" class="form-control"
@@ -240,101 +242,103 @@
                                             @enderror
                                         </div> --}}
 
-                                {{-- Profesor --}}
-                                <div class="form-group mb-3">
-                                    <label for="profesor">Profesor</label>
+                                    {{-- Profesor --}}
+                                    <div class="form-group mb-3">
+                                        <label for="profesor">Profesor</label>
 
-                                    @if ($profesores->isEmpty())
-                                        <input type="text" class="form-control"
-                                            placeholder="{{ __('No hay categorias añadidas') }}" disabled>
-                                    @else
-                                        <select id="profesor"
-                                            class="form-control @error('profesor') is-invalid @enderror" name="profesor">
-                                            @if ($profesores->isEmpty())
-                                                <option>No hay profesores añadidos</option>
-                                            @else
-                                                <option>Seleccione una categoria</option>
-                                            @endif
-                                            @foreach ($profesores as $profesor)
-                                                <option value="{{ $profesor->id }}"
-                                                    {{ !empty($materia->info) && $materia->info->profesor_id === $profesor->id ? 'selected' : '' }}>
-                                                    {{ $profesor->usuario->nombre }}
-                                                    {{ $profesor->usuario->apellido }}</option>
-                                            @endforeach
-                                        </select>
-                                    @endif
+                                        @if ($profesores->isEmpty())
+                                            <input type="text" class="form-control"
+                                                placeholder="{{ __('No hay categorias añadidas') }}" disabled>
+                                        @else
+                                            <select id="profesor"
+                                                class="form-control @error('profesor') is-invalid @enderror"
+                                                name="profesor">
+                                                @if ($profesores->isEmpty())
+                                                    <option>No hay profesores añadidos</option>
+                                                @else
+                                                    <option>Seleccione una categoria</option>
+                                                @endif
+                                                @foreach ($profesores as $profesor)
+                                                    <option value="{{ $profesor->id }}"
+                                                        {{ !empty($materia->info) && $materia->info->profesor_id === $profesor->id ? 'selected' : '' }}>
+                                                        {{ $profesor->usuario->nombre }}
+                                                        {{ $profesor->usuario->apellido }}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
 
-                                    @error('profesor')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                        @error('profesor')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
                                 </div>
 
-                            </div>
+                                {{--            Parte 3            --}}
+                                <div id="image-details" class="content" role="tabpanel"
+                                    aria-labelledby="image-details-trigger">
 
-                            {{--            Parte 3            --}}
-                            <div id="image-details" class="content" role="tabpanel"
-                                aria-labelledby="image-details-trigger">
+                                    {{-- Campo de imagen --}}
+                                    <div class="input-group mb-3">
+                                        <input type="file"
+                                            class="custom-file-input @error('imagen_materia') is-invalid @enderror"
+                                            id="imagen_materia" name="imagen_materia" accept="image/jpeg">
+                                        <label class="custom-file-label text-muted" for="imagen_materia"
+                                            id="campoImagen">{{ Str::substr($materia['imagen_materia'], 18) }}</label>
+                                        <small id="imageHelp" class="form-text text-muted">La imagen debe pesar
+                                            menos
+                                            de
+                                            1
+                                            MB.</small>
 
-                                {{-- Campo de imagen --}}
-                                <div class="input-group mb-3">
-                                    <input type="file"
-                                        class="custom-file-input @error('imagen_materia') is-invalid @enderror"
-                                        id="imagen_materia" name="imagen_materia" accept="image/jpeg">
-                                    <label class="custom-file-label text-muted" for="imagen_materia"
-                                        id="campoImagen">{{ Str::substr($materia['imagen_materia'], 18) }}</label>
-                                    <small id="imageHelp" class="form-text text-muted">La imagen debe pesar
-                                        menos
-                                        de
-                                        1
-                                        MB.</small>
+                                        @error('imagen_materia')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
 
-                                    @error('imagen_materia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                                    {{-- Previsualizacion de imagen --}}
+                                    <div class="mx-auto mb-3" style="max-width: 50vw">
+                                        @if ($materia->imagen_materia !== null)
+                                            <img src="{{ asset('storage/' . $materia->imagen_materia) }}" alt=""
+                                                id="previsualizar" class="rounded img-fluid">
+                                        @else
+                                            <div class="card-body">
+                                                <img src="" alt="" id="previsualizar"
+                                                    class="rounded img-fluid">
+                                                <h5 id="noImagen" class="text-muted">El curso no posee una imagen
+                                                    para poder
+                                                    mostrarla</h5>
+                                            </div>
+                                        @endif
+                                    </div>
 
-                                {{-- Previsualizacion de imagen --}}
-                                <div class="mx-auto mb-3" style="max-width: 50vw">
-                                    @if ($materia->imagen_materia !== null)
-                                        <img src="{{ asset('storage/' . $materia->imagen_materia) }}" alt=""
-                                            id="previsualizar" class="rounded img-fluid">
-                                    @else
-                                        <div class="card-body">
-                                            <img src="" alt="" id="previsualizar"
-                                                class="rounded img-fluid">
-                                            <h5 id="noImagen" class="text-muted">El curso no posee una imagen
-                                                para poder
-                                                mostrarla</h5>
+                                    {{-- Botones / acciones --}}
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a href="{{ route('materias.index') }}" class="btn btn-block btn-secondary">
+                                                {{ __('Volver') }}
+                                            </a>
                                         </div>
-                                    @endif
-                                </div>
+                                        <div class="col-6">
+                                            <button type=submit class="btn btn-block btn-success">
+                                                {{ __('Guardar') }}
+                                            </button>
+                                        </div>
+                                    </div>
 
-                                {{-- Botones / acciones --}}
-                                <div class="row">
-                                    <div class="col-6">
-                                        <a href="{{ route('materias.index') }}" class="btn btn-block btn-secondary">
-                                            {{ __('Volver') }}
-                                        </a>
-                                    </div>
-                                    <div class="col-6">
-                                        <button type=submit class="btn btn-block btn-success">
-                                            {{ __('Guardar') }}
-                                        </button>
-                                    </div>
                                 </div>
 
                             </div>
 
                         </div>
 
-                    </div>
-
-                </form>
-            </main>
+                    </form>
+                </main>
+            </div>
 
         </div>
     </div>

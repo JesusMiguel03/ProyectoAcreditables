@@ -135,7 +135,11 @@
                                         <th>{{ $pregunta->titulo }}</th>
                                         <th>{{ $pregunta->explicacion }}</th>
                                         <th><a href="{{ route('preguntas.edit', $pregunta->id) }}"
-                                                class="btn btn-primary">Editar</a></th>
+                                                class="btn btn-primary">
+                                                <i class="fas fa-edit mr-2"></i>
+                                                Editar
+                                            </a>
+                                        </th>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -23,6 +23,7 @@ class CreateProfesoresTable extends Migration
             $table->string('estado', 20);
             $table->date('fecha_de_nacimiento');
             $table->date('fecha_ingreso_plantel');
+            $table->boolean('estado_profesor');
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

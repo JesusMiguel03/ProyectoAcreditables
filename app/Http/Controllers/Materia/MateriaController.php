@@ -147,7 +147,7 @@ class MateriaController extends Controller
             return redirect()->back()->withErrors($validador)->withInput();
         }
 
-        // Busca la relacion curso <-> informacion
+        // Busca la relacion curso - informacion
         $informacion = Informacion_materia::updateOrCreate(
             ['id' =>  $id],
             [

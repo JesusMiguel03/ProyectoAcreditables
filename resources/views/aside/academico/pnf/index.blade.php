@@ -25,7 +25,7 @@
                 <div class="card">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pnf">
                         <i class="fas fa-plus mr-2"></i>
-                        {{ __('Añadir pnf') }}
+                        {{ __('Añadir PNF') }}
                     </button>
                 </div>
             </div>
@@ -38,7 +38,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="campopnf">Agregar pnf</h5>
+                        <h5 class="modal-title" id="campopnf">Agregar PNF</h5>
                     </div>
                     <div class="modal-body">
                         <form action="{{ route('pnf.store') }}" method="post">
@@ -46,6 +46,7 @@
 
                             {{-- Campo nombre --}}
                             <div class="form-group mb-3">
+                                <label for="nom_pnf">Nombre</label>
                                 <input type="text" name="nom_pnf" id="nom_pnf"
                                     class="form-control @error('nom_pnf') is-invalid @enderror" value="{{ old('nom_pnf') }}"
                                     placeholder="{{ __('Nombre del pnf') }}" autofocus>
@@ -85,7 +86,10 @@
                             @foreach ($pnfs as $pnf)
                                 <tr>
                                     <th>{{ $pnf->nom_pnf }}</th>
-                                    <th><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary">Editar</a>
+                                    <th><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary">
+                                        <i class="fas fa-edit mr-2"></i>
+                                        Editar
+                                    </a>
                                     </th>
                                 </tr>
                             @endforeach
