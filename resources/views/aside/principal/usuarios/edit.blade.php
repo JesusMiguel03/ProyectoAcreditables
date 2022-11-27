@@ -27,7 +27,13 @@
             <div class="card-body">
                 <div class="form-group mb-3">
                     <label>Nombre</label>
-                    <p class="form-control">{{ $usuario->nombre }} {{ $usuario->apellido }}</p>
+                    <input type="text" class="form-control" placeholder="{{ $usuario->nombre }} {{ $usuario->apellido }}"
+                        disabled></input>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Cédula</label>
+                    <input type="text" class="form-control" placeholder="{{ $usuario->cedula }}" disabled></input>
                 </div>
 
 
@@ -66,6 +72,32 @@
                                     </div>
                                 @endforeach
                             </div>
+                        </div>
+                    @endif
+
+                    @if ($usuario->roles[0]->name === 'Estudiante')
+                        <div class="form-group mb-3">
+                            <label>Trayecto</label>
+                            <select name="trayecto" class="form-control">
+                                <option>Seleccione uno</option>
+                                @foreach ($trayectos as $trayecto)
+                                    <option value="{{ $trayecto->id }}"
+                                        {{ !empty($usuario->estudiante) && $usuario->estudiante->trayecto_id === $trayecto->id ? 'selected' : '' }}>
+                                        {{ $trayecto->num_trayecto }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label>PNF</label>
+                            <select name="pnf" class="form-control">
+                                <option>Seleccione uno</option>
+                                @foreach ($pnfs as $pnf)
+                                    <option value="{{ $pnf->id }}"
+                                        {{ !empty($usuario->estudiante) && $usuario->estudiante->pnf_id === $pnf->id ? 'selected' : '' }}>
+                                        {{ $pnf->nom_pnf }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     @endif
 

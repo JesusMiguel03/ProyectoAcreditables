@@ -20,18 +20,16 @@
 
         @if ($noticias->isEmpty())
             <div class="col-4 mx-auto">
-                <div class="card">
-
-                    <div class="card-header">
-                        <h5 class="text-center fw-bold">No hay noticias</h5>
+                <div class="card mt-3 shadow" style="height: 17rem;">
+                    <div class="card-header bg-secondary">
+                        <h5 class="text-center fw-bold">. . . Esperando noticias . . .</h5>
                     </div>
-
-                    <div class="card-body" style="min-height: 10rem">
-                        <p class="card-text text-justify px-2">Parece que no hay noticias disponibles, puede que no haya
-                            nada que
-                            notificar por los momentos...</p>
+                    <div class="card-body border-bottom border-primary">
+                        <h6 class="mb-2 pl-3 py-1 text-muted" style="border-left: 5px solid #007bff">
+                            [ Sin fecha ]
+                        </h6>
+                        <p class="card-text text-justify">Parece que no han añadidos ninguna noticia, aviso o notificación, puede que en otro momento lo hagan...</p>
                     </div>
-
                 </div>
             </div>
         @else
@@ -39,10 +37,12 @@
                 @foreach ($noticias as $noticia)
                     @if ($noticia->mostrar === 1)
                         <div class="slide">
-                            <div class="card mt-3" style="height: 17rem;">
-                                <div class="card-body">
+                            <div class="card mt-3 shadow" style="height: 17rem;">
+                                <div class="card-header bg-secondary">
                                     <h5 class="text-center fw-bold">{{ $noticia->encabezado }}</h5>
-                                    <h6 class="mb-2 text-muted">
+                                </div>
+                                <div class="card-body border-bottom border-primary">
+                                    <h6 class="mb-2 pl-3 py-1 text-muted" style="border-left: 5px solid #007bff">
                                         [ {{ explode('-', explode(' ', $noticia->created_at)[0])[2] }}
                                         -{{ explode('-', explode(' ', $noticia->created_at)[0])[1] }}
                                         -{{ explode('-', explode(' ', $noticia->created_at)[0])[0] }} ]

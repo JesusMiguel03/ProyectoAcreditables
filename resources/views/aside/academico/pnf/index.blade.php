@@ -20,56 +20,7 @@
     {{-- Page content --}}
     <div class="container-fluid">
 
-        <div class="row">
-            <div class="col-md-3 col-sm-12">
-                <div class="card">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pnf">
-                        <i class="fas fa-plus mr-2"></i>
-                        {{ __('Añadir PNF') }}
-                    </button>
-                </div>
-            </div>
-
-            <x-botones.volver />
-        </div>
-
-        {{-- Modal para crear --}}
-        <div class="modal fade" id="pnf" tabindex="-1" role="dialog" aria-labelledby="campopnf" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="campopnf">Agregar PNF</h5>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('pnf.store') }}" method="post">
-                            @csrf
-
-                            {{-- Campo nombre --}}
-                            <div class="form-group mb-3">
-                                <label for="nom_pnf">Nombre</label>
-                                <input type="text" name="nom_pnf" id="nom_pnf"
-                                    class="form-control @error('nom_pnf') is-invalid @enderror" value="{{ old('nom_pnf') }}"
-                                    placeholder="{{ __('Nombre del pnf') }}" autofocus>
-
-                                @error('nom_pnf')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            {{-- Botón de registrar --}}
-                            <div class="row">
-                                <x-botones.cancelar />
-
-                                <x-botones.guardar />
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-botones.volver />
 
         <div class="row mt-3">
             <div class="col-12 mt-4">
@@ -87,9 +38,9 @@
                                 <tr>
                                     <th>{{ $pnf->nom_pnf }}</th>
                                     <th><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary">
-                                        <i class="fas fa-edit mr-2"></i>
-                                        Editar
-                                    </a>
+                                            <i class="fas fa-edit mr-2"></i>
+                                            Editar
+                                        </a>
                                     </th>
                                 </tr>
                             @endforeach

@@ -32,26 +32,26 @@ class TrayectoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $validador = Validator::make($request->all(), [
-            'num_trayecto' => ['required', 'integer', 'max:4'],
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $validador = Validator::make($request->all(), [
+    //         'num_trayecto' => ['required', 'integer', 'max:4'],
+    //     ]);
 
-        if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
-        }
+    //     if ($validador->fails()) {
+    //         return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+    //     }
 
-        if (Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))->first()) {
-            return redirect('trayecto')->with('registrada', 'Aula ocupada');
-        }
+    //     if (Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))->first()) {
+    //         return redirect('trayecto')->with('registrada', 'Aula ocupada');
+    //     }
 
-        $trayecto = new Trayecto();
-        $trayecto->num_trayecto = request('num_trayecto');
-        $trayecto->save();
+    //     $trayecto = new Trayecto();
+    //     $trayecto->num_trayecto = request('num_trayecto');
+    //     $trayecto->save();
 
-        return redirect('trayecto')->with('creado', 'El aula fue encontrada exitosamente');
-    }
+    //     return redirect('trayecto')->with('creado', 'El aula fue encontrada exitosamente');
+    // }
 
     /**
      * Show the form for editing the specified resource.

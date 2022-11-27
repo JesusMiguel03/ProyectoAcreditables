@@ -5,7 +5,7 @@
         {!! $item['data-compiled'] ?? '' !!}>
 
         <i
-            class="nav-icon {{ $item['icon'] ?? 'far fa-fw fa-circle' }} {{ isset($item['icon_color']) ? 'text-' . $item['icon_color'] : '' }}"></i>
+            class="nav-icon {{ $item['icon'] ?? 'far fa-fw fa-circle' }} {{ isset($item['icon_color']) ? 'text-' . $item['icon_color'] : '' }} mr-2"></i>
 
         <p>
             {{ $item['text'] }}

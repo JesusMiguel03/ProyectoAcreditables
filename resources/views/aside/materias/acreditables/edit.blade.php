@@ -154,6 +154,29 @@
                                         @enderror
                                     </div>
 
+                                    {{-- Número de acreditable --}}
+                                    <div class="form-group mb-3">
+                                        <label for="num_acreditable">Acreditable Nro</label>
+                                        <select name="num_acreditable"
+                                            class="form-control @error('num_acreditable') is-invalid @enderror">
+                                            <option>Seleccione una</option>
+                                            <option value="1"
+                                                {{ $materia->num_acreditable === 1 ? 'selected' : '' }}>1</option>
+                                            <option value="2"
+                                                {{ $materia->num_acreditable === 2 ? 'selected' : '' }}>2</option>
+                                            <option value="3"
+                                                {{ $materia->num_acreditable === 3 ? 'selected' : '' }}>3</option>
+                                            <option value="4"
+                                                {{ $materia->num_acreditable === 4 ? 'selected' : '' }}>4</option>
+                                        </select>
+
+                                        @error('num_acreditable')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
                                 </div>
 
                                 {{--            Parte 2            --}}
@@ -165,7 +188,8 @@
                                         <label for="categoria">Categoria</label>
 
                                         @if ($categorias->isEmpty())
-                                            <input type="text" class="form-control"
+                                            <input type="text"
+                                                class="form-control @error('categoria') is-invalid @enderror"
                                                 placeholder="{{ __('No hay categorias añadidas') }}" disabled>
                                         @else
                                             <select id="categoria"
@@ -247,7 +271,8 @@
                                         <label for="profesor">Profesor</label>
 
                                         @if ($profesores->isEmpty())
-                                            <input type="text" class="form-control"
+                                            <input type="text"
+                                                class="form-control @error('categoria') is-invalid @enderror"
                                                 placeholder="{{ __('No hay categorias añadidas') }}" disabled>
                                         @else
                                             <select id="profesor"
@@ -352,12 +377,13 @@
     </style>
 
     <link rel="stylesheet" href="{{ asset('vendor/bs-stepper/css/bs-stepper.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 @stop
 
 @section('js')
     <script src="{{ asset('vendor/bs-stepper/js/bs-stepper.min.js') }}"></script>
     <script src="{{ asset('js/previsualizacion.js') }}"></script>
-
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             const stepper = new Stepper($('.bs-stepper')[0], {
@@ -365,5 +391,19 @@
                 animation: true
             })
         })
+    </script>
+    <script>
+        @if ($message = session('error'))
+            let timerInterval
+            Swal.fire({
+                icon: 'error',
+                title: '¡No se pudo registrar!',
+                html: 'Uno de los campos no cumple los requisitos.',
+                confirmButtonColor: '#6c757d',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @endif
     </script>
 @stop

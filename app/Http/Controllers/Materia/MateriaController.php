@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Materia;
 
 // Controladores, ayudas
 use App\Http\Controllers\Controller;
+use App\Models\Estudiante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -30,6 +31,7 @@ class MateriaController extends Controller
     public function index()
     {
         $materias = Materia::all();
+
         return view('aside.materias.acreditables.index', compact('materias'));
     }
 
@@ -45,8 +47,11 @@ class MateriaController extends Controller
             'nom_materia' => ['required', 'string', 'max:40'],
             'cupos' => ['required', 'numeric', 'max:50'],
             'desc_materia' => ['required', 'string', 'max:255'],
+            'num_acreditable' => ['required', 'numeric', 'max:4'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
         ], [
+            'num_acreditable.required' => 'El campo número de la acreditable es necesario.',
+            'num_acreditable.max' => 'El campo número de la acreditable no debe ser mayor a :max.',
             'cupos.max' => 'El campo cupos no debe ser mayor a :max',
             'desc_materia.max' => 'El campo descripción no debe ser mayor a :max carácteres',
             'imagen_materia.max' => 'La imagen no debe pesar más de 1 MB.',
@@ -70,6 +75,7 @@ class MateriaController extends Controller
         $materia->cupos = $request->get('cupos');
         $materia->cupos_disponibles = $materia->cupos;
         $materia->desc_materia = $request->get('desc_materia');
+        $materia->num_acreditable = $request->get('num_acreditable');
         $materia->estado_materia = 'Inactivo';
         $materia->informacion_id = null;
 
@@ -86,9 +92,20 @@ class MateriaController extends Controller
      */
     public function show($id)
     {
-        // Busca la id del curso y crea una variable con valores por defecto
+        // Busca la id del curso
         $materia = Materia::find($id);
 
+        // Trae a todos los estudiantes inscritos
+        $estudiantes = Estudiante::all();
+        $preinscritos = [];
+
+        foreach ($estudiantes as $estudiante) {
+            if ($estudiante->preinscrito->materia->id === $materia->id) {
+                array_push($preinscritos, $estudiante);
+            }
+        }
+
+        // En caso de que no se complete la materia se colocan valores por defecto
         $validacion = [];
         $datos_materia = ['Tipo', 'Categoria', 'Horario'];
 
@@ -97,7 +114,7 @@ class MateriaController extends Controller
             $validacion = ['Sin asignar'];
         }
 
-        return view('aside.materias.acreditables.show', compact('materia', 'validacion', 'datos_materia'));
+        return view('aside.materias.acreditables.show', compact('materia', 'validacion', 'datos_materia', 'preinscritos'));
     }
 
     /**
@@ -129,6 +146,7 @@ class MateriaController extends Controller
         $validador = Validator::make($request->all(), [
             'nom_materia' => ['required', 'string', 'max:40'],
             'cupos' => ['required', 'numeric', 'max:50'],
+            'num_acreditable' => ['required', 'numeric', 'max:4'],
             'desc_materia' => ['required', 'string', 'max:255'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
             'estado_materia' => ['required'],
@@ -136,6 +154,8 @@ class MateriaController extends Controller
             'tipo' => ['required'],
             'profesor' => ['required'],
         ], [
+            'num_acreditable.required' => 'El campo número de la acreditable es necesario.',
+            'num_acreditable.max' => 'El campo número de la acreditable no debe ser mayor a :max.',
             'cupos.max' => 'El campo cupos no debe ser mayor a :max',
             'desc_materia.max' => 'El campo descripción no debe ser mayor a :max carácteres',
             'imagen_materia.max' => 'La imagen no debe pesar más de 1 MB.',
@@ -144,7 +164,7 @@ class MateriaController extends Controller
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         // Busca la relacion curso - informacion

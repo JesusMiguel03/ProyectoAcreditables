@@ -6,7 +6,7 @@
 
         <i class="{{ $item['icon'] ?? 'far fa-fw fa-circle' }} {{
             isset($item['icon_color']) ? 'text-'.$item['icon_color'] : ''
-        }}"></i>
+        }} mx-2"></i>
 
         <p>
             {{ $item['text'] }}

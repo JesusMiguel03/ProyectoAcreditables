@@ -294,7 +294,7 @@ return [
         ['header' => 'PRINCIPAL'],
         [
             'text'        => 'Inicio',
-            'url'         => '/inicio',
+            'url'         => '/',
             'icon'        => 'fas fa-home'
         ],
         [

@@ -32,30 +32,30 @@ class PnfController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $validador = Validator::make($request->all(), [
-            'nom_pnf' => ['required', 'string', 'max:40'],
-        ], [
-            'nom_pnf.required' => 'El campo nombre del pnf es necesario.',
-            'nom_pnf.string' => 'El campo nombre del pnf debe ser texto.',
-            'nom_pnf.max' => 'El campo nombre del pnf no puede contener mas de :values carácteres.'
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $validador = Validator::make($request->all(), [
+    //         'nom_pnf' => ['required', 'string', 'max:40'],
+    //     ], [
+    //         'nom_pnf.required' => 'El campo nombre del pnf es necesario.',
+    //         'nom_pnf.string' => 'El campo nombre del pnf debe ser texto.',
+    //         'nom_pnf.max' => 'El campo nombre del pnf no puede contener mas de :values carácteres.'
+    //     ]);
 
-        if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
-        }
+    //     if ($validador->fails()) {
+    //         return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+    //     }
 
-        if (Pnf::where('nom_pnf', '=', $request->get('nom_pnf'))->first()) {
-            return redirect('pnf')->with('registrada', 'Aula ocupada');
-        }
+    //     if (Pnf::where('nom_pnf', '=', $request->get('nom_pnf'))->first()) {
+    //         return redirect('pnf')->with('registrada', 'Aula ocupada');
+    //     }
 
-        $pnf = new Pnf();
-        $pnf->nom_pnf = request('nom_pnf');
-        $pnf->save();
+    //     $pnf = new Pnf();
+    //     $pnf->nom_pnf = request('nom_pnf');
+    //     $pnf->save();
 
-        return redirect('pnf')->with('creado', 'El aula fue encontrada exitosamente');
-    }
+    //     return redirect('pnf')->with('creado', 'El aula fue encontrada exitosamente');
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -79,7 +79,7 @@ class PnfController extends Controller
     public function update(Request $request, $id)
     {
         $validador = Validator::make($request->all(), [
-            'nom_pnf' => ['required', 'string', 'max:40'],
+            'nom_pnf' => ['required', 'string', 'max:30'],
         ], [
             'nom_pnf.required' => 'El campo nombre del pnf es necesario.',
             'nom_pnf.string' => 'El campo nombre del pnf debe ser texto.',

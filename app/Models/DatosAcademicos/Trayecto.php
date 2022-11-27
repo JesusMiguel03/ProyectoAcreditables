@@ -10,4 +10,9 @@ class Trayecto extends Model
     use HasFactory;
 
     public $table = 'trayecto';
+
+    public function estudiante()
+    {
+        return $this->belongsTo(Estudiante::class, 'trayecto_id');
+    }
 }

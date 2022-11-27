@@ -9,6 +9,7 @@ use App\Http\Controllers\Materia\CategoriaController;
 use App\Http\Controllers\Materia\PreinscripcionController;
 use App\Http\Controllers\DatosAcademicos\PnfController;
 use App\Http\Controllers\DatosAcademicos\TrayectoController;
+use App\Http\Controllers\Estudiante\EstudianteController;
 use App\Http\Controllers\Informacion\InicioController;
 use App\Http\Controllers\Informacion\NoticiasController;
 use App\Http\Controllers\Informacion\PreguntasFrecuentesController;
@@ -26,11 +27,6 @@ use App\Http\Controllers\PerfilController;
 |
 */
 
-// Iniciar sesion
-Route::get('/', function () {
-    return view('auth.login');
-});
-
 // Inicio
 Route::middleware([
     'auth:sanctum',
@@ -38,7 +34,7 @@ Route::middleware([
     'verified',
     'prevent-back-history'
 ])->group(function () {
-    Route::resource('/inicio', InicioController::class)->only([
+    Route::resource('/', InicioController::class)->only([
         'index'
     ])->names('inicio');
 });
@@ -85,10 +81,10 @@ Route::resource('/pnf', PnfController::class)->middleware('prevent-back-history'
 ]);
 
 // Inscripcion
-Route::resource('/estudiante', PreinscripcionController::class)->middleware('prevent-back-history')->only('store');
+Route::resource('/preinscripcion', PreinscripcionController::class)->middleware('prevent-back-history')->only('store');
 
 // Perfil
-Route::resource('/perfil', PerfilController::class)->middleware('prevent-back-history')->only('index', 'edit', 'update');
+Route::resource('/perfil', PerfilController::class)->middleware('prevent-back-history')->only('index');
 
 // Noticias
 Route::resource('/noticias', NoticiasController::class)
@@ -100,3 +96,9 @@ Route::resource('/preguntas-frecuentes', PreguntasFrecuentesController::class)
     ->middleware('prevent-back-history')
     ->only(['index', 'store', 'edit', 'update'])
     ->names('preguntas');
+
+// Estudiante
+Route::resource('/estudiante', EstudianteController::class)->middleware('prevent-back-history')->only('store');
+Route::get('/estudiante/comprobante', [EstudianteController::class, 'comprobante'])->middleware('prevent-back-history')->name('comprobante');
+Route::post('/validar', [PreinscripcionController::class, 'validar'])->middleware('prevent-back-history')->name('validacion');
+Route::post('/invalidar', [PreinscripcionController::class, 'invalidar'])->middleware('prevent-back-history')->name('invalidacion');

@@ -20,60 +20,27 @@
     {{-- Page content --}}
     <div class="container-fluid">
 
-        <div class="row">
-            <div class="col-md-3 col-sm-12">
-                <div class="card">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#trayecto">
-                        <i class="fas fa-plus mr-2"></i>
-                        {{ __('Añadir trayecto') }}
-                    </button>
-                </div>
-            </div>
+        <x-botones.volver />
 
-            <x-botones.volver />
-        </div>
-
-        {{-- Modal para crear --}}
-        <div class="modal fade" id="trayecto" tabindex="-1" role="dialog" aria-labelledby="campotrayecto"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="campotrayecto">Agregar trayecto</h5>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('trayecto.store') }}" method="post">
-                            @csrf
-
-                            {{-- Campo numero --}}
-                            <div class="form-group mb-3">
-                                <label for="num_trayecto">Trayecto Nro</label>
-                                <input type="number" name="num_trayecto" id="num_trayecto"
-                                    class="form-control @error('num_trayecto') is-invalid @enderror"
-                                    value="{{ old('num_trayecto') }}" placeholder="{{ __('Número del trayecto') }}"
-                                    autofocus>
-
-                                @error('num_trayecto')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            {{-- Botón de registrar --}}
-                            <div class="row">
-                                <x-botones.cancelar />
-
-                                <x-botones.guardar />
-                            </div>
-
-                        </form>
+        <div class="row mt-5">
+            @foreach ($trayectos as $trayecto)
+                <div class="col-md-3 col-sm-12">
+                    <div class="card">
+                        <header class="card-header bg-secondary">
+                            <h4 class="text-center">Trayecto {{ $trayecto->num_trayecto }}</h4>
+                        </header>
+                        <footer class="card-footer">
+                            <a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-outline-primary btn-block">
+                                <i class="fas fa-edit mr-2"></i>
+                                Editar
+                            </a>
+                        </footer>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
 
-        <div class="row mt-3">
+        {{-- <div class="row mt-3">
             <div class="col-12 mt-4">
                 <div class="card table-responsive-sm p-3 mb-4">
                     <table id='tabla' class="table table-striped">
@@ -88,8 +55,7 @@
                             @foreach ($trayectos as $trayecto)
                                 <tr>
                                     <th>{{ $trayecto->num_trayecto }}</th>
-                                    <th><a href="{{ route('trayecto.edit', $trayecto->id) }}"
-                                            class="btn btn-primary">
+                                    <th><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary">
                                             <i class="fas fa-edit mr-2"></i>
                                             Editar
                                         </a>
@@ -101,7 +67,7 @@
                 </div>
             </div>
 
-        </div>
+        </div> --}}
 
     </div>
 @stop

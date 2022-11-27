@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function estudiante()
     {
-        return $this->belongsToMany('App\Models\Estudiante');
+        return $this->hasOne(Estudiante::class, 'usuario_id');
     }
 
     public function profesor()

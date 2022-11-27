@@ -12,7 +12,7 @@ class Materia extends Model
 
     public function info()
     {
-        return $this->hasOne(Informacion_materia::class, 'id');
+        return $this->hasOne(Informacion_materia::class, 'id', 'informacion_id');
     }
 
     public function estudiantes()
@@ -22,6 +22,6 @@ class Materia extends Model
 
     public function profesor()
     {
-        return $this->hasOne(Profesor::class, 'id');
+        return $this->hasOne(Profesor::class, 'id', 'profesor_id');
     }
 }

@@ -1,7 +1,7 @@
-const archivo = document.getElementById("imagen_materia");
-const previsualizar = document.getElementById("previsualizar");
-const campoImagen = document.getElementById("campoImagen");
-const textoAlternativo = document.getElementById("noImagen");
+let archivo = document.getElementById('imagen_materia')
+let previsualizar = document.getElementById("previsualizar")
+let campoImagen = document.getElementById("campoImagen")
+let textoAlternativo = document.getElementById("noImagen")
 
 archivo.addEventListener("change", (e) => {
     if (e.target.files.length === 1) {

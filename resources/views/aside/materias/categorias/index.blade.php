@@ -118,8 +118,8 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: '¡Categoria de curso registrada!',
-                html: 'Ahora la categoria de curso se encuentra disponible.',
+                title: '¡Categoria registrada!',
+                html: 'Ahora la categoria se encuentra disponible.',
                 confirmButtonColor: '#6c757d',
                 customClass: {
                     confirmButton: 'btn px-5'
@@ -129,8 +129,8 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: '¡Categoria de curso existente!',
-                html: 'La categoria de curso a añadir ya se encuentra registrada.',
+                title: '¡Categoria existente!',
+                html: 'La categoria a añadir ya se encuentra registrada.',
                 confirmButtonColor: '#6c757d',
                 customClass: {
                     confirmButton: 'btn px-5'
@@ -140,8 +140,8 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: '¡La categoria de curso se ha actualizado!',
-                html: 'La categoria de curso se puede encontrar con el nuevo nombre.',
+                title: '¡La categoria se ha actualizado!',
+                html: 'La categoria se puede encontrar con el nuevo nombre.',
                 confirmButtonColor: '#6c757d',
                 customClass: {
                     confirmButton: 'btn px-5'

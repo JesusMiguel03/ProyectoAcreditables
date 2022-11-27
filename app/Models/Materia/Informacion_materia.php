@@ -26,16 +26,16 @@ class Informacion_materia extends Model
 
     public function categoria()
     {
-        return $this->hasOne(Categoria::class, 'id');
+        return $this->hasOne(Categoria::class, 'id', 'categoria_id');
     }
 
     public function horario()
     {
-        return $this->hasOne(Horario::class,  'id');
+        return $this->hasOne(Horario::class,  'id', 'horario_id');
     }
 
     public function profesor()
     {
-        return $this->hasOne(Profesor::class,  'id');
+        return $this->hasOne(Profesor::class,  'id', 'profesor_id');
     }
 }

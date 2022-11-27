@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Coordinador;
 
 use App\Http\Controllers\Controller;
+use App\Models\DatosAcademicos\Pnf;
+use App\Models\DatosAcademicos\Trayecto;
+use App\Models\Estudiante;
 use App\Models\Profesor\Especialidad;
 use App\Models\Profesor\Profesor;
 use App\Models\Profesor\Profesor_especialidad;
@@ -38,6 +41,8 @@ class UsuarioController extends Controller
         $roles = Role::all();
         $especialidades = Especialidad::all();
         $relacion = [];
+        $pnfs = Pnf::all();
+        $trayectos = Trayecto::all();
 
         // Si tiene especialidades las retorna en el arreglo $relacion
         if (!empty($usuario->profesor->especialidades)) {
@@ -46,7 +51,7 @@ class UsuarioController extends Controller
             }
         }
 
-        return view('aside.principal.usuarios.edit', compact('usuario', 'roles', 'especialidades', 'relacion'));
+        return view('aside.principal.usuarios.edit', compact('usuario', 'roles', 'especialidades', 'relacion', 'pnfs', 'trayectos'));
     }
 
     public function update(Request $request, $id)
@@ -65,6 +70,15 @@ class UsuarioController extends Controller
                 return redirect('usuarios')->with('incorrecto', 'categoria existente');
             }
             $usuario->profesor->especialidades()->sync($especialidades);
+        } else if ($rol === 'Estudiante') {
+            // dd($usuario->estudiante);
+            $estudiante = Estudiante::updateOrCreate(
+                ['usuario_id' => $usuario->id],
+                [
+                    'trayecto_id' => $request->get('trayecto'),
+                    'pnf_id' => $request->get('pnf')
+                ]
+            );
         }
 
         return redirect('usuarios')->with('creado', 'Roles añadidos exitosamente');

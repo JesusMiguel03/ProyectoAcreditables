@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
-use App\Models\Materia\Estudiante_curso;
+use App\Models\DatosAcademicos\Estudiante_materia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class PreinscripcionController extends Controller
@@ -18,26 +17,34 @@ class PreinscripcionController extends Controller
      */
     public function store(Request $request)
     {
-        // $validador = Validator::make($request->all(), [
-        //     'user_id' => ['required', 'string', 'max:50']
-        // ]);
+        Estudiante_materia::updateOrCreate(
+            ['estudiante_id' => $request->get('usuario_id')],
+            [
+                'calificacion' => 0,
+                'codigo' => Str::random(20),
+                'validacion_estudiante' => 0,
+                'materia_id' => $request->get('materia_id')
+            ]
+        );
 
-        // if ($validador->fails()) {
-        //     return redirect('tipo/create')->withErrors($validador)->withInput();
-        // }
+        return redirect('materias')->with('registrado', 'El tipo fue creada exitosamente');
+    }
 
-        // if (Estudiante_en_curso::where('id', '=', $request->get('nombre'))->first()) {
-        //     return redirect('curso')->with('error', 'tipo existente');
-        // }
+    public function validar(Request $request)
+    {
+        $id = $request->get('id');
+        $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
+        $estudiante->validacion_estudiante = 1;
+        $estudiante->update();
+        return redirect()->back()->with('validado', 'Se ha validado');
+    }
 
-
-        $estudiante = new Estudiante_curso();
-        $estudiante->calificacion = 0;
-        $estudiante->codigo = Str::random(20);;
-        $estudiante->estudiante_id = request('usuario_id');
-        $estudiante->curso_id = request('curso_id');
-        $estudiante->save();
-
-        return redirect('tipo')->with('creado', 'El tipo fue creada exitosamente');
+    public function invalidar(Request $request)
+    {
+        $id = $request->get('id');
+        $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
+        $estudiante->validacion_estudiante = 0;
+        $estudiante->update();
+        return redirect()->back()->with('validado', 'Se ha validado');
     }
 }

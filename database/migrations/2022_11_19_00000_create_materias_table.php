@@ -21,6 +21,7 @@ class CreateMateriasTable extends Migration
             $table->string('desc_materia', 255);
             $table->string('estado_materia', 20);
             $table->string('imagen_materia', 80)->nullable();
+            $table->integer('num_acreditable');
             $table->unsignedBigInteger('informacion_id')->nullable();
             $table->foreign('informacion_id')->references('id')->on('informacion_materia')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
