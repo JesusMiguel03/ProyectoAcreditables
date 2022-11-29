@@ -147,7 +147,7 @@
     {{-- Vista estudiante/profesor --}}
     @if (Auth::user()->getRoleNames()[0] !== 'Coordinador')
         @if (empty(Auth::user()->estudiante))
-            <div class="col-md-6 col-sm-12 mx-auto">
+            <div class="col-md-4 col-sm-12 mx-auto">
                 <section class="card">
                     <header class="card-header bg-secondary">
                         <h5 class="mx-auto text-center" id="exampleModalLongTitle">¡Aún no terminas tu perfil
