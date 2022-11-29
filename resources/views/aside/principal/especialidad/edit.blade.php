@@ -45,6 +45,19 @@
                         @enderror
                     </div>
 
+                    {{-- Campo de descripción --}}
+                    <div class="form-group mb-3">
+                        <label for="desc_especialidad">Nombre</label>
+                        <textarea name="desc_especialidad" class="form-control @error('desc_especialidad') is-invalid @enderror"
+                            placeholder="{{ __('Descripción') }}" autofocus style="min-height: 9rem; resize: none">{{ $especialidad->desc_especialidad }}</textarea>
+
+                        @error('desc_especialidad')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
                     {{-- Botón de registrar --}}
                     <div class="row">
                         <div class="col-6">

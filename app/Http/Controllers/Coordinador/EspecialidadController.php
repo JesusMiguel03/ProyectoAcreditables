@@ -35,27 +35,30 @@ class EspecialidadController extends Controller
     public function store(Request $request)
     {
         $validado = Validator::make($request->all(), [
-            'nom_especialidad' => ['required', 'string', 'alpha', 'between:10,50']
+            'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'between:10,50'],
+            'desc_especialidad' => ['required', 'string', 'between:10,255']
         ], [
+            'desc_especialidad.required' => 'El campo descripción es necesario.',
             'nom_especialidad.required' => 'El campo nombre es necesario.',
+            'desc_especialidad.string' => 'El campo descripción debe ser una oración.',
             'nom_especialidad.string' => 'El campo nombre debe ser una oración.',
-            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max.',
-            'nom_especialidad.between' => 'El campo nombre solo puede contener letras.'
+            'desc_especialidad.regex' => 'El campo nombre solo puedo contener letras y espacios.',
+            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max carácteres.',
+            'desc_especialidad.between' => 'El campo descripción debe estar entre :min y :max carácteres.',
         ]);
 
-        if ($validado->fails())
-        {
+        if ($validado->fails()) {
             return redirect()->back()->withErrors($validado)->withInput()->with('error', 'error');
         }
 
-        if (Especialidad::where('nom_especialidad', '=', $request->get('nom_especialidad'))->first())
-        {
+        if (Especialidad::where('nom_especialidad', '=', $request->get('nom_especialidad'))->first()) {
             return redirect('especialidad')->with('error', 'categoria existente');
         }
 
 
         $especialidad = new Especialidad();
         $especialidad->nom_especialidad = request('nom_especialidad');
+        $especialidad->desc_especialidad = request('desc_especialidad');
         $especialidad->save();
 
         return redirect('especialidad')->with('creado', 'La categoria fue creada exitosamente');
@@ -83,16 +86,19 @@ class EspecialidadController extends Controller
     public function update(Request $request, $id)
     {
         $validado = Validator::make($request->all(), [
-            'nom_especialidad' => ['required', 'string', 'alpha', 'between:10,50']
+            'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'between:10,50'],
+            'desc_especialidad' => ['required', 'string', 'between:10,255']
         ], [
+            'desc_especialidad.required' => 'El campo descripción es necesario.',
             'nom_especialidad.required' => 'El campo nombre es necesario.',
+            'desc_especialidad.string' => 'El campo descripción debe ser una oración.',
             'nom_especialidad.string' => 'El campo nombre debe ser una oración.',
-            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max.',
-            'nom_especialidad.between' => 'El campo nombre solo puede contener letras.'
+            'desc_especialidad.regex' => 'El campo nombre solo puedo contener letras y espacios.',
+            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max carácteres.',
+            'desc_especialidad.between' => 'El campo descripción debe estar entre :min y :max carácteres.',
         ]);
 
-        if ($validado->fails())
-        {
+        if ($validado->fails()) {
             return redirect()->back()->withErrors($validado)->withInput()->with('error', 'error');
         }
 

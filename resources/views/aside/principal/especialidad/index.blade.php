@@ -54,6 +54,19 @@
                             @enderror
                         </div>
 
+                        {{-- Campo de descripción --}}
+                        <div class="form-group mb-3">
+                            <label for="desc_especialidad">Nombre</label>
+                            <textarea name="desc_especialidad" class="form-control @error('desc_especialidad') is-invalid @enderror"
+                                placeholder="{{ __('Descripción') }}" autofocus style="min-height: 9rem; resize: none">{{ old('desc_especialidad') }}</textarea>
+
+                            @error('desc_especialidad')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
                         {{-- Botón de registrar --}}
                         <div class="row">
                             <x-botones.cancelar />
@@ -72,6 +85,7 @@
             <thead>
                 <tr class="bg-secondary">
                     <th>Nombre</th>
+                    <th>Descripción</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -79,6 +93,7 @@
                 @foreach ($especialidades as $especialidad)
                     <tr>
                         <th>{{ $especialidad->nom_especialidad }}</th>
+                        <th>{{ $especialidad->desc_especialidad }}</th>
                         <th><a href="{{ route('especialidad.edit', $especialidad->id) }}" class="btn btn-primary">
                                 <i class="fas fa-edit mr-2"></i>
                                 Editar
