@@ -9,7 +9,7 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Trayectos</a></li>
             </ol>
         </div>
@@ -17,58 +17,28 @@
 @stop
 
 @section('content')
-    {{-- Page content --}}
-    <div class="container-fluid">
+    <div class="card table-responsive-sm p-3 my-3">
+        <table id='tabla' class="table table-striped">
+            <thead>
+                <tr class="bg-secondary">
+                    <th>Trayectos</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
 
-        <x-botones.volver />
-
-        <div class="row mt-5">
-            @foreach ($trayectos as $trayecto)
-                <div class="col-md-3 col-sm-12">
-                    <div class="card">
-                        <header class="card-header bg-secondary">
-                            <h4 class="text-center">Trayecto {{ $trayecto->num_trayecto }}</h4>
-                        </header>
-                        <footer class="card-footer">
-                            <a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-outline-primary btn-block">
+            <tbody>
+                @foreach ($trayectos as $trayecto)
+                    <tr>
+                        <th>{{ $trayecto->num_trayecto }}</th>
+                        <th><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary">
                                 <i class="fas fa-edit mr-2"></i>
                                 Editar
                             </a>
-                        </footer>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        {{-- <div class="row mt-3">
-            <div class="col-12 mt-4">
-                <div class="card table-responsive-sm p-3 mb-4">
-                    <table id='tabla' class="table table-striped">
-                        <thead>
-                            <tr class="bg-secondary">
-                                <th>Trayectos</th>
-                                <th>Opciones</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($trayectos as $trayecto)
-                                <tr>
-                                    <th>{{ $trayecto->num_trayecto }}</th>
-                                    <th><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary">
-                                            <i class="fas fa-edit mr-2"></i>
-                                            Editar
-                                        </a>
-                                    </th>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div> --}}
-
+                        </th>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 @stop
 

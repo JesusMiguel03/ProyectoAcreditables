@@ -9,31 +9,28 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
-                <li class="breadcrumb-item active"><a href="">Listado de Usuarios</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item active"><a href="">Usuarios</a></li>
             </ol>
         </div>
     </div>
 @stop
 
 @section('content')
-    <div class="container-fluid">
 
-        <div class="row">
-            {{-- <div class="col-md-3 col-sm-12">
+    {{-- <div class="row">
+        <div class="col-md-3 col-sm-12">
                 <div class="card">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#usuario">
                         <i class="fas fa-plus mr-2"></i>
                         {{ __('Agregar usuario') }}
                     </button>
                 </div>
-            </div> --}}
-
-            <x-botones.volver />
-        </div>
+            </div>
+    </div> --}}
 
 
-        {{-- <div class="modal fade" id="usuario" tabindex="-1" role="dialog" aria-labelledby="campousuario"
+    {{-- <div class="modal fade" id="usuario" tabindex="-1" role="dialog" aria-labelledby="campousuario"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -193,38 +190,35 @@
             </div>
         </div> --}}
 
-        <div class="row mt-3">
-            <div class="col-12 card table-responsive-sm p-3 mb-4">
-                <table id='tabla' class="table table-striped">
-                    <thead>
-                        <tr class="bg-secondary">
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>PNF</th>
-                            <th>Rol</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($usuarios as $usuario)
-                            <tr>
-                                <td>{{ $usuario->nombre }}</td>
-                                <td>{{ $usuario->apellido }}</td>
-                                <td>{{ $usuario->email }}</td>
-                                <td>{{ $usuario->getRoleNames()->first() }}</td>
-                                <td>
-                                    <a href="{{ route('coordinador.usuarios.edit', $usuario) }}" class="btn btn-primary"
-                                        style="width: 7rem">
-                                        <i class="fas fa-edit mr-2"></i>
-                                        Editar
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="col-12 card table-responsive-sm p-3 my-3">
+        <table id='tabla' class="table table-striped">
+            <thead>
+                <tr class="bg-secondary">
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>PNF</th>
+                    <th>Rol</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($usuarios as $usuario)
+                    <tr>
+                        <td>{{ $usuario->nombre }}</td>
+                        <td>{{ $usuario->apellido }}</td>
+                        <td>{{ $usuario->email }}</td>
+                        <td>{{ $usuario->getRoleNames()->first() }}</td>
+                        <td>
+                            <a href="{{ route('coordinador.usuarios.edit', $usuario) }}" class="btn btn-primary"
+                                style="width: 7rem">
+                                <i class="fas fa-edit mr-2"></i>
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 @stop
 
@@ -266,6 +260,17 @@
                 icon: 'warning',
                 title: '¡Debes crear un perfil de profesor primero!',
                 html: 'Antes de asignar las especialidades del educador primero debes registrar su perfil educativo.',
+                confirmButtonColor: '#6c757d',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('error'))
+            let timerInterval
+            Swal.fire({
+                icon: 'error',
+                title: '¡Hubo un problema!',
+                html: 'Parece que uno de los campos no cumple los requisitos.',
                 confirmButtonColor: '#6c757d',
                 customClass: {
                     confirmButton: 'btn px-5'

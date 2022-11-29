@@ -5,11 +5,11 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Listado de PNF</h1>
+            <h1 class="m-0">PNF</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">PNF</a></li>
             </ol>
         </div>
@@ -17,41 +17,31 @@
 @stop
 
 @section('content')
-    {{-- Page content --}}
-    <div class="container-fluid">
+        <div class="col-12 my-4">
+            <div class="card table-responsive-sm p-3 mb-4">
+                <table id='tabla' class="table table-striped">
+                    <thead>
+                        <tr class="bg-secondary">
+                            <th>Nombre</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
 
-        <x-botones.volver />
-
-        <div class="row mt-3">
-            <div class="col-12 mt-4">
-                <div class="card table-responsive-sm p-3 mb-4">
-                    <table id='tabla' class="table table-striped">
-                        <thead>
-                            <tr class="bg-secondary">
-                                <th>Nombre</th>
-                                <th>Opciones</th>
+                    <tbody>
+                        @foreach ($pnfs as $pnf)
+                            <tr>
+                                <th>{{ $pnf->nom_pnf }}</th>
+                                <th><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary">
+                                        <i class="fas fa-edit mr-2"></i>
+                                        Editar
+                                    </a>
+                                </th>
                             </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($pnfs as $pnf)
-                                <tr>
-                                    <th>{{ $pnf->nom_pnf }}</th>
-                                    <th><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary">
-                                            <i class="fas fa-edit mr-2"></i>
-                                            Editar
-                                        </a>
-                                    </th>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-
         </div>
-
-    </div>
 @stop
 
 @section('css')

@@ -34,13 +34,18 @@ class EspecialidadController extends Controller
      */
     public function store(Request $request)
     {
-        $validador = Validator::make($request->all(), [
-            'nom_especialidad' => ['required', 'string', 'max:50']
+        $validado = Validator::make($request->all(), [
+            'nom_especialidad' => ['required', 'string', 'alpha', 'between:10,50']
+        ], [
+            'nom_especialidad.required' => 'El campo nombre es necesario.',
+            'nom_especialidad.string' => 'El campo nombre debe ser una oración.',
+            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max.',
+            'nom_especialidad.between' => 'El campo nombre solo puede contener letras.'
         ]);
 
-        if ($validador->fails())
+        if ($validado->fails())
         {
-            return redirect('especialidad/create')->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validado)->withInput()->with('error', 'error');
         }
 
         if (Especialidad::where('nom_especialidad', '=', $request->get('nom_especialidad'))->first())
@@ -77,6 +82,20 @@ class EspecialidadController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validado = Validator::make($request->all(), [
+            'nom_especialidad' => ['required', 'string', 'alpha', 'between:10,50']
+        ], [
+            'nom_especialidad.required' => 'El campo nombre es necesario.',
+            'nom_especialidad.string' => 'El campo nombre debe ser una oración.',
+            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max.',
+            'nom_especialidad.between' => 'El campo nombre solo puede contener letras.'
+        ]);
+
+        if ($validado->fails())
+        {
+            return redirect()->back()->withErrors($validado)->withInput()->with('error', 'error');
+        }
+
         $informacion = request()->except(['_token', '_method']);
         Especialidad::where('id', '=', $id)->update($informacion);
         return redirect('especialidad')->with('actualizado', 'Curso actualizado exitosamente');

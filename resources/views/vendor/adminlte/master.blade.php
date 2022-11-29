@@ -32,6 +32,9 @@
             margin: 0.5rem auto;
             opacity: 0.5;
         }
+        a.link-muted:hover {
+            color: #007bff;
+        }
     </style>
 
     {{-- Base Stylesheets --}}

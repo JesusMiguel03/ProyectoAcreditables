@@ -10,7 +10,7 @@
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
-                <li class="breadcrumb-item active"><a href="{{ route('profesores.index') }}">Listado</a></li>
+                <li class="breadcrumb-item active"><a href="{{ route('profesores.index') }}">Profesores</a></li>
                 <li class="breadcrumb-item active"><a href="">Profesor</a></li>
             </ol>
         </div>

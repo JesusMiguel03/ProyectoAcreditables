@@ -14,6 +14,7 @@ use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
 use App\Models\Profesor\Profesor;
+use Illuminate\Validation\Validator as ValidationValidator;
 
 class MateriaController extends Controller
 {
@@ -47,9 +48,10 @@ class MateriaController extends Controller
             'nom_materia' => ['required', 'string', 'max:40'],
             'cupos' => ['required', 'numeric', 'max:50'],
             'desc_materia' => ['required', 'string', 'max:255'],
-            'num_acreditable' => ['required', 'numeric', 'max:4'],
+            'num_acreditable' => ['required', 'numeric', 'max:4', 'not_in:0'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
         ], [
+            'num_acreditable.not_in' => 'El campo número de la acreditable es inválido.',
             'num_acreditable.required' => 'El campo número de la acreditable es necesario.',
             'num_acreditable.max' => 'El campo número de la acreditable no debe ser mayor a :max.',
             'cupos.max' => 'El campo cupos no debe ser mayor a :max',
@@ -58,11 +60,12 @@ class MateriaController extends Controller
             'imagen_materia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
         ]);
 
-        $materia = new Materia();
-
+        
         if ($validator->fails()) {
-            return redirect('materias/create')->withErrors($validator)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'error');
         };
+
+        $materia = new Materia();
 
         if ($request->hasFile('imagen_materia')) {
             $imagen = $request->file('imagen_materia')->storeAs('uploads', date('Y-m-d') . $request->get('nom_materia') . '.jpg', 'public');
@@ -146,7 +149,7 @@ class MateriaController extends Controller
         $validador = Validator::make($request->all(), [
             'nom_materia' => ['required', 'string', 'max:40'],
             'cupos' => ['required', 'numeric', 'max:50'],
-            'num_acreditable' => ['required', 'numeric', 'max:4'],
+            'num_acreditable' => ['required', 'numeric', 'not_in:0'],
             'desc_materia' => ['required', 'string', 'max:255'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
             'estado_materia' => ['required'],
@@ -154,8 +157,8 @@ class MateriaController extends Controller
             'tipo' => ['required'],
             'profesor' => ['required'],
         ], [
+            'num_acreditable.not_in' => 'El campo número de la acreditable es inválido.',
             'num_acreditable.required' => 'El campo número de la acreditable es necesario.',
-            'num_acreditable.max' => 'El campo número de la acreditable no debe ser mayor a :max.',
             'cupos.max' => 'El campo cupos no debe ser mayor a :max',
             'desc_materia.max' => 'El campo descripción no debe ser mayor a :max carácteres',
             'imagen_materia.max' => 'La imagen no debe pesar más de 1 MB.',

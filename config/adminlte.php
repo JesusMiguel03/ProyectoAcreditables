@@ -193,7 +193,7 @@ return [
     'classes_content_header' => '',
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-light-primary elevation-4',
-    'classes_sidebar_nav' => '',
+    'classes_sidebar_nav' => 'nav-flat',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
@@ -303,7 +303,7 @@ return [
             'can'         => 'perfiles',
             'submenu'         => [
                 [
-                    'text'        => 'Especialidad',
+                    'text'        => 'Especialidades',
                     'shift'       => 'ml-1',
                     'url'         => '/especialidad',
                     'active'         => ['especialidad*'],
@@ -376,7 +376,7 @@ return [
             'icon'        => 'fas fa-th-large',
         ],
         [
-            'text'        => 'Trayecto',
+            'text'        => 'Trayectos',
             'url'         => '/trayecto',
             'active'      => ['trayecto*'],
             'can'         => 'trayecto',

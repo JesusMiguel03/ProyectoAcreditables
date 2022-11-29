@@ -5,11 +5,12 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Coordinación de Acreditables</h1>
+            <h1 class="m-0">Editar categoria</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('categoria.index') }}" class="link-muted">Categorias</a></li>
                 <li class="breadcrumb-item active"><a href="">Categoria</a></li>
             </ol>
         </div>
@@ -17,19 +18,20 @@
 @stop
 
 @section('content')
-    {{-- Page content --}}
-    <div class="container-fluid">
+    <div class="col-md-6 col-sm-12 mx-auto">
+        <div class="card">
+            <header class="card-header bg-primary">
+                <h5>Editar categoria</h5>
+            </header>
 
-        <div class="card col-6 mx-auto p-4">
-            <h2 class="card-header">Editar categoria</h2>
-
-            <div class="card-body">
+            <main class="card-body">
                 <form action="{{ route('categoria.update', $categoria) }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    {{ method_field('PATCH') }}
+                    {{ method_field('PUT') }}
 
                     {{-- Campo de nombre --}}
-                    <div class="input-group mb-3">
+                    <div class="form-group mb-3">
+                        <label for="nombre">Nombre</label>
                         <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
                             value="{{ $categoria->nom_categoria }}"
                             placeholder="{{ __('Nombre de la categoria de curso') }}" autofocus>
@@ -52,10 +54,8 @@
 
                         <x-botones.guardar />
                     </div>
-
                 </form>
-            </div>
+            </main>
         </div>
-
     </div>
 @stop

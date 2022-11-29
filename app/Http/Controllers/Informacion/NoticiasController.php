@@ -31,13 +31,16 @@ class NoticiasController extends Controller
         $validador = Validator::make($request->all(), [
             'encabezado' => ['required', 'string', 'max:25'],
             'desc_noticia' => ['required', 'string', 'max:150'],
-            'mostrar' => ['required', 'boolean'],
+            'mostrar' => ['required', 'max:2', 'not_in:0'],
         ], [
-            'desc_noticia.max' => 'La descripcion no debe ser mayor a 150 carácteres.'
+            'desc_noticia.max' => 'La descripcion no debe ser mayor a 150 carácteres.',
+            'mostrar.not_in' => 'El campo mostrar noticia es inválido.',
+            'mostrar.required' => 'El campo mostrar noticia es necesiario.',
+            'mostrar.max' => 'El campo mostrar noticia solo puede ser si o no.'
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         // Sin uso [valida que no se repita]
@@ -78,13 +81,16 @@ class NoticiasController extends Controller
         $validador = Validator::make($request->all(), [
             'encabezado' => ['required', 'string', 'max:25'],
             'desc_noticia' => ['required', 'string', 'max:150'],
-            'mostrar' => ['required', 'boolean'],
+            'mostrar' => ['required', 'max:2', 'not_in:0'],
         ], [
-            'desc_noticia.max' => 'La descripcion no debe ser mayor a 150 carácteres.'
+            'desc_noticia.max' => 'La descripcion no debe ser mayor a 150 carácteres.',
+            'mostrar.not_in' => 'El campo mostrar noticia es inválido.',
+            'mostrar.required' => 'El campo mostrar noticia es necesiario.',
+            'mostrar.max' => 'El campo mostrar noticia solo puede ser si o no.'
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         $informacion = request()->except(['_token', '_method']);

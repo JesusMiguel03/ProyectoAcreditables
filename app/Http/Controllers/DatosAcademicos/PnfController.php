@@ -79,15 +79,16 @@ class PnfController extends Controller
     public function update(Request $request, $id)
     {
         $validador = Validator::make($request->all(), [
-            'nom_pnf' => ['required', 'string', 'max:30'],
+            'nom_pnf' => ['required', 'string', 'between:10,30', 'alpha'],
         ], [
-            'nom_pnf.required' => 'El campo nombre del pnf es necesario.',
-            'nom_pnf.string' => 'El campo nombre del pnf debe ser texto.',
-            'nom_pnf.max' => 'El campo nombre del pnf no puede contener mas de :values carácteres.'
+            'nom_pnf.required' => 'El campo nombre es necesario.',
+            'nom_pnf.string' => 'El campo nombre debe ser texto.',
+            'nom_pnf.alpha' => 'El campo nombre solo puede contener letras..',
+            'nom_pnf.between' => 'El campo nombre debe estar entre :min y :max carácteres.'
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         $informacion = request()->except(['_token', '_method']);

@@ -9,7 +9,8 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('especialidad.index') }}" class="link-muted">Especialidades</a></li>
                 <li class="breadcrumb-item active"><a href="">Especialidad</a></li>
             </ol>
         </div>
@@ -17,21 +18,23 @@
 @stop
 
 @section('content')
-    {{-- Page content --}}
-    <div class="container-fluid">
+    <div class="col-md-6 col-sm-12 mx-auto mt-3">
+        <div class="card">
+            <header class="card-header bg-primary">
+                <h5>Editar especialidad</h5>
+            </header>
 
-        <div class="card col-6 mx-auto p-4">
-            <h2 class="card-header">Editar especialidad</h2>
-
-            <div class="card-body">
-                <form action="{{ route('especialidad.update', $especialidad) }}" method="post" enctype="multipart/form-data">
+            <main class="card-body">
+                <form action="{{ route('especialidad.update', $especialidad) }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
-                    {{ method_field('PATCH') }}
+                    {{ method_field('PUT') }}
 
                     {{-- Campo de nombre --}}
                     <div class="form-group mb-3">
                         <label for="nom_especialidad">Nombre</label>
-                        <input type="text" name="nom_especialidad" class="form-control @error('nom_especialidad') is-invalid @enderror"
+                        <input type="text" name="nom_especialidad"
+                            class="form-control @error('nom_especialidad') is-invalid @enderror"
                             value="{{ $especialidad->nom_especialidad }}"
                             placeholder="{{ __('Nombre de la especialidad') }}" autofocus>
 
@@ -55,8 +58,7 @@
                     </div>
 
                 </form>
-            </div>
+            </main>
         </div>
-
     </div>
 @stop

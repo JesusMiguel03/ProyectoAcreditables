@@ -37,24 +37,26 @@ class ProfesorController extends Controller
     public function store(Request $request)
     {
         $validador = Validator::make($request->all(), [
-            'usuarios' => ['required'],
+            'usuarios' => ['required', 'not_in:0'],
             'titulo' => ['required', 'string', 'max:50'],
-            'direccion' => ['required', 'string', 'max:50'],
-            'ciudad' => ['required', 'string', 'max:50'],
-            'estado' => ['required', 'string', 'max:50'],
+            'direccion' => ['required', 'string', 'max:40'],
+            'ciudad' => ['required', 'string', 'max:40'],
+            'estado' => ['required', 'string', 'max:20'],
             'telefono' => ['required', 'string', 'regex:/^[0-9]{11}$/'],
-            'fecha_de_nacimiento' => ['required', 'string'],
-            'fecha_ingreso_plantel' => ['required', 'string'],
+            'fecha_de_nacimiento' => ['required', 'date'],
+            'fecha_ingreso_plantel' => ['required', 'date'],
+        ], [
+            'usuarios.not_in' => 'El usuario seleccionado es inválido.'
         ]);
 
         if ($validador->fails())
         {
-            return redirect('profesores')->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         if (Profesor::where('usuario_id', '=', request('usuarios'))->first())
         {
-            return redirect('profesores')->with('existente', 'categoria existente');
+            return redirect()->back()->with('existente', 'categoria existente');
         }
         
         $profesor = Profesor::create([
@@ -107,8 +109,25 @@ class ProfesorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validador = Validator::make($request->all(), [
+            'usuarios' => ['required', 'not_in:0'],
+            'titulo' => ['required', 'string', 'max:50'],
+            'direccion' => ['required', 'string', 'max:40'],
+            'ciudad' => ['required', 'string', 'max:40'],
+            'estado' => ['required', 'string', 'max:20'],
+            'telefono' => ['required', 'string', 'regex:/^[0-9]{11}$/'],
+            'fecha_de_nacimiento' => ['required', 'date'],
+            'fecha_ingreso_plantel' => ['required', 'date'],
+        ], [
+            'usuarios.not_in' => 'El usuario seleccionado es inválido.'
+        ]);
+
+        if ($validador->fails())
+        {
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
+        }
+
         $profesor = Profesor::find($id);
-        $profesor->usuario_id = $id;
         $profesor->titulo = request('titulo');
         $profesor->direccion = request('direccion');
         $profesor->ciudad = request('ciudad');

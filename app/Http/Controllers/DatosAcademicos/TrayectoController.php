@@ -75,11 +75,15 @@ class TrayectoController extends Controller
     public function update(Request $request, $id)
     {
         $validador = Validator::make($request->all(), [
-            'num_trayecto' => ['required', 'integer', 'max:4'],
+            'num_trayecto' => ['required', 'number', 'max:4'],
+        ], [
+            'num_trayecto.required' => 'El campo número es necesario.',
+            'num_trayecto.number' => 'El campo número debe ser un número.',
+            'num_trayecto.max' => 'El campo número no debe ser mayor a :max.',
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         if (Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))->first()) {

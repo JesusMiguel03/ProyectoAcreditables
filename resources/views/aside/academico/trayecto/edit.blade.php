@@ -9,7 +9,8 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('trayecto.index') }}" class="link-muted">Trayectos</a></li>
                 <li class="breadcrumb-item active"><a href="">Editar trayecto</a></li>
             </ol>
         </div>
@@ -17,25 +18,26 @@
 @stop
 
 @section('content')
-    {{-- Page content --}}
-    <div class="container-fluid">
+    <div class="col-md-6 col-sm-12 mx-auto">
+        <div class="card">
+            <header class="card-header bg-primary">
+                <h5>Editar trayecto</h5>
+            </header>
 
-        <div class="card col-6 mx-auto p-4">
-            <h2 class="card-header">Editar trayecto</h2>
-
-            <div class="card-body">
+            <main class="card-body">
                 <form action="{{ route('trayecto.update', $trayecto) }}" method="post">
                     @csrf
-                    {{ method_field('PATCH') }}
+                    {{ method_field('PUT') }}
 
                     {{-- Campo de número --}}
                     <div class="form-group mb-3">
-                        <label for="numero">Trayecto Nro</label>
-                        <input type="number" name="numero" id="numero"
-                            class="form-control @error('numero') is-invalid @enderror" value="{{ __($trayecto->numero) }}"
-                            placeholder="{{ __('Número del trayecto') }}" autofocus>
+                        <label for="num_trayecto">Trayecto Nro</label>
+                        <input type="number" name="num_trayecto" id="num_trayecto"
+                            class="form-control @error('num_trayecto') is-invalid @enderror"
+                            value="{{ __($trayecto->num_trayecto) }}" placeholder="{{ __('Número del trayecto') }}"
+                            autofocus>
 
-                        @error('numero')
+                        @error('num_trayecto')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -55,8 +57,7 @@
                     </div>
 
                 </form>
-            </div>
+            </main>
         </div>
-
     </div>
 @stop

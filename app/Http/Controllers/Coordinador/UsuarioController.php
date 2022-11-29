@@ -7,10 +7,9 @@ use App\Models\DatosAcademicos\Pnf;
 use App\Models\DatosAcademicos\Trayecto;
 use App\Models\Estudiante;
 use App\Models\Profesor\Especialidad;
-use App\Models\Profesor\Profesor;
-use App\Models\Profesor\Profesor_especialidad;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 class UsuarioController extends Controller
@@ -56,6 +55,18 @@ class UsuarioController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validador = Validator::make($request->all(), [
+            'roles[]' => ['required', 'not_in:0'],
+        ], [
+            'roles[].required' => 'El campo rol es necesario.',
+            'roles[].not_in' => 'El rol seleccionado es inválido.'
+        ]);
+
+        if ($validador->fails())
+        {
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
+        }
+
         // Actualizar rol
         $usuario = User::find($id);
         $rol = $usuario->getRoleNames()[0];

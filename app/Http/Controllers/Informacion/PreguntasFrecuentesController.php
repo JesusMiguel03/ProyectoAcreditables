@@ -34,7 +34,7 @@ class PreguntasFrecuentesController extends Controller
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         $pregunta = new Preguntas_frecuentes();
@@ -72,7 +72,7 @@ class PreguntasFrecuentesController extends Controller
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
+            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
         $informacion = request()->except(['_token', '_method']);

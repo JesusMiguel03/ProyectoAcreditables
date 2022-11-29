@@ -9,25 +9,25 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
-                <li class="breadcrumb-item active"><a href="{{ route('noticias.index') }}">Noticias</a></li>
-                <li class="breadcrumb-item active"><a href="">Editar noticia</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('noticias.index') }}" class="link-muted">Noticias</a></li>
+                <li class="breadcrumb-item active"><a href="">Noticia</a></li>
             </ol>
         </div>
     </div>
 @stop
 
 @section('content')
-    {{-- Page content --}}
-    <div class="container-fluid">
+    <div class="col-md-6 col-sm-12 mx-auto">
+        <div class="card">
+            <header class="card-header bg-primary">
+                <h5>Editar noticia</h5>
+            </header>
 
-        <div class="card col-md-6 col-sm-12 mx-auto p-4">
-            <h2 class="card-header">Editar noticia</h2>
-
-            <div class="card-body">
+            <main class="card-body">
                 <form action="{{ route('noticias.update', $noticia) }}" method="post">
                     @csrf
-                    {{ method_field('PATCH') }}
+                    {{ method_field('PUT') }}
 
                     {{-- Campo de nombre --}}
                     <div class="form-group mb-3">
@@ -82,10 +82,8 @@
                         </div>
                         <x-botones.guardar />
                     </div>
-
                 </form>
-            </div>
+            </main>
         </div>
-
     </div>
 @stop

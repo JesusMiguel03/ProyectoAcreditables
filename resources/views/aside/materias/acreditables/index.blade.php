@@ -9,7 +9,7 @@
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Materias</a></li>
             </ol>
         </div>
@@ -17,8 +17,6 @@
 @stop
 
 @section('content')
-    {{-- Page content --}}
-
     {{-- Boton para crear cursos - Modal --}}
     @can('materias.gestion')
         <div class="row">
@@ -30,8 +28,6 @@
                     </button>
                 </div>
             </div>
-
-            <x-botones.volver />
         </div>
 
         {{-- Modal para crear --}}
@@ -41,12 +37,12 @@
                 <div class="modal-content">
 
                     {{-- Encabezado --}}
-                    <div class="modal-header">
+                    <header class="modal-header bg-primary">
                         <h5 class="modal-title" id="exampleModalLabel">Agregar materia</h5>
-                    </div>
+                    </header>
 
                     {{-- Contenido --}}
-                    <div class="modal-body">
+                    <main class="modal-body">
                         <form action="{{ route('materias.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
 
@@ -96,7 +92,7 @@
                                 <label for="num_acreditable">Acreditable Nro</label>
                                 <select name="num_acreditable"
                                     class="form-control @error('num_acreditable') is-invalid @enderror">
-                                    <option>Seleccione una</option>
+                                    <option value="0">Seleccione una</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -121,13 +117,12 @@
                                         una imagen</label>
                                     <small id="ayudaImagen" class="form-text text-muted">La imagen debe pesar menos de 1
                                         MB.</small>
-
-                                    @error('imagen_materia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
+                                @error('imagen_materia')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
 
                             {{-- Previsualizar imagen --}}
@@ -143,7 +138,7 @@
                             </div>
 
                         </form>
-                    </div>
+                    </main>
                 </div>
             </div>
         </div>
