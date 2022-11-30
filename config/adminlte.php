@@ -303,7 +303,7 @@ return [
             'can'         => 'perfiles',
             'submenu'         => [
                 [
-                    'text'        => 'Especialidades',
+                    'text'        => 'Areas de conocimiento',
                     'shift'       => 'ml-1',
                     'url'         => '/especialidad',
                     'active'         => ['especialidad*'],

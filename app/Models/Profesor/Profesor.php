@@ -2,6 +2,7 @@
 
 namespace App\Models\Profesor;
 
+use App\Models\Materia\Area_conocimiento;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,14 +15,15 @@ class Profesor extends Model
 
     protected $fillable = [
         'usuario_id',
+        'telefono',
         'titulo',
-        'genero',
-        'direccion',
+        'casa',
+        'calle',
+        'urb',
         'ciudad',
         'estado',
-        'telefono',
         'fecha_de_nacimiento',
-        'fecha_ingreso_plantel',
+        'fecha_ingreso_institucion',
         'estado_profesor'
     ];
 
@@ -33,5 +35,10 @@ class Profesor extends Model
     public function especialidades()
     {
         return $this->belongsToMany(Especialidad::class, 'profesor_especialidad', 'profesor_id', 'especialidad_id');
+    }
+
+    public function areas_conocimiento()
+    {
+        return $this->belongsToMany(Area_conocimiento::class, 'profesor_especialidad', 'profesor_id', 'area_conocimiento_id');
     }
 }

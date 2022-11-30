@@ -5,12 +5,9 @@
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Gestión de materias</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
-                <li class="breadcrumb-item active"><a href="{{ route('materias.index') }}">Cursos</a></li>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Cursos</a></li>
                 <li class="breadcrumb-item active"><a href="">Editar Materia</a></li>
             </ol>
         </div>
@@ -18,15 +15,10 @@
 @stop
 
 @section('content')
-    <div class="card">
+    <div class="card my-3">
 
-        <header class="card-header">
-            <div class="row">
-                <h2>Editar materia - {{ $materia->nom_materia }}</h2>
-
-                <a href="{{ route('materias.index') }}"
-                    class="btn btn-outline-secondary ml-auto float-right px-4">Volver</a>
-            </div>
+        <header class="card-header bg-primary">
+            <h5>Editar materia - {{ $materia->nom_materia }}</h5>
         </header>
 
         <main class="card-body">
@@ -75,12 +67,12 @@
                         <div id="basic-info" class="content" role="tabpanel" aria-labelledby="basic-info-trigger">
 
                             {{-- Nombre --}}
-                            <div class="form-group mb-3">
-                                <label for="name">Nombre</label>
+                            <div class="form-group required mb-3">
+                                <label for="name" class="control-label">Nombre</label>
                                 <input type="text" name="nom_materia" id="nom_materia"
                                     class="form-control @error('nom_materia') is-invalid @enderror"
                                     value="{{ $materia->nom_materia }}" placeholder="{{ __('Nombre de la materia') }}"
-                                    autofocus>
+                                    autofocus required>
 
                                 @error('nom_materia')
                                     <span class="invalid-feedback" role="alert">
@@ -90,12 +82,12 @@
                             </div>
 
                             {{-- Cupos --}}
-                            <div class="form-group mb-3">
-                                <label for="cupos">Cupos</label>
+                            <div class="form-group required mb-3">
+                                <label for="cupos" class="control-label">Cupos</label>
                                 <input type="number" name="cupos" id="cupos"
                                     class="form-control @error('cupos') is-invalid @enderror" id="cupos"
                                     value="{{ $materia->cupos }}" placeholder="{{ __('Cupos disponibles, límite: 50') }}"
-                                    autofocus>
+                                    autofocus required>
 
                                 @error('cupos')
                                     <span class="invalid-feedback" role="alert">
@@ -105,10 +97,10 @@
                             </div>
 
                             {{-- Descripcion --}}
-                            <div class="form-group mb-3">
-                                <label for="description">Descripción</label>
+                            <div class="form-group required mb-3">
+                                <label for="description" class="control-label">Descripción</label>
                                 <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror"
-                                    placeholder="{{ __('Descripción') }}" autofocus spellcheck="false" style="min-height: 9rem; resize: none">{{ $materia->desc_materia }}</textarea>
+                                    placeholder="{{ __('Descripción') }}" autofocus spellcheck="false" style="min-height: 7rem; resize: none" required>{{ $materia->desc_materia }}</textarea>
 
                                 @error('desc_materia')
                                     <span class="invalid-feedback" role="alert">
@@ -118,12 +110,12 @@
                             </div>
 
                             {{-- Estado --}}
-                            <div class="form-group mb-3">
-                                <label for="description">Estado</label>
+                            <div class="form-group required mb-3">
+                                <label for="description" class="control-label">Estado</label>
                                 <select id="estado_materia"
                                     class="form-control @error('estado_materia') is-invalid @enderror"
                                     name="estado_materia">
-                                    <option>Seleccione el estado de la materia</option>
+                                    <option disabled>Seleccione el estado de la materia</option>
                                     <option value="Inactivo"
                                         {{ $materia->estado_materia === 'Inactivo' ? 'selected' : '' }}>
                                         Inactivo</option>
@@ -150,8 +142,8 @@
                             </div>
 
                             {{-- Número de acreditable --}}
-                            <div class="form-group mb-3">
-                                <label for="num_acreditable">Acreditable Nro</label>
+                            <div class="form-group required mb-3">
+                                <label for="num_acreditable" class="control-label">Acreditable Nro</label>
                                 <select name="num_acreditable"
                                     class="form-control @error('num_acreditable') is-invalid @enderror">
                                     <option>Seleccione una</option>
@@ -172,6 +164,12 @@
                                 @enderror
                             </div>
 
+                            <div class="form-group" style="margin-bottom: -10px">
+                                <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                                    son obligatorios.
+                                </p>
+                            </div>
+
                         </div>
 
                         {{--            Parte 2            --}}
@@ -181,21 +179,19 @@
                             {{-- Categoria --}}
                             <div class="form-group mb-3">
                                 <label for="categoria">Categoria</label>
-
-                                @if ($categorias->isEmpty())
-                                    <input type="text" class="form-control @error('categoria') is-invalid @enderror"
-                                        placeholder="{{ __('No hay categorias añadidas') }}" disabled>
-                                @else
-                                    <select id="categoria" class="form-control @error('categoria') is-invalid @enderror"
-                                        name="categoria">
-                                        <option>Seleccione una categoria</option>
-                                        @foreach ($categorias as $categoria)
-                                            <option value="{{ $categoria->id }}"
-                                                {{ !empty($materia->info) && $materia->info->categoria_id === $categoria->id ? 'selected' : '' }}>
-                                                {{ $categoria->nom_categoria }}</option>
-                                        @endforeach
-                                    </select>
-                                @endif
+                                <select id="categoria" class="form-control @error('categoria') is-invalid @enderror"
+                                    name="categoria">
+                                    @if ($profesores->isEmpty())
+                                        <option value="0">No hay categorias añadidas</option>
+                                    @else
+                                        <option value="0">Seleccione uno</option>
+                                    @endif
+                                    @foreach ($categorias as $categoria)
+                                        <option value="{{ $categoria->id }}"
+                                            {{ !empty($materia->info) && $materia->info->categoria_id === $categoria->id ? 'selected' : '' }}>
+                                            {{ $categoria->nom_categoria }}</option>
+                                    @endforeach
+                                </select>
 
                                 @error('categoria')
                                     <span class="invalid-feedback" role="alert">
@@ -206,10 +202,10 @@
 
                             {{-- Tipo --}}
                             <div class="form-group mb-3">
-                                <label for="tipo">Tipo</label>
+                                <label for="tipo">Tipo de aprendizaje</label>
                                 <select id="tipo" class="form-control @error('tipo') is-invalid @enderror"
                                     name="tipo">
-                                    <option>Seleccione el aprendizaje</option>
+                                    <option value="0">Seleccione uno</option>
                                     <option value="Teórico"
                                         {{ !empty($materia->info) && $materia->info->metodologia_aprendizaje === 'Teórico' ? 'selected' : '' }}>
                                         Teórico</option>
@@ -262,26 +258,20 @@
                             {{-- Profesor --}}
                             <div class="form-group mb-3">
                                 <label for="profesor">Profesor</label>
-
-                                @if ($profesores->isEmpty())
-                                    <input type="text" class="form-control @error('categoria') is-invalid @enderror"
-                                        placeholder="{{ __('No hay categorias añadidas') }}" disabled>
-                                @else
-                                    <select id="profesor" class="form-control @error('profesor') is-invalid @enderror"
-                                        name="profesor">
-                                        @if ($profesores->isEmpty())
-                                            <option>No hay profesores añadidos</option>
-                                        @else
-                                            <option>Seleccione una categoria</option>
-                                        @endif
-                                        @foreach ($profesores as $profesor)
-                                            <option value="{{ $profesor->id }}"
-                                                {{ !empty($materia->info) && $materia->info->profesor_id === $profesor->id ? 'selected' : '' }}>
-                                                {{ $profesor->usuario->nombre }}
-                                                {{ $profesor->usuario->apellido }}</option>
-                                        @endforeach
-                                    </select>
-                                @endif
+                                <select id="profesor" class="form-control @error('profesor') is-invalid @enderror"
+                                    name="profesor">
+                                    @if ($profesores->isEmpty())
+                                        <option value="0">No hay profesores añadidos</option>
+                                    @else
+                                        <option value="0">Seleccione uno</option>
+                                    @endif
+                                    @foreach ($profesores as $profesor)
+                                        <option value="{{ $profesor->id }}"
+                                            {{ !empty($materia->info) && $materia->info->profesor_id === $profesor->id ? 'selected' : '' }}>
+                                            {{ $profesor->usuario->nombre }}
+                                            {{ $profesor->usuario->apellido }}</option>
+                                    @endforeach
+                                </select>
 
                                 @error('profesor')
                                     <span class="invalid-feedback" role="alert">
@@ -359,6 +349,13 @@
     <style>
         .custom-file-label::after {
             content: "Buscar";
+        }
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
         }
     </style>
 

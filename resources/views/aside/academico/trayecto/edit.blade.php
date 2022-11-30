@@ -3,12 +3,9 @@
 @section('title', 'Acreditables | Editar trayecto')
 
 @section('content_header')
-    <div class="row mb-2">
+    <div class="row">
         <div class="col-sm-6">
-            <h1 class="m-0">Trayecto</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('trayecto.index') }}" class="link-muted">Trayectos</a></li>
                 <li class="breadcrumb-item active"><a href="">Editar trayecto</a></li>
@@ -30,18 +27,24 @@
                     {{ method_field('PUT') }}
 
                     {{-- Campo de número --}}
-                    <div class="form-group mb-3">
-                        <label for="num_trayecto">Trayecto Nro</label>
+                    <div class="form-group required mb-3">
+                        <label for="num_trayecto" class="control-label">Trayecto Nro</label>
                         <input type="number" name="num_trayecto" id="num_trayecto"
                             class="form-control @error('num_trayecto') is-invalid @enderror"
                             value="{{ __($trayecto->num_trayecto) }}" placeholder="{{ __('Número del trayecto') }}"
-                            autofocus>
+                            autofocus required>
 
                         @error('num_trayecto')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: -10px">
+                        <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                            son obligatorios.
+                        </p>
                     </div>
 
                     {{-- Botón de registrar --}}
@@ -60,4 +63,16 @@
             </main>
         </div>
     </div>
+@stop
+
+@section('css')
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
 @stop

@@ -30,11 +30,11 @@
                     {{ method_field('PUT') }}
 
                     {{-- Campo de nombre --}}
-                    <div class="form-group mb-3">
-                        <label for="encabezado">Encabezado</label>
+                    <div class="form-group required mb-3">
+                        <label for="encabezado" class="control-label">Encabezado</label>
                         <input type="text" name="encabezado" id="encabezado"
                             class="form-control @error('encabezado') is-invalid @enderror"
-                            value="{{ $noticia->encabezado }}" placeholder="{{ __('Encabezado') }}" autofocus>
+                            value="{{ $noticia->encabezado }}" placeholder="{{ __('Encabezado') }}" autofocus required>
 
                         @error('encabezado')
                             <span class="invalid-feedback" role="alert">
@@ -44,10 +44,10 @@
                     </div>
 
                     {{-- Campo de descripcion --}}
-                    <div class="form-group mb-3">
-                        <label for="desc_noticia">Descripción</label>
+                    <div class="form-group required mb-3">
+                        <label for="desc_noticia" class="control-label">Descripción</label>
                         <textarea name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror"
-                            placeholder="{{ __('Descripción') }}" autofocus spellcheck="false" style="min-height: 9rem; resize: none">{{ $noticia->desc_noticia }}</textarea>
+                            placeholder="{{ __('Descripción') }}" autofocus spellcheck="false" style="min-height: 9rem; resize: none" required>{{ $noticia->desc_noticia }}</textarea>
 
                         @error('desc_noticia')
                             <span class="invalid-feedback" role="alert">
@@ -57,10 +57,10 @@
                     </div>
 
                     {{-- Campo para mostrar o no la noticia --}}
-                    <div class="form-group mb-3">
-                        <label for="mostrar">¿Mostrar noticia?</label>
+                    <div class="form-group required mb-3">
+                        <label for="mostrar" class="control-label">¿Mostrar noticia?</label>
                         <select name="mostrar" class="form-control">
-                            <option>¿Desea mostrar la noticia?</option>
+                            <option disabled>¿Desea mostrar la noticia?</option>
                             <option value="1" {{ $noticia->mostrar === 1 ? 'selected' : '' }}>Si</option>
                             <option value="0" {{ $noticia->mostrar === 0 ? 'selected' : '' }}>No</option>
                         </select>
@@ -70,6 +70,12 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: -10px">
+                        <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                            son obligatorios.
+                        </p>
                     </div>
 
                     {{-- Botón de registrar --}}
@@ -86,4 +92,16 @@
             </main>
         </div>
     </div>
+@stop
+
+@section('css')
+<style>
+    .form-group.required .control-label:after {
+        color: #d00;
+        content: "*";
+        position: absolute;
+        margin-left: 6px;
+        margin-top: 3px;
+    }
+</style>
 @stop

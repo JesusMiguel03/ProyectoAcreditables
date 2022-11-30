@@ -17,8 +17,8 @@ class CreateInformacionMateriaTable extends Migration
             $table->id();
             $table->string('metodologia_aprendizaje', 16);
             // $table->unsignedBigInteger('horario_id');
-            $table->unsignedBigInteger('categoria_id');
-            $table->unsignedBigInteger('profesor_id');
+            $table->unsignedBigInteger('categoria_id')->nullable();
+            $table->unsignedBigInteger('profesor_id')->nullable();
             // $table->foreign('horario_id')->references('id')->on('horario')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('categoria_id')->references('id')->on('categorias')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('profesor_id')->references('id')->on('profesores')->onUpdate('cascade')->onDelete('cascade');

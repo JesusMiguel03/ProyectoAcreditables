@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Coordinador\EspecialidadController;
+use App\Http\Controllers\Coordinador\EspecialidadesProfesorController;
 use App\Http\Controllers\Coordinador\ProfesorController;
 use Illuminate\Support\Facades\Route;
 
@@ -102,3 +103,7 @@ Route::resource('/estudiante', EstudianteController::class)->middleware('prevent
 Route::get('/estudiante/comprobante', [EstudianteController::class, 'comprobante'])->middleware('prevent-back-history')->name('comprobante');
 Route::post('/validar', [PreinscripcionController::class, 'validar'])->middleware('prevent-back-history')->name('validacion');
 Route::post('/invalidar', [PreinscripcionController::class, 'invalidar'])->middleware('prevent-back-history')->name('invalidacion');
+Route::get('/preinscribir/{id}', [PreinscripcionController::class, 'preinscribir'])->middleware('prevent-back-history')->name('preinscribir');
+
+// Especialidades profesor
+// Route::get('/profesores/especialidades/{id}', EspecialidadesProfesorController::class)->middleware('prevent-back-history')->name('especialidades');

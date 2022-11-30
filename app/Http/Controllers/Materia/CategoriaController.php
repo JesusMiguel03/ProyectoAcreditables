@@ -36,12 +36,12 @@ class CategoriaController extends Controller
     public function store(Request $request)
     {
         $validador = Validator::make($request->all(), [
-            'nom_categoria' => ['required', 'string', 'alpha', 'between:10, 50']
+            'nom_categoria' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:50']
         ], [
             'nom_categoria.required' => 'El campo categoria es necesario.',
             'nom_categoria.string' => 'El campo categoria debe ser una oración.',
-            'nom_categoria.alpha' => 'El campo categoria solo puede contener letras.',
-            'nom_categoria.between' => 'El campo categoria debe estar entre :min y :max carácteres.',
+            'nom_categoria.regex' => 'El campo nombre solo puedo contener letras y espacios.',
+            'nom_categoria.max' => 'El campo categoria debe contener mas de :max carácteres.',
         ]);
 
         if ($validador->fails()) {
@@ -82,12 +82,12 @@ class CategoriaController extends Controller
     public function update(Request $request, $id)
     {
         $validador = Validator::make($request->all(), [
-            'nom_categoria' => ['required', 'string', 'alpha', 'between:10, 50']
+            'nom_categoria' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:50']
         ], [
             'nom_categoria.required' => 'El campo categoria es necesario.',
             'nom_categoria.string' => 'El campo categoria debe ser una oración.',
-            'nom_categoria.alpha' => 'El campo categoria solo puede contener letras.',
-            'nom_categoria.between' => 'El campo categoria debe estar entre :min y :max carácteres.',
+            'nom_categoria.regex' => 'El campo nombre solo puedo contener letras y espacios.',
+            'nom_categoria.max' => 'El campo categoria debe contener mas de :max carácteres.',
         ]);
 
         if ($validador->fails()) {

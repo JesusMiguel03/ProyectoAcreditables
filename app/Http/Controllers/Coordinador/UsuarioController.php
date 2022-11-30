@@ -56,10 +56,10 @@ class UsuarioController extends Controller
     public function update(Request $request, $id)
     {
         $validador = Validator::make($request->all(), [
-            'roles[]' => ['required', 'not_in:0'],
+            'roles' => ['required', 'not_in:0'],
         ], [
-            'roles[].required' => 'El campo rol es necesario.',
-            'roles[].not_in' => 'El rol seleccionado es inválido.'
+            'roles.required' => 'El campo rol es necesario.',
+            'roles.not_in' => 'El rol seleccionado es inválido.'
         ]);
 
         if ($validador->fails())
@@ -82,8 +82,7 @@ class UsuarioController extends Controller
             }
             $usuario->profesor->especialidades()->sync($especialidades);
         } else if ($rol === 'Estudiante') {
-            // dd($usuario->estudiante);
-            $estudiante = Estudiante::updateOrCreate(
+            Estudiante::updateOrCreate(
                 ['usuario_id' => $usuario->id],
                 [
                     'trayecto_id' => $request->get('trayecto'),

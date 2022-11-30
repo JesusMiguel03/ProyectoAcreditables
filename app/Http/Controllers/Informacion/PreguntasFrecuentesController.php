@@ -31,6 +31,13 @@ class PreguntasFrecuentesController extends Controller
         $validador = Validator::make($request->all(), [
             'titulo' => ['required', 'string', 'max:30'],
             'explicacion' => ['required', 'string', 'max:255'],
+        ], [
+            'titulo.required' => 'El campo pregunta es necesario.',
+            'explicacion.required' => 'El campo respuesta es necesario.',
+            'titulo.string' => 'El campo pregunta debe ser una oración.',
+            'explicacion.string' => 'El campo respuesta debe ser una oración.',
+            'titulo.max' => 'El campo pregunta no debe ser mayor a :max carácteres.',
+            'explicacion.max' => 'El campo respuesta no debe ser mayor a :max carácteres.',
         ]);
 
         if ($validador->fails()) {
@@ -69,6 +76,9 @@ class PreguntasFrecuentesController extends Controller
         $validador = Validator::make($request->all(), [
             'titulo' => ['required', 'string', 'max:30'],
             'explicacion' => ['required', 'string', 'max:255'],
+        ], [
+            'titulo.required' => 'El campo pregunta es necesario.',
+            'explicacion.required' => 'El campo respuesta es necesario.',
         ]);
 
         if ($validador->fails()) {

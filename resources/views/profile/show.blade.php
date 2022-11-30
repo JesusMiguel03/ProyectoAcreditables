@@ -3,13 +3,10 @@
 @section('title', 'Acreditables | Mi cuenta')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Perfil de usuario</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="text-primary">Inicio</a></li>
+    <div class="row">
+        <div class="col-6">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="" class="text-primary">Mi cuenta</a></li>
             </ol>
         </div>
@@ -17,15 +14,12 @@
 @stop
 
 @section('content')
-
-    <x-botones.volver />
-
     <div class="row mt-3">
 
         {{-- Perfil de usuario --}}
         <div class="col-6">
-            <div class="card p-4">
-                <header class="card-header">
+            <div class="card">
+                <header class="card-header bg-primary">
                     <h5>Información de perfil</h5>
                 </header>
 
@@ -75,8 +69,8 @@
         @can('preinscribir')
             @if (empty(Auth::user()->estudiante))
                 <div class="col-6">
-                    <div class="card p-4">
-                        <header class="card-header">
+                    <div class="card">
+                        <header class="card-header bg-primary">
                             <h5>Perfil académico</h5>
                         </header>
                         <main class="card-body">
@@ -138,8 +132,8 @@
                 </div>
             @else
                 <div class="col-6">
-                    <div class="card p-4">
-                        <header class="card-header">
+                    <div class="card">
+                        <header class="card-header bg-primary">
                             <h5>Perfil académico</h5>
                         </header>
 
@@ -166,7 +160,7 @@
         @endcan
 
         {{-- Preinscripcion --}}
-        @if (!empty(Auth::user()->estudiante->preinscrito))
+        @if (!empty(Auth::user()->estudiante->preinscrito) && !empty(Auth::user()->estudiante->preinscrito->profesor))
             <section class="col-4 p-2">
                 <a href="{{ route('comprobante') }}">
                     <div class="info-box">

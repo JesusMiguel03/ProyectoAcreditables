@@ -3,12 +3,9 @@
 @section('title', 'Acreditables | Inicio')
 
 @section('content_header')
-    <div class="row mb-2">
+    <div class="row">
         <div class="col-sm-6">
-            <h1 class="m-0">Inicio</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
             </ol>
         </div>
@@ -28,7 +25,8 @@
                         <h6 class="mb-2 pl-3 py-1 text-muted" style="border-left: 5px solid #007bff">
                             [ Sin fecha ]
                         </h6>
-                        <p class="card-text text-justify">Parece que no han añadidos ninguna noticia, aviso o notificación, puede que en otro momento lo hagan...</p>
+                        <p class="card-text text-justify">Parece que no han añadidos ninguna noticia, aviso o notificación,
+                            puede que en otro momento lo hagan...</p>
                     </div>
                 </div>
             </div>

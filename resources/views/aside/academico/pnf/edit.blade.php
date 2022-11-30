@@ -3,12 +3,9 @@
 @section('title', 'Acreditables | Editar pnf')
 
 @section('content_header')
-    <div class="row mb-2">
+    <div class="row">
         <div class="col-sm-6">
-            <h1 class="m-0">PNF</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item"><a href="" class="link-muted">PNF</a></li>
                 <li class="breadcrumb-item active"><a href="">Editar PNF</a></li>
@@ -30,17 +27,23 @@
                     {{ method_field('PUT') }}
 
                     {{-- Campo de nombre --}}
-                    <div class="form-group mb-3">
-                        <label for="nom_pnf">Nombre</label>
+                    <div class="form-group required mb-3">
+                        <label for="nom_pnf" class="control-label">Nombre</label>
                         <input type="text" name="nom_pnf" id="nom_pnf"
                             class="form-control @error('nom_pnf') is-invalid @enderror" value="{{ __($pnf->nom_pnf) }}"
-                            placeholder="{{ __('Nombre del pnf') }}" autofocus>
+                            placeholder="{{ __('Nombre del pnf') }}" autofocus required>
 
                         @error('nom_pnf')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: -10px">
+                        <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                            son obligatorios.
+                        </p>
                     </div>
 
                     {{-- Botón de registrar --}}
@@ -59,4 +62,16 @@
             </main>
         </div>
     </div>
+@stop
+
+@section('css')
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
 @stop

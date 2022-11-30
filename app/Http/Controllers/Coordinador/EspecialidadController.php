@@ -35,16 +35,16 @@ class EspecialidadController extends Controller
     public function store(Request $request)
     {
         $validado = Validator::make($request->all(), [
-            'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'between:10,50'],
-            'desc_especialidad' => ['required', 'string', 'between:10,255']
+            'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:50'],
+            'desc_especialidad' => ['required', 'string', 'max:255']
         ], [
             'desc_especialidad.required' => 'El campo descripción es necesario.',
             'nom_especialidad.required' => 'El campo nombre es necesario.',
             'desc_especialidad.string' => 'El campo descripción debe ser una oración.',
             'nom_especialidad.string' => 'El campo nombre debe ser una oración.',
             'desc_especialidad.regex' => 'El campo nombre solo puedo contener letras y espacios.',
-            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max carácteres.',
-            'desc_especialidad.between' => 'El campo descripción debe estar entre :min y :max carácteres.',
+            'nom_especialidad.max' => 'El campo nombre no debe tener más de :max carácteres.',
+            'desc_especialidad.max' => 'El campo descripción no debe tener más de :max carácteres.',
         ]);
 
         if ($validado->fails()) {
@@ -86,16 +86,16 @@ class EspecialidadController extends Controller
     public function update(Request $request, $id)
     {
         $validado = Validator::make($request->all(), [
-            'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'between:10,50'],
-            'desc_especialidad' => ['required', 'string', 'between:10,255']
+            'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:50'],
+            'desc_especialidad' => ['required', 'string', 'max:255']
         ], [
             'desc_especialidad.required' => 'El campo descripción es necesario.',
             'nom_especialidad.required' => 'El campo nombre es necesario.',
             'desc_especialidad.string' => 'El campo descripción debe ser una oración.',
             'nom_especialidad.string' => 'El campo nombre debe ser una oración.',
             'desc_especialidad.regex' => 'El campo nombre solo puedo contener letras y espacios.',
-            'nom_especialidad.between' => 'El campo nombre debe estar entre :min y :max carácteres.',
-            'desc_especialidad.between' => 'El campo descripción debe estar entre :min y :max carácteres.',
+            'nom_especialidad.max' => 'El campo nombre no debe tener más de :max carácteres.',
+            'desc_especialidad.max' => 'El campo descripción no debe tener más de :max carácteres.',
         ]);
 
         if ($validado->fails()) {

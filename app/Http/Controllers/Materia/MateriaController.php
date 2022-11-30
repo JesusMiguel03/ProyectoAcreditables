@@ -79,7 +79,7 @@ class MateriaController extends Controller
         $materia->cupos_disponibles = $materia->cupos;
         $materia->desc_materia = $request->get('desc_materia');
         $materia->num_acreditable = $request->get('num_acreditable');
-        $materia->estado_materia = 'Inactivo';
+        $materia->estado_materia = 'Activo';
         $materia->informacion_id = null;
 
         $materia->save();
@@ -103,8 +103,10 @@ class MateriaController extends Controller
         $preinscritos = [];
 
         foreach ($estudiantes as $estudiante) {
-            if ($estudiante->preinscrito->materia->id === $materia->id) {
-                array_push($preinscritos, $estudiante);
+            if (!empty($estudiante->preinscrito)) {
+                if ($estudiante->preinscrito->materia->id === $materia->id) {
+                    array_push($preinscritos, $estudiante);
+                }
             }
         }
 
@@ -153,9 +155,6 @@ class MateriaController extends Controller
             'desc_materia' => ['required', 'string', 'max:255'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
             'estado_materia' => ['required'],
-            'categoria' => ['required'],
-            'tipo' => ['required'],
-            'profesor' => ['required'],
         ], [
             'num_acreditable.not_in' => 'El campo número de la acreditable es inválido.',
             'num_acreditable.required' => 'El campo número de la acreditable es necesario.',
@@ -174,9 +173,9 @@ class MateriaController extends Controller
         $informacion = Informacion_materia::updateOrCreate(
             ['id' =>  $id],
             [
-                'metodologia_aprendizaje' => $request->get('tipo'),
-                'categoria_id' => $request->get('categoria'),
-                'profesor_id' => $request->get('profesor'),
+                'metodologia_aprendizaje' => $request->get('tipo') === '0' ? 'Sin asignar' : $request->get('tipo'),
+                'categoria_id' => $request->get('categoria') === '0' ? null : $request->get('categoria'),
+                'profesor_id' => $request->get('profesor') === '0' ? null : $request->get('profesor'),
             ],
         );
 

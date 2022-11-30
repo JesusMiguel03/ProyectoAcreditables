@@ -3,112 +3,115 @@
 @section('title', 'Acreditables | ¿Sabías que?')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Preguntas frecuentes</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+    <div class="row">
+        <div class="col-6">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Preguntas frecuentes</a></li>
             </ol>
         </div>
-    </div>
-@stop
-
-@section('content')
-    @can('preguntas.create')
-        <div class="row">
-            <div class="col-md-3 col-sm-12">
-                <div class="card">
+        <div class="col-6">
+            @can('preguntas.create')
+                <div class="card float-right">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pregunta">
                         <i class="fas fa-plus mr-2"></i>
                         {{ __('Añadir pregunta') }}
                     </button>
                 </div>
-            </div>
-        </div>
 
-        <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="campopregunta" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <header class="modal-header bg-primary">
-                        <h5 class="modal-title" id="campopregunta">Nueva pregunta</h5>
-                    </header>
+                <div class="modal fade" id="pregunta" tabindex="-1" role="dialog" aria-labelledby="campopregunta"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <header class="modal-header bg-primary">
+                                <h5 class="modal-title" id="campopregunta">Nueva pregunta</h5>
+                            </header>
 
-                    <main class="modal-body">
-                        <div class="label-group mb-3">
-                            <form action="{{ route('preguntas.store') }}" method="post">
-                                @csrf
+                            <main class="modal-body">
+                                <div class="label-group mb-3">
+                                    <form action="{{ route('preguntas.store') }}" method="post">
+                                        @csrf
 
-                                {{-- Campo de nombre --}}
-                                <div class="form-group mb-3">
-                                    <label for="titulo">Pregunta</label>
-                                    <input type="text" name="titulo" id="titulo"
-                                        class="form-control @error('titulo') is-invalid @enderror" value="{{ old('titulo') }}"
-                                        placeholder="{{ __('Titulo de la pregunta sin signos') }}" autofocus>
+                                        {{-- Campo de nombre --}}
+                                        <div class="form-group required mb-3">
+                                            <label for="titulo" class="control-label">Pregunta</label>
+                                            <input type="text" name="titulo" id="titulo"
+                                                class="form-control @error('titulo') is-invalid @enderror"
+                                                value="{{ old('titulo') }}"
+                                                placeholder="{{ __('Titulo de la pregunta sin signos') }}" autofocus required>
 
-                                    @error('titulo')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                            @error('titulo')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+
+                                        {{-- Campo de nombre --}}
+                                        <div class="form-group required mb-3">
+                                            <label for="explicacion" class="control-label">Respuesta</label>
+                                            <textarea name="explicacion" class="form-control @error('explicacion') is-invalid @enderror"
+                                                placeholder="{{ __('Explicacion de la pregunta') }}" autofocus style="min-height: 9rem; resize: none" required>{{ old('explicacion') }}</textarea>
+
+                                            @error('explicacion')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group" style="margin-bottom: -10px">
+                                            <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                                                son obligatorios.
+                                            </p>
+                                        </div>
+
+                                        {{-- Botón de registrar --}}
+                                        <div class="row">
+                                            <x-botones.cancelar />
+
+                                            <x-botones.guardar />
+                                        </div>
+
+                                    </form>
                                 </div>
-
-                                {{-- Campo de nombre --}}
-                                <div class="form-group mb-3">
-                                    <label for="explicacion">Respuesta</label>
-                                    <textarea name="explicacion" class="form-control @error('explicacion') is-invalid @enderror"
-                                        placeholder="{{ __('Explicacion de la pregunta') }}" autofocus style="min-height: 9rem; resize: none">{{ old('explicacion') }}</textarea>
-
-                                    @error('explicacion')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                {{-- Botón de registrar --}}
-                                <div class="row">
-                                    <x-botones.cancelar />
-
-                                    <x-botones.guardar />
-                                </div>
-
-                            </form>
+                            </main>
                         </div>
-                    </main>
+                    </div>
                 </div>
-            </div>
+            @endcan
         </div>
-    @endcan
+    </div>
+@stop
 
+@section('content')
     <div class="row">
-        {{-- Welcome Logo --}}
-        <div class="col-sm-12 col-md-3">
-            <div class="card">
-                <div class="card-body box-profile">
-                    <div class="text-center">
-                        <h4 class="text-secondary">¡Bienvenido!</h4>
-                        <img class="profile-user-img img-fluid img-circle" src="{{ asset('vendor/img/users/avatar.png') }}"
-                            alt="User profile picture">
+        @if (Auth::user()->getRoleNames()[0] !== 'Coordinador')
+            <div class="col-sm-12 col-md-3">
+                <div class="card">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <h4 class="text-secondary">¡Bienvenido!</h4>
+                            <img class="profile-user-img img-fluid img-circle"
+                                src="{{ asset('vendor/img/users/avatar.png') }}" alt="User profile picture">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-12 col-md-9">
-            <div class="card">
-                <div class="card-body" style="height: 11rem">
-                    <div class="text-center">
-                        <h4>Responderé a tus posibles dudas</h4>
-                        <p class="text-justify">A continuación tendrás una lista de opciones donde consideramos
-                            aquellas preguntas que son muy frecuentes o pueden ser algo complicadas de entender y
-                            las explicamos lo más práctico y sencillo posible, esperamos aclare todas tus dudas 😅
-                        </p>
+            <div class="col-sm-12 col-md-9">
+                <div class="card">
+                    <div class="card-body" style="height: 11rem">
+                        <div class="text-center">
+                            <h4>Responderé a tus posibles dudas</h4>
+                            <p class="text-justify">A continuación tendrás una lista de opciones donde consideramos
+                                aquellas preguntas que son muy frecuentes o pueden ser algo complicadas de entender y
+                                las explicamos lo más práctico y sencillo posible, esperamos aclare todas tus dudas 😅
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         {{-- Preguntas --}}
         @if (Auth::user()->getRoleNames()[0] === 'Coordinador')
@@ -185,6 +188,15 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
 @stop
 
 @section('js')

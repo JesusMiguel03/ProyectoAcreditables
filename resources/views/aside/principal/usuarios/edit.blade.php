@@ -25,28 +25,28 @@
             <header class="card-header bg-primary">
                 <h5>Editar credenciales</h5>
             </header>
-    
+
             <main class="card-body">
                 <div class="form-group mb-3">
                     <label>Nombre</label>
                     <input type="text" class="form-control" placeholder="{{ $usuario->nombre }} {{ $usuario->apellido }}"
                         disabled></input>
                 </div>
-    
+
                 <div class="form-group mb-3">
                     <label>Cédula</label>
                     <input type="text" class="form-control" placeholder="{{ $usuario->cedula }}" disabled></input>
                 </div>
-    
-    
+
+
                 <form action="{{ route('coordinador.usuarios.update', $usuario) }}" method="post">
                     @csrf
                     {{ method_field('PUT') }}
-    
-                    <div class="form-group mb-3">
-                        <label for="roles[]">Rol de usuario</label>
-                        <select class="form-control mb-3" name="roles[]">
-                            <option>Seleccione un rol</option>
+
+                    <div class="form-group required mb-3">
+                        <label for="roles" class="control-label">Rol de usuario</label>
+                        <select class="form-control mb-3" name="roles">
+                            <option value="0" disabled>Seleccione un rol</option>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->id }}"
                                     {{ $usuario->roles->contains($role->id) ? 'selected' : '' }}>
@@ -54,8 +54,7 @@
                             @endforeach
                         </select>
                     </div>
-    
-    
+
                     @if ($usuario->roles[0]->name === 'Profesor')
                         <div class="form-group mb-3">
                             <label>Especialidades</label>
@@ -66,7 +65,7 @@
                                             <input type="checkbox" name="especialidades[]" id="{{ $especialidad->id }}"
                                                 value="{{ $especialidad->id }}"
                                                 {{ in_array($especialidad->id, $relacion) ? 'checked' : '' }}>
-    
+
                                             <label for="{{ $especialidad->id }}">
                                                 {{ __($especialidad->nom_especialidad) }}
                                             </label>
@@ -76,7 +75,7 @@
                             </div>
                         </div>
                     @endif
-    
+
                     @if ($usuario->roles[0]->name === 'Estudiante')
                         <div class="form-group mb-3">
                             <label>Trayecto</label>
@@ -89,7 +88,7 @@
                                 @endforeach
                             </select>
                         </div>
-    
+
                         <div class="form-group mb-3">
                             <label>PNF</label>
                             <select name="pnf" class="form-control">
@@ -102,7 +101,13 @@
                             </select>
                         </div>
                     @endif
-    
+
+                    <div class="form-group" style="margin-bottom: -10px">
+                        <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                            son obligatorios.
+                        </p>
+                    </div>
+
                     <div class="row">
                         <div class="col-6">
                             <a href="{{ route('coordinador.usuarios.index') }}" class="btn btn-block btn-secondary">
@@ -110,11 +115,23 @@
                                 {{ __('Volver') }}
                             </a>
                         </div>
-    
+
                         <x-botones.guardar />
                     </div>
                 </form>
             </main>
         </section>
     </div>
+@stop
+
+@section('css')
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
 @stop

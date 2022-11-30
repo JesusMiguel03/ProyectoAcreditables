@@ -1,16 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', 'Acreditables | Listado de profesores')
+@section('title', 'Acreditables | Profesores')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Coordinación de Acreditables</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
-                <li class="breadcrumb-item active"><a href="">Listado de Profesores</a></li>
+    <div class="row">
+        <div class="col-6">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('profesores.index') }}" class="link-muted">Profesores</a></li>
+                <li class="breadcrumb-item active"><a href="">Profesor {{ $profesor->usuario->nombre }} {{ $profesor->usuario->apellido }}</a></li>
             </ol>
         </div>
     </div>
@@ -25,15 +23,15 @@
             <main class="card-body">
                 <form action="{{ route('profesores.update', $profesor->id) }}" method="post">
                     @csrf
-                    {{ method_field('PATCH') }}
+                    {{ method_field('PUT') }}
 
                     {{-- Usuario --}}
-                    <div class="form-group mb-3">
+                    <div class="form-group required mb-3">
                         <label for="usuarios">Nombre y apellido</label>
                         <input type="text" name="usuarios" id="usuarios"
                             class="form-control @error('usuarios') is-invalid @enderror"
-                            value="{{ __($profesor->usuario->nombre . ' ' . $profesor->usuario->apellido) }}" autofocus
-                            readonly>
+                            value="{{ __($profesor->usuario->nombre . ' ' . $profesor->usuario->apellido) . ' - ' . $profesor->usuario->cedula }}" autofocus
+                            readonly disabled>
 
                         @error('usuarios')
                             <span class="invalid-feedback" role="alert">
@@ -43,11 +41,11 @@
                     </div>
 
                     {{-- Titulo --}}
-                    <div class="form-group mb-3">
-                        <label for="titulo">Título</label>
+                    <div class="form-group required mb-3">
+                        <label for="titulo" class="control-label">Título</label>
                         <input type="text" name="titulo" id="titulo"
                             class="form-control @error('titulo') is-invalid @enderror" value="{{ __($profesor->titulo) }}"
-                            placeholder="{{ __('Ingrese el titulo del profesor(a)') }}" autofocus>
+                            placeholder="{{ __('Ingrese el titulo del profesor(a)') }}" autofocus required>
 
                         @error('titulo')
                             <span class="invalid-feedback" role="alert">
@@ -57,46 +55,95 @@
                     </div>
 
                     {{-- Residencia --}}
-                    <div class="form-group">
-                        <label>Residencia</label>
+                    <div class="form-group required required mb-3">
+                        <label class="control-label">Residencia</label>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <input type="text" name="estado" id="estado"
+                                    class="form-control @error('estado') is-invalid @enderror"
+                                    value="{{ $profesor->estado }}" placeholder="{{ __('Estado') }}" autofocus
+                                    required>
 
-                        <div class="input-group mb-3">
-                            <input type="text" name="direccion" id="direccion"
-                                class="form-control @error('direccion') is-invalid @enderror"
-                                value="{{ __($profesor->direccion) }}" placeholder="{{ __('Direccion') }}" autofocus>
+                                @error('estado')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-6">
+                                <input type="text" name="ciudad" id="ciudad"
+                                    class="form-control @error('ciudad') is-invalid @enderror"
+                                    value="{{ $profesor->ciudad }}" placeholder="{{ __('Ciudad') }}" autofocus
+                                    required>
 
-                            @error('direccion')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <input type="text" name="ciudad" id="ciudad"
-                                class="form-control @error('ciudad') is-invalid @enderror"
-                                value="{{ __($profesor->ciudad) }}" placeholder="{{ __('Ciudad') }}" autofocus>
+                                @error('ciudad')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-4">
+                                <input type="text" name="urb" id="urb"
+                                    class="form-control @error('urb') is-invalid @enderror"
+                                    value="{{ $profesor->urb }}" placeholder="{{ __('Urbanización') }}"
+                                    autofocus required>
 
-                            @error('ciudad')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <input type="text" name="estado" id="estado"
-                                class="form-control @error('estado') is-invalid @enderror"
-                                value="{{ __($profesor->estado) }}" placeholder="{{ __('Estado') }}" autofocus>
+                                @error('urb')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-4">
+                                <input type="text" name="calle" id="calle"
+                                    class="form-control @error('calle') is-invalid @enderror"
+                                    value="{{ $profesor->calle }}" placeholder="{{ __('Calle') }}" autofocus
+                                    required>
 
-                            @error('estado')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                                @error('calle')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-4">
+                                <input type="text" name="casa" id="casa"
+                                    class="form-control @error('casa') is-invalid @enderror"
+                                    value="{{ $profesor->casa }}" placeholder="{{ __('Casa') }}" autofocus
+                                    required>
+
+                                @error('casa')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
                     {{-- Telefono --}}
-                    <div class="form-group mb-3">
-                        <label>Número de contacto</label>
-                        <input type="tel" name="telefono" class="form-control @error('estado') is-invalid @enderror"
-                            value="{{ $profesor->telefono }}"
-                            placeholder="{{ __('Número de teléfono, ej: 04124395155') }}" autofocus>
+                    <div class="form-group required" style="margin-top: -10px">
+                        <label for="telefono" class="control-label">Número de contacto</label>
+                        <div class="row">
+                            <div class="col-3">
+                                <select name="codigo" class="form-control">
+                                    <option value="0" disabled>Seleccione uno</option>
+                                    <option value="0412" {{ substr($profesor->telefono, 0, 4) === '0412' ? 'selected' : '' }}>0412</option>
+                                    <option value="0414" {{ substr($profesor->telefono, 0, 4) === '0414' ? 'selected' : '' }}>0414</option>
+                                    <option value="0416" {{ substr($profesor->telefono, 0, 4) === '0416' ? 'selected' : '' }}>0416</option>
+                                    <option value="0424" {{ substr($profesor->telefono, 0, 4) === '0424' ? 'selected' : '' }}>0424</option>
+                                    <option value="0426" {{ substr($profesor->telefono, 0, 4) === '0426' ? 'selected' : '' }}>0426</option>
+                                </select>
+                            </div>
+                            <div class="col-9">
+                                <input type="tel" name="telefono"
+                                    class="form-control @error('telefono') is-invalid @enderror"
+                                    value="{{ substr($profesor->telefono, 4) }}" placeholder="{{ __('0193451') }}"
+                                    autofocus required>
+                            </div>
+                        </div>
 
                         @error('telefono')
                             <span class="invalid-feedback" role="alert">
@@ -106,11 +153,11 @@
                     </div>
 
                     {{-- Fecha de nacimiento --}}
-                    <div class="form-group mb-3">
-                        <label>Fecha de nacimiento</label>
+                    <div class="form-group required mb-3">
+                        <label for="fecha_de_nacimiento" class="control-label">Fecha de nacimiento</label>
                         <div class="input-group date" id="fecha_nacimiento" data-target-input="nearest">
                             <input type="text" name="fecha_de_nacimiento" class="form-control datetimepicker-input"
-                                data-target="#fecha_nacimiento" value="{{ __($profesor->fecha_de_nacimiento) }}" />
+                                data-target="#fecha_nacimiento" value="{{ __($profesor->fecha_de_nacimiento) }}" required>
                             <div class="input-group-append" data-target="#fecha_nacimiento" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -118,11 +165,11 @@
                     </div>
 
                     {{-- Fecha de ingreso --}}
-                    <div class="form-group mb-3">
-                        <label>Fecha de ingreso al plantel</label>
+                    <div class="form-group required mb-3">
+                        <label for="fecha_ingreso_institucion" class="control-label">Fecha de ingreso a la institución</label>
                         <div class="input-group date" id="fecha_ingreso" data-target-input="nearest">
-                            <input type="text" name="fecha_ingreso_plantel" class="form-control datetimepicker-input"
-                                data-target="#fecha_ingreso" value="{{ __($profesor->fecha_ingreso_plantel) }}" />
+                            <input type="text" name="fecha_ingreso_institucion" class="form-control datetimepicker-input"
+                                data-target="#fecha_ingreso" value="{{ __($profesor->fecha_ingreso_institucion) }}" required>
                             <div class="input-group-append" data-target="#fecha_ingreso" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -130,8 +177,8 @@
                     </div>
 
                     {{-- Estado del profesor --}}
-                    <div class="form-group mb-3">
-                        <label>¿Se encuentra activo?</label>
+                    <div class="form-group required mb-3">
+                        <label for="estado_profesor" class="control-label">¿Se encuentra activo?</label>
                         <div class="input-control">
                             <select name="estado_profesor" class="form-control">
                                 <option>Seleccione una</option>
@@ -150,6 +197,11 @@
                         @enderror
                     </div>
 
+                    <div class="form-group" style="margin-bottom: -10px">
+                        <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                            son obligatorios.
+                        </p>
+                    </div>
 
                     {{-- Botón de registrar --}}
                     <div class="row">
@@ -171,6 +223,15 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
 @stop
 
 @section('js')

@@ -4,71 +4,71 @@
 
 @section('content_header')
     <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Categorias</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
+        <div class="col-6">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Categorias</a></li>
             </ol>
         </div>
-    </div>
-@stop
-
-@section('content')
-    <div class="row">
-        <div class="col-md-3 col-sm-12">
-            <div class="card">
+        <div class="col-6">
+            <div class="card float-right">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#categoria">
                     <i class="fas fa-plus mr-2"></i>
                     {{ __('Añadir categoria') }}
                 </button>
             </div>
-        </div>
-    </div>
 
-    {{-- Modal para crear --}}
-    <div class="modal fade" id="categoria" tabindex="-1" role="dialog" aria-labelledby="campoCategoria"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <header class="modal-header bg-primary">
-                    <h5 class="modal-title" id="campoCategoria">Agregar categoria</h5>
-                </header>
-                <main class="modal-body">
-                    <form action="{{ route('categoria.store') }}" method="post">
-                        @csrf
+            {{-- Modal para crear --}}
+            <div class="modal fade" id="categoria" tabindex="-1" role="dialog" aria-labelledby="campoCategoria"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <header class="modal-header bg-primary">
+                            <h5 class="modal-title" id="campoCategoria">Agregar categoria</h5>
+                        </header>
+                        <main class="modal-body">
+                            <form action="{{ route('categoria.store') }}" method="post">
+                                @csrf
 
-                        {{-- Campo de nombre --}}
-                        <div class="form-group mb-3">
-                            <label for="nom_categoria">Nombre</label>
-                            <input type="text" name="nom_categoria" id="nom_categoria"
-                                class="form-control @error('nom_categoria') is-invalid @enderror"
-                                value="{{ old('nom_categoria') }}" placeholder="{{ __('Nombre de la categoria de curso') }}"
-                                autofocus>
+                                {{-- Campo de nombre --}}
+                                <div class="form-group required mb-3">
+                                    <label for="nom_categoria" class="control-label">Nombre</label>
+                                    <input type="text" name="nom_categoria" id="nom_categoria"
+                                        class="form-control @error('nom_categoria') is-invalid @enderror"
+                                        value="{{ old('nom_categoria') }}"
+                                        placeholder="{{ __('Nombre de la categoria de curso') }}" autofocus required>
 
-                            @error('nom_categoria')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                                    @error('nom_categoria')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
 
-                        {{-- Botón de registrar --}}
-                        <div class="row">
-                            <x-botones.cancelar />
+                                <div class="form-group" style="margin-bottom: -10px">
+                                    <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                                        son obligatorios.
+                                    </p>
+                                </div>
 
-                            <x-botones.guardar />
-                        </div>
+                                {{-- Botón de registrar --}}
+                                <div class="row">
+                                    <x-botones.cancelar />
 
-                    </form>
-                </main>
+                                    <x-botones.guardar />
+                                </div>
+
+                            </form>
+                        </main>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+@stop
 
-    <div class="card col-12 table-responsive-sm p-3 my-3">
+@section('content')
+    <div class="card col-12 table-responsive-sm p-3 mt-1 mb-3">
         <table id='tabla' class="table table-striped">
             <thead>
                 <tr class="bg-secondary">
@@ -97,6 +97,15 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
 @stop
 
 @section('js')
