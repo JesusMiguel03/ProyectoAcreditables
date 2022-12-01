@@ -21,7 +21,7 @@
                 <div class="card-body box-profile" style="height: 15.063rem;">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle mt-5"
-                            src="{{ asset('/vendor/img/profs/user0.jpg') }}" alt="User profile picture">
+                            src="{{ empty($profesor->usuario->avatar) ? asset('/vendor/img/profs/user.webp') : asset('vendor/img/profs/' . $profesor->usuario->avatar) }}" alt="Avatar del profesor">
                     </div>
 
                     <h3 class="profile-username text-center">
@@ -58,7 +58,8 @@
                                 {{ substr($profesor->telefono, 0, 4) . ' ' . substr($profesor->telefono, 4) }}
                             </p>
                             <p class="text-muted">
-                                Estado: {{ $profesor->estado }} - Ciudad: {{ $profesor->ciudad }} - Urbanización: {{ $profesor->urb }} -
+                                Estado: {{ $profesor->estado }} - Ciudad: {{ $profesor->ciudad }} - Urbanización:
+                                {{ $profesor->urb }} -
                                 Calle: {{ $profesor->calle }} - Casa: {{ $profesor->casa }}
                             </p>
                         </div>
@@ -73,35 +74,31 @@
                     <div class="row">
                         <div class="col-3">
                             <p class="font-weight-bold">
-                                Área de conomiento
+                                Área de conocimiento
                             </p>
                             <p class="font-weight-bold">
                                 Fecha de ingreso al plantel
                             </p>
-                            @if (!empty($profesor->especialidades))
-                                <p class="font-weight-bold">
-                                    Áreas de conocimiento
-                                </p>
-                            @endif
+                            <p class="font-weight-bold">
+                                Pertenece al departamento
+                            </p>
                         </div>
                         <div class="col-9">
-                            <p class="text-muted">
-                                {{ !empty($profesor->titulo) ? $profesor->titulo : 'No asignado' }}.
-                            </p>
-                            <p class="text-muted">
-                                {{ $profesor->fecha_ingreso_institucion }}.
-                            </p>
-                            @if (empty($profesor->especialidades))
+                            @if (empty($profesor->conocimiento))
                                 <p class="text-muted">
                                     No se han establecido.
                                 </p>
                             @else
                                 <p class="text-muted">
-                                    @foreach ($profesor->especialidades as $especialidad)
-                                        {{ $especialidad->nom_especialidad }} |
-                                    @endforeach
+                                    [{{ $profesor->conocimiento->nom_especialidad }}]. {{ $profesor->conocimiento->desc_especialidad }}
                                 </p>
                             @endif
+                            <p class="text-muted">
+                                {{ $profesor->fecha_ingreso_institucion }}.
+                            </p>
+                            <p class="text-muted">
+                                {{ $profesor->departamento->nom_pnf }}.
+                            </p>
                         </div>
                     </div>
                 </div>

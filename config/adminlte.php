@@ -298,15 +298,15 @@ return [
             'icon'        => 'fas fa-home'
         ],
         [
-            'text'        => 'Perfiles',
+            'text'        => 'Registrar',
             'icon'        => 'fas fa-folder',
             'can'         => 'perfiles',
             'submenu'         => [
                 [
                     'text'        => 'Areas de conocimiento',
                     'shift'       => 'ml-1',
-                    'url'         => '/especialidad',
-                    'active'         => ['especialidad*'],
+                    'url'         => '/conocimiento',
+                    'active'         => ['conocimiento*'],
                     'icon'        => 'fas fa-users',
                     'can'         => 'perfiles',
                 ],
@@ -319,7 +319,7 @@ return [
                     'can'         => 'perfiles',
                 ],
                 [
-                    'text'        => 'Usuarios',
+                    'text'        => 'Estudiantes',
                     'shift'       => 'ml-1',
                     'url'         => '/usuarios',
                     'active'         => ['usuarios*'],
@@ -387,14 +387,15 @@ return [
         [
             'text'        => 'Acerca de',
             'url'         => '/preguntas-frecuentes',
-            'active'         => ['preguntas-frecuentes*'],
+            'active'      => ['preguntas-frecuentes*'],
             'icon'        => 'fas fa-question-circle'
         ],
         [
             'text'        => 'Noticias',
             'url'         => '/noticias',
-            'active'         => ['noticias*'],
-            'icon'        => 'fas fa-exclamation-circle'
+            'active'      => ['noticias*'],
+            'icon'        => 'fas fa-exclamation-circle',
+            'can'         => 'noticias.create'
         ],
     ],
 

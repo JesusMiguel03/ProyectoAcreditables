@@ -18,6 +18,14 @@
                 </button>
             </div>
 
+            <div class="card float-right mr-2">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registrar">
+                    <i class="fas fa-plus mr-2"></i>
+                    {{ __('Registrar usuario') }}
+                </button>
+            </div>
+
+            {{-- Perfil de profesor --}}
             <div class="modal fade" id="profesor" tabindex="-1" role="dialog" aria-labelledby="campoprofesor"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -37,10 +45,11 @@
                                     <select class="form-control @error('usuarios') is-invalid @enderror" name="usuarios">
                                         <option value='0' disabled>Seleccione a un usuario</option>
                                         @foreach ($usuarios as $usuario)
-                                            @if ($usuario->getRoleNames()[0] === 'Profesor')
+                                            @if ($usuario->getRoleNames()[0] === 'Profesor' && empty($usuario->profesor))
                                                 <option value="{{ $usuario->id }}"
                                                     {{ $usuario->usuarios === $usuario->id ? 'selected' : '' }}>
-                                                    {{ $usuario->nombre }} {{ $usuario->apellido }} - CI: {{ number_format($usuario->cedula, 0, ',', '.') }}</option>
+                                                    {{ $usuario->nombre }} {{ $usuario->apellido }} - CI:
+                                                    {{ number_format($usuario->cedula, 0, ',', '.') }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -52,16 +61,45 @@
                                     @enderror
                                 </div>
 
-                                {{-- Titulo --}}
+                                {{-- Departamento --}}
                                 <div class="form-group required mb-3">
-                                    <label for="titulo" class="control-label">Profesión</label>
+                                    <label for="departamento" class="control-label">Adjunto al departamento</label>
                                     <div class="input-group">
-                                        <input type="text" name="titulo" id="titulo"
-                                            class="form-control @error('titulo') is-invalid @enderror"
-                                            value="{{ old('titulo') }}"
-                                            placeholder="{{ __('Ingrese el titulo del profesor(a)') }}" autofocus required>
+                                        <select name="departamento" class="form-control">
+                                            <option value="0" readonly>Seleccione uno</option>
+                                            @foreach ($departamentos as $departamento)
+                                                <option value="{{ $departamento->id }}">
+                                                    {{ $departamento->nom_pnf }}
+                                                </option>
+                                            @endforeach
+                                        </select>
 
-                                        @error('titulo')
+                                        @error('departamento')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                {{-- Conocimiento --}}
+                                <div class="form-group required mb-3">
+                                    <label for="conocimiento" class="control-label">Área de conocimiento</label>
+                                    <div class="input-group">
+                                        <select name="conocimiento" class="form-control">
+                                            @if (!empty($conocimientos))
+                                                <option value="0" readonly>No hay datos registrados</option>
+                                            @else
+                                                <option value="0" readonly>Seleccione uno</option>
+                                            @endif
+                                            @foreach ($conocimientos as $conocimiento)
+                                                <option value="{{ $conocimiento->id }}">
+                                                    {{ $conocimiento->nom_especialidad }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        @error('conocimiento')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -234,6 +272,185 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Registrar usuario --}}
+            <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="camporegistrar"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+
+                        <header class="modal-header bg-primary">
+                            <h5 class="modal-title" id="camporegistrar">Registrar usuario como profesor</h5>
+                        </header>
+
+                        <main class="modal-body">
+                            <form action="{{ route('registrar-profesor') }}" method="post">
+                                @csrf
+
+                                {{-- Nombre --}}
+                                <div class="form-row" style="margin-bottom: -0.75rem">
+                                    <div class="form-group required col-6">
+                                        <label for="nombre" class="control-label">Nombre</label>
+                                        <div class="input-group">
+                                            <input type="text" name="nombre"
+                                                class="form-control @error('nombre') is-invalid @enderror"
+                                                value="{{ old('nombre') }}" placeholder="{{ __('Nombre') }}" autofocus
+                                                required>
+
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span
+                                                        class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                                                </div>
+                                            </div>
+
+                                            @error('nombre')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- Apellido --}}
+                                    <div class="form-group col-6 required">
+                                        <label for="apellido" class="control-label">Apellido</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" name="apellido"
+                                                class="form-control @error('apellido') is-invalid @enderror"
+                                                value="{{ old('apellido') }}" placeholder="{{ __('Apellido') }}"
+                                                autofocus required>
+
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span
+                                                        class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                                                </div>
+                                            </div>
+
+                                            @error('apellido')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Cedula --}}
+                                <div class="form-group required mb-3">
+                                    <label for="cedula" class="control-label">Cedula</label>
+                                    <div class="input-group">
+                                        <input type="text" name="cedula"
+                                            class="form-control @error('cedula') is-invalid @enderror"
+                                            value="{{ old('cedula') }}" placeholder="{{ __('Cedula') }}" autofocus
+                                            required>
+
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span
+                                                    class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                                            </div>
+                                        </div>
+
+                                        @error('cedula')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                {{-- Correo --}}
+                                <div class="form-group required mb-3">
+                                    <label for="email" class="control-label">Correo electrónico</label>
+                                    <div class="input-group">
+                                        <input type="email" name="email"
+                                            class="form-control @error('email') is-invalid @enderror"
+                                            value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}"
+                                            autofocus required>
+
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span
+                                                    class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                                            </div>
+                                        </div>
+
+                                        @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                {{-- Contraseña --}}
+                                <div class="form-row">
+                                    <div class="form-group col-6 required">
+                                        <label for="password" class="control-label">Contraseña</label>
+                                        <div class="input-group">
+                                            <input type="password" name="password"
+                                                class="form-control @error('password') is-invalid @enderror"
+                                                placeholder="{{ __('Contraseña') }}" autofocus required>
+
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span
+                                                        class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                                                </div>
+                                            </div>
+
+                                            @error('password')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- Confirmar contraseña --}}
+                                    <div class="form-group col-6 required">
+                                        <label for="password_confirmation" class="control-label">Confirmar
+                                            contraseña</label>
+                                        <div class="input-group">
+                                            <input type="password" name="password_confirmation"
+                                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                                placeholder="{{ __('Confirmar contraseña') }}" autofocus required>
+
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span
+                                                        class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                                                </div>
+                                            </div>
+
+                                            @error('password_confirmation')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: -10px">
+                                    <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                                        son obligatorios.
+                                    </p>
+                                </div>
+
+                                {{-- Botón de registrar --}}
+                                <div class="row">
+                                    <x-botones.cancelar />
+
+                                    <x-botones.guardar />
+                                </div>
+                            </form>
+                        </main>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @stop
@@ -244,7 +461,7 @@
             <thead>
                 <tr class="bg-secondary">
                     <th>Nombre</th>
-                    <th>Titulo</th>
+                    <th>Área de conocimiento</th>
                     <th>Telefono</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -254,19 +471,15 @@
                 @foreach ($profesores as $profesor)
                     <tr>
                         <td>{{ $profesor->usuario->nombre }} {{ $profesor->usuario->apellido }}</td>
-                        <td>{{ $profesor->titulo }}</td>
+                        <td>{{ $profesor->conocimiento->nom_especialidad }}</td>
                         <td>{{ substr($profesor->telefono, 0, 4) . ' ' . substr($profesor->telefono, 4) }}</td>
                         <td>{{ $profesor->estado_profesor === 1 ? 'Activo' : 'Inactivo' }}</td>
                         <td>
-                            <a href="{{ route('profesores.edit', $profesor) }}" class="btn btn-primary"
-                                style="width: 7rem">
-                                <i class="fas fa-edit mr-2"></i>
-                                Editar
+                            <a href="{{ route('profesores.edit', $profesor) }}" class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
                             </a>
-                            <a href="{{ route('profesores.show', $profesor) }}" class="btn btn-primary"
-                                style="width: 7rem">
-                                <i class="fas fa-eye mr-2"></i>
-                                Ver
+                            <a href="{{ route('profesores.show', $profesor) }}" class="btn btn-primary">
+                                <i class="fas fa-eye"></i>
                             </a>
                         </td>
                     </tr>
@@ -338,6 +551,17 @@
                 icon: 'success',
                 title: '¡Perfil actualizado!',
                 html: 'El perfil del profesor se encuentra al dia.',
+                confirmButtonColor: '#6c757d',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('registrado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: 'Usuario registrado!',
+                html: 'El usuario fue registrado.',
                 confirmButtonColor: '#6c757d',
                 customClass: {
                     confirmButton: 'btn px-5'

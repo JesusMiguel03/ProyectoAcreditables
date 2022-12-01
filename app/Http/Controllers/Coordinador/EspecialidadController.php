@@ -23,7 +23,7 @@ class EspecialidadController extends Controller
     public function index()
     {
         $especialidades = Especialidad::all();
-        return view('aside.principal.especialidad.index', compact('especialidades'));
+        return view('aside.principal.conocimiento.index', compact('especialidades'));
     }
 
     /**
@@ -52,7 +52,7 @@ class EspecialidadController extends Controller
         }
 
         if (Especialidad::where('nom_especialidad', '=', $request->get('nom_especialidad'))->first()) {
-            return redirect('especialidad')->with('error', 'categoria existente');
+            return redirect('conocimiento')->with('error', 'categoria existente');
         }
 
 
@@ -61,7 +61,7 @@ class EspecialidadController extends Controller
         $especialidad->desc_especialidad = request('desc_especialidad');
         $especialidad->save();
 
-        return redirect('especialidad')->with('creado', 'La categoria fue creada exitosamente');
+        return redirect('conocimiento')->with('creado', 'La categoria fue creada exitosamente');
     }
 
     /**
@@ -73,7 +73,7 @@ class EspecialidadController extends Controller
     public function edit($id)
     {
         $especialidad = Especialidad::findOrFail($id);
-        return view('aside.principal.especialidad.edit', compact('especialidad'));
+        return view('aside.principal.conocimiento.edit', compact('especialidad'));
     }
 
     /**
@@ -104,6 +104,6 @@ class EspecialidadController extends Controller
 
         $informacion = request()->except(['_token', '_method']);
         Especialidad::where('id', '=', $id)->update($informacion);
-        return redirect('especialidad')->with('actualizado', 'Curso actualizado exitosamente');
+        return redirect('conocimiento')->with('actualizado', 'Curso actualizado exitosamente');
     }
 }

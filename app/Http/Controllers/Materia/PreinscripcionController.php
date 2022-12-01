@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Materia;
 use App\Http\Controllers\Controller;
 use App\Models\DatosAcademicos\Estudiante_materia;
 use App\Models\Estudiante;
+use App\Models\Materia\Asistencia;
 use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -40,13 +41,29 @@ class PreinscripcionController extends Controller
             return redirect()->back()->with('materia-invalida', 'error');
         }
 
+        $asistencia = Asistencia::create([
+            'Sem1' => 0,
+            'Sem2' => 0,
+            'Sem3' => 0,
+            'Sem4' => 0,
+            'Sem5' => 0,
+            'Sem6' => 0,
+            'Sem7' => 0,
+            'Sem8' => 0,
+            'Sem9' => 0,
+            'Sem10' => 0,
+            'Sem11' => 0,
+            'Sem12' => 0,
+        ]);
+
         Estudiante_materia::updateOrCreate(
             ['estudiante_id' => $request->get('usuario_id')],
             [
                 'calificacion' => 0,
                 'codigo' => Str::random(20),
                 'validacion_estudiante' => 0,
-                'materia_id' => $request->get('materia_id')
+                'materia_id' => $request->get('materia_id'),
+                'asistencia_id' => $asistencia->id,
             ]
         );
 

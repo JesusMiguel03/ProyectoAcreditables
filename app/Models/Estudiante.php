@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\DatosAcademicos\Estudiante_materia;
 use App\Models\DatosAcademicos\Pnf;
 use App\Models\DatosAcademicos\Trayecto;
+use App\Models\Materia\Asistencia;
 use App\Models\Materia\Materia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,5 +38,10 @@ class Estudiante extends Model
     public function preinscrito()
     {
         return $this->hasOne(Estudiante_materia::class, 'estudiante_id', 'id');
+    }
+
+    public function asistencia()
+    {
+        return $this->belongsTo(Asistencia::class, 'id');
     }
 }

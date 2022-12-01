@@ -132,8 +132,7 @@
                                     <th>{{ $pregunta->titulo }}</th>
                                     <th>{{ $pregunta->explicacion }}</th>
                                     <th><a href="{{ route('preguntas.edit', $pregunta->id) }}" class="btn btn-primary">
-                                            <i class="fas fa-edit mr-2"></i>
-                                            Editar
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                     </th>
                                 </tr>

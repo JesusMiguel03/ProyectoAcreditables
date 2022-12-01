@@ -20,8 +20,10 @@ class CreateEstudiantesMateriaTable extends Migration
             $table->boolean('validacion_estudiante');
             $table->unsignedBigInteger('materia_id');
             $table->unsignedBigInteger('estudiante_id');
+            $table->unsignedBigInteger('asistencia_id');
             $table->foreign('materia_id')->references('id')->on('materias')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('estudiante_id')->references('id')->on('estudiantes')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('asistencia_id')->references('id')->on('asistencias')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

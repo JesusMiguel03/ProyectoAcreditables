@@ -40,14 +40,17 @@
                         @enderror
                     </div>
 
-                    {{-- Titulo --}}
+                    {{-- Conocimiento --}}
                     <div class="form-group required mb-3">
-                        <label for="titulo" class="control-label">Título</label>
-                        <input type="text" name="titulo" id="titulo"
-                            class="form-control @error('titulo') is-invalid @enderror" value="{{ __($profesor->titulo) }}"
-                            placeholder="{{ __('Ingrese el titulo del profesor(a)') }}" autofocus required>
+                        <label for="conocimiento" class="control-label">Área de conocimiento</label>
+                        <select name="conocimiento" class="form-control @error('conocimiento') is-invalid @enderror">
+                            <option value="0" disabled>Seleccione uno</option>
+                            @foreach ($conocimientos as $conocimiento)
+                                <option value="{{ $conocimiento->id }}" {{ $profesor->conocimiento->nom_especialidad === $conocimiento->nom_especialidad ? 'selected' : '' }}>{{ $conocimiento->nom_especialidad }}</option>
+                            @endforeach
+                        </select>
 
-                        @error('titulo')
+                        @error('conocimiento')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

@@ -28,68 +28,84 @@ class UsuarioController extends Controller
 
     public function index()
     {
-        // Busca a todos los usuarios
+        // Busca a todos los estudiantes
         $usuarios = User::all();
-        return view('aside.principal.usuarios.index', compact('usuarios'));
+        $estudiantes = [];
+
+        foreach ($usuarios as $usuario) {
+            if ($usuario->getRoleNames()[0] === 'Estudiante') {
+                array_push($estudiantes, $usuario);
+            }
+        }
+
+        return view('aside.principal.usuarios.index', compact('estudiantes'));
     }
 
     public function edit($id)
     {
-        // Busca al usuario y demás modelos (roles - Spatie, especialidades)
         $usuario = User::find($id);
-        $roles = Role::all();
-        $especialidades = Especialidad::all();
-        $relacion = [];
+        // Busca al usuario y demás modelos (roles - Spatie, especialidades)
+        // $usuario = User::find($id);
+        // $roles = Role::all();
+        // $especialidades = Especialidad::all();
+        // $relacion = [];
         $pnfs = Pnf::all();
         $trayectos = Trayecto::all();
 
         // Si tiene especialidades las retorna en el arreglo $relacion
-        if (!empty($usuario->profesor->especialidades)) {
-            foreach ($usuario->profesor->especialidades as $prof) {
-                array_push($relacion, $prof->pivot->especialidad_id);
-            }
-        }
+        // if (!empty($usuario->profesor->especialidades)) {
+        //     foreach ($usuario->profesor->especialidades as $prof) {
+        //         array_push($relacion, $prof->pivot->especialidad_id);
+        //     }
+        // }
 
-        return view('aside.principal.usuarios.edit', compact('usuario', 'roles', 'especialidades', 'relacion', 'pnfs', 'trayectos'));
+        return view('aside.principal.usuarios.edit', compact('usuario', 'pnfs', 'trayectos'));
     }
 
     public function update(Request $request, $id)
     {
-        $validador = Validator::make($request->all(), [
-            'roles' => ['required', 'not_in:0'],
-        ], [
-            'roles.required' => 'El campo rol es necesario.',
-            'roles.not_in' => 'El rol seleccionado es inválido.'
-        ]);
+        // $validador = Validator::make($request->all(), [
+        //     'roles' => ['required', 'not_in:0'],
+        // ], [
+        //     'roles.required' => 'El campo rol es necesario.',
+        //     'roles.not_in' => 'El rol seleccionado es inválido.'
+        // ]);
 
-        if ($validador->fails())
-        {
-            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
-        }
+        // if ($validador->fails())
+        // {
+        //     return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
+        // }
 
         // Actualizar rol
         $usuario = User::find($id);
-        $rol = $usuario->getRoleNames()[0];
-        $usuario->roles()->sync($request->roles);
+        // $rol = $usuario->getRoleNames()[0];
+        // $usuario->roles()->sync($request->roles);
 
         // Array con las especialidades
-        $especialidades = request('especialidades');
+        // $especialidades = request('especialidades');
 
         // Actualiza solo si es profesor
-        if ($rol === 'Profesor') {
-            if (empty($usuario->profesor->especialidades)) {
-                return redirect('usuarios')->with('incorrecto', 'categoria existente');
-            }
-            $usuario->profesor->especialidades()->sync($especialidades);
-        } else if ($rol === 'Estudiante') {
-            Estudiante::updateOrCreate(
-                ['usuario_id' => $usuario->id],
-                [
-                    'trayecto_id' => $request->get('trayecto'),
-                    'pnf_id' => $request->get('pnf')
-                ]
-            );
-        }
+        // if ($rol === 'Profesor') {
+        //     if (empty($usuario->profesor->especialidades)) {
+        //         return redirect('usuarios')->with('incorrecto', 'categoria existente');
+        //     }
+        //     $usuario->profesor->especialidades()->sync($especialidades);
+        // } else if ($rol === 'Estudiante') {
+        //     Estudiante::updateOrCreate(
+        //         ['usuario_id' => $usuario->id],
+        //         [
+        //             'trayecto_id' => $request->get('trayecto'),
+        //             'pnf_id' => $request->get('pnf')
+        //         ]
+        //     );
+        // }
+        Estudiante::updateOrCreate(
+            ['usuario_id' => $usuario->id],
+            [
+                'trayecto_id' => $request->get('trayecto'),
+                'pnf_id' => $request->get('pnf')
+            ]
+        );
 
         return redirect('usuarios')->with('creado', 'Roles añadidos exitosamente');
     }

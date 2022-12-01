@@ -1,17 +1,14 @@
 @extends('adminlte::page')
 
-@section('title', 'Acreditables | Editar especialidad')
+@section('title', 'Acreditables | Editar área de conocimiento')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Especialidad</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+    <div class="row">
+        <div class="col-6">
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('especialidad.index') }}" class="link-muted">Especialidades</a></li>
-                <li class="breadcrumb-item active"><a href="">Especialidad</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('conocimiento.index') }}" class="link-muted">Áreas de conocimiento</a></li>
+                <li class="breadcrumb-item active"><a href="">Área de conocimiento</a></li>
             </ol>
         </div>
     </div>
@@ -21,12 +18,11 @@
     <div class="col-md-6 col-sm-12 mx-auto mt-3">
         <div class="card">
             <header class="card-header bg-primary">
-                <h5>Editar especialidad</h5>
+                <h5>Editar área</h5>
             </header>
 
             <main class="card-body">
-                <form action="{{ route('especialidad.update', $especialidad) }}" method="post"
-                    enctype="multipart/form-data">
+                <form action="{{ route('conocimiento.update', $especialidad) }}" method="post">
                     @csrf
                     {{ method_field('PUT') }}
 
@@ -61,7 +57,7 @@
                     {{-- Botón de registrar --}}
                     <div class="row">
                         <div class="col-6">
-                            <a href="{{ route('especialidad.index') }}" class="btn btn-block btn-secondary">
+                            <a href="{{ route('conocimiento.index') }}" class="btn btn-block btn-secondary">
                                 <i class="fas fa-arrow-left mr-2"></i>
                                 {{ __('Volver') }}
                             </a>

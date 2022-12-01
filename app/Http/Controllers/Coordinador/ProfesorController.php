@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Coordinador;
 
 use App\Models\Profesor\Profesor;
 use App\Http\Controllers\Controller;
+use App\Models\DatosAcademicos\Pnf;
+use App\Models\Profesor\Especialidad;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +27,10 @@ class ProfesorController extends Controller
     {
         $profesores = Profesor::all();
         $usuarios = User::all();
-        return view('aside.principal.profesores.index', compact('profesores', 'usuarios'));
+        $conocimientos = Especialidad::all();
+        $departamentos = Pnf::all();
+
+        return view('aside.principal.profesores.index', compact('profesores', 'usuarios', 'conocimientos', 'departamentos'));
     }
 
     /**
@@ -39,7 +44,7 @@ class ProfesorController extends Controller
         $validador = Validator::make($request->all(), [
             'usuarios' => ['required', 'not_in:0'],
             'telefono' => ['required', 'string', 'regex:/^[0-9]{7}$/'],
-            'titulo' => ['required', 'string', 'max:50'],
+            'conocimiento' => ['required'],
             'casa' => ['required', 'string', 'max:10'],
             'calle' => ['required', 'string', 'max:20'],
             'urb' => ['required', 'string', 'max:20'],
@@ -47,25 +52,20 @@ class ProfesorController extends Controller
             'estado' => ['required', 'string', 'max:16'],
             'fecha_de_nacimiento' => ['required', 'date'],
             'fecha_ingreso_institucion' => ['required', 'date'],
+            'departamento' => ['required'],
         ], [
             'usuarios.not_in' => 'El usuario seleccionado es inválido.'
         ]);
 
         if ($validador->fails())
         {
-            dd($validador->errors()->getMessages());
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
-        if (Profesor::where('usuario_id', '=', request('usuarios'))->first())
-        {
-            return redirect()->back()->with('existente', 'categoria existente');
-        }
-        
         Profesor::create([
             'usuario_id' => $request->get('usuarios'),
             'telefono' => $request->get('codigo') . $request->get('telefono'),
-            'titulo' => $request->get('titulo'),
+            'conocimiento_id' => $request->get('conocimiento'),
             'casa' => $request->get('casa'),
             'calle' => $request->get('calle'),
             'urb' => $request->get('urb'),
@@ -73,6 +73,7 @@ class ProfesorController extends Controller
             'estado' => $request->get('estado'),
             'fecha_de_nacimiento' => $request->get('fecha_de_nacimiento'),
             'fecha_ingreso_institucion' => $request->get('fecha_ingreso_institucion'),
+            'departamento_id' => $request->get('departamento'),
             'estado_profesor' => 1
         ])->save();
 
@@ -100,8 +101,9 @@ class ProfesorController extends Controller
      */
     public function edit($id)
     {
+        $conocimientos = Especialidad::all();
         $profesor = Profesor::find($id);
-        return view('aside.principal.profesores.edit', compact('profesor'));
+        return view('aside.principal.profesores.edit', compact('profesor', 'conocimientos'));
     }
 
     /**
@@ -115,7 +117,7 @@ class ProfesorController extends Controller
     {
         $validador = Validator::make($request->all(), [
             'telefono' => ['required', 'string', 'regex:/^[0-9]{7}$/'],
-            'titulo' => ['required', 'string', 'max:50'],
+            'conocimiento' => ['required'],
             'casa' => ['required', 'string', 'max:10'],
             'calle' => ['required', 'string', 'max:20'],
             'urb' => ['required', 'string', 'max:20'],
@@ -138,7 +140,7 @@ class ProfesorController extends Controller
             ['id' => $id],
             [
                 'telefono' => $request->get('codigo') . $request->get('telefono'),
-                'titulo' => $request->get('titulo'),
+                'conocimiento_id' => $request->get('conocimiento'),
                 'casa' => $request->get('casa'),
                 'calle' => $request->get('calle'),
                 'urb' => $request->get('urb'),

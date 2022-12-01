@@ -15,37 +15,48 @@ class PNFSeeder extends Seeder
     public function run()
     {
         Pnf::create([
-            'nom_pnf' => 'Administración'
+            'nom_pnf' => 'Administración',
+            'cod_pnf' => '?'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Agroalimentación'
+            'nom_pnf' => 'Agroalimentación',
+            'cod_pnf' => '?'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Contaduría Pública'
+            'nom_pnf' => 'Contaduría Pública',
+            'cod_pnf' => '?'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Electricidad'
+            'nom_pnf' => 'Electricidad',
+            'cod_pnf' => 'PEUA'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Electrónica'
+            'nom_pnf' => 'Electrónica',
+            'cod_pnf' => 'PLUA'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Informática'
+            'nom_pnf' => 'Informática',
+            'cod_pnf' => 'PIUA'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Instrumentación y Control'
+            'nom_pnf' => 'Instrumentación y Control',
+            'cod_pnf' => 'PCUN'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Mantenimiento'
+            'nom_pnf' => 'Mantenimiento',
+            'cod_pnf' => 'PNAA'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Mecánica'
+            'nom_pnf' => 'Mecánica',
+            'cod_pnf' => 'No ve'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Sistemas de Calidad y Ambiente'
+            'nom_pnf' => 'Sistemas de Calidad y Ambiente',
+            'cod_pnf' => '?'
         ]);
         Pnf::create([
-            'nom_pnf' => 'Telecomunicaciones'
+            'nom_pnf' => 'Telecomunicaciones',
+            'cod_pnf' => 'PTUA'
         ]);
     }
 }

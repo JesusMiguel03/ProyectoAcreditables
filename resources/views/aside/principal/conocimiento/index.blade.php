@@ -26,7 +26,7 @@
                             <h5 class="modal-title" id="campoespecialidad">Agregar área de conocimiento</h5>
                         </header>
                         <main class="modal-body">
-                            <form action="{{ route('especialidad.store') }}" method="POST">
+                            <form action="{{ route('conocimiento.store') }}" method="POST">
                                 @csrf
 
                                 {{-- Campo de nombre --}}
@@ -94,9 +94,8 @@
                     <tr>
                         <th>{{ $especialidad->nom_especialidad }}</th>
                         <th>{{ $especialidad->desc_especialidad }}</th>
-                        <th><a href="{{ route('especialidad.edit', $especialidad->id) }}" class="btn btn-primary">
-                                <i class="fas fa-edit mr-2"></i>
-                                Editar
+                        <th><a href="{{ route('conocimiento.edit', $especialidad->id) }}" class="btn btn-primary">
+                                <i class="fas fa-edit"></i>
                             </a>
                         </th>
                     </tr>

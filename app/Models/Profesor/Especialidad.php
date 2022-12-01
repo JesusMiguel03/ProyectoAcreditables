@@ -13,6 +13,6 @@ class Especialidad extends Model
 
     public function profesores()
     {
-        return $this->belongsToMany(Profesor::class);
+        return $this->hasMany(Profesor::class);
     }
 }

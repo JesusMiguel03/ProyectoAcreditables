@@ -36,11 +36,12 @@
                     @if ($noticia->mostrar === 1)
                         <div class="slide">
                             <div class="card mt-3 shadow" style="height: 17rem;">
-                                <div class="card-header bg-secondary">
-                                    <h5 class="text-center fw-bold">{{ $noticia->encabezado }}</h5>
-                                </div>
+                                <img src="{{ asset('vendor/img/defecto/noticias.png') }}"
+                                    class="card-img-top rounded border border-outline-secondary"
+                                    style="filter:brightness(0.8)" alt="Imagen de noticia">
+                                <h5 class="text-center py-2 text-white fw-bold" style="margin-top: -5rem; z-index: 100; background-color:rgba(0, 0, 0, 0.5)">{{ $noticia->encabezado }}</h5>
                                 <div class="card-body border-bottom border-primary">
-                                    <h6 class="mb-2 pl-3 py-1 text-muted" style="border-left: 5px solid #007bff">
+                                    <h6 class="my-3 pl-3 py-1 text-muted" style="border-left: 5px solid #007bff">
                                         [ {{ explode('-', explode(' ', $noticia->created_at)[0])[2] }}
                                         -{{ explode('-', explode(' ', $noticia->created_at)[0])[1] }}
                                         -{{ explode('-', explode(' ', $noticia->created_at)[0])[0] }} ]

@@ -13,7 +13,7 @@ class Estudiante_materia extends Model
     public $table = 'estudiantes_materias';
 
     protected $fillable = [
-        'estudiante_id', 'calificacion', 'codigo', 'validacion_estudiante','materia_id'
+        'estudiante_id', 'calificacion', 'codigo', 'validacion_estudiante','materia_id', 'asistencia_id'
     ];
 
     public function materia()

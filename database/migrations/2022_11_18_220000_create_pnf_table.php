@@ -16,6 +16,7 @@ class CreatePnfTable extends Migration
         Schema::create('pnf', function (Blueprint $table) {
             $table->id();
             $table->string('nom_pnf', 30);
+            $table->string('cod_pnf', 6);
             $table->timestamps();
         });
     }

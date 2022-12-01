@@ -68,7 +68,7 @@
                     {{-- Botón de registrar --}}
                     <div class="row">
                         <div class="col-6">
-                            <a href="{{ route('noticias.index') }}" class="btn btn-block btn-secondary">
+                            <a href="{{ route('materias.index') }}" class="btn btn-block btn-secondary">
                                 <i class="fas fa-arrow-left mr-2"></i>
                                 {{ __('Volver') }}
                             </a>

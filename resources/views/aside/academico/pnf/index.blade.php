@@ -73,18 +73,23 @@
             <table id='tabla' class="table table-striped">
                 <thead>
                     <tr class="bg-secondary">
+                        <th>Código</th>
                         <th>Nombre</th>
-                        <th>Opciones</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @foreach ($pnfs as $pnf)
                         <tr>
+                            @if ($pnf->cod_pnf === 'No ve')
+                                <th>{{ 'No cursa acreditable' }}</th>
+                            @else
+                                <th>{{ $pnf->cod_pnf === '?' ? 'Sin asignar' : $pnf->cod_pnf }}</th>
+                            @endif
                             <th>{{ $pnf->nom_pnf }}</th>
                             <th><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary">
-                                    <i class="fas fa-edit mr-2"></i>
-                                    Editar
+                                    <i class="fas fa-edit"></i>
                                 </a>
                             </th>
                         </tr>

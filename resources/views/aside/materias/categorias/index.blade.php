@@ -83,8 +83,7 @@
                         <th>{{ $categoria->nom_categoria }}</th>
                         <th>
                             <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-primary">
-                                <i class="fas fa-edit mr-2"></i>
-                                Editar
+                                <i class="fas fa-edit"></i>
                             </a>
                         </th>
                     </tr>

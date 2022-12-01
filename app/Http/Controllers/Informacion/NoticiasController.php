@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class NoticiasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:noticias.create');
+    }
+
     /*
     * Display a listing of the resource.
     *

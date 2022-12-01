@@ -17,7 +17,7 @@ class CreateProfesoresTable extends Migration
             $table->id();
             $table->unsignedBigInteger('usuario_id');
             $table->string('telefono', 11);
-            $table->string('titulo', 50);
+            $table->unsignedBigInteger('conocimiento_id');
             $table->string('casa', 10);
             $table->string('calle', 20);
             $table->string('urb', 20);
@@ -25,8 +25,11 @@ class CreateProfesoresTable extends Migration
             $table->string('estado', 16);
             $table->date('fecha_de_nacimiento');
             $table->date('fecha_ingreso_institucion');
+            $table->unsignedBigInteger('departamento_id');
             $table->boolean('estado_profesor');
+            $table->foreign('departamento_id')->references('id')->on('pnf')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('conocimiento_id')->references('id')->on('especialidad')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -82,8 +82,7 @@
                     <tr>
                         <th>{{ $trayecto->num_trayecto }}</th>
                         <th><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary">
-                                <i class="fas fa-edit mr-2"></i>
-                                Editar
+                                <i class="fas fa-edit"></i>
                             </a>
                         </th>
                     </tr>

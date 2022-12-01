@@ -119,8 +119,7 @@
                                 <th>{{ $noticia->desc_noticia }}</th>
                                 <th>{{ $noticia->mostrar === 0 ? 'Inactivo' : 'Activo' }}</th>
                                 <th><a href="{{ route('noticias.edit', $noticia->id) }}" class="btn btn-primary">
-                                        <i class="fas fa-edit mr-2"></i>
-                                        Editar
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                 </th>
                             </tr>

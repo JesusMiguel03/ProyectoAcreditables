@@ -178,9 +178,10 @@
                             <div class="card mt-3">
 
                                 @if ($materia->imagen_materia === null)
-                                    <div class="card-header bg-secondary">
-                                        <h5 class="py-2 my-4 text-light" style="min-height: 4.438rem;">Esta materia no
-                                            posee una imagen</h5>
+                                    <div class="card-img-top">
+                                        <img src="{{ asset('vendor/img/defecto/materias.png') }}" alt="Imagen de materia"
+                                            class="card-img-top rounded border border-outline-secondary"
+                                            style="filter:brightness(0.8)">
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title mb-2 h2 fw-bold">{{ $materia->nom_materia }}</h5>
@@ -234,6 +235,36 @@
                     @endif
                 @endforeach
             </div>
+            <div class="card table-responsive-sm p-3 mt-5 mb-3 col-12">
+                <table id='tabla' class="table table-striped">
+                    <thead>
+                        <tr class="bg-secondary">
+                            <th>Nombre</th>
+                            <th>Cupos</th>
+                            <th>Estado</th>
+                            <th>Descripción</th>
+                            <th>Acreditable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($materias as $materia)
+                            <tr>
+                                <td>{{ $materia->nom_materia }}</td>
+                                <td>{{ $materia->cupos_disponibles }}</td>
+                                <td>{{ $materia->estado_materia }}</td>
+                                <td class="text-justify">{{ $materia->desc_materia }}</td>
+                                <td>{{ $materia->num_acreditable }}</td>
+                                <td>
+                                    <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary {{ $materia->cupos_disponibles === 0 ? 'disabled' : '' }}">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         @else
             <div id="slick" class="px-5">
 
@@ -245,9 +276,10 @@
                             <div class="card mt-3">
 
                                 @if ($materia->imagen_materia === null)
-                                    <div class="card-header bg-secondary">
-                                        <h5 class="py-2 my-4 text-light" style="min-height: 4.438rem;">Esta materia no
-                                            posee una imagen</h5>
+                                    <div class="card-img-top">
+                                        <img src="{{ asset('vendor/img/defecto/materias.png') }}" alt="Imagen de materia"
+                                            class="card-img-top rounded border border-outline-secondary"
+                                            style="filter:brightness(0.8)">
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title mb-2 h2 fw-bold">{{ $materia->nom_materia }}</h5>
@@ -328,20 +360,14 @@
                             <td class="text-justify">{{ $materia->desc_materia }}</td>
                             <td>{{ $materia->num_acreditable }}</td>
                             <td>
-                                <a href="{{ route('materias.edit', $materia) }}" class="btn btn-primary"
-                                    style="width: 8rem">
-                                    <i class="fas fa-edit mr-2"></i>
-                                    Editar
+                                <a href="{{ route('materias.edit', $materia) }}" class="btn btn-primary">
+                                    <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary"
-                                    style="width: 8rem">
-                                    <i class="fas fa-eye mr-2"></i>
-                                    Ver
+                                <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary">
+                                    <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('preinscribir', $materia->id) }}" class="btn btn-primary"
-                                    style="width: 8rem">
-                                    <i class="fas fa-id-badge mr-2"></i>
-                                    Preinscribir
+                                <a href="{{ route('preinscribir', $materia->id) }}" class="btn btn-primary">
+                                    <i class="fas fa-id-badge"></i>
                                 </a>
                             </td>
                         </tr>
@@ -353,26 +379,18 @@
 @stop
 
 @section('css')
-    @if (Auth::user()->getRoleNames()[0] !== 'Coordinador')
-        <link rel="stylesheet" href="{{ asset('vendor/carousel/slick.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/carousel/carousel.css') }}">
-        <style>
-            .card-img-top {
-                max-height: 9rem;
-            }
-        </style>
-    @else
-        <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
-        <style>
-            .form-group.required .control-label:after {
-                color: #d00;
-                content: "*";
-                position: absolute;
-                margin-left: 6px;
-                margin-top: 3px;
-            }
-        </style>
-    @endif
+    <link rel="stylesheet" href="{{ asset('vendor/carousel/slick.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/carousel/carousel.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
     <style>
         .custom-file-label::after {
@@ -382,13 +400,10 @@
 @stop
 
 @section('js')
-    @if (Auth::user()->getRoleNames()[0] === 'Coordinador')
-        <script src="{{ asset('js/tablas.js') }}"></script>
-        <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
-    @else
-        <script src="{{ asset('vendor/carousel/slick.min.js') }}"></script>
-        <script src="{{ asset('vendor/carousel/carousel.js') }}"></script>
-    @endif
+    <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('vendor/carousel/slick.min.js') }}"></script>
+    <script src="{{ asset('vendor/carousel/carousel.js') }}"></script>
     <script src="{{ asset('js/previsualizacion.js') }}" defer></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script>
