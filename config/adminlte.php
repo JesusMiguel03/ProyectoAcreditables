@@ -331,6 +331,14 @@ return [
         ['hr'],
         ['header' => 'ACREDITABLES'],
         [
+            'text'        => 'Materias',
+            'shift'       => 'ml-1',
+            'url'         => '/materias',
+            'active'      => ['materias*'],
+            'can'         => 'preinscribir',
+            'icon'        => 'fas fa-th-large',
+        ],
+        [
             'text'        => 'Gestionar',
             'icon'        => 'fas fa-folder',
             'can'         => 'asistencia',

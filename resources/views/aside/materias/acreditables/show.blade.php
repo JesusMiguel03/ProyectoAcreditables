@@ -18,9 +18,10 @@
     <div class="row mt-2">
         <div class="col-sm-12 col-md-3">
             <div class="card">
-                <main class="card-body box-profile" @if (empty($materia->info->profesor)) style="height: 13.512rem" @endif>
+                <main class="card-body box-profile" @if (empty($materia->info->profesor)) style="height: 13.512rem" @endif
+                    @if (Auth::user()->getRoleNames()[0] === 'Estudiante') style="height: 13.512rem" @endif>
                     @if (!empty($materia->info->profesor))
-                        <div class="text-center">
+                        <div class="text-center @if (Auth::user()->getRoleNames()[0] === 'Estudiante') mt-4 @endif">
                             <img class="profile-user-img img-fluid img-circle"
                                 src="{{ asset('/vendor/img/profs/user0.jpg') }}" alt="User profile picture">
                         </div>
@@ -72,9 +73,14 @@
                                         value="{{ Auth::user()->estudiante->id }}">
                                     <input type="number" name="materia_id" class="d-none" hidden value="{{ $materia->id }}">
 
-                                    <button type="submit"
-                                        class="btn btn-{{ $materia->cupos_disponibles === 0 ? 'secondary' : 'outline-primary' }}"
-                                        {{ !empty(Auth::user()->estudiante->preinscrito) || $materia->cupos_disponibles === 0 ? 'disabled' : '' }}>{{ !empty(Auth::user()->estudiante->preinscrito) ? 'Inscrito' : 'Inscribir' }}</button>
+                                    @if (Auth::user()->estudiante->preinscrito->materia_id === $materia->id)
+                                        <button class="btn btn-secondary disabled">Te inscribiste en esta acreditable</button>
+                                    @else
+                                        <button type="submit"
+                                            class="btn btn-{{ $materia->cupos_disponibles === 0 ? 'secondary' : 'outline-primary' }}"
+                                            {{ !empty(Auth::user()->estudiante->preinscrito) || $materia->cupos_disponibles === 0 ? 'disabled' : '' }}>{{ !empty(Auth::user()->estudiante->preinscrito) ? 'Inscrito' : 'Inscribir' }}</button>
+                                    @endif
+
                                 </form>
                             </div>
                         @endif
