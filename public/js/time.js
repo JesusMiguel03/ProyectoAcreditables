@@ -37,7 +37,7 @@ const update = () => {
             month[time.getMonth()]
         } de ${time.getFullYear()} - ${addZero(time.getHours() > 12 ? time.getHours()- 12 : time.getHours())}:${addZero(
             time.getMinutes()
-        )} ${time.getHours() > 12 ? "PM" : "AM"}`;
+        )} ${time.getHours() >= 12 ? "PM" : "AM"}`;
     }
 };
 setInterval(update, 1000);

@@ -11,6 +11,8 @@ class Especialidad extends Model
 
     public $table = 'especialidad';
 
+    protected $fillable = ['nom_especialidad', 'desc_especialidad'];
+
     public function profesores()
     {
         return $this->hasMany(Profesor::class);

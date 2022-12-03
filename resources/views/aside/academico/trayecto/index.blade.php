@@ -80,11 +80,11 @@
             <tbody>
                 @foreach ($trayectos as $trayecto)
                     <tr>
-                        <th>{{ $trayecto->num_trayecto }}</th>
-                        <th><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary">
+                        <td>{{ $trayecto->num_trayecto }}</td>
+                        <td><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
-                        </th>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -116,8 +116,8 @@
             Swal.fire({
                 icon: 'success',
                 title: 'Trayecto registrado!',
-                html: 'Ahora se podran agrupar los estudiantes.',
-                confirmButtonColor: '#6c757d',
+                html: 'Un nuevo trayecto ha sido añadido.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -126,20 +126,21 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error de registro',
-                html: 'Algo parece andar mal con los campos.',
-                confirmButtonColor: '#6c757d',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
             })
-        @elseif ($message = session('registrada'))
+            $('#trayecto').modal('show')
+        @elseif ($message = session('registrado'))
             let timerInterval
             Swal.fire({
-                icon: 'error',
-                title: 'Trayecto no disponible',
-                html: 'Este trayecto ya fue registrado.',
-                confirmButtonColor: '#6c757d',
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'El trayecto ya se encuentra registrado.',
+                confirmButtonColor: '#17a2b8',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -149,8 +150,8 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
-                html: 'El trayecto ha sido modificado.',
-                confirmButtonColor: '#6c757d',
+                html: 'El trayecto ha sido actualizado.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },

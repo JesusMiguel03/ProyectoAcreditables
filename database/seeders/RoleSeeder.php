@@ -45,6 +45,8 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'preguntas'])->syncRoles([$estudiante, $profesor, $coordinador]);
         Permission::create(['name' => 'noticias'])->syncRoles([$estudiante, $profesor, $coordinador]);
 
+        Permission::create(['name' => 'asistencia'])->syncRoles([$profesor, $coordinador]);
+
         // Cuenta
         Permission::create(['name' => 'ver.perfil'])->syncRoles([$estudiante, $profesor, $coordinador]);
     }

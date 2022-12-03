@@ -30,15 +30,30 @@
                             <form action="{{ route('pnf.store') }}" method="post">
                                 @csrf
 
-                                {{-- Campo de nombre --}}
+                                {{-- Nombre --}}
                                 <div class="form-group required mb-3">
                                     <label for="nom_pnf" class="control-label">Nombre</label>
                                     <input type="text" name="nom_pnf" id="nom_pnf"
                                         class="form-control @error('nom_pnf') is-invalid @enderror"
-                                        value="{{ old('nom_pnf') }}" placeholder="{{ __('Nombre de la pnf de curso') }}"
+                                        value="{{ old('nom_pnf') }}" placeholder="{{ __('Nombre del PNF') }}"
                                         autofocus required>
 
                                     @error('nom_pnf')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                {{-- Código --}}
+                                <div class="form-group mb-3">
+                                    <label for="cod_pnf">Código</label>
+                                    <input type="text" name="cod_pnf" id="cod_pnf"
+                                        class="form-control @error('cod_pnf') is-invalid @enderror"
+                                        value="{{ old('cod_pnf') }}" placeholder="{{ __('Código del PNF') }}"
+                                        autofocus>
+
+                                    @error('cod_pnf')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -83,15 +98,15 @@
                     @foreach ($pnfs as $pnf)
                         <tr>
                             @if ($pnf->cod_pnf === 'No ve')
-                                <th>{{ 'No cursa acreditable' }}</th>
+                                <td>{{ 'No cursa acreditable' }}</td>
                             @else
-                                <th>{{ $pnf->cod_pnf === '?' ? 'Sin asignar' : $pnf->cod_pnf }}</th>
+                                <td>{{ $pnf->cod_pnf === '?' ? 'Sin asignar' : $pnf->cod_pnf }}</td>
                             @endif
-                            <th>{{ $pnf->nom_pnf }}</th>
-                            <th><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary">
+                            <td>{{ $pnf->nom_pnf }}</td>
+                            <td><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
                                     <i class="fas fa-edit"></i>
                                 </a>
-                            </th>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -124,8 +139,8 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡PNF registrado!',
-                html: 'Ya se puede seleccionar este PNF.',
-                confirmButtonColor: '#6c757d',
+                html: 'Un nuevo PNF ha sido añadido.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -134,20 +149,21 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error de registro',
-                html: 'Uno de los parámetros parece estar mal, has clic en el boton de añadir para ver el campo incorrecto.',
-                confirmButtonColor: '#6c757d',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
             })
-        @elseif ($message = session('registrada'))
+            $('#pnf').modal('show')
+        @elseif ($message = session('registrado'))
             let timerInterval
             Swal.fire({
-                icon: 'error',
-                title: 'PNF no disponible',
-                html: 'Parece que el PNF a asignar ya se encuentra registrado.',
-                confirmButtonColor: '#6c757d',
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'El PNF ya se encuentra registrado.',
+                confirmButtonColor: '#17a2b8',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -157,8 +173,8 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
-                html: 'El PNF ahora posee otro nombre.',
-                confirmButtonColor: '#6c757d',
+                html: 'El PNF ha sido actualizado.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },

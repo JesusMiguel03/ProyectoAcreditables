@@ -36,7 +36,7 @@
 
                 <div class="form-group mb-3">
                     <label>Cédula</label>
-                    <input type="text" class="form-control" placeholder="{{ $usuario->cedula }}"
+                    <input type="text" class="form-control" placeholder="{{ 'V-' . number_format($usuario->cedula, 0, ',', '.') }}"
                         disabled></input>
                 </div>
 

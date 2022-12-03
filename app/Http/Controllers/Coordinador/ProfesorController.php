@@ -14,17 +14,14 @@ class ProfesorController extends Controller
 {
     public function __construct()
     {
+        // Valida autenticación y permisos
         $this->middleware('auth');
         $this->middleware('can:perfiles');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        // Lista profesores, usuarios, áreas de conocimiento y departamentos
         $profesores = Profesor::all();
         $usuarios = User::all();
         $conocimientos = Especialidad::all();
@@ -33,14 +30,9 @@ class ProfesorController extends Controller
         return view('aside.principal.profesores.index', compact('profesores', 'usuarios', 'conocimientos', 'departamentos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'usuarios' => ['required', 'not_in:0'],
             'telefono' => ['required', 'string', 'regex:/^[0-9]{7}$/'],
@@ -62,6 +54,7 @@ class ProfesorController extends Controller
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
+        // Guarda un profesor
         Profesor::create([
             'usuario_id' => $request->get('usuarios'),
             'telefono' => $request->get('codigo') . $request->get('telefono'),
@@ -77,44 +70,28 @@ class ProfesorController extends Controller
             'estado_profesor' => 1
         ])->save();
 
-        return redirect('profesores')->with('creado', 'La categoria fue creada exitosamente');
+        return redirect('profesores')->with('creado', 'creado');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
+        // Muestra al profesor específico
         $profesor = Profesor::find($id);
 
         return view('aside.principal.profesores.show', compact('profesor'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        // Lista las áreas de conocimiento y al profesor
         $conocimientos = Especialidad::all();
         $profesor = Profesor::find($id);
         return view('aside.principal.profesores.edit', compact('profesor', 'conocimientos'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'telefono' => ['required', 'string', 'regex:/^[0-9]{7}$/'],
             'conocimiento' => ['required'],
@@ -136,6 +113,7 @@ class ProfesorController extends Controller
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
+        // Busca y actualiza
         Profesor::updateOrCreate(
             ['id' => $id],
             [
@@ -152,6 +130,6 @@ class ProfesorController extends Controller
             ]
         );
 
-        return redirect('profesores')->with('actualizado', 'Datos actualizados');
+        return redirect('profesores')->with('actualizado', 'actualizado');
     }
 }

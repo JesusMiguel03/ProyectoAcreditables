@@ -11,29 +11,21 @@ class EspecialidadController extends Controller
 {
     public function __construct()
     {
+        // Valida la autenticación y los permisos
         $this->middleware('auth');
         $this->middleware('can:perfiles');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        // Lista todas las áreas de conocimiento
         $especialidades = Especialidad::all();
         return view('aside.principal.conocimiento.index', compact('especialidades'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        // Valida los campos
         $validado = Validator::make($request->all(), [
             'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:50'],
             'desc_especialidad' => ['required', 'string', 'max:255']
@@ -51,40 +43,30 @@ class EspecialidadController extends Controller
             return redirect()->back()->withErrors($validado)->withInput()->with('error', 'error');
         }
 
+        // Evita duplicidad
         if (Especialidad::where('nom_especialidad', '=', $request->get('nom_especialidad'))->first()) {
-            return redirect('conocimiento')->with('error', 'categoria existente');
+            return redirect('conocimiento')->with('error', 'error');
         }
 
+        // Guarda el área de conocimiento
+        Especialidad::create([
+            'nom_especialidad' => $request->get('nom_especialidad'),
+            'desc_especialidad' => $request->get('desc_especialidad'),
+        ]);
 
-        $especialidad = new Especialidad();
-        $especialidad->nom_especialidad = request('nom_especialidad');
-        $especialidad->desc_especialidad = request('desc_especialidad');
-        $especialidad->save();
-
-        return redirect('conocimiento')->with('creado', 'La categoria fue creada exitosamente');
+        return redirect('conocimiento')->with('creado', 'creado');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $especialidad = Especialidad::findOrFail($id);
+        // Busca el área de conocimiento respectivamente
+        $especialidad = Especialidad::find($id);
         return view('aside.principal.conocimiento.edit', compact('especialidad'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        // Valida los campos
         $validado = Validator::make($request->all(), [
             'nom_especialidad' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:50'],
             'desc_especialidad' => ['required', 'string', 'max:255']
@@ -102,8 +84,12 @@ class EspecialidadController extends Controller
             return redirect()->back()->withErrors($validado)->withInput()->with('error', 'error');
         }
 
-        $informacion = request()->except(['_token', '_method']);
-        Especialidad::where('id', '=', $id)->update($informacion);
-        return redirect('conocimiento')->with('actualizado', 'Curso actualizado exitosamente');
+        // Busca y actualiza
+        Especialidad::find($id)->update([
+            'nom_especialidad' => $request->get('nom_especialidad'),
+            'desc_especialidad' => $request->get('desc_especialidad'),
+        ]);
+
+        return redirect('conocimiento')->with('actualizado', 'actualizado');
     }
 }

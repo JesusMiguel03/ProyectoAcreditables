@@ -13,16 +13,23 @@ class RegistrarProfesorController extends Controller
 {
     public function store(Request $request)
     {
-        Validator::make($request->all(), [
+        // Valida los campos
+        $usuario = Validator::make($request->all(), [
             'nombre' => ['required', 'string', 'max:20'],
             'apellido' => ['required', 'string', 'max:20'],
             'cedula' => ['required', 'numeric', 'digits_between:7,8', 'unique:users'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', new Password, 'confirmed'],
         ], [
-            'cedula.digits_between' => 'La cedula debe estar entre los 7 y 8 dígitos.'
-        ])->validate();
+            'cedula.digits_between' => 'La cedula debe estar entre los 7 y 8 dígitos.',
+            'cedula.unique' => 'La cedula ya ha sido registrada.'
+        ]);
 
+        if ($usuario->fails()) {
+            return redirect()->back()->withInput()->withErrors($usuario)->with('mostrarUsuario', 'modal');
+        }
+
+        // Guarda al usuario con rol de profesor
         $profesor = User::create([
             'nombre' => $request->get('nombre'),
             'apellido' => $request->get('apellido'),
@@ -31,6 +38,6 @@ class RegistrarProfesorController extends Controller
             'password' => Hash::make($request->get('password')),
         ])->assignRole('Profesor');
 
-        return redirect()->back()->with('registrado', 'exito');
+        return redirect()->back()->with('registrarUsuarioProfesor', 'registrar');
     }
 }

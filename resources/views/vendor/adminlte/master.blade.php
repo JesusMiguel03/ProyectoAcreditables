@@ -120,6 +120,7 @@
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
 
+    @include('popper::assets')
 </body>
 
 </html>

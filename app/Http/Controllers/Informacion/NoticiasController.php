@@ -11,29 +11,21 @@ class NoticiasController extends Controller
 {
     public function __construct()
     {
+        // Valida la autenticación y los permisos
         $this->middleware('auth');
         $this->middleware('can:noticias.create');
     }
 
-    /*
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
     public function index()
     {
+        // Lista todas las noticias
         $noticias = Noticia::all();
         return view('aside.informacion.noticias.index', compact('noticias'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'encabezado' => ['required', 'string', 'max:25'],
             'desc_noticia' => ['required', 'string', 'max:150'],
@@ -49,41 +41,31 @@ class NoticiasController extends Controller
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
-        // Sin uso [valida que no se repita]
-        // if (Noticia::where('', '=', $request->get(''))->first()) {
-        //     return redirect('trayecto')->with('registrada', 'Aula ocupada');
+        // Evita duplicidad
+        // if (Noticia::where('desc_noticia', '=', $request->get('desc_noticia'))->first()) {
+        //     return redirect('noticias')->with('registrado', 'registrado');
         // }
 
-        $noticia = new Noticia();
-        $noticia->encabezado = request('encabezado');
-        $noticia->desc_noticia = request('desc_noticia');
-        $noticia->mostrar = request('mostrar');
-        $noticia->save();
+        // Guarda el trayecto
+        Noticia::create([
+            'encabezado' => $request->get('encabezado'),
+            'desc_noticia' => $request->get('desc_noticia'),
+            'mostrar' => $request->get('mostrar'),
+        ]);
 
         return redirect('noticias')->with('creado', 'El aula fue encontrada exitosamente');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        // Trae la noticia correspondiente
         $noticia = Noticia::find($id);
         return view('aside.informacion.noticias.edit', compact('noticia'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'encabezado' => ['required', 'string', 'max:25'],
             'desc_noticia' => ['required', 'string', 'max:150'],
@@ -99,8 +81,13 @@ class NoticiasController extends Controller
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
-        $informacion = request()->except(['_token', '_method']);
-        Noticia::where('id', '=', $id)->update($informacion);
+        // Busca y actualiza
+        Noticia::find($id)->update([
+            'encabezado' => $request->get('encabezado'),
+            'desc_noticia' => $request->get('desc_noticia'),
+            'mostrar' => $request->get('mostrar'),
+        ]);
+
         return redirect('noticias')->with('actualizado', 'Aula actualizada exitosamente');
     }
 }

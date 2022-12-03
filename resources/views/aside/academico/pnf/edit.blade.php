@@ -30,10 +30,25 @@
                     <div class="form-group required mb-3">
                         <label for="nom_pnf" class="control-label">Nombre</label>
                         <input type="text" name="nom_pnf" id="nom_pnf"
-                            class="form-control @error('nom_pnf') is-invalid @enderror" value="{{ __($pnf->nom_pnf) }}"
+                            class="form-control @error('nom_pnf') is-invalid @enderror" value="{{ $pnf->nom_pnf }}"
                             placeholder="{{ __('Nombre del pnf') }}" autofocus required>
 
                         @error('nom_pnf')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    {{-- Código --}}
+                    <div class="form-group mb-3">
+                        <label for="cod_pnf">Código</label>
+                        <input type="text" name="cod_pnf" id="cod_pnf"
+                            class="form-control @error('cod_pnf') is-invalid @enderror"
+                            value="{{ $pnf->cod_pnf }}" placeholder="{{ __('Código del PNF') }}"
+                            autofocus>
+
+                        @error('cod_pnf')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

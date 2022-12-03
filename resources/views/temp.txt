@@ -1,0 +1,46 @@
+@if ($message = session('creado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡PNF registrado!',
+                html: 'Un nuevo PNF ha sido añadido.',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('error'))
+            let timerInterval
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+            $('#pnf').modal('show')
+        @elseif ($message = session('registrado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'El PNF ya se encuentra registrado.',
+                confirmButtonColor: '#17a2b8',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('actualizado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Datos actualizados!',
+                html: 'El PNF ha sido actualizado.',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @endif

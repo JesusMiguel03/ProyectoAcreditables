@@ -43,9 +43,4 @@ class Profesor extends Model
     {
         return $this->belongsTo(Pnf::class, 'departamento_id', 'id');
     }
-
-    // public function conocimiento()
-    // {
-    //     return $this->belongsToMany(Area_conocimiento::class, 'profesor_especialidad', 'profesor_id', 'area_conocimiento_id');
-    // }
 }

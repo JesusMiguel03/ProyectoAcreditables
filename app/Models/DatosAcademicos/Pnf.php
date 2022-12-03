@@ -12,6 +12,8 @@ class Pnf extends Model
 
     public $table = 'pnf';
 
+    protected $fillable = ['nom_pnf', 'cod_pnf'];
+
     public function estudiante()
     {
         return $this->belongsTo(Estudiante::class, 'pnf_id');

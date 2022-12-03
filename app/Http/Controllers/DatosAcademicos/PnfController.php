@@ -11,87 +11,77 @@ class PnfController extends Controller
 {
     public function __construct()
     {
+        // Validación de autenticación y permiso
         $this->middleware('auth');
         $this->middleware('can:pnf');
     }
 
-    /*
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
     public function index()
     {
+        // Lista todos los pnf
         $pnfs = Pnf::all();
         return view('aside.academico.pnf.index', compact('pnfs'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'nom_pnf' => ['required', 'string', 'max:40'],
+            'cod_pnf' => ['max:6'],
         ], [
-            'nom_pnf.required' => 'El campo nombre del pnf es necesario.',
-            'nom_pnf.string' => 'El campo nombre del pnf debe ser texto.',
-            'nom_pnf.max' => 'El campo nombre del pnf no puede contener mas de :max carácteres.'
+            'nom_pnf.required' => 'El campo nombre es necesario.',
+            'nom_pnf.string' => 'El campo nombre debe ser una oración.',
+            'cod_pnf.max' => 'El campo códogp no puede contener mas de :max carácteres.'
         ]);
 
         if ($validador->fails()) {
             return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
         }
 
+        // Evita duplicidad
         if (Pnf::where('nom_pnf', '=', $request->get('nom_pnf'))->first()) {
-            return redirect('pnf')->with('registrada', 'Aula ocupada');
+            return redirect('pnf')->with('registrado', 'registrado');
         }
 
-        $pnf = new Pnf();
-        $pnf->nom_pnf = request('nom_pnf');
-        $pnf->save();
+        // Guarda el pnf
+        Pnf::create([
+            'nom_pnf' => $request->get('nom_pnf'),
+            'cod_pnf' => $request->get('cod_pnf') === null ? '?' : $request->get('cod_pnf')
+        ]);
 
-        return redirect('pnf')->with('creado', 'El aula fue encontrada exitosamente');
+        return redirect('pnf')->with('creado', 'creado');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        // Trea el pnf correspondiente
         $pnf = Pnf::find($id);
         return view('aside.academico.pnf.edit', compact('pnf'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'nom_pnf' => ['required', 'string', 'max:40'],
+            'cod_pnf' => ['max:6'],
         ], [
             'nom_pnf.required' => 'El campo nombre es necesario.',
-            'nom_pnf.string' => 'El campo nombre debe ser texto.',
-            'nom_pnf.max' => 'El campo nombre del pnf no puede contener mas de :max carácteres.'
+            'nom_pnf.string' => 'El campo nombre debe ser una oración.',
+            'cod_pnf.max' => 'El campo códogp no puede contener mas de :max carácteres.'
         ]);
 
         if ($validador->fails()) {
-            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
+            return redirect()->back()->with('error', $validador->errors()->getMessages())->withErrors($validador)->withInput();
         }
 
-        $informacion = request()->except(['_token', '_method']);
-        Pnf::where('id', '=', $id)->update($informacion);
-        return redirect('pnf')->with('actualizado', 'Aula actualizada exitosamente');
+        // Busca y actualiza
+        Pnf::find($id)->update([
+            'nom_pnf' => $request->get('nom_pnf'), 
+            'cod_pnf' => $request->get('cod_pnf') === null ? '?' : $request->get('cod_pnf')
+        ]);
+
+        return redirect('pnf')->with('actualizado', 'actualizado');
     }
 }

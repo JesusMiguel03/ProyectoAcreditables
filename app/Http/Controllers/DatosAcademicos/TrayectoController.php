@@ -11,29 +11,21 @@ class TrayectoController extends Controller
 {
     public function __construct()
     {
+        // Validación de autenticación y permiso
         $this->middleware('auth');
         $this->middleware('can:trayecto');
     }
 
-    /*
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
     public function index()
     {
+        // Lista todos los trayectos
         $trayectos = Trayecto::all();
         return view('aside.academico.trayecto.index', compact('trayectos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'num_trayecto' => ['required', 'integer'],
         ], [
@@ -46,37 +38,25 @@ class TrayectoController extends Controller
         }
 
         if (Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))->first()) {
-            return redirect('trayecto')->with('registrada', 'Aula ocupada');
+            return redirect('trayecto')->with('registrado', 'registrado');
         }
 
-        $trayecto = new Trayecto();
-        $trayecto->num_trayecto = request('num_trayecto');
-        $trayecto->save();
+        // Guarda el trayecto
+        Trayecto::create(['num_trayecto' => $request->get('num_trayecto')]);
 
-        return redirect('trayecto')->with('creado', 'El aula fue encontrada exitosamente');
+        return redirect('trayecto')->with('creado', 'creado');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        // Trae el trayecto correspondiente
         $trayecto = Trayecto::find($id);
         return view('aside.academico.trayecto.edit', compact('trayecto'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'num_trayecto' => ['required', 'integer'],
         ], [
@@ -88,12 +68,11 @@ class TrayectoController extends Controller
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
-        if (Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))->first()) {
-            return redirect('trayecto')->with('registrada', 'Aula ocupada');
-        }
+        // Busca y actualiza
+        Trayecto::find($id)->update([
+            'num_trayecto' => $request->get('num_trayecto')
+        ]);
 
-        $informacion = request()->except(['_token', '_method']);
-        Trayecto::where('id', '=', $id)->update($informacion);
-        return redirect('trayecto')->with('actualizado', 'Aula actualizada exitosamente');
+        return redirect('trayecto')->with('actualizado', 'actualizado');
     }
 }

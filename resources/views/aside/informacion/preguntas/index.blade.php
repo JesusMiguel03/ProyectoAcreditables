@@ -129,12 +129,12 @@
                         <tbody>
                             @foreach ($preguntas as $pregunta)
                                 <tr>
-                                    <th>{{ $pregunta->titulo }}</th>
-                                    <th>{{ $pregunta->explicacion }}</th>
-                                    <th><a href="{{ route('preguntas.edit', $pregunta->id) }}" class="btn btn-primary">
+                                    <td>{{ $pregunta->titulo }}</td>
+                                    <td>{{ $pregunta->explicacion }}</td>
+                                    <td><a href="{{ route('preguntas.edit', $pregunta->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                    </th>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -208,19 +208,8 @@
             Swal.fire({
                 icon: 'success',
                 title: 'Pregunta registrada!',
-                html: 'Una posible duda sera aclarada.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('actualizado'))
-            let timerInterval
-            Swal.fire({
-                icon: 'success',
-                title: 'Pregunta actualizada!',
-                html: 'El nombre o explicacion ha sido actualizado.',
-                confirmButtonColor: '#6c757d',
+                html: 'Una nueva pregunta ha sido añadido.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -229,9 +218,32 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Pregunta no guardada!',
-                html: 'Uno de los campos es incorrecto, verifique que los campos cumplan las condiciones.',
-                confirmButtonColor: '#6c757d',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+            $('#pregunta').modal('show')
+        @elseif ($message = session('registrado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'La pregunta ya se encuentra registrada.',
+                confirmButtonColor: '#17a2b8',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('actualizado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Datos actualizados!',
+                html: 'La pregunta ha sido actualizada.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },

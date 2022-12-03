@@ -149,22 +149,23 @@
 
 @section('content')
     {{-- Vista estudiante/profesor --}}
-    @if (Auth::user()->getRoleNames()[0] !== 'Coordinador')
+    @if (Auth::user()->getRoleNames()[0] === 'Estudiante')
         @if (empty(Auth::user()->estudiante))
             <div class="col-md-4 col-sm-12 mx-auto">
                 <section class="card">
                     <header class="card-header bg-secondary">
-                        <h5 class="mx-auto text-center" id="exampleModalLongTitle">¡Aún no terminas tu perfil
-                            académico!</h5>
+                        <h5 class="mx-auto text-center" id="exampleModalLongTitle">Su perfil académico se encuentra
+                            incompleto</h5>
                     </header>
 
                     <main class="card-body p-4 text-justify">
-                        Dirigete al ícono o avatar al lado de tu nombre, perfil y coloca el pnf que estés cursando y
-                        trayecto para acceder a las materias.
+                        <p>Verifique en su perfil (<span class="text-info">haga clic en la imagen al lado de su nombre,
+                                perfil</span>) y revise si en el apartado "Perfil académico" se encuentra su información, en
+                            caso contrario comuníquese con el coordinador para completar su perfil.</p>
                     </main>
 
                     <footer class="card-footer">
-                        <a href="{{ route('perfil.index') }}" class="btn btn-primary btn-block px-5">Ver perfil</a>
+                        <p class="text-justify">Nos disculpamos por los inconvenientes.</p>
                     </footer>
                 </section>
             </div>
@@ -256,7 +257,8 @@
                                 <td class="text-justify">{{ $materia->desc_materia }}</td>
                                 <td>{{ $materia->num_acreditable }}</td>
                                 <td>
-                                    <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary {{ $materia->cupos_disponibles === 0 ? 'disabled' : '' }}">
+                                    <a href="{{ route('materias.show', $materia) }}"
+                                        class="btn btn-primary {{ Popper::pop('Ver materia!') }}">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>
@@ -338,13 +340,47 @@
         @endif
 
         {{-- Vista coordinador --}}
+    @elseif (Auth::user()->getRoleNames()[0] === 'Profesor')
+        <div class="card table-responsive-sm p-3 mt-1 mb-3 col-12">
+            <table id='tabla' class="table table-striped">
+                <thead>
+                    <tr class="bg-secondary">
+                        <th>Nombre</th>
+                        <th>Cupos disponibles</th>
+                        <th>Estado</th>
+                        <th>Descripción</th>
+                        <th>Acreditable</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($materias as $materia)
+                        @if (Auth::user()->profesor->id === $materia->info->profesor->id)
+                            <tr>
+                                <td>{{ $materia->nom_materia }}</td>
+                                <td>{{ $materia->cupos_disponibles }}</td>
+                                <td>{{ $materia->estado_materia }}</td>
+                                <td class="text-justify">{{ $materia->desc_materia }}</td>
+                                <td>{{ $materia->num_acreditable }}</td>
+                                <td>
+                                    <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary"
+                                        {{ Popper::arrow()->pop('Ver materia') }}>
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @else
         <div class="card table-responsive-sm p-3 mt-1 mb-3 col-12">
             <table id='tabla' class="table table-striped">
                 <thead>
                     <tr class="bg-secondary">
                         <th>Nombre</th>
-                        <th>Cupos</th>
+                        <th>Cupos disponibles</th>
                         <th>Estado</th>
                         <th>Descripción</th>
                         <th>Acreditable</th>
@@ -355,20 +391,28 @@
                     @foreach ($materias as $materia)
                         <tr>
                             <td>{{ $materia->nom_materia }}</td>
-                            <td>{{ $materia->cupos }}</td>
+                            <td>{{ $materia->cupos_disponibles }}</td>
                             <td>{{ $materia->estado_materia }}</td>
                             <td class="text-justify">{{ $materia->desc_materia }}</td>
                             <td>{{ $materia->num_acreditable }}</td>
                             <td>
-                                <a href="{{ route('materias.edit', $materia) }}" class="btn btn-primary">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary">
+                                @can('materias.gestion')
+                                    <a href="{{ route('materias.edit', $materia) }}" class="btn btn-primary"
+                                        {{ Popper::arrow()->pop('Editar materia') }}>
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                @endcan
+                                <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary"
+                                    {{ Popper::arrow()->pop('Ver materia') }}>
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('preinscribir', $materia->id) }}" class="btn btn-primary">
-                                    <i class="fas fa-id-badge"></i>
-                                </a>
+                                @can('materias.gestion')
+                                    <a href="{{ route('preinscribir', $materia->id) }}"
+                                        class="btn btn-primary {{ $materia->cupos_disponibles === 0 ? 'disabled' : '' }}"
+                                        {{ Popper::arrow()->pop('Inscribir estudiantes') }}>
+                                        <i class="fas fa-id-badge"></i>
+                                    </a>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
@@ -411,9 +455,9 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: '¡Cambio exitoso!',
-                html: 'Materia editada correctamente.',
-                confirmButtonColor: '#6c757d',
+                title: '¡Registro actualizado!',
+                html: 'La materia ha sido actualizad correctamente.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -422,9 +466,9 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: '¡Materia añadida!',
-                html: 'Materia registrada correctamente.',
-                confirmButtonColor: '#6c757d',
+                title: '¡Materia registrada!',
+                html: 'Una nueva materia ha sido añadida.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -433,9 +477,21 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: '¡No se pudo registrar!',
-                html: 'Uno de los campos no cumple los requisitos.',
-                confirmButtonColor: '#6c757d',
+                title: '¡Error al registrar!',
+                html: 'Uno de los campos parece estar mal.',
+                confirmButtonColor: '#dc3545',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+            $('materias').modal('show')
+        @elseif ($message = session('inexistente'))
+            let timerInterval
+            Swal.fire({
+                icon: 'error',
+                title: '¡Materia no encontrada!',
+                html: 'La materia a la que intenta acceder no existe.',
+                confirmButtonColor: '#dc3545',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -446,7 +502,7 @@
                 icon: 'success',
                 title: '¡Te has registrado exitosamente!',
                 html: 'Ahora podrás cursar la materia preinscrita, pero recuerda llevar tu comprobante de preinscripción a la Coordinación de Acreditables para ser validado.',
-                confirmButtonColor: '#6c757d',
+                confirmButtonColor: '#007bff',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },

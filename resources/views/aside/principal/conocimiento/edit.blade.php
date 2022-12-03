@@ -7,7 +7,8 @@
         <div class="col-6">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('conocimiento.index') }}" class="link-muted">Áreas de conocimiento</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('conocimiento.index') }}" class="link-muted">Áreas de
+                        conocimiento</a></li>
                 <li class="breadcrumb-item active"><a href="">Área de conocimiento</a></li>
             </ol>
         </div>
@@ -18,7 +19,7 @@
     <div class="col-md-6 col-sm-12 mx-auto mt-3">
         <div class="card">
             <header class="card-header bg-primary">
-                <h5>Editar área</h5>
+                <h5>Editar área de conocimiento</h5>
             </header>
 
             <main class="card-body">
@@ -27,12 +28,12 @@
                     {{ method_field('PUT') }}
 
                     {{-- Campo de nombre --}}
-                    <div class="form-group mb-3">
-                        <label for="nom_especialidad">Nombre</label>
+                    <div class="form-group required mb-3">
+                        <label for="nom_especialidad" class="control-label">Nombre</label>
                         <input type="text" name="nom_especialidad"
                             class="form-control @error('nom_especialidad') is-invalid @enderror"
                             value="{{ $especialidad->nom_especialidad }}"
-                            placeholder="{{ __('Nombre de la especialidad') }}" autofocus>
+                            placeholder="{{ __('Nombre de la especialidad') }}" autofocus required>
 
                         @error('nom_especialidad')
                             <span class="invalid-feedback" role="alert">
@@ -42,16 +43,22 @@
                     </div>
 
                     {{-- Campo de descripción --}}
-                    <div class="form-group mb-3">
-                        <label for="desc_especialidad">Nombre</label>
+                    <div class="form-group required mb-3">
+                        <label for="desc_especialidad" class="control-label">Descripción</label>
                         <textarea name="desc_especialidad" class="form-control @error('desc_especialidad') is-invalid @enderror"
-                            placeholder="{{ __('Descripción') }}" autofocus style="min-height: 9rem; resize: none">{{ $especialidad->desc_especialidad }}</textarea>
+                            placeholder="{{ __('Descripción') }}" autofocus style="min-height: 9rem; resize: none" required>{{ $especialidad->desc_especialidad }}</textarea>
 
                         @error('desc_especialidad')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: -10px">
+                        <p class="pl-2 text-danger"><strong>Nota:</strong> (*) Indica los campos que
+                            son obligatorios.
+                        </p>
                     </div>
 
                     {{-- Botón de registrar --}}
@@ -70,4 +77,16 @@
             </main>
         </div>
     </div>
+@stop
+
+@section('css')
+    <style>
+        .form-group.required .control-label:after {
+            color: #d00;
+            content: "*";
+            position: absolute;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+    </style>
 @stop

@@ -461,6 +461,8 @@
             <thead>
                 <tr class="bg-secondary">
                     <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Cédula</th>
                     <th>Área de conocimiento</th>
                     <th>Telefono</th>
                     <th>Estado</th>
@@ -470,15 +472,19 @@
             <tbody>
                 @foreach ($profesores as $profesor)
                     <tr>
-                        <td>{{ $profesor->usuario->nombre }} {{ $profesor->usuario->apellido }}</td>
+                        <td>{{ $profesor->usuario->nombre }}</td>
+                        <td>{{ $profesor->usuario->apellido }}</td>
+                        <td>{{ 'V-' . number_format($profesor->usuario->cedula, 0, ',', '.') }}</td>
                         <td>{{ $profesor->conocimiento->nom_especialidad }}</td>
-                        <td>{{ substr($profesor->telefono, 0, 4) . ' ' . substr($profesor->telefono, 4) }}</td>
+                        <td>{{ substr($profesor->telefono, 0, 4) . '-' . substr($profesor->telefono, 4) }}</td>
                         <td>{{ $profesor->estado_profesor === 1 ? 'Activo' : 'Inactivo' }}</td>
                         <td>
-                            <a href="{{ route('profesores.edit', $profesor) }}" class="btn btn-primary">
+                            <a href="{{ route('profesores.edit', $profesor) }}" class="btn btn-primary"
+                                {{ Popper::arrow()->pop('Editar') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="{{ route('profesores.show', $profesor) }}" class="btn btn-primary">
+                            <a href="{{ route('profesores.show', $profesor) }}" class="btn btn-primary"
+                                {{ Popper::arrow()->pop('Ver perfil') }}>
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
@@ -527,42 +533,9 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: '¡Profesor disponible!',
-                html: 'Un nuevo facilitador ahora puede dictar una acreditable.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('existente'))
-            let timerInterval
-            Swal.fire({
-                icon: 'error',
-                title: '¡Perfil de profesor ya registrado!',
-                html: 'El usuario al que intenta asignar ya es profesor.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('actualizado'))
-            let timerInterval
-            Swal.fire({
-                icon: 'success',
-                title: '¡Perfil actualizado!',
-                html: 'El perfil del profesor se encuentra al dia.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('registrado'))
-            let timerInterval
-            Swal.fire({
-                icon: 'success',
-                title: 'Usuario registrado!',
-                html: 'El usuario fue registrado.',
-                confirmButtonColor: '#6c757d',
+                title: '¡Profesor registado!',
+                html: 'Un nuevo PNF ha sido añadido.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -571,13 +544,59 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: '¡Hubo un problema!',
-                html: 'Parece que uno de los campos no cumple los requisitos.',
-                confirmButtonColor: '#6c757d',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
             })
+            $('#profesor').modal('show')
+        @elseif ($message = session('registrado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'El profesor ya se encuentra registrado.',
+                confirmButtonColor: '#17a2b8',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('registrarUsuarioProfesor'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: 'Usuario registrado',
+                html: 'Un perfil de profesor ha sido registrado, para completar su perfil académico vaya al botón "Asignar profesor".',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('actualizado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Datos actualizados!',
+                html: 'Los datos del profesor han sido actualizados.',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('mostrarUsuario'))
+            let timerInterval
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+            $('#registrar').modal('show')
         @endif
     </script>
 @stop

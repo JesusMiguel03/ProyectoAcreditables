@@ -35,7 +35,8 @@
                             @else
                                 @foreach ($no_preinscritos as $no_preinscrito)
                                     <option value="{{ $no_preinscrito->id }}">{{ $no_preinscrito->usuarios->nombre }}
-                                        {{ $no_preinscrito->usuarios->apellido }} - {{ $no_preinscrito->usuarios->cedula }}
+                                        {{ $no_preinscrito->usuarios->apellido }} 
+                                        [{{ 'V-' . number_format($no_preinscrito->usuarios->cedula, 0, ',', '.') }}]
                                     </option>
                                 @endforeach
                             @endif
@@ -44,19 +45,8 @@
 
                     <div class="form-group required mb-3">
                         <label for="materia_id" class="control-label">Materia</label>
-                        <select name="materia_id" class="form-control">
-                            @if (empty($materias))
-                                <option value="0" readonly>No hay materias disponibles</option>
-                            @else
-                                @foreach ($materias as $materia)
-                                    @if ($materia->cupos_disponibles !== 0)
-                                        <option value="{{ $materia->id }}">{{ $materia->nom_materia }}</option>
-                                    @else
-                                        <option value="0" readonly>No hay materias con cupos disponibles</option>
-                                    @endif
-                                @endforeach
-                            @endif
-                        </select>
+                        <input type="text" class="d-hidden" name="materia_id" value="{{ $materia->id }}" hidden>
+                        <input type="text" class="form-control" value="{{ $materia->nom_materia }}" disabled readonly>
                     </div>
 
                     <div class="form-group" style="margin-bottom: -10px">
@@ -75,11 +65,22 @@
                         </div>
 
                         <div class="col-6">
-                            <button type="submit" class="btn btn-block btn-success"
-                                {{ empty($materias[0]->cupos_disponibles) || empty($no_preinscritos) ? 'disabled' : '' }}>
+                            <button type="submit" class="btn btn-block btn-success" {{ empty($no_preinscritos) ? 'disabled' : '' }}>
                                 <i class="fas fa-save mr-2"></i>
                                 {{ __('Guardar') }}
                             </button>
+                            
+                            {{-- @foreach ($materias as $materia)
+                                @if ($loop->first)
+                                    @if ($materia->cupos_disponibles > 0 && !empty($no_preinscritos))
+                                    @else
+                                        <button class="btn btn-block btn-success" disabled>
+                                            <i class="fas fa-save mr-2"></i>
+                                            {{ __('Guardar') }}
+                                        </button>
+                                    @endif
+                                @endif
+                            @endforeach --}}
                         </div>
                     </div>
                 </form>

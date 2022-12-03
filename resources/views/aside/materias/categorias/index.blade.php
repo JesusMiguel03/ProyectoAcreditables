@@ -80,12 +80,12 @@
             <tbody>
                 @foreach ($categorias as $categoria)
                     <tr>
-                        <th>{{ $categoria->nom_categoria }}</th>
-                        <th>
-                            <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-primary">
+                        <td>{{ $categoria->nom_categoria }}</td>
+                        <td>
+                            <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
-                        </th>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

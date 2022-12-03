@@ -1,23 +1,23 @@
 <?php
 
+
 use App\Http\Controllers\Coordinador\EspecialidadController;
 use App\Http\Controllers\Coordinador\ProfesorController;
 use App\Http\Controllers\Coordinador\RegistrarEstudianteController;
 use App\Http\Controllers\Coordinador\RegistrarProfesorController;
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\Coordinador\UsuarioController;
 use App\Http\Controllers\Materia\CategoriaController;
 use App\Http\Controllers\Materia\PreinscripcionController;
 use App\Http\Controllers\DatosAcademicos\PnfController;
 use App\Http\Controllers\DatosAcademicos\TrayectoController;
-use App\Http\Controllers\Estudiante\AsistenciaController;
 use App\Http\Controllers\Estudiante\EstudianteController;
 use App\Http\Controllers\Informacion\InicioController;
 use App\Http\Controllers\Informacion\NoticiasController;
 use App\Http\Controllers\Informacion\PreguntasFrecuentesController;
+use App\Http\Controllers\Materia\AsistenciaController as MateriaAsistenciaController;
 use App\Http\Controllers\Materia\MateriaController;
 use App\Http\Controllers\PerfilController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,11 +58,6 @@ Route::resource('/categoria', CategoriaController::class)->middleware('prevent-b
     'create', 'show', 'destroy'
 ]);
 
-// Horario
-// Route::resource('/horario', HorarioController::class)->except([
-//     'create', 'show', 'destroy'
-// ]);
-
 // Especialidad
 Route::resource('/conocimiento', EspecialidadController::class)->middleware('prevent-back-history')->except([
     'create', 'show', 'destroy'
@@ -74,12 +69,10 @@ Route::resource('/profesores', ProfesorController::class)->middleware('prevent-b
 ]);
 Route::post('/registrar-profesor', [RegistrarProfesorController::class, 'store'])->middleware('prevent-back-history')->name('registrar-profesor');
 
-// Trayecto
+// Datos académicos
 Route::resource('/trayecto', TrayectoController::class)->middleware('prevent-back-history')->except([
     'create', 'show', 'destroy'
 ]);
-
-// Pnf
 Route::resource('/pnf', PnfController::class)->middleware('prevent-back-history')->except([
     'create', 'show', 'destroy'
 ]);
@@ -110,7 +103,6 @@ Route::post('/invalidar', [PreinscripcionController::class, 'invalidar'])->middl
 Route::get('/preinscribir/{id}', [PreinscripcionController::class, 'preinscribir'])->middleware('prevent-back-history')->name('preinscribir');
 
 // Asistencia
-Route::post('/asistencia', [AsistenciaController::class, 'asistencia'])->middleware('prevent-back-history')->name('asistencia');
-
-// Especialidades profesor
-// Route::get('/profesores/especialidades/{id}', EspecialidadesProfesorController::class)->middleware('prevent-back-history')->name('especialidades');
+Route::get('/asistencia', [MateriaAsistenciaController::class, 'index'])->middleware(['prevent-back-history'])->name('asistencia');
+Route::get('/asistencia/{id}', [MateriaAsistenciaController::class, 'edit'])->middleware(['prevent-back-history'])->name('asistencia-ver');
+Route::post('/asistencia/actualizar', [MateriaAsistenciaController::class, 'update'])->middleware(['prevent-back-history'])->name('asistencia-actualizar');

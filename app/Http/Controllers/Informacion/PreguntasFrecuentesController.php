@@ -9,25 +9,23 @@ use Illuminate\Support\Facades\Validator;
 
 class PreguntasFrecuentesController extends Controller
 {
-    /*
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
+    public function __construct()
+    {
+        // Valida la autenticación y los permisos
+        $this->middleware('auth');
+        $this->middleware('can:noticias.create')->except('index');
+    }
+
     public function index()
     {
+        // Lista todas las preguntas
         $preguntas = Preguntas_frecuentes::all();
         return view('aside.informacion.preguntas.index', compact('preguntas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'titulo' => ['required', 'string', 'max:30'],
             'explicacion' => ['required', 'string', 'max:255'],
@@ -44,35 +42,30 @@ class PreguntasFrecuentesController extends Controller
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
-        $pregunta = new Preguntas_frecuentes();
-        $pregunta->titulo = request('titulo');
-        $pregunta->explicacion = request('explicacion');
-        $pregunta->save();
+        // Evita duplicidad
+        if (Preguntas_frecuentes::where('titulo', '=', $request->get('titulo'))->first()) {
+            return redirect('preguntas-frecuentes')->with('registrado', 'registrado');
+        }
 
-        return redirect('preguntas-frecuentes')->with('creado', 'El aula fue encontrada exitosamente');
+        // Guarda la pregunta
+        Preguntas_frecuentes::create([
+            'titulo' => $request->get('titulo'),
+            'explicacion' => $request->get('explicacion')
+        ]);
+
+        return redirect('preguntas-frecuentes')->with('creado', 'creado');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        // Trae la pregunta correspondiente
         $pregunta = Preguntas_frecuentes::find($id);
         return view('aside.informacion.preguntas.edit', compact('pregunta'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        // Valida los campos
         $validador = Validator::make($request->all(), [
             'titulo' => ['required', 'string', 'max:30'],
             'explicacion' => ['required', 'string', 'max:255'],
@@ -85,8 +78,12 @@ class PreguntasFrecuentesController extends Controller
             return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
         }
 
-        $informacion = request()->except(['_token', '_method']);
-        Preguntas_frecuentes::where('id', '=', $id)->update($informacion);
-        return redirect('preguntas-frecuentes')->with('actualizado', 'Aula actualizada exitosamente');
+        // Busca y actualiza
+        Preguntas_frecuentes::find($id)->update([
+            'titulo' => $request->get('titulo'),
+            'explicacion' => $request->get('explicacion')
+        ]);
+
+        return redirect('preguntas-frecuentes')->with('actualizado', 'actualizado');
     }
 }

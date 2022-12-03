@@ -204,6 +204,7 @@
                 <tr class="bg-secondary">
                     <th>Nombre</th>
                     <th>Apellido</th>
+                    <th>Cédula</th>
                     <th>PNF</th>
                     <th>Trayecto</th>
                     <th>Acciones</th>
@@ -214,10 +215,13 @@
                     <tr>
                         <td>{{ $estudiante->nombre }}</td>
                         <td>{{ $estudiante->apellido }}</td>
-                        <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->pnf->nom_pnf  : 'Sin asignar' }}</td>
-                        <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->trayecto->num_trayecto  : 'Sin asignar' }}</td>
+                        <td>{{ 'V-' . number_format($estudiante->cedula, 0, ',', '.') }}</td>
+                        <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->pnf->nom_pnf : 'Sin asignar' }}
+                        </td>
+                        <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->trayecto->num_trayecto : 'Sin asignar' }}
+                        </td>
                         <td>
-                            <a href="{{ route('coordinador.usuarios.edit', $estudiante) }}" class="btn btn-primary">
+                            <a href="{{ route('coordinador.usuarios.edit', $estudiante) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar perfil') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
@@ -251,9 +255,32 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: '¡Cambio exitoso!',
-                html: 'El rol ha sido actualizado correctamente.',
-                confirmButtonColor: '#6c757d',
+                title: '¡Estudiante registrado!',
+                html: 'Un nuevo estudiante ha sido añadido.',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('error'))
+            let timerInterval
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+            $('#registrar').modal('show')
+        @elseif ($message = session('registrado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'El estudiante ya se encuentra registrado.',
+                confirmButtonColor: '#17a2b8',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -263,41 +290,8 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
-                html: 'El rol ha sido actualizado correctamente.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('incorrecto'))
-            let timerInterval
-            Swal.fire({
-                icon: 'warning',
-                title: '¡Debes crear un perfil de profesor primero!',
-                html: 'Antes de asignar las especialidades del educador primero debes registrar su perfil educativo.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('registrado'))
-            let timerInterval
-            Swal.fire({
-                icon: 'success',
-                title: 'Usuario registrado!',
-                html: 'El usuario fue registrado.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('error'))
-            let timerInterval
-            Swal.fire({
-                icon: 'error',
-                title: '¡Hubo un problema!',
-                html: 'Parece que uno de los campos no cumple los requisitos.',
-                confirmButtonColor: '#6c757d',
+                html: 'Los datos del estudiante han sido actualizados.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },

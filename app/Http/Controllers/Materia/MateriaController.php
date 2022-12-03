@@ -14,6 +14,7 @@ use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
 use App\Models\Profesor\Profesor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator as ValidationValidator;
 
 class MateriaController extends Controller
@@ -97,6 +98,10 @@ class MateriaController extends Controller
     {
         // Busca la id del curso
         $materia = Materia::find($id);
+
+        if (!$materia) {
+            return redirect()->back()->with('inexistente', 'inexistente');
+        }
 
         // Trae a todos los estudiantes inscritos
         $estudiantes = Estudiante::all();

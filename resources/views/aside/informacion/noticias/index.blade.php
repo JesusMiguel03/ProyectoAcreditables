@@ -115,13 +115,13 @@
                     <tbody>
                         @foreach ($noticias as $noticia)
                             <tr>
-                                <th>{{ $noticia->encabezado }}</th>
-                                <th>{{ $noticia->desc_noticia }}</th>
-                                <th>{{ $noticia->mostrar === 0 ? 'Inactivo' : 'Activo' }}</th>
-                                <th><a href="{{ route('noticias.edit', $noticia->id) }}" class="btn btn-primary">
+                                <td>{{ $noticia->encabezado }}</td>
+                                <td>{{ $noticia->desc_noticia }}</td>
+                                <td>{{ $noticia->mostrar === 0 ? 'Inactivo' : 'Activo' }}</td>
+                                <td><a href="{{ route('noticias.edit', $noticia->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                </th>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -154,20 +154,9 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: '¡Noticia registrada!',
-                html: 'Una nueva noticia aparecera en la vista de estudiante.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('actualizado'))
-            let timerInterval
-            Swal.fire({
-                icon: 'success',
-                title: '¡Noticia actualizada!',
-                html: 'La noticia ha cambiado sus datos.',
-                confirmButtonColor: '#6c757d',
+                title: 'Noticia registrado!',
+                html: 'Una nueva noticia ha sido añadida.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -176,9 +165,32 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: '¡Noticia no guardada!',
-                html: 'Uno de los campos es incorrecto, verifique que los campos cumplan las condiciones.',
-                confirmButtonColor: '#6c757d',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+            $('#noticia').modal('show')
+        @elseif ($message = session('registrado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'La noticia ya se encuentra registrada.',
+                confirmButtonColor: '#17a2b8',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('actualizado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Datos actualizados!',
+                html: 'La noticia ha sido actualizada.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },

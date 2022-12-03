@@ -331,17 +331,26 @@ return [
         ['hr'],
         ['header' => 'ACREDITABLES'],
         [
-            'text'        => 'Materias',
-            'url'         => '/materias',
-            'active'      => ['materias*'],
-            'icon'        => 'fas fa-th-large',
-            'can'         => 'materias',
-        ],
-        [
             'text'        => 'Gestionar',
             'icon'        => 'fas fa-folder',
-            'can'         => 'materias.gestion',
+            'can'         => 'asistencia',
             'submenu'       => [
+                [
+                    'text'        => 'Materias',
+                    'shift'       => 'ml-1',
+                    'url'         => '/materias',
+                    'active'      => ['materias*'],
+                    'icon'        => 'fas fa-th-large',
+                    'can'         => 'materias',
+                ],
+                [
+                    'text'        => 'Categorias',
+                    'shift'       => 'ml-1',
+                    'url'         => '/categoria',
+                    'active'      => ['categoria*'],
+                    'can'         => 'categorias',
+                    'icon'        => 'fas fa-tags',
+                ],
                 [
                     'text'        => 'Materias',
                     'shift'       => 'ml-1',
@@ -351,12 +360,12 @@ return [
                     'icon'        => 'fas fa-th-large',
                 ],
                 [
-                    'text'        => 'Categorias',
+                    'text'        => 'Asistencias',
                     'shift'       => 'ml-1',
-                    'url'         => '/categoria',
-                    'active'      => ['categoria*'],
-                    'can'         => 'categorias',
-                    'icon'        => 'fas fa-tags',
+                    'url'         => '/asistencia',
+                    'active'      => ['asistencia*'],
+                    'can'         => 'asistencia',
+                    'icon'        => 'fas fa-calendar',
                 ],
             ],
         ],
@@ -385,17 +394,17 @@ return [
         ['hr'],
         ['header' => 'INFORMACIÓN'],
         [
-            'text'        => 'Acerca de',
-            'url'         => '/preguntas-frecuentes',
-            'active'      => ['preguntas-frecuentes*'],
-            'icon'        => 'fas fa-question-circle'
-        ],
-        [
             'text'        => 'Noticias',
             'url'         => '/noticias',
             'active'      => ['noticias*'],
             'icon'        => 'fas fa-exclamation-circle',
             'can'         => 'noticias.create'
+        ],
+        [
+            'text'        => 'Acerca de',
+            'url'         => '/preguntas-frecuentes',
+            'active'      => ['preguntas-frecuentes*'],
+            'icon'        => 'fas fa-question-circle'
         ],
     ],
 

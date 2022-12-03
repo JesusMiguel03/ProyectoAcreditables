@@ -73,60 +73,19 @@
                         <header class="card-header bg-primary">
                             <h5>Perfil académico</h5>
                         </header>
-                        <main class="card-body">
-                            <form action="{{ route('estudiante.store') }}" method="post">
-                                @csrf
-
-                                <input type="text" name="usuario" value="{{ Auth::user()->id }}" class="d-hide" hidden>
-
-                                {{-- Trayecto --}}
-                                <div class="form-group mb-3 px-2">
-                                    <label>Trayecto</label>
-                                    <select name="trayecto" class="form-control">
-                                        <option>Seleccione uno</option>
-                                        @foreach ($trayectos as $trayecto)
-                                            <option value="{{ $trayecto->id }}"
-                                                {{ !empty($usuario->estudiante) && $usuario->estudiante->trayecto_id === $trayecto->id ? 'selected' : '' }}>
-                                                {{ $trayecto->num_trayecto }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @error('trayecto')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                {{-- Pnf --}}
-                                <div class="form-group mb-3 px-2">
-                                    <label>PNF</label>
-                                    <select name="pnf" class="form-control">
-                                        <option>Seleccione uno</option>
-                                        @foreach ($pnfs as $pnf)
-                                            <option value="{{ $pnf->id }}"
-                                                {{ !empty($usuario->estudiante) && $usuario->estudiante->pnf_id === $pnf->id ? 'selected' : '' }}>
-                                                {{ $pnf->nom_pnf }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @error('pnf')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                {{-- Botones --}}
-                                <div class="row px-2">
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-block btn-outline-primary">
-                                            {{ __('Actualizar perfil ') }}
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </form>
+                        <main class="card-body" style="height: 15.625rem">
+                            <div class="form-group mb-3">
+                                <label>Trayecto</label>
+                                <input type="text" class="form-control"
+                                    value="{{ !empty(Auth::user()->estudiante) ? Auth::user()->estudiante->pnf->num_trayecto : 'Sin asignar' }}"
+                                    readonly disabled>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>PNF</label>
+                                <input type="text" class="form-control"
+                                    value="{{ !empty(Auth::user()->estudiante) ? Auth::user()->estudiante->pnf->nom_pnf : 'Sin asignar' }}"
+                                    readonly disabled>
+                            </div>
                         </main>
                     </div>
                 </div>
@@ -160,17 +119,40 @@
         @endcan
 
         {{-- Preinscripcion --}}
-        @if (!empty(Auth::user()->estudiante->preinscrito) && !empty(Auth::user()->estudiante->preinscrito->profesor))
-            <section class="col-4 p-2">
-                <a href="{{ route('comprobante') }}">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-danger"><i class="far fa-file-pdf"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text text-primary">Descargar comprobante</span>
+        @if (!empty(Auth::user()->estudiante->preinscrito))
+            @if (!empty(Auth::user()->estudiante->preinscrito->materia->profesor))
+                <section class="col-4 p-2">
+                    <a href="{{ route('comprobante') }}">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-danger"><i class="far fa-file-pdf"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text text-primary">Descargar comprobante</span>
+                            </div>
                         </div>
+                    </a>
+                </section>
+            @else
+                <div class="col-6">
+                    <div class="card">
+                        <main class="card-body">
+                            <p class="text-justify text-muted">Aún no se ha asignado un profesor a la materia escogida,
+                                comuníquese con el
+                                coordinador para notificarle.</p>
+                        </main>
                     </div>
-                </a>
-            </section>
+                </div>
+            @endif
+        @else
+            @can('preinscribir')
+                <div class="col-6">
+                    <div class="card">
+                        <main class="card-body">
+                            <p class="text-justify text-muted">No se encuentra registrado en ninguna materia.</p>
+                            <a href="{{ route('materias.index') }}">Ver materias</a>
+                        </main>
+                    </div>
+                </div>
+            @endcan
         @endif
     </div>
 

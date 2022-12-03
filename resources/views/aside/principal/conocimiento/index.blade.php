@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Acreditables | Especialidad')
+@section('title', 'Acreditables | Área de conocimiento')
 
 @section('content_header')
     <div class="row">
@@ -92,12 +92,12 @@
             <tbody>
                 @foreach ($especialidades as $especialidad)
                     <tr>
-                        <th>{{ $especialidad->nom_especialidad }}</th>
-                        <th>{{ $especialidad->desc_especialidad }}</th>
-                        <th><a href="{{ route('conocimiento.edit', $especialidad->id) }}" class="btn btn-primary">
+                        <td>{{ $especialidad->nom_especialidad }}</td>
+                        <td>{{ $especialidad->desc_especialidad }}</td>
+                        <td><a href="{{ route('conocimiento.edit', $especialidad->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
-                        </th>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -128,20 +128,9 @@
             let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: 'Registro exitoso!',
-                html: 'Una nueva área de conocimiento se puede asignar a los profesores.',
-                confirmButtonColor: '#6c757d',
-                customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('actualizado'))
-            let timerInterval
-            Swal.fire({
-                icon: 'success',
-                title: 'Registro actualizado!',
-                html: 'El área de conocimiento ahora se encuentra con otro nombre.',
-                confirmButtonColor: '#6c757d',
+                title: 'Área de conocimiento registrado!',
+                html: 'Un nuevo área de conocimiento ha sido añadida.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
@@ -150,9 +139,32 @@
             let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: '¡Hubo un problema!',
-                html: 'Parece que uno de los campos no cumple los requisitos.',
-                confirmButtonColor: '#6c757d',
+                title: 'Error al registrar',
+                html: 'Uno de los parámetros parece estar mal.',
+                confirmButtonColor: '#dc3545',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+            $('#especialidad').modal('show')
+        @elseif ($message = session('registrado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'info',
+                title: 'Ya fue registrado',
+                html: 'El área de conocimiento ya se encuentra registrada.',
+                confirmButtonColor: '#17a2b8',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('actualizado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Datos actualizados!',
+                html: 'El área de conocimiento ha sido actualizada.',
+                confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },

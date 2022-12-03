@@ -13,17 +13,24 @@ class RegistrarEstudianteController extends Controller
 {
     public function store(Request $request)
     {
-        Validator::make($request->all(), [
+        // Valida los campos
+        $validador = Validator::make($request->all(), [
             'nombre' => ['required', 'string', 'max:20'],
             'apellido' => ['required', 'string', 'max:20'],
             'cedula' => ['required', 'numeric', 'digits_between:7,8', 'unique:users'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', new Password, 'confirmed'],
         ], [
-            'cedula.digits_between' => 'La cedula debe estar entre los 7 y 8 dígitos.'
-        ])->validate();
+            'cedula.digits_between' => 'La cédula debe estar entre los 7 y 8 dígitos.',
+            'cedula.unique' => 'La cédula ya ha sido registrada.'
+        ]);
 
-        $estudiante = User::create([
+        if ($validador->fails()) {
+            return redirect()->back()->withInput()->withErrors($validador)->with('error', 'modal');
+        }
+
+        // Guarda al usuario como estudiante
+        User::create([
             'nombre' => $request->get('nombre'),
             'apellido' => $request->get('apellido'),
             'cedula' => $request->get('cedula'),
@@ -31,6 +38,6 @@ class RegistrarEstudianteController extends Controller
             'password' => Hash::make($request->get('password')),
         ])->assignRole('Estudiante');
 
-        return redirect()->back()->with('registrado', 'exito');
+        return redirect()->back()->with('creado', 'registrar');
     }
 }

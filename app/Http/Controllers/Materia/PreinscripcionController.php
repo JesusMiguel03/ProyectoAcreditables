@@ -23,8 +23,8 @@ class PreinscripcionController extends Controller
             }
         }
 
-        $materias = Materia::all();
-        return view('aside.materias.acreditables.preinscribir', compact('no_preinscritos', 'materias'));
+        $materia = Materia::find($id);
+        return view('aside.materias.acreditables.preinscribir', compact('no_preinscritos', 'materia'));
     }
     /**
      * Store a newly created resource in storage.
@@ -36,9 +36,6 @@ class PreinscripcionController extends Controller
     {
         if ($request->get('usuario_id') === '0') {
             return redirect()->back()->with('usuario-invalido', 'error');
-        }
-        if ($request->get('materia_id') === '0') {
-            return redirect()->back()->with('materia-invalida', 'error');
         }
 
         $asistencia = Asistencia::create([

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Materia\Asistencia;
 use Illuminate\Http\Request;
 
-class AsistenciaController extends Controller
+class LAsistenciaController extends Controller
 {
     public function asistencia(Request $request)
     {

@@ -11,6 +11,8 @@ class Trayecto extends Model
 
     public $table = 'trayecto';
 
+    protected $fillable = ['num_trayecto'];
+
     public function estudiante()
     {
         return $this->belongsTo(Estudiante::class, 'trayecto_id');
