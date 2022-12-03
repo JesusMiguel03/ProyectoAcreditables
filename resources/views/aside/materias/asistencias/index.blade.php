@@ -41,6 +41,19 @@
                                 </a>
                             </td>
                         </tr>
+                    @elseif (Auth::user()->getRoleNames()[0] === 'Coordinador')
+                        <tr>
+                            <td>{{ $estudiante->usuarios->nombre }}</td>
+                            <td>{{ $estudiante->usuarios->apellido }}</td>
+                            <td>{{ 'V-' . number_format($estudiante->usuarios->cedula, 0, ',', '.') }}</td>
+                            <td>{{ !empty($estudiante->preinscrito->materia->nom_materia) ? $estudiante->preinscrito->materia->nom_materia : 'No inscrito' }}</td>
+                            <td>
+                                <a href="{{ route('asistencia-ver', $estudiante->id) }}" class="btn btn-primary"
+                                    {{ Popper::arrow()->pop('Ver') }}>
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
                     @endif
                 @endforeach
             </tbody>

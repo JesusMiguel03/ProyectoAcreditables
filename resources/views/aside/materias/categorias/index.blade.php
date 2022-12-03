@@ -36,7 +36,7 @@
                                     <input type="text" name="nom_categoria" id="nom_categoria"
                                         class="form-control @error('nom_categoria') is-invalid @enderror"
                                         value="{{ old('nom_categoria') }}"
-                                        placeholder="{{ __('Nombre de la categoria de curso') }}" autofocus required>
+                                        placeholder="{{ __('Nombre de la categoria') }}" autofocus required>
 
                                     @error('nom_categoria')
                                         <span class="invalid-feedback" role="alert">

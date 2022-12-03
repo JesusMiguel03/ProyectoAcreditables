@@ -10,6 +10,6 @@ class Asistencia extends Model
     use HasFactory;
 
     public $fillable = [
-        'Sem1', 'Sem2', 'Sem3', 'Sem4', 'Sem5', 'Sem6', 'Sem7', 'Sem8', 'Sem9', 'Sem10', 'Sem11', 'Sem12', 
+        'sem1', 'sem2', 'sem3', 'sem4', 'sem5', 'sem6', 'sem7', 'sem8', 'sem9', 'sem10', 'sem11', 'sem12', 
     ];
 }

@@ -46,7 +46,7 @@ class ProfesorController extends Controller
             'fecha_ingreso_institucion' => ['required', 'date'],
             'departamento' => ['required'],
         ], [
-            'usuarios.not_in' => 'El usuario seleccionado es inválido.'
+            'usuarios.not_in' => 'El usuario seleccionado es inválido.',
         ]);
 
         if ($validador->fails())

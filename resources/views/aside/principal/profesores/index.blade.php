@@ -193,16 +193,15 @@
                                         <div class="col-9">
                                             <input type="tel" name="telefono"
                                                 class="form-control @error('telefono') is-invalid @enderror"
-                                                value="{{ old('telefono') }}" placeholder="{{ __('0193451') }}"
-                                                autofocus required>
+                                                value="{{ old('telefono') }}" placeholder="{{ __('0193451') }}" autofocus
+                                                required>
+                                            @error('telefono')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
-
-                                    @error('telefono')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
 
                                 {{-- Fechas --}}

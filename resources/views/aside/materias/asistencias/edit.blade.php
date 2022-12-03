@@ -35,120 +35,120 @@
                         <td>Presente</td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem1" id="Sem1"
-                                    {{ $estudiante->asistencia->Sem1 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem1" id="sem1"
+                                    {{ $estudiante->asistencia->sem1 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem1">
+                                <label for="sem1">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem2" id="Sem2"
-                                    {{ $estudiante->asistencia->Sem2 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem2" id="sem2"
+                                    {{ $estudiante->asistencia->sem2 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem2">
+                                <label for="sem2">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem3" id="Sem3"
-                                    {{ $estudiante->asistencia->Sem3 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem3" id="sem3"
+                                    {{ $estudiante->asistencia->sem3 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem3">
+                                <label for="sem3">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem4" id="Sem4"
-                                    {{ $estudiante->asistencia->Sem4 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem4" id="sem4"
+                                    {{ $estudiante->asistencia->sem4 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem4">
+                                <label for="sem4">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem5" id="Sem5"
-                                    {{ $estudiante->asistencia->Sem5 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem5" id="sem5"
+                                    {{ $estudiante->asistencia->sem5 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem5">
+                                <label for="sem5">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem6" id="Sem6"
-                                    {{ $estudiante->asistencia->Sem6 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem6" id="sem6"
+                                    {{ $estudiante->asistencia->sem6 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem6">
+                                <label for="sem6">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem7" id="Sem7"
-                                    {{ $estudiante->asistencia->Sem7 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem7" id="sem7"
+                                    {{ $estudiante->asistencia->sem7 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem7">
+                                <label for="sem7">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem8" id="Sem8"
-                                    {{ $estudiante->asistencia->Sem8 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem8" id="sem8"
+                                    {{ $estudiante->asistencia->sem8 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem8">
+                                <label for="sem8">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem9" id="Sem9"
-                                    {{ $estudiante->asistencia->Sem9 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem9" id="sem9"
+                                    {{ $estudiante->asistencia->sem9 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem9">
+                                <label for="sem9">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem10" id="Sem10"
-                                    {{ $estudiante->asistencia->Sem10 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem10" id="sem10"
+                                    {{ $estudiante->asistencia->sem10 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem10">
+                                <label for="sem10">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem11" id="Sem11"
-                                    {{ $estudiante->asistencia->Sem11 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem11" id="sem11"
+                                    {{ $estudiante->asistencia->sem11 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem11">
+                                <label for="sem11">
                                     {{ __('') }}
                                 </label>
                             </div>
                         </td>
                         <td>
                             <div class="icheck-primary">
-                                <input type="checkbox" name="Sem12" id="Sem12"
-                                    {{ $estudiante->asistencia->Sem12 === 1 ? 'checked' : '' }}>
+                                <input type="checkbox" name="sem12" id="sem12"
+                                    {{ $estudiante->asistencia->sem12 === 1 ? 'checked' : '' }}>
 
-                                <label for="Sem12">
+                                <label for="sem12">
                                     {{ __('') }}
                                 </label>
                             </div>

@@ -3,19 +3,14 @@
 @section('title', 'Acreditables | Editar estudiante')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Editar estudiante</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('coordinador.usuarios.index') }}" class="link-muted">
-                        Estudiantes</a>
-                </li>
-                <li class="breadcrumb-item active"><a href="">Estudiante</a></li>
-            </ol>
-        </div>
+    <div class="col-6">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('coordinador.usuarios.index') }}" class="link-muted">
+                    Estudiantes</a>
+            </li>
+            <li class="breadcrumb-item active"><a href="">Estudiante</a></li>
+        </ol>
     </div>
 @stop
 
@@ -29,15 +24,14 @@
             <main class="card-body">
                 <div class="form-group mb-3">
                     <label>Nombre</label>
-                    <input type="text" class="form-control"
-                        placeholder="{{ $usuario->nombre }} {{ $usuario->apellido }}"
+                    <input type="text" class="form-control" placeholder="{{ $usuario->nombre }} {{ $usuario->apellido }}"
                         disabled></input>
                 </div>
 
                 <div class="form-group mb-3">
                     <label>Cédula</label>
-                    <input type="text" class="form-control" placeholder="{{ 'V-' . number_format($usuario->cedula, 0, ',', '.') }}"
-                        disabled></input>
+                    <input type="text" class="form-control"
+                        placeholder="{{ 'V-' . number_format($usuario->cedula, 0, ',', '.') }}" disabled></input>
                 </div>
 
 
