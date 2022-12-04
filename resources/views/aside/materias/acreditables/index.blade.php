@@ -236,37 +236,6 @@
                     @endif
                 @endforeach
             </div>
-            <div class="card table-responsive-sm p-3 mt-5 mb-3 col-12">
-                <table id='tabla' class="table table-striped">
-                    <thead>
-                        <tr class="bg-secondary">
-                            <th>Nombre</th>
-                            <th>Cupos</th>
-                            <th>Estado</th>
-                            <th>Descripción</th>
-                            <th>Acreditable</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($materias as $materia)
-                            <tr>
-                                <td>{{ $materia->nom_materia }}</td>
-                                <td>{{ $materia->cupos_disponibles }}</td>
-                                <td>{{ $materia->estado_materia }}</td>
-                                <td class="text-justify">{{ $materia->desc_materia }}</td>
-                                <td>{{ $materia->num_acreditable }}</td>
-                                <td>
-                                    <a href="{{ route('materias.show', $materia) }}"
-                                        class="btn btn-primary {{ Popper::pop('Ver materia!') }}">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
         @else
             <div id="slick" class="px-5">
 
@@ -339,9 +308,102 @@
 
         @endif
 
+        <div class="card table-responsive-sm p-3 mt-5 mb-3 col-12">
+            <table id='tabla' class="table table-striped">
+                <thead>
+                    <tr class="bg-secondary">
+                        <th>Nombre</th>
+                        <th>Cupos</th>
+                        <th>Estado</th>
+                        <th>Descripción</th>
+                        <th>Acreditable</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($materias as $materia)
+                        <tr>
+                            <td>{{ $materia->nom_materia }}</td>
+                            <td>{{ $materia->cupos_disponibles }}</td>
+                            <td>{{ $materia->estado_materia }}</td>
+                            <td class="text-justify">{{ $materia->desc_materia }}</td>
+                            <td>{{ $materia->num_acreditable }}</td>
+                            <td>
+                                <a href="{{ route('materias.show', $materia) }}"
+                                    class="btn btn-primary {{ Popper::pop('Ver materia!') }}">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
         {{-- Vista coordinador --}}
     @elseif (Auth::user()->getRoleNames()[0] === 'Profesor')
-        <div class="card table-responsive-sm p-3 mt-1 mb-3 col-12">
+        <div id="slick" class="px-5">
+            @foreach ($materias as $materia)
+                <div class="slide">
+                    <div class="card mt-3">
+
+                        @if ($materia->imagen_materia === null)
+                            <div class="card-img-top">
+                                <img src="{{ asset('vendor/img/defecto/materias.png') }}" alt="Imagen de materia"
+                                    class="card-img-top rounded border border-outline-secondary"
+                                    style="filter:brightness(0.8)">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title mb-2 h2 fw-bold">{{ $materia->nom_materia }}</h5>
+                                <h6 class="card-text text-secondary">Cupos disponibles:
+                                    <span class="text-primary">{{ $materia->cupos_disponibles }}
+                                    </span>
+                                </h6>
+                                <p class="card-text text-truncate">{{ $materia->desc_materia }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ route('materias.show', $materia->id) }}" class="btn btn-primary d-block">
+                                    Ver materia
+                                </a>
+                            </div>
+                        @else
+                            <img src="{{ asset('storage/' . $materia->imagen_materia) }}" class="card-img-top rounded"
+                                alt="Imagen de la materia">
+
+                            <div class="card-body">
+                                <div class="row px-2">
+                                    <h5 class="card-title mb-2 font-weight-bold">{{ $materia->nom_materia }}</h5>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-10">
+                                        <h6 class="card-text text-secondary">Cupos disponibles:
+                                            <span class="text-primary">{{ $materia->cupos_disponibles }}
+                                            </span>
+                                        </h6>
+                                    </div>
+                                    <div class="col-2">
+                                        <h5 class="card-title mb-2 font-weight-bold text-muted">
+                                            #A{{ $materia->num_acreditable }}</h5>
+
+                                    </div>
+                                </div>
+                                <p class="card-text text-truncate">{{ $materia->desc_materia }}</p>
+                            </div>
+
+                            <div class="card-footer">
+                                <a href="{{ route('materias.show', $materia->id) }}" class="btn btn-primary d-block">
+                                    Ver materia
+                                </a>
+                            </div>
+                        @endif
+
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="card table-responsive-sm p-3 mt-4 mb-3 col-12">
             <table id='tabla' class="table table-striped">
                 <thead>
                     <tr class="bg-secondary">
@@ -355,7 +417,9 @@
                 </thead>
                 <tbody>
                     @foreach ($materias as $materia)
-                        @if (Auth::user()->profesor->id === $materia->info->profesor->id)
+                        @if (!empty(Auth::user()->profesor) && !empty($materia->info)
+                            ? Auth::user()->profesor->id === $materia->info->profesor->id
+                            : '')
                             <tr>
                                 <td>{{ $materia->nom_materia }}</td>
                                 <td>{{ $materia->cupos_disponibles }}</td>
@@ -369,6 +433,10 @@
                                     </a>
                                 </td>
                             </tr>
+                        @else
+                        <div class="card p-4 bg-secondary">
+                            <h5>No se encuentra asignado a ninguna acreditable. Cuando el coordinador lo añada a una se mostrará en la tabla debajo.</h5>
+                        </div>
                         @endif
                     @endforeach
                 </tbody>

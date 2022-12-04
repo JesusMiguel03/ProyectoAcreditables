@@ -25,7 +25,7 @@
                 <div class="modal-content">
 
                     <header class="modal-header bg-primary">
-                        <h5 class="modal-title" id="camporegistrar">Registrar usuario como profesor</h5>
+                        <h5 class="modal-title" id="camporegistrar">Registrar usuario como estudiante</h5>
                     </header>
 
                     <main class="modal-body">

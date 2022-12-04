@@ -19,9 +19,9 @@
         <div class="col-sm-12 col-md-3">
             <div class="card">
                 <main class="card-body box-profile" @if (empty($materia->info->profesor)) style="height: 13.512rem" @endif
-                    @if (Auth::user()->getRoleNames()[0] === 'Estudiante') style="height: 13.512rem" @endif>
+                    @if (Auth::user()->getRoleNames()[0] !== 'Coordinador') style="height: 13.512rem" @endif>
                     @if (!empty($materia->info->profesor))
-                        <div class="text-center @if (Auth::user()->getRoleNames()[0] === 'Estudiante') mt-4 @endif">
+                        <div class="text-center @if (Auth::user()->getRoleNames()[0] !== 'Coordinador') mt-4 @endif">
                             <img class="profile-user-img img-fluid img-circle"
                                 src="{{ asset('/vendor/img/profs/user0.jpg') }}" alt="User profile picture">
                         </div>
@@ -74,7 +74,7 @@
                                     <input type="number" name="materia_id" class="d-none" hidden value="{{ $materia->id }}">
 
                                     @if (!empty(Auth::user()->estudiante->preinscrito) ? Auth::user()->estudiante->preinscrito->materia_id === $materia->id : '')
-                                        <button class="btn btn-secondary disabled">Te inscribiste en esta acreditable</button>
+                                        <button class="btn btn-secondary disabled">Se encuentra inscrito en esta acreditable</button>
                                     @else
                                         <button type="submit"
                                             class="btn btn-{{ $materia->cupos_disponibles === 0 ? 'secondary' : 'outline-primary' }}"
@@ -221,13 +221,11 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡Preinscripción exitosa!',
-                html: 'Ya te encuentras preinscrito en la materia, a continuación lleva el comprobante ubicado en tu pefil a la Coordinación de Acreditables para finalizar tu inscripción. <br>[<strong>Nota</strong>] <span class="text-muted">Al darle al botón Ok serás redirigido a tu perfil.<span>',
+                html: 'Ya se encuentra preinscrito en la materia, a continuación lleve el comprobante ubicado en su pefil a la Coordinación de Acreditables para finalizar su inscripción. <br>[<strong>Nota</strong>] <span class="text-muted">El comprobante se encuentra en su perfil (avatar al lado de su nombre).<span>',
                 confirmButtonColor: '#6c757d',
                 customClass: {
                     confirmButton: 'btn px-5'
                 },
-            }).then(function() {
-                window.location = "/perfil"
             })
         @elseif ($message = session('actualizado'))
             let timerInterval
