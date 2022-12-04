@@ -185,7 +185,7 @@
                                                     @endif
                                                 @endcan
                                                 <a href="{{ route('asistencia-ver', $estudiante->id) }}"
-                                                    class="btn btn-primary">
+                                                    class="btn btn-primary" {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                     <i class="fas fa-calendar" style="width: 15px"></i>
                                                 </a>
                                             </div>
