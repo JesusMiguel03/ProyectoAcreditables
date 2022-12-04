@@ -7,13 +7,15 @@
 ## 🖥Código
 
 Para clonar y trabajar con el repositorio seguir las siguientes instrucciones:
-En el escritorio o carpeta correspondiente (/htdocs en xampp, /www en laragon y wampp)
+Abrir la consola de comandos en la carpeta del servidor local (xampp: /htdocs o laragon y wampp /www), pegar el siguiente enlace y darle enter.
 ```
 git clone https://github.com/JesusMiguel03/ProyectoAcreditables.git
 ```
+Se require tener instalado [composer](https://getcomposer.org/download/)
 ```
 composer install
 ```
+Dentro del IDE de su preferencia y en la ruta donde se encuentra la carpeta descargada, pegar los siguientes enlaces y darle enter.
 ```
 cp .env.example .env
 ```
@@ -23,14 +25,14 @@ php artisan key:generate
 ```
 php artisan migrate --seed
 ```
-Crea un enlace en /public para guardar las imagenes de cursos
+Para que las imágenes sean accesibles una vez guardadas:
 ```
 php artisan storage:link
 ```
 ```
 php artisan serve
 ```
-Para recibir las actualizaciones:
+<strong>Para recibir las actualizaciones:</strong>
 Dentro de la carpeta donde se encuentra el proyecto
 ```
 git pull
