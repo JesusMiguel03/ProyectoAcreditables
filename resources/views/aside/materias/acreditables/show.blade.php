@@ -73,7 +73,7 @@
                                         value="{{ Auth::user()->estudiante->id }}">
                                     <input type="number" name="materia_id" class="d-none" hidden value="{{ $materia->id }}">
 
-                                    @if (Auth::user()->estudiante->preinscrito->materia_id === $materia->id)
+                                    @if (!empty(Auth::user()->estudiante->preinscrito) ? Auth::user()->estudiante->preinscrito->materia_id === $materia->id : '')
                                         <button class="btn btn-secondary disabled">Te inscribiste en esta acreditable</button>
                                     @else
                                         <button type="submit"

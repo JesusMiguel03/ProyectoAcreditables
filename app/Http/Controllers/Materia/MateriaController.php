@@ -137,7 +137,6 @@ class MateriaController extends Controller
     {
         // Busca todos los valores necesarios para editar un curso
         $materia = Materia::find($id);
-        // $horarios = Horario::all();
         $categorias = Categoria::all();
         $profesores = Profesor::all();
 
