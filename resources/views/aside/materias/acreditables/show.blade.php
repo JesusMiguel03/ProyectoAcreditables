@@ -238,6 +238,28 @@
                     confirmButton: 'btn px-5'
                 },
             })
+            @elseif ($message = session('invalidado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'info',
+                title: '¡Estudiante invalidado!',
+                html: 'El estudiante no podrá cursar esta acreditable.',
+                confirmButtonColor: '#17a2b8',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('validado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Estudiante validado!',
+                html: 'El estudiante ya puede cursar su acreditable.',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
         @endif
     </script>
 @stop

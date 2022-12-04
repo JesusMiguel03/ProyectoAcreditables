@@ -39,18 +39,18 @@ class PreinscripcionController extends Controller
         }
 
         $asistencia = Asistencia::create([
-            'Sem1' => 0,
-            'Sem2' => 0,
-            'Sem3' => 0,
-            'Sem4' => 0,
-            'Sem5' => 0,
-            'Sem6' => 0,
-            'Sem7' => 0,
-            'Sem8' => 0,
-            'Sem9' => 0,
-            'Sem10' => 0,
-            'Sem11' => 0,
-            'Sem12' => 0,
+            'sem1' => 0,
+            'sem2' => 0,
+            'sem3' => 0,
+            'sem4' => 0,
+            'sem5' => 0,
+            'sem6' => 0,
+            'sem7' => 0,
+            'sem8' => 0,
+            'sem9' => 0,
+            'sem10' => 0,
+            'sem11' => 0,
+            'sem12' => 0,
         ]);
 
         Estudiante_materia::updateOrCreate(
@@ -72,7 +72,7 @@ class PreinscripcionController extends Controller
             return redirect()->back()->with('registrado', 'registro');
         }
 
-        return redirect('materias/' . $request->get('materia_id'))->with('registrado', 'El tipo fue creada exitosamente');
+        return redirect('materias/' . $request->get('materia_id'))->with('registrado', 'registrado');
     }
 
     public function validar(Request $request)
@@ -90,6 +90,6 @@ class PreinscripcionController extends Controller
         $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
         $estudiante->validacion_estudiante = 0;
         $estudiante->update();
-        return redirect()->back()->with('validado', 'Se ha validado');
+        return redirect()->back()->with('invalidado', 'Se ha invalidado');
     }
 }
