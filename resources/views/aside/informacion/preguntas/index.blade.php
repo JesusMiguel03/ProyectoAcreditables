@@ -122,7 +122,7 @@
                             <tr class="bg-secondary">
                                 <th>Pregunta</th>
                                 <th>Respuesta</th>
-                                <th>Opciones</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
 

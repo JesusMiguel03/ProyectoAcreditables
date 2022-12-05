@@ -32,7 +32,7 @@
 
                                 {{-- Campo de nombre --}}
                                 <div class="form-group required mb-3">
-                                    <label for="num_trayecto" class="control-label">Nombre</label>
+                                    <label for="num_trayecto" class="control-label">Número</label>
                                     <input type="number" name="num_trayecto" id="num_trayecto"
                                         class="form-control @error('num_trayecto') is-invalid @enderror"
                                         value="{{ old('num_trayecto') }}" placeholder="{{ __('Número del trayecto') }}"
@@ -73,7 +73,7 @@
             <thead>
                 <tr class="bg-secondary">
                     <th>Trayectos</th>
-                    <th>Opciones</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 

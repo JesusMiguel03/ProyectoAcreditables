@@ -338,7 +338,7 @@
 
                                 {{-- Cedula --}}
                                 <div class="form-group required mb-3">
-                                    <label for="cedula" class="control-label">Cedula</label>
+                                    <label for="cedula" class="control-label">Cédula</label>
                                     <div class="input-group">
                                         <input type="text" name="cedula"
                                             class="form-control @error('cedula') is-invalid @enderror"

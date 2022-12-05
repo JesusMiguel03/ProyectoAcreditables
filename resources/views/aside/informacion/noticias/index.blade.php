@@ -109,7 +109,7 @@
                             <th>Encabezado</th>
                             <th>Descripcion</th>
                             <th>Estado</th>
-                            <th>Opciones</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
