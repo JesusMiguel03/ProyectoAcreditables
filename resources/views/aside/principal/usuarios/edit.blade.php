@@ -3,13 +3,15 @@
 @section('title', 'Acreditables | Editar estudiante')
 
 @section('content_header')
+<x-tipografia.titulo>Listado de estudiantes</x-tipografia.titulo>
+
     <div class="col-6">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
             <li class="breadcrumb-item"><a href="{{ route('coordinador.usuarios.index') }}" class="link-muted">
                     Estudiantes</a>
             </li>
-            <li class="breadcrumb-item active"><a href="">Estudiante</a></li>
+            <li class="breadcrumb-item active"><a href="">{{ $usuario->nombre }} {{ $usuario->apellido }}</a></li>
         </ol>
     </div>
 @stop
@@ -56,9 +58,11 @@
                         <select name="pnf" class="form-control">
                             <option>Seleccione uno</option>
                             @foreach ($pnfs as $pnf)
-                                <option value="{{ $pnf->id }}"
-                                    {{ !empty($usuario->estudiante) && $usuario->estudiante->pnf_id === $pnf->id ? 'selected' : '' }}>
-                                    {{ $pnf->nom_pnf }}</option>
+                                @if (!in_array($pnf->nom_pnf, $pnfsNoDisponibles))
+                                    <option value="{{ $pnf->id }}"
+                                        {{ !empty($usuario->estudiante) && $usuario->estudiante->pnf_id === $pnf->id ? 'selected' : '' }}>
+                                        {{ $pnf->nom_pnf }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
@@ -86,13 +90,5 @@
 @stop
 
 @section('css')
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
 use App\Models\Estudiante;
-use App\Models\Materia\Asistencia;
 use Illuminate\Http\Request;
 
 class AsistenciaController extends Controller
@@ -12,7 +11,24 @@ class AsistenciaController extends Controller
     public function index()
     {
         $estudiantes = Estudiante::all();
-        return view('aside.materias.asistencias.index', compact('estudiantes'));
+        $asistenciaEstudiantes = [];
+
+        foreach ($estudiantes as $estudiante) {
+            $asistencia = $estudiante->asistencia;
+
+            // Se inicializan los contadores
+            $asistencias = 0;
+
+            // Añade las asistencias
+            for ($i = 1; $i <= 12; $i++) {
+                $sem = 'sem' . $i;
+                $asistencia[$sem] === 1 ? $asistencias++ : '';
+            }
+
+            array_push($asistenciaEstudiantes, $asistencias);
+        }
+
+        return view('aside.materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes'));
     }
 
     public function update(Request $request)
@@ -24,13 +40,31 @@ class AsistenciaController extends Controller
             $asistencia[$campo] = $request->get($campo) === 'on' ? 1 : 0;
         }
         $asistencia->save();
-        
-        return redirect()->back()->with('creado', 'creado');
+
+        return redirect()->back()->with('registrado', 'registrado');
     }
 
     public function edit($id)
     {
+        // Busca al estudiante y su asistencia
         $estudiante = Estudiante::find($id);
-        return view('aside.materias.asistencias.edit', compact('estudiante'));
+
+        // Valida que tenga perfil de estudiante o esté inscrito en una materia
+        if (!$estudiante || !$estudiante->preinscrito) {
+            return redirect()->back();
+        }
+
+        $asistencia = $estudiante->asistencia;
+
+        // Se inicializan el contador
+        $asistencias = 0;
+
+        // Añade las asistencias
+        for ($i = 1; $i <= 12; $i++) {
+            $sem = 'sem' . $i;
+            $asistencia[$sem] === 1 ? $asistencias++ : '';
+        }
+
+        return view('aside.materias.asistencias.edit', compact('estudiante', 'asistencias'));
     }
 }

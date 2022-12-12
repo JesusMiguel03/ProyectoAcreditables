@@ -3,6 +3,8 @@
 @section('title', 'Acreditables | ¿Sabías que?')
 
 @section('content_header')
+    <x-tipografia.titulo>Preguntas frecuentes</x-tipografia.titulo>
+
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -37,8 +39,8 @@
                                             <label for="titulo" class="control-label">Pregunta</label>
                                             <input type="text" name="titulo" id="titulo"
                                                 class="form-control @error('titulo') is-invalid @enderror"
-                                                value="{{ old('titulo') }}"
-                                                placeholder="{{ __('Titulo de la pregunta sin signos') }}" autofocus required>
+                                                value="{{ old('titulo') }}" placeholder="{{ __('Ej: Cómo consulto mi nota') }}"
+                                                autofocus required>
 
                                             @error('titulo')
                                                 <span class="invalid-feedback" role="alert">
@@ -51,7 +53,8 @@
                                         <div class="form-group required mb-3">
                                             <label for="explicacion" class="control-label">Respuesta</label>
                                             <textarea name="explicacion" class="form-control @error('explicacion') is-invalid @enderror"
-                                                placeholder="{{ __('Explicacion de la pregunta') }}" autofocus style="min-height: 9rem; resize: none" required>{{ old('explicacion') }}</textarea>
+                                                placeholder="{{ __('Ej: Vaya a su perfil, ubicado en el avatar al lado de su nombre') }}" autofocus
+                                                style="min-height: 9rem; resize: none" required>{{ old('explicacion') }}</textarea>
 
                                             @error('explicacion')
                                                 <span class="invalid-feedback" role="alert">
@@ -131,7 +134,8 @@
                                 <tr>
                                     <td>{{ $pregunta->titulo }}</td>
                                     <td>{{ $pregunta->explicacion }}</td>
-                                    <td><a href="{{ route('preguntas.edit', $pregunta->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
+                                    <td><a href="{{ route('preguntas.edit', $pregunta->id) }}" class="btn btn-primary"
+                                            {{ Popper::arrow()->pop('Editar') }}>
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     </td>
@@ -187,15 +191,7 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop
 
 @section('js')

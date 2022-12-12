@@ -3,17 +3,14 @@
 @section('title', 'Acreditables | Editar categoria')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Editar categoria</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('categoria.index') }}" class="link-muted">Categorias</a></li>
-                <li class="breadcrumb-item active"><a href="">Categoria</a></li>
-            </ol>
-        </div>
+    <x-tipografia.titulo>Categorías</x-tipografia.titulo>
+
+    <div class="col-6">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('categoria.index') }}" class="link-muted">Categorias</a></li>
+            <li class="breadcrumb-item active"><a href="">Editar</a></li>
+        </ol>
     </div>
 @stop
 
@@ -32,7 +29,8 @@
                     {{-- Campo de nombre --}}
                     <div class="form-group required mb-3">
                         <label for="nom_categoria" class="control-label">Nombre</label>
-                        <input type="text" name="nom_categoria" class="form-control @error('nom_categoria') is-invalid @enderror"
+                        <input type="text" name="nom_categoria"
+                            class="form-control @error('nom_categoria') is-invalid @enderror"
                             value="{{ $categoria->nom_categoria }}"
                             placeholder="{{ __('Nombre de la categoria de curso') }}" autofocus required>
 
@@ -67,13 +65,5 @@
 @stop
 
 @section('css')
-<style>
-    .form-group.required .control-label:after {
-        color: #d00;
-        content: "*";
-        position: absolute;
-        margin-left: 6px;
-        margin-top: 3px;
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop

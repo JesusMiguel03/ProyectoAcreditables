@@ -3,17 +3,14 @@
 @section('title', 'Acreditables | Editar noticia')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0">Noticias</h1>
-        </div>
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('noticias.index') }}" class="link-muted">Noticias</a></li>
-                <li class="breadcrumb-item active"><a href="">Noticia</a></li>
-            </ol>
-        </div>
+    <x-tipografia.titulo>Noticias</x-tipografia.titulo>
+
+    <div class="col-6">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('noticias.index') }}" class="link-muted">Noticias</a></li>
+            <li class="breadcrumb-item active"><a href="">Editar</a></li>
+        </ol>
     </div>
 @stop
 
@@ -95,13 +92,5 @@
 @stop
 
 @section('css')
-<style>
-    .form-group.required .control-label:after {
-        color: #d00;
-        content: "*";
-        position: absolute;
-        margin-left: 6px;
-        margin-top: 3px;
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop

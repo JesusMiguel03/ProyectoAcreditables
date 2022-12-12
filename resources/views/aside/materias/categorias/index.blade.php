@@ -3,6 +3,8 @@
 @section('title', 'Acreditables | Categoria')
 
 @section('content_header')
+    <x-tipografia.titulo>Categorías</x-tipografia.titulo>
+
     <div class="row mb-2">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -35,8 +37,8 @@
                                     <label for="nom_categoria" class="control-label">Nombre</label>
                                     <input type="text" name="nom_categoria" id="nom_categoria"
                                         class="form-control @error('nom_categoria') is-invalid @enderror"
-                                        value="{{ old('nom_categoria') }}"
-                                        placeholder="{{ __('Nombre de la categoria') }}" autofocus required>
+                                        value="{{ old('nom_categoria') }}" placeholder="{{ __('Nombre de la categoria') }}"
+                                        autofocus required>
 
                                     @error('nom_categoria')
                                         <span class="invalid-feedback" role="alert">
@@ -82,7 +84,8 @@
                     <tr>
                         <td>{{ $categoria->nom_categoria }}</td>
                         <td>
-                            <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
+                            <a href="{{ route('categoria.edit', $categoria->id) }}" class="btn btn-primary"
+                                {{ Popper::arrow()->pop('Editar') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
@@ -96,15 +99,7 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop
 
 @section('js')

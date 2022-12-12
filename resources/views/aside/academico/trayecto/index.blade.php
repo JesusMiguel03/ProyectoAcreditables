@@ -3,6 +3,8 @@
 @section('title', 'Acreditables | Trayectos')
 
 @section('content_header')
+<x-tipografia.titulo>Trayectos</x-tipografia.titulo>
+
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">

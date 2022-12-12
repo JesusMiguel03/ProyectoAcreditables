@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Acreditables | Preinscribir')
+@section('title', 'Acreditables | Inscribir')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-6">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
-                <li class="breadcrumb-item active"><a href="">Preinscribir</a></li>
-            </ol>
-        </div>
+    <x-tipografia.titulo>Inscripción</x-tipografia.titulo>
+
+    <div class="col-6">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
+            <li class="breadcrumb-item active"><a href="">Inscribir</a></li>
+        </ol>
     </div>
 @stop
 
@@ -18,7 +18,7 @@
     <div class="col-md-6 col-sm-12 mx-auto">
         <div class="card">
             <header class="card-header bg-primary">
-                <h5>Preinscribir estudiantes</h5>
+                <h5>Inscribir estudiantes</h5>
             </header>
 
             <main class="card-body">
@@ -35,7 +35,7 @@
                             @else
                                 @foreach ($no_preinscritos as $no_preinscrito)
                                     <option value="{{ $no_preinscrito->id }}">{{ $no_preinscrito->usuarios->nombre }}
-                                        {{ $no_preinscrito->usuarios->apellido }} 
+                                        {{ $no_preinscrito->usuarios->apellido }}
                                         [{{ 'V-' . number_format($no_preinscrito->usuarios->cedula, 0, ',', '.') }}]
                                     </option>
                                 @endforeach
@@ -65,11 +65,12 @@
                         </div>
 
                         <div class="col-6">
-                            <button type="submit" class="btn btn-block btn-success" {{ empty($no_preinscritos) ? 'disabled' : '' }}>
+                            <button type="submit" class="btn btn-block btn-success"
+                                {{ empty($no_preinscritos) ? 'disabled' : '' }}>
                                 <i class="fas fa-save mr-2"></i>
                                 {{ __('Guardar') }}
                             </button>
-                            
+
                             {{-- @foreach ($materias as $materia)
                                 @if ($loop->first)
                                     @if ($materia->cupos_disponibles > 0 && !empty($no_preinscritos))

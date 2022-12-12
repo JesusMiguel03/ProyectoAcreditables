@@ -44,61 +44,19 @@ class UsuarioController extends Controller
     public function edit($id)
     {
         $usuario = User::find($id);
-        // Busca al usuario y demás modelos (roles - Spatie, especialidades)
-        // $usuario = User::find($id);
-        // $roles = Role::all();
-        // $especialidades = Especialidad::all();
-        // $relacion = [];
         $pnfs = Pnf::all();
         $trayectos = Trayecto::all();
 
-        // Si tiene especialidades las retorna en el arreglo $relacion
-        // if (!empty($usuario->profesor->especialidades)) {
-        //     foreach ($usuario->profesor->especialidades as $prof) {
-        //         array_push($relacion, $prof->pivot->especialidad_id);
-        //     }
-        // }
+        // PNF's no vistos en la institución
+        $pnfsNoDisponibles = ['Administración', 'Agroalimentación', 'Contaduría Pública', 'Mecánica'];
 
-        return view('aside.principal.usuarios.edit', compact('usuario', 'pnfs', 'trayectos'));
+        return view('aside.principal.usuarios.edit', compact('usuario', 'pnfs', 'trayectos', 'pnfsNoDisponibles'));
     }
 
     public function update(Request $request, $id)
     {
-        // $validador = Validator::make($request->all(), [
-        //     'roles' => ['required', 'not_in:0'],
-        // ], [
-        //     'roles.required' => 'El campo rol es necesario.',
-        //     'roles.not_in' => 'El rol seleccionado es inválido.'
-        // ]);
-
-        // if ($validador->fails())
-        // {
-        //     return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
-        // }
-
         // Actualizar rol
         $usuario = User::find($id);
-        // $rol = $usuario->getRoleNames()[0];
-        // $usuario->roles()->sync($request->roles);
-
-        // Array con las especialidades
-        // $especialidades = request('especialidades');
-
-        // Actualiza solo si es profesor
-        // if ($rol === 'Profesor') {
-        //     if (empty($usuario->profesor->especialidades)) {
-        //         return redirect('usuarios')->with('incorrecto', 'categoria existente');
-        //     }
-        //     $usuario->profesor->especialidades()->sync($especialidades);
-        // } else if ($rol === 'Estudiante') {
-        //     Estudiante::updateOrCreate(
-        //         ['usuario_id' => $usuario->id],
-        //         [
-        //             'trayecto_id' => $request->get('trayecto'),
-        //             'pnf_id' => $request->get('pnf')
-        //         ]
-        //     );
-        // }
         Estudiante::updateOrCreate(
             ['usuario_id' => $usuario->id],
             [

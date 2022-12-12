@@ -3,13 +3,14 @@
 @section('title', 'Acreditables | Editar área de conocimiento')
 
 @section('content_header')
+    <x-tipografia.titulo>Áreas de conocimiento</x-tipografia.titulo>
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('conocimiento.index') }}" class="link-muted">Áreas de
                         conocimiento</a></li>
-                <li class="breadcrumb-item active"><a href="">Área de conocimiento</a></li>
+                <li class="breadcrumb-item active"><a href="">Editar área</a></li>
             </ol>
         </div>
     </div>
@@ -80,13 +81,5 @@
 @stop
 
 @section('css')
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop

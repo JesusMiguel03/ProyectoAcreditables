@@ -3,6 +3,8 @@
 @section('title', 'Acreditables | PNF')
 
 @section('content_header')
+<x-tipografia.titulo>PNF</x-tipografia.titulo>
+
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -35,8 +37,8 @@
                                     <label for="nom_pnf" class="control-label">Nombre</label>
                                     <input type="text" name="nom_pnf" id="nom_pnf"
                                         class="form-control @error('nom_pnf') is-invalid @enderror"
-                                        value="{{ old('nom_pnf') }}" placeholder="{{ __('Nombre del PNF') }}"
-                                        autofocus required>
+                                        value="{{ old('nom_pnf') }}" placeholder="{{ __('Nombre del PNF') }}" autofocus
+                                        required>
 
                                     @error('nom_pnf')
                                         <span class="invalid-feedback" role="alert">
@@ -50,8 +52,7 @@
                                     <label for="cod_pnf">Código</label>
                                     <input type="text" name="cod_pnf" id="cod_pnf"
                                         class="form-control @error('cod_pnf') is-invalid @enderror"
-                                        value="{{ old('cod_pnf') }}" placeholder="{{ __('Código del PNF') }}"
-                                        autofocus>
+                                        value="{{ old('cod_pnf') }}" placeholder="{{ __('Código del PNF') }}" autofocus>
 
                                     @error('cod_pnf')
                                         <span class="invalid-feedback" role="alert">
@@ -103,7 +104,8 @@
                                 <td>{{ $pnf->cod_pnf === '?' ? 'Sin asignar' : $pnf->cod_pnf }}</td>
                             @endif
                             <td>{{ $pnf->nom_pnf }}</td>
-                            <td><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
+                            <td><a href="{{ route('pnf.edit', $pnf->id) }}" class="btn btn-primary"
+                                    {{ Popper::arrow()->pop('Editar') }}>
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -118,15 +120,7 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop
 
 @section('js')

@@ -3,6 +3,8 @@
 @section('title', 'Acreditables | Estudiantes')
 
 @section('content_header')
+<x-tipografia.titulo>Listado de estudiantes</x-tipografia.titulo>
+
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -202,9 +204,9 @@
         <table id='tabla' class="table table-striped">
             <thead>
                 <tr class="bg-secondary">
+                    <th>Cédula</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Cédula</th>
                     <th>PNF</th>
                     <th>Trayecto</th>
                     <th>Acciones</th>
@@ -213,9 +215,9 @@
             <tbody>
                 @foreach ($estudiantes as $estudiante)
                     <tr>
+                        <td>{{ 'V-' . number_format($estudiante->cedula, 0, ',', '.') }}</td>
                         <td>{{ $estudiante->nombre }}</td>
                         <td>{{ $estudiante->apellido }}</td>
-                        <td>{{ 'V-' . number_format($estudiante->cedula, 0, ',', '.') }}</td>
                         <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->pnf->nom_pnf : 'Sin asignar' }}
                         </td>
                         <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->trayecto->num_trayecto : 'Sin asignar' }}
@@ -235,15 +237,7 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop
 
 @section('js')

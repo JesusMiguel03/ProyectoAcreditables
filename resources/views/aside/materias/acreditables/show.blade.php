@@ -3,14 +3,14 @@
 @section('title', 'Acreditables | Ver materia')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
-                <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }}</a></li>
-            </ol>
-        </div>
+    <x-tipografia.titulo>Materias</x-tipografia.titulo>
+
+    <div class="col-6">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
+            <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }}</a></li>
+        </ol>
     </div>
 @stop
 
@@ -73,12 +73,15 @@
                                         value="{{ Auth::user()->estudiante->id }}">
                                     <input type="number" name="materia_id" class="d-none" hidden value="{{ $materia->id }}">
 
-                                    @if (!empty(Auth::user()->estudiante->preinscrito) ? Auth::user()->estudiante->preinscrito->materia_id === $materia->id : '')
-                                        <button class="btn btn-secondary disabled">Se encuentra inscrito en esta acreditable</button>
+                                    @if (!empty(Auth::user()->estudiante->preinscrito)
+                                        ? Auth::user()->estudiante->preinscrito->materia_id === $materia->id
+                                        : '')
+                                        <button class="btn btn-secondary disabled">Se encuentra inscrito en esta
+                                            acreditable</button>
                                     @else
                                         <button type="submit"
-                                            class="btn btn-{{ $materia->cupos_disponibles === 0 ? 'secondary' : 'outline-primary' }}"
-                                            {{ !empty(Auth::user()->estudiante->preinscrito) || $materia->cupos_disponibles === 0 ? 'disabled' : '' }}>{{ !empty(Auth::user()->estudiante->preinscrito) ? 'Inscrito' : 'Inscribir' }}</button>
+                                            class="btn btn-{{ $materia->cupos_disponibles === 0 ? 'secondary' : 'primary' }}"
+                                            {{ !empty(Auth::user()->estudiante->preinscrito) || $materia->cupos_disponibles === 0 ? 'disabled' : '' }}>{{ !empty(Auth::user()->estudiante->preinscrito) ? 'Ya estás inscrito en una acreditable' : 'Inscribir' }}</button>
                                     @endif
 
                                 </form>
@@ -145,6 +148,7 @@
                                 <th>Apellido</th>
                                 <th>Estado</th>
                             @endif
+                        </tr>
                     </thead>
                     <tbody>
                         @if (!empty($preinscritos))
@@ -185,7 +189,8 @@
                                                     @endif
                                                 @endcan
                                                 <a href="{{ route('asistencia-ver', $estudiante->id) }}"
-                                                    class="btn btn-primary" {{ Popper::arrow()->pop('Marcar asistencia') }}>
+                                                    class="btn btn-primary"
+                                                    {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                     <i class="fas fa-calendar" style="width: 15px"></i>
                                                 </a>
                                             </div>
@@ -238,7 +243,7 @@
                     confirmButton: 'btn px-5'
                 },
             })
-            @elseif ($message = session('invalidado'))
+        @elseif ($message = session('invalidado'))
             let timerInterval
             Swal.fire({
                 icon: 'info',

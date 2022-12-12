@@ -10,9 +10,9 @@ use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class PreinscripcionController extends Controller
+class InscripcionController extends Controller
 {
-    public function preinscribir($id)
+    public function inscribir($id)
     {
         $estudiantes = Estudiante::all();
         $no_preinscritos = [];

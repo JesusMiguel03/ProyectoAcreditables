@@ -3,6 +3,8 @@
 @section('title', 'Acreditables | Noticias')
 
 @section('content_header')
+<x-tipografia.titulo>Noticias</x-tipografia.titulo>
+
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -134,15 +136,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}">
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop
 
 @section('js')

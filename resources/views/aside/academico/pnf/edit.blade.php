@@ -3,14 +3,14 @@
 @section('title', 'Acreditables | Editar pnf')
 
 @section('content_header')
-    <div class="row">
-        <div class="col-sm-6">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="" class="link-muted">PNF</a></li>
-                <li class="breadcrumb-item active"><a href="">Editar PNF</a></li>
-            </ol>
-        </div>
+    <x-tipografia.titulo>PNF</x-tipografia.titulo>
+
+    <div class="col-6">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="" class="link-muted">PNF</a></li>
+            <li class="breadcrumb-item active"><a href="">Editar</a></li>
+        </ol>
     </div>
 @stop
 
@@ -44,9 +44,8 @@
                     <div class="form-group mb-3">
                         <label for="cod_pnf">Código</label>
                         <input type="text" name="cod_pnf" id="cod_pnf"
-                            class="form-control @error('cod_pnf') is-invalid @enderror"
-                            value="{{ $pnf->cod_pnf }}" placeholder="{{ __('Código del PNF') }}"
-                            autofocus>
+                            class="form-control @error('cod_pnf') is-invalid @enderror" value="{{ $pnf->cod_pnf }}"
+                            placeholder="{{ __('Código del PNF') }}" autofocus>
 
                         @error('cod_pnf')
                             <span class="invalid-feedback" role="alert">
@@ -80,13 +79,5 @@
 @stop
 
 @section('css')
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop
