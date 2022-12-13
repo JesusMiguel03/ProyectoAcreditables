@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Categoria')
 
 @section('content_header')
-    <x-tipografia.titulo>Categorías</x-tipografia.titulo>
-
     <div class="row mb-2">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -67,6 +65,8 @@
             </div>
         </div>
     </div>
+
+    <x-tipografia.titulo>Categorías</x-tipografia.titulo>
 @stop
 
 @section('content')

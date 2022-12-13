@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Materias')
 
 @section('content_header')
-    <x-tipografia.titulo>Materias</x-tipografia.titulo>
-
     <div class="row mb-2">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -152,6 +150,8 @@
             @endcan
         </div>
     </div>
+
+    <x-tipografia.titulo>Materias</x-tipografia.titulo>
 @stop
 
 @section('content')
@@ -159,15 +159,17 @@
     @if (Auth::user()->getRoleNames()[0] === 'Estudiante')
         <div id="slick" class="px-5">
             @if (empty(Auth::user()->estudiante))
-                <div class="col-md-4 col-sm-12 mx-auto">
+                <div class="col-md-12 col-sm-12 mx-auto">
                     <section class="card">
                         <header class="card-header bg-secondary">
-                            <h5 class="mx-auto text-center" id="exampleModalLongTitle">Su perfil académico se encuentra
+                            <h5 class="mx-auto text-center" id="exampleModalLongTitle">Su perfil académico se
+                                encuentra
                                 incompleto</h5>
                         </header>
 
                         <main class="card-body p-4 text-justify">
-                            <p>Verifique en su perfil (<span class="text-info">haga clic en la imagen al lado de su nombre,
+                            <p>Verifique en su perfil (<span class="text-info">haga clic en la imagen al lado de su
+                                    nombre,
                                     perfil</span>) y revise si en el apartado "Perfil académico" se encuentra su
                                 información, en
                                 caso contrario comuníquese con el coordinador para completar su perfil.</p>
@@ -308,7 +310,8 @@
                             @if (!empty($materia->info->profesor_id) ? $materia->info->profesor_id === Auth::user()->profesor->id : '')
                                 <tr>
                                     <td>{{ $materia->nom_materia }}</td>
-                                    <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $materia->cupos_disponibles }}
+                                    <td {{ Popper::arrow()->pop('Cupos disponibles') }}>
+                                        {{ $materia->cupos_disponibles }}
                                     </td>
                                     <td>{{ !empty($materia->info->categoria->nom_categoria) ? $materia->info->categoria->nom_categoria : 'Sin categoría' }}
                                     </td>
@@ -340,7 +343,8 @@
                     @else
                         <tr>
                             <td>{{ $materia->nom_materia }}</td>
-                            <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $materia->cupos_disponibles }}</td>
+                            <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $materia->cupos_disponibles }}
+                            </td>
                             <td>{{ !empty($materia->info->categoria->nom_categoria) ? $materia->info->categoria->nom_categoria : 'Sin categoría' }}
                             </td>
                             <td>{{ $materia->estado_materia }}</td>

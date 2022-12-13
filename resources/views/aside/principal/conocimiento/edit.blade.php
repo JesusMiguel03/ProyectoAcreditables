@@ -3,7 +3,6 @@
 @section('title', 'Acreditables | Editar área de conocimiento')
 
 @section('content_header')
-    <x-tipografia.titulo>Áreas de conocimiento</x-tipografia.titulo>
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -14,6 +13,8 @@
             </ol>
         </div>
     </div>
+
+    <x-tipografia.titulo>Áreas de conocimiento</x-tipografia.titulo>
 @stop
 
 @section('content')

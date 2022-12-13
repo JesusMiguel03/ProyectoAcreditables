@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | ¿Sabías que?')
 
 @section('content_header')
-    <x-tipografia.titulo>Preguntas frecuentes</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -85,6 +83,8 @@
             @endcan
         </div>
     </div>
+
+    <x-tipografia.titulo>Preguntas frecuentes</x-tipografia.titulo>
 @stop
 
 @section('content')

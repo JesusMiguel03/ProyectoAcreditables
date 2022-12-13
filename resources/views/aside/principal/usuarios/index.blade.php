@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Estudiantes')
 
 @section('content_header')
-<x-tipografia.titulo>Listado de estudiantes</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -197,6 +195,8 @@
             </div>
         </div>
     </div>
+
+    <x-tipografia.titulo>Listado de estudiantes</x-tipografia.titulo>
 @stop
 
 @section('content')
@@ -218,12 +218,23 @@
                         <td>{{ 'V-' . number_format($estudiante->cedula, 0, ',', '.') }}</td>
                         <td>{{ $estudiante->nombre }}</td>
                         <td>{{ $estudiante->apellido }}</td>
-                        <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->pnf->nom_pnf : 'Sin asignar' }}
-                        </td>
-                        <td>{{ !empty($estudiante->estudiante) ? $estudiante->estudiante->trayecto->num_trayecto : 'Sin asignar' }}
+                        <td>
+                            @if (empty($estudiante->estudiante))
+                                <b>Sin asignar</b>
+                            @else
+                                {{ $estudiante->estudiante->pnf->nom_pnf }}
+                            @endif
                         </td>
                         <td>
-                            <a href="{{ route('coordinador.usuarios.edit', $estudiante) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar perfil') }}>
+                            @if (empty($estudiante->estudiante))
+                                <b>Sin asignar</b>
+                            @else
+                                {{ $estudiante->estudiante->trayecto->num_trayecto }}
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('coordinador.usuarios.edit', $estudiante) }}" class="btn btn-primary"
+                                {{ Popper::arrow()->pop('Editar perfil') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>

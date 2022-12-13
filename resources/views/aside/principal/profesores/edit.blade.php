@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Profesores')
 
 @section('content_header')
-    <x-tipografia.titulo>Listado de profesores</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -15,6 +13,8 @@
             </ol>
         </div>
     </div>
+
+    <x-tipografia.titulo>Listado de profesores</x-tipografia.titulo>
 @stop
 
 @section('content')
@@ -50,7 +50,8 @@
                             {{-- Área de conocimiento --}}
                             <div class="col-6">
                                 <label for="conocimiento" class="control-label">Área de conocimiento</label>
-                                <select name="conocimiento" class="form-control @error('conocimiento') is-invalid @enderror">
+                                <select name="conocimiento"
+                                    class="form-control @error('conocimiento') is-invalid @enderror">
                                     <option value="0" disabled>Seleccione uno</option>
                                     @foreach ($conocimientos as $conocimiento)
                                         <option value="{{ $conocimiento->id }}"
@@ -58,7 +59,7 @@
                                             {{ $conocimiento->nom_especialidad }}</option>
                                     @endforeach
                                 </select>
-        
+
                                 @error('conocimiento')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -77,9 +78,9 @@
                                         <option value=0 {{ $profesor->estado_profesor === 0 ? 'selected' : '' }}>Inactivo
                                         </option>
                                     </select>
-        
+
                                 </div>
-        
+
                                 @error('estado_profesor')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

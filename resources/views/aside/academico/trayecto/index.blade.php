@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Trayectos')
 
 @section('content_header')
-<x-tipografia.titulo>Trayectos</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -67,6 +65,8 @@
             </div>
         </div>
     </div>
+
+    <x-tipografia.titulo>Trayectos</x-tipografia.titulo>
 @stop
 
 @section('content')
@@ -83,7 +83,8 @@
                 @foreach ($trayectos as $trayecto)
                     <tr>
                         <td>{{ $trayecto->num_trayecto }}</td>
-                        <td><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
+                        <td><a href="{{ route('trayecto.edit', $trayecto->id) }}" class="btn btn-primary"
+                                {{ Popper::arrow()->pop('Editar') }}>
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>

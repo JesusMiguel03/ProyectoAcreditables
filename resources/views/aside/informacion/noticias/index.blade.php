@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Noticias')
 
 @section('content_header')
-<x-tipografia.titulo>Noticias</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -99,6 +97,8 @@
             @endcan
         </div>
     </div>
+
+    <x-tipografia.titulo>Noticias</x-tipografia.titulo>
 @stop
 
 @section('content')
@@ -120,7 +120,8 @@
                                 <td>{{ $noticia->encabezado }}</td>
                                 <td>{{ $noticia->desc_noticia }}</td>
                                 <td>{{ $noticia->mostrar === 0 ? 'Inactivo' : 'Activo' }}</td>
-                                <td><a href="{{ route('noticias.edit', $noticia->id) }}" class="btn btn-primary" {{ Popper::arrow()->pop('Editar') }}>
+                                <td><a href="{{ route('noticias.edit', $noticia->id) }}" class="btn btn-primary"
+                                        {{ Popper::arrow()->pop('Editar') }}>
                                         <i class="fas fa-edit"></i>
                                     </a>
                                 </td>

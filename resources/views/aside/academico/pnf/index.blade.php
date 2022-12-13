@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | PNF')
 
 @section('content_header')
-<x-tipografia.titulo>PNF</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -81,6 +79,8 @@
             </div>
         </div>
     </div>
+
+    <x-tipografia.titulo>PNF</x-tipografia.titulo>
 @stop
 
 @section('content')

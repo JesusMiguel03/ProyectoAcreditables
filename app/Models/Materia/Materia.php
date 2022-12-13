@@ -2,6 +2,7 @@
 
 namespace App\Models\Materia;
 
+use App\Models\DatosAcademicos\Estudiante_materia;
 use App\Models\Profesor\Profesor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,7 @@ class Materia extends Model
 
     public function estudiantes()
     {
-        return $this->hasMany(Estudiante_materia::class, 'id');
+        return $this->hasMany(Estudiante_materia::class, 'materia_id', 'id');
     }
 
     public function profesor()

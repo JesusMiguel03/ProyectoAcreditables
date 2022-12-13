@@ -3,24 +3,26 @@
 @section('title', 'Acreditables | Profesor')
 
 @section('content_header')
-<x-tipografia.titulo>Listado de profesores</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-6">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('profesores.index') }}" class="link-muted">Profesores</a></li>
-                <li class="breadcrumb-item active"><a href="">{{ $profesor->usuario->nombre . ' ' . $profesor->usuario->apellido }}</a></li>
+                <li class="breadcrumb-item active"><a
+                        href="">{{ $profesor->usuario->nombre . ' ' . $profesor->usuario->apellido }}</a></li>
             </ol>
         </div>
     </div>
+
+    <x-tipografia.titulo>Listado de profesores</x-tipografia.titulo>
 @stop
 
 @section('content')
     <div class="row">
         <div class="col-md-3 col-sm-12">
             <div class="card">
-                <header class="card-header {{ $profesor->estado_profesor === 1 ? 'bg-primary' : 'bg-secondary' }} text-center">
+                <header
+                    class="card-header {{ $profesor->estado_profesor === 1 ? 'bg-primary' : 'bg-secondary' }} text-center">
                     <h6>
                         Se encuentra {{ $profesor->estado_profesor === 1 ? 'Activo' : 'Inactivo' }}
                     </h6>
@@ -28,7 +30,8 @@
                 <div class="card-body box-profile" style="height: 11.801rem;">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle"
-                            src="{{ empty($profesor->usuario->avatar) ? asset('/vendor/img/profs/user.webp') : asset('vendor/img/profs/' . $profesor->usuario->avatar) }}" alt="Avatar del profesor">
+                            src="{{ empty($profesor->usuario->avatar) ? asset('/vendor/img/profs/user.webp') : asset('vendor/img/profs/' . $profesor->usuario->avatar) }}"
+                            alt="Avatar del profesor">
                     </div>
 
                     <h3 class="profile-username text-center">

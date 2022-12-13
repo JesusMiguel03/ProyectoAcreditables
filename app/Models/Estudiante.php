@@ -6,7 +6,6 @@ use App\Models\DatosAcademicos\Estudiante_materia;
 use App\Models\DatosAcademicos\Pnf;
 use App\Models\DatosAcademicos\Trayecto;
 use App\Models\Materia\Asistencia;
-use App\Models\Materia\Materia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

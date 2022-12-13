@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Editar estudiante')
 
 @section('content_header')
-<x-tipografia.titulo>Listado de estudiantes</x-tipografia.titulo>
-
     <div class="col-6">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
@@ -14,6 +12,8 @@
             <li class="breadcrumb-item active"><a href="">{{ $usuario->nombre }} {{ $usuario->apellido }}</a></li>
         </ol>
     </div>
+
+    <x-tipografia.titulo>Listado de estudiantes</x-tipografia.titulo>
 @stop
 
 @section('content')

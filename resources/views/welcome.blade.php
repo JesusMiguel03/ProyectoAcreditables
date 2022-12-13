@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Inicio')
 
 @section('content_header')
-<x-tipografia.titulo>Página principal</x-tipografia.titulo>
-
     <div class="row">
         <div class="col-sm-6">
             <ol class="breadcrumb">
@@ -12,6 +10,8 @@
             </ol>
         </div>
     </div>
+
+    <x-tipografia.titulo>Página principal</x-tipografia.titulo>
 @stop
 
 @section('content')

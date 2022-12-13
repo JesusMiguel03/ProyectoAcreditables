@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCoordinadorTable extends Migration
+class CreatePeriodosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateCoordinadorTable extends Migration
      */
     public function up()
     {
-        Schema::create('coordinador', function (Blueprint $table) {
+        Schema::create('periodos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('usuario_id');
-            $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('fase');
+            $table->dateTime('inicio');
+            $table->dateTime('fin');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateCoordinadorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coordinador');
+        Schema::dropIfExists('periodos');
     }
 }

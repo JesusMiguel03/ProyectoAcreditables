@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Ver materia')
 
 @section('content_header')
-    <x-tipografia.titulo>Materias</x-tipografia.titulo>
-
     <div class="col-6">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
@@ -12,6 +10,8 @@
             <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }}</a></li>
         </ol>
     </div>
+
+    <x-tipografia.titulo>Materias</x-tipografia.titulo>
 @stop
 
 @section('content')
@@ -131,8 +131,14 @@
         </section>
 
         {{-- Listado de estudiantes --}}
-        <section class="col-12">
-            <div class="card col-12 table-responsive-sm p-3 my-3">
+        <section class="col-12 my-3">
+            @if (auth()->user()->getRoleNames()[0] !== 'Estudiante')
+                <a href="{{ route('listadoEstudiantes', $materia->id) }}" class="btn btn-primary float-right"
+                    {{ Popper::arrow()->pop('Descargar listado de estudiantes') }}>
+                    <i class="fas fa-download" style="width: 2rem"></i>
+                </a>
+            @endif
+            <div class="card col-12 table-responsive-sm p-3">
                 <table id='tabla' class="table table-striped">
                     <thead>
                         <tr class="bg-secondary">
@@ -164,8 +170,14 @@
                                         <td>
                                             <div class="row">
                                                 @can('materias.gestion')
+                                                    <a href="{{ route('comprobante', $estudiante->id) }}"
+                                                        class="btn btn-danger mr-2"
+                                                        {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
+                                                        <i class="fas fa-file-pdf" style="width: 15px"></i>
+                                                    </a>
+
                                                     @if ($estudiante->preinscrito->validacion_estudiante === 0)
-                                                        <form action="{{ route('validacion') }}" method="POSt">
+                                                        <form action="{{ route('validacion') }}" method="POST">
                                                             @csrf
                                                             <input type="number" name="id" value="{{ $estudiante->id }}"
                                                                 class="d-none" hidden>
@@ -176,7 +188,7 @@
                                                             </button>
                                                         </form>
                                                     @else
-                                                        <form action="{{ route('invalidacion') }}" method="POSt">
+                                                        <form action="{{ route('invalidacion') }}" method="POST">
                                                             @csrf
                                                             <input type="number" name="id" value="{{ $estudiante->id }}"
                                                                 class="d-none" hidden>

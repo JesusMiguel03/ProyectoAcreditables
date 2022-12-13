@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Asistencia')
 
 @section('content_header')
-    <x-tipografia.titulo>Asistencias</x-tipografia.titulo>
-
     <div class="col-6">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
@@ -13,6 +11,8 @@
                     {{ $estudiante->usuarios->apellido }}</a></li>
         </ol>
     </div>
+
+    <x-tipografia.titulo>Asistencias</x-tipografia.titulo>
 @stop
 
 @section('content')
@@ -55,10 +55,13 @@
             <div class="row">
                 <div class="col-6">
                     <p>
-                        Lleva un <span class="font-weight-bold text-info">{{ number_format($asistencias * (100 / 12), 0, ',', '.') }}%</span> / <span class="font-weight-bold text-info">75%</span> de asistencia para aprobar la acreditable.
+                        Lleva un <span
+                            class="font-weight-bold text-info">{{ number_format($asistencias * (100 / 12), 0, ',', '.') }}%</span>
+                        / <span class="font-weight-bold text-info">75%</span> de asistencia para aprobar la acreditable.
                     </p>
                     <p>
-                        Estado: <span class="font-weight-bold {{ $asistencias < 9 ? 'text-danger' : 'text-success' }}">{{ $asistencias < 9 ? 'reprobado por inasistencias' : 'aprobado' }}</span>
+                        Estado: <span
+                            class="font-weight-bold {{ $asistencias < 9 ? 'text-danger' : 'text-success' }}">{{ $asistencias < 9 ? 'reprobado por inasistencias' : 'aprobado' }}</span>
                     </p>
                 </div>
 

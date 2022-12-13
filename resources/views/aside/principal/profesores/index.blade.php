@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Profesores')
 
 @section('content_header')
-<x-tipografia.titulo>Listado de profesores</x-tipografia.titulo>
-
     <div class="row mb-2">
         <div class="col-6">
             <ol class="breadcrumb">
@@ -195,8 +193,8 @@
                                         <div class="col-9">
                                             <input type="tel" name="telefono"
                                                 class="form-control @error('telefono') is-invalid @enderror"
-                                                value="{{ old('telefono') }}" placeholder="{{ __('0193451') }}" autofocus
-                                                required>
+                                                value="{{ old('telefono') }}" placeholder="{{ __('0193451') }}"
+                                                autofocus required>
                                             @error('telefono')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -454,6 +452,8 @@
             </div>
         </div>
     </div>
+
+    <x-tipografia.titulo>Listado de profesores</x-tipografia.titulo>
 @stop
 
 @section('content')

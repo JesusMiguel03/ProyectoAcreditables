@@ -3,8 +3,6 @@
 @section('title', 'Acreditables | Editar materia')
 
 @section('content_header')
-    <x-tipografia.titulo>Materias</x-tipografia.titulo>
-
     <div class="col-6">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
@@ -12,6 +10,8 @@
             <li class="breadcrumb-item active"><a href="">Editar</a></li>
         </ol>
     </div>
+
+    <x-tipografia.titulo>Materias</x-tipografia.titulo>
 @stop
 
 @section('content')
