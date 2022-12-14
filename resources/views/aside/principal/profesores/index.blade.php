@@ -69,8 +69,8 @@
                                 <div class="form-group required mb-3">
                                     <label for="departamento" class="control-label">Adjunto al departamento</label>
                                     <div class="input-group">
-                                        <select name="departamento" class="form-control">
-                                            <option value="0" readonly>Seleccione uno</option>
+                                        <select name="departamento" class="form-control" required>
+                                            <option value="" readonly>Seleccione uno</option>
                                             @foreach ($departamentos as $departamento)
                                                 <option value="{{ $departamento->id }}">
                                                     {{ $departamento->nom_pnf }}
@@ -90,11 +90,11 @@
                                 <div class="form-group required mb-3">
                                     <label for="conocimiento" class="control-label">Área de conocimiento</label>
                                     <div class="input-group">
-                                        <select name="conocimiento" class="form-control">
+                                        <select name="conocimiento" class="form-control @error('conocimiento') is-invalid @enderror" required>
                                             @if (!empty($conocimientos))
-                                                <option value="0" readonly>No hay datos registrados</option>
+                                                <option value="" readonly>No hay datos registrados, favor registre uno</option>
                                             @else
-                                                <option value="0" readonly>Seleccione uno</option>
+                                                <option value="" readonly>Seleccione uno</option>
                                             @endif
                                             @foreach ($conocimientos as $conocimiento)
                                                 <option value="{{ $conocimiento->id }}">
@@ -465,9 +465,9 @@
         <table id='tabla' class="table table-striped">
             <thead>
                 <tr class="bg-secondary">
+                    <th>Cédula</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Cédula</th>
                     <th>Área de conocimiento</th>
                     <th>Telefono</th>
                     <th>Estado</th>
@@ -477,9 +477,9 @@
             <tbody>
                 @foreach ($profesores as $profesor)
                     <tr>
+                        <td>{{ 'V-' . number_format($profesor->usuario->cedula, 0, ',', '.') }}</td>
                         <td>{{ $profesor->usuario->nombre }}</td>
                         <td>{{ $profesor->usuario->apellido }}</td>
-                        <td>{{ 'V-' . number_format($profesor->usuario->cedula, 0, ',', '.') }}</td>
                         <td>{{ $profesor->conocimiento->nom_especialidad }}</td>
                         <td>{{ substr($profesor->telefono, 0, 4) . '-' . substr($profesor->telefono, 4) }}</td>
                         <td>{{ $profesor->estado_profesor === 1 ? 'Activo' : 'Inactivo' }}</td>
