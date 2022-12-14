@@ -32,6 +32,15 @@
 
                     <input type="text" class="d-none" name="validador" value="coord" hidden>
 
+                    <div class="form-group text-justify" style="margin-bottom: -10px">
+                        <p class="pl-2 text-muted"><strong>Nota:</strong> 
+                            Para seleccionar 1 a 1 presione la tecla Ctrl y clic en cada estudiante.
+                        </p>
+                        <p class="pl-2 text-muted" style="margin-top: -1rem">
+                            Para seleccionar varios presione la tecla Shift y clic en el primer y último estudiante.
+                        </p>
+                    </div>
+
                     <div class="form-group required mb-3">
                         <label for="usuario_id" class="control-label">Estudiante</label>
                         <select name="estudiantes[]" class="js-example-basic-single form-control" multiple="multiple">
@@ -75,18 +84,6 @@
                                 <i class="fas fa-save mr-2"></i>
                                 {{ __('Guardar') }}
                             </button>
-
-                            {{-- @foreach ($materias as $materia)
-                                @if ($loop->first)
-                                    @if ($materia->cupos_disponibles > 0 && !empty($no_preinscritos))
-                                    @else
-                                        <button class="btn btn-block btn-success" disabled>
-                                            <i class="fas fa-save mr-2"></i>
-                                            {{ __('Guardar') }}
-                                        </button>
-                                    @endif
-                                @endif
-                            @endforeach --}}
                         </div>
                     </div>
                 </form>
@@ -96,7 +93,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/select2.min.css') }}">
