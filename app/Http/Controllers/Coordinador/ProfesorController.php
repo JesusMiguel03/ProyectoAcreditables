@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Coordinador;
 
 use App\Models\Profesor\Profesor;
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use App\Models\DatosAcademicos\Pnf;
 use App\Models\Profesor\Especialidad;
 use App\Models\User;
@@ -22,12 +23,13 @@ class ProfesorController extends Controller
     public function index()
     {
         // Lista profesores, usuarios, áreas de conocimiento y departamentos
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $profesores = Profesor::all();
         $usuarios = User::all();
         $conocimientos = Especialidad::all();
         $departamentos = Pnf::all();
 
-        return view('aside.principal.profesores.index', compact('profesores', 'usuarios', 'conocimientos', 'departamentos'));
+        return view('aside.principal.profesores.index', compact('profesores', 'usuarios', 'conocimientos', 'departamentos', 'periodo'));
     }
 
     public function store(Request $request)
@@ -76,17 +78,19 @@ class ProfesorController extends Controller
     public function show($id)
     {
         // Muestra al profesor específico
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $profesor = Profesor::find($id);
 
-        return view('aside.principal.profesores.show', compact('profesor'));
+        return view('aside.principal.profesores.show', compact('profesor', 'periodo'));
     }
 
     public function edit($id)
     {
         // Lista las áreas de conocimiento y al profesor
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $conocimientos = Especialidad::all();
         $profesor = Profesor::find($id);
-        return view('aside.principal.profesores.edit', compact('profesor', 'conocimientos'));
+        return view('aside.principal.profesores.edit', compact('profesor', 'conocimientos', 'periodo'));
     }
 
     public function update(Request $request, $id)

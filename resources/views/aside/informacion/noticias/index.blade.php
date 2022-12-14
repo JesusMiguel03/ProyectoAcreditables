@@ -4,13 +4,17 @@
 
 @section('content_header')
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Noticias</a></li>
             </ol>
         </div>
-        <div class="col-6">
+
+        <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+            fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
+
+        <div class="col-4">
             @can('noticias.create')
                 <div class="card float-right">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noticia">
@@ -28,7 +32,7 @@
                             </header>
                             <main class="modal-body">
                                 <div class="label-group mb-3">
-                                    <form action="{{ route('noticias.store') }}" method="post">
+                                    <form action="{{ route('noticias.store') }}" method="post" enctype="multipart/form-data">
                                         @csrf
 
                                         {{-- Campo de encabezado --}}
@@ -73,6 +77,32 @@
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                             @enderror
+                                        </div>
+
+                                        {{-- Imagen (opcional) --}}
+                                        <div class="form-group mb-3">
+                                            <label for="imagen_noticia">Imagen</label>
+                                            <div class="input-group">
+                                                <input type="file"
+                                                    class="custom-file-input @error('imagen_noticia') is-invalid @enderror"
+                                                    id="imagen" name="imagen_noticia" accept="image/jpeg">
+                                                <label class="custom-file-label text-muted" for="imagen_noticia"
+                                                    id="campoImagen">Seleccione
+                                                    una imagen</label>
+                                                <small id="ayudaImagen" class="form-text text-muted">La imagen debe pesar menos
+                                                    de 1
+                                                    MB.</small>
+                                            </div>
+                                            @error('imagen_noticia')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+
+                                        {{-- Previsualizar imagen --}}
+                                        <div class="card" style="max-width: 540px">
+                                            <img src="" alt="" id="previsualizar" class="rounded">
                                         </div>
 
                                         <div class="form-group" style="margin-bottom: -10px">
@@ -138,12 +168,16 @@
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
 @stop
 
 @section('js')
     <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    @if (Auth::user()->getRoleNames()[0] === 'Coordinador')
+        <script src="{{ asset('js/previsualizacion.js') }}" defer></script>
+    @endif
     <script>
         @if ($message = session('creado'))
             let timerInterval

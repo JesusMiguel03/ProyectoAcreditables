@@ -4,11 +4,15 @@
 
 @section('content_header')
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}">Inicio</a></li>
             </ol>
         </div>
+
+        <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+            fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
+
     </div>
 
     <x-tipografia.titulo>Página principal</x-tipografia.titulo>
@@ -37,7 +41,7 @@
                 @if ($noticia->mostrar === 1)
                     <div class="slide">
                         <div class="card mt-3 shadow" style="height: 17rem;">
-                            <img src="{{ asset('vendor/img/defecto/noticias.png') }}"
+                            <img src="{{ !empty($noticia->imagen_noticia) ? asset('storage/' . $noticia->imagen_noticia) : asset('vendor/img/defecto/noticias.png') }}"
                                 class="card-img-top rounded border border-outline-secondary" style="filter:brightness(0.8)"
                                 alt="Imagen de noticia">
                             <h5 class="text-center py-2 text-white fw-bold"

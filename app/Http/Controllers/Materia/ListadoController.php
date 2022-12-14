@@ -12,6 +12,7 @@ class ListadoController extends Controller
     public function show($id)
     {
         // Lista a todos los estudiantes
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $estudiantes = Materia::find($id)->estudiantes;
 
         // Busca el último periodo

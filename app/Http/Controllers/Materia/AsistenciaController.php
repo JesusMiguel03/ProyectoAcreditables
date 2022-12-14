@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use App\Models\Estudiante;
 use Illuminate\Http\Request;
 
@@ -10,6 +11,7 @@ class AsistenciaController extends Controller
 {
     public function index()
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $estudiantes = Estudiante::all();
         $asistenciaEstudiantes = [];
 
@@ -28,7 +30,7 @@ class AsistenciaController extends Controller
             array_push($asistenciaEstudiantes, $asistencias);
         }
 
-        return view('aside.materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes'));
+        return view('aside.materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes', 'periodo'));
     }
 
     public function update(Request $request)
@@ -47,6 +49,7 @@ class AsistenciaController extends Controller
     public function edit($id)
     {
         // Busca al estudiante y su asistencia
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $estudiante = Estudiante::find($id);
 
         // Valida que tenga perfil de estudiante o esté inscrito en una materia
@@ -65,6 +68,6 @@ class AsistenciaController extends Controller
             $asistencia[$sem] === 1 ? $asistencias++ : '';
         }
 
-        return view('aside.materias.asistencias.edit', compact('estudiante', 'asistencias'));
+        return view('aside.materias.asistencias.edit', compact('estudiante', 'asistencias', 'periodo'));
     }
 }

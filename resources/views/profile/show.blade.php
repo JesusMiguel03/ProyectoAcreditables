@@ -3,12 +3,17 @@
 @section('title', 'Acreditables | Mi cuenta')
 
 @section('content_header')
-    <div class="col-6">
+<div class="row">
+    <div class="col-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
             <li class="breadcrumb-item active"><a href="" class="text-primary">Cuenta</a></li>
         </ol>
     </div>
+
+    <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+        fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
+</div>
 
     <x-tipografia.titulo>Mi cuenta</x-tipografia.titulo>
 @stop

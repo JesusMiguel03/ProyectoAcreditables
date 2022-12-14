@@ -1,4 +1,4 @@
-let archivo = document.getElementById('imagen_materia')
+let archivo = document.getElementById('imagen')
 let previsualizar = document.getElementById("previsualizar")
 let campoImagen = document.getElementById("campoImagen")
 

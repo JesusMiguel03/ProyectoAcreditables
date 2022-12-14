@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,8 +24,9 @@ class CategoriaController extends Controller
      */
     public function index()
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $categorias = Categoria::all();
-        return view('aside.materias.categorias.index', compact('categorias'));
+        return view('aside.materias.categorias.index', compact('categorias', 'periodo'));
     }
 
     /**
@@ -68,8 +70,9 @@ class CategoriaController extends Controller
      */
     public function edit($id)
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $categoria = Categoria::findOrFail($id);
-        return view('aside.materias.categorias.edit', compact('categoria'));
+        return view('aside.materias.categorias.edit', compact('categoria', 'periodo'));
     }
 
     /**

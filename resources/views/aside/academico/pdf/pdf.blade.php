@@ -164,20 +164,11 @@
                                 <h6 style="font-weight: 400;">
                                     @if (!empty($periodo->inicio))
                                         @php
-                                            $inicio = explode('-', explode(' ', $periodo->inicio)[0]);
-                                            $inicioDia = $inicio[2];
-                                            $inicioMes = $inicio[1];
-                                            $inicioFecha = $inicio[0];
-                                            $inicio = $inicioDia . '-' . $inicioMes . '-' . $inicioFecha;
-                                            
-                                            $fin = explode('-', explode(' ', $periodo->fin)[0]);
-                                            $finDia = $fin[2];
-                                            $finMes = $fin[1];
-                                            $finFecha = $fin[0];
-                                            $fin = $finDia . '-' . $finMes . '-' . $finFecha;
+                                            $inicio = explode('-', explode(' ', $periodo->inicio)[0])[0];
+                                            $numeros = ['I', 'II', 'III'];
+                                            $fecha = $numeros[$periodo->fase - 1] . '-' . $inicio;
                                         @endphp
-                                        [{{ $inicio }}] -
-                                        [{{ $fin }}]
+                                        [{{ $fecha }}]
                                     @else
                                         No definido
                                     @endif

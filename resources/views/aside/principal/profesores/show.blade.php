@@ -4,7 +4,7 @@
 
 @section('content_header')
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('profesores.index') }}" class="link-muted">Profesores</a></li>
@@ -12,6 +12,9 @@
                         href="">{{ $profesor->usuario->nombre . ' ' . $profesor->usuario->apellido }}</a></li>
             </ol>
         </div>
+
+        <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+            fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
     </div>
 
     <x-tipografia.titulo>Listado de profesores</x-tipografia.titulo>

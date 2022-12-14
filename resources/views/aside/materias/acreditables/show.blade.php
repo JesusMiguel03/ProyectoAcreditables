@@ -3,12 +3,17 @@
 @section('title', 'Acreditables | Ver materia')
 
 @section('content_header')
-    <div class="col-6">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
-            <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }}</a></li>
-        </ol>
+    <div class="row">
+        <div class="col-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
+                <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }}</a></li>
+            </ol>
+        </div>
+
+        <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+            fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
     </div>
 
     <x-tipografia.titulo>Materias</x-tipografia.titulo>
@@ -69,7 +74,7 @@
                                 <form action="{{ route('preinscripcion.store') }}" method="post">
                                     @csrf
 
-                                    <input type="number" name="usuario_id" class="d-none" hidden
+                                    <input type="number" name="estudiantes[]" class="d-none" hidden
                                         value="{{ Auth::user()->estudiante->id }}">
                                     <input type="number" name="materia_id" class="d-none" hidden value="{{ $materia->id }}">
 

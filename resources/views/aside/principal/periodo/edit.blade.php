@@ -4,13 +4,16 @@
 
 @section('content_header')
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('periodo') }}" class="link-muted">Periodos</a></li>
                 <li class="breadcrumb-item active"><a href="">Editar</a></li>
             </ol>
         </div>
+
+        <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+            fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
     </div>
 
     <x-tipografia.titulo>Periodo</x-tipografia.titulo>
@@ -28,14 +31,14 @@
                     @csrf
                     {{ method_field('PUT') }}
 
-                    <input type="numeric" class="d-none" name="id" value="{{ $periodo->id }}" hidden>
+                    <input type="numeric" class="d-none" name="id" value="{{ $periodoEditar->id }}" hidden>
 
                     {{-- Fase --}}
                     <div class="form-group required mb-3">
                         <label for="fase" class="control-label">Fase</label>
                         <div class="input-group">
                             <input type="number" name="fase" class="form-control @error('fase') is-invalid @enderror"
-                                value="{{ $periodo->fase }}" placeholder="{{ __('Ej: 1, 2 o 3') }}" autofocus required>
+                                value="{{ $periodoEditar->fase }}" placeholder="{{ __('Ej: 1, 2 o 3') }}" autofocus required>
 
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -57,7 +60,7 @@
                         <div class="input-group date" id="inicio" data-target-input="nearest">
                             <input type="text" name="inicio"
                                 class="form-control datetimepicker-input @error('inicio') is-invalid @enderror"
-                                data-target="#inicio" value="{{ explode(' ', $periodo->inicio)[0] }}" placeholder="{{ __('2015-01-01') }}"
+                                data-target="#inicio" value="{{ explode(' ', $periodoEditar->inicio)[0] }}" placeholder="{{ __('2015-01-01') }}"
                                 required>
                             <div class="input-group-append" data-target="#inicio" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -77,7 +80,7 @@
                         <div class="input-group date" id="fin" data-target-input="nearest">
                             <input type="text" name="fin"
                                 class="form-control datetimepicker-input @error('fin') is-invalid @enderror"
-                                data-target="#fin" value="{{ explode(' ', $periodo->fin)[0] }}" placeholder="{{ __('2015-01-01') }}"
+                                data-target="#fin" value="{{ explode(' ', $periodoEditar->fin)[0] }}" placeholder="{{ __('2015-01-01') }}"
                                 required>
                             <div class="input-group-append" data-target="#fin" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>

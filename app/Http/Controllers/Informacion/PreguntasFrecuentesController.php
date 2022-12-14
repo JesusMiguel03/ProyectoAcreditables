@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Informacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use App\Models\Informacion\Preguntas_frecuentes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -19,8 +20,9 @@ class PreguntasFrecuentesController extends Controller
     public function index()
     {
         // Lista todas las preguntas
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $preguntas = Preguntas_frecuentes::all();
-        return view('aside.informacion.preguntas.index', compact('preguntas'));
+        return view('aside.informacion.preguntas.index', compact('preguntas', 'periodo'));
     }
 
     public function store(Request $request)
@@ -59,8 +61,9 @@ class PreguntasFrecuentesController extends Controller
     public function edit($id)
     {
         // Trae la pregunta correspondiente
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $pregunta = Preguntas_frecuentes::find($id);
-        return view('aside.informacion.preguntas.edit', compact('pregunta'));
+        return view('aside.informacion.preguntas.edit', compact('pregunta', 'periodo'));
     }
 
     public function update(Request $request, $id)

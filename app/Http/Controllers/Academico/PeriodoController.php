@@ -18,8 +18,9 @@ class PeriodoController extends Controller
 
     public function index()
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $periodos = Periodo::all();
-        return view('aside.principal.periodo.index', compact('periodos'));
+        return view('aside.principal.periodo.index', compact('periodos', 'periodo'));
     }
 
     public function store(Request $request)
@@ -45,8 +46,9 @@ class PeriodoController extends Controller
 
     public function edit($id)
     {
-        $periodo = Periodo::find($id);
-        return view('aside.principal.periodo.edit', compact('periodo'));
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
+        $periodoEditar = Periodo::find($id);
+        return view('aside.principal.periodo.edit', compact('periodoEditar', 'periodo'));
     }
 
     public function update(Request $request)

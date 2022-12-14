@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Academico\Periodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,8 +20,9 @@ class UserProfileController extends Controller
      */
     public function index()
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $profile = Auth::user();
-        return view('auth.profile')->with('profile', $profile);
+        return view('auth.profile', compact('profile', 'periodo'));
     }
 
     /**

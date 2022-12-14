@@ -4,6 +4,7 @@ namespace App\Http\Controllers\DatosAcademicos;
 
 use App\Models\DatosAcademicos\Pnf;
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,8 +20,9 @@ class PnfController extends Controller
     public function index()
     {
         // Lista todos los pnf
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $pnfs = Pnf::all();
-        return view('aside.academico.pnf.index', compact('pnfs'));
+        return view('aside.academico.pnf.index', compact('pnfs', 'periodo'));
     }
 
     public function store(Request $request)
@@ -56,8 +58,9 @@ class PnfController extends Controller
     public function edit($id)
     {
         // Trea el pnf correspondiente
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $pnf = Pnf::find($id);
-        return view('aside.academico.pnf.edit', compact('pnf'));
+        return view('aside.academico.pnf.edit', compact('pnf', 'periodo'));
     }
 
     public function update(Request $request, $id)

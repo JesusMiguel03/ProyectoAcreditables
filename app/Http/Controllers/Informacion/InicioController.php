@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Informacion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Informacion\Noticia;
+use App\Models\Informacion\Periodo;
 use Illuminate\Http\Request;
 
 class InicioController extends Controller
@@ -15,7 +16,8 @@ class InicioController extends Controller
     */
     public function index()
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $noticias = Noticia::all();
-        return view('welcome', compact('noticias'));
+        return view('welcome', compact('noticias', 'periodo'));
     }
 }

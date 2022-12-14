@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Coordinador;
 
 use App\Models\Profesor\Especialidad;
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,8 +20,9 @@ class EspecialidadController extends Controller
     public function index()
     {
         // Lista todas las áreas de conocimiento
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $especialidades = Especialidad::all();
-        return view('aside.principal.conocimiento.index', compact('especialidades'));
+        return view('aside.principal.conocimiento.index', compact('especialidades', 'periodo'));
     }
 
     public function store(Request $request)
@@ -60,8 +62,9 @@ class EspecialidadController extends Controller
     public function edit($id)
     {
         // Busca el área de conocimiento respectivamente
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $especialidad = Especialidad::find($id);
-        return view('aside.principal.conocimiento.edit', compact('especialidad'));
+        return view('aside.principal.conocimiento.edit', compact('especialidad', 'periodo'));
     }
 
     public function update(Request $request, $id)

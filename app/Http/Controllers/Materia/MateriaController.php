@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Materia;
 
-// Controladores, ayudas
+
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use App\Models\Estudiante;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-
-// Modelos
 use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
 use App\Models\Profesor\Profesor;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Validator as ValidationValidator;
+
 
 class MateriaController extends Controller
 {
@@ -32,9 +30,10 @@ class MateriaController extends Controller
      */
     public function index()
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $materias = Materia::all();
 
-        return view('aside.materias.acreditables.index', compact('materias'));
+        return view('aside.materias.acreditables.index', compact('materias', 'periodo'));
     }
 
     /**
@@ -61,7 +60,7 @@ class MateriaController extends Controller
             'imagen_materia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
         ]);
 
-        
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput()->with('error', 'error');
         };
@@ -97,6 +96,7 @@ class MateriaController extends Controller
     public function show($id)
     {
         // Busca la id del curso
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $materia = Materia::find($id);
 
         if (!$materia) {
@@ -124,7 +124,7 @@ class MateriaController extends Controller
             $validacion = ['Sin asignar'];
         }
 
-        return view('aside.materias.acreditables.show', compact('materia', 'validacion', 'datos_materia', 'preinscritos'));
+        return view('aside.materias.acreditables.show', compact('materia', 'validacion', 'datos_materia', 'preinscritos', 'periodo'));
     }
 
     /**
@@ -136,11 +136,12 @@ class MateriaController extends Controller
     public function edit($id)
     {
         // Busca todos los valores necesarios para editar un curso
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $materia = Materia::find($id);
         $categorias = Categoria::all();
         $profesores = Profesor::all();
 
-        return view('aside.materias.acreditables.edit', compact('materia', 'categorias', 'profesores'));
+        return view('aside.materias.acreditables.edit', compact('materia', 'categorias', 'profesores', 'periodo'));
     }
 
     /**
@@ -195,7 +196,14 @@ class MateriaController extends Controller
 
         // Actualiza los campos
         $materia->nom_materia = $request->get('nom_materia');
+
+        if ($materia->cupos !== $request->get('cupos')) {
+            $materia->cupos > $request->get('cupos') ?
+                $materia->cupos_disponibles -= intval($materia->cupos) - $request->get('cupos') : $materia->cupos_disponibles += $request->get('cupos') - intval($materia->cupos);
+        }
         $materia->cupos = $request->get('cupos');
+
+
         $materia->desc_materia = $request->get('desc_materia');
         $materia->imagen_materia = $imagen ? $imagen : $materia->imagen_materia;
         $materia->estado_materia = $request->get('estado_materia');

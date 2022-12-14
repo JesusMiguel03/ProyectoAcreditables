@@ -4,13 +4,17 @@
 
 @section('content_header')
     <div class="row mb-2">
-        <div class="col-6">
+        <div class="col-4">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
                 <li class="breadcrumb-item active"><a href="">Materias</a></li>
             </ol>
         </div>
-        <div class="col-6">
+
+        <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+            fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
+
+        <div class="col-4">
             {{-- Boton para crear cursos - Modal --}}
             @can('materias.gestion')
                 <div class="card float-right">
@@ -110,7 +114,7 @@
                                         <div class="input-group">
                                             <input type="file"
                                                 class="custom-file-input @error('imagen_materia') is-invalid @enderror"
-                                                id="imagen_materia" name="imagen_materia" accept="image/jpeg">
+                                                id="imagen" name="imagen_materia" accept="image/jpeg">
                                             <label class="custom-file-label text-muted" for="imagen_materia"
                                                 id="campoImagen">Seleccione
                                                 una imagen</label>
@@ -384,11 +388,7 @@
 <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-<style>
-    .custom-file-label::after {
-        content: "Buscar";
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
 @stop
 
 @section('js')

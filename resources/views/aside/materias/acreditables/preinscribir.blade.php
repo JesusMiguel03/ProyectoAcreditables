@@ -3,12 +3,17 @@
 @section('title', 'Acreditables | Inscribir')
 
 @section('content_header')
-    <div class="col-6">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
-            <li class="breadcrumb-item active"><a href="">Inscribir</a></li>
-        </ol>
+    <div class="row">
+        <div class="col-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
+                <li class="breadcrumb-item active"><a href="">Inscribir</a></li>
+            </ol>
+        </div>
+
+        <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
+            fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
     </div>
 
     <x-tipografia.titulo>Inscripción</x-tipografia.titulo>
@@ -29,7 +34,7 @@
 
                     <div class="form-group required mb-3">
                         <label for="usuario_id" class="control-label">Estudiante</label>
-                        <select name="usuario_id" class="form-control">
+                        <select name="estudiantes[]" class="js-example-basic-single form-control" multiple="multiple">
                             @if (empty($no_preinscritos))
                                 <option value="0" readonly>No hay estudiantes disponibles</option>
                             @else
@@ -92,22 +97,21 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
-    <style>
-        .form-group.required .control-label:after {
-            color: #d00;
-            content: "*";
-            position: absolute;
-            margin-left: 6px;
-            margin-top: 3px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/select2/select2.min.css') }}">
 @stop
 
 @section('js')
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
     <script>
         @if ($message = session('actualizado'))
             let timerInterval

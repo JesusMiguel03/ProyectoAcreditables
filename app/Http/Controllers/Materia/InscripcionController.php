@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use App\Models\DatosAcademicos\Estudiante_materia;
 use App\Models\Estudiante;
 use App\Models\Materia\Asistencia;
@@ -14,6 +15,7 @@ class InscripcionController extends Controller
 {
     public function inscribir($id)
     {
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $estudiantes = Estudiante::all();
         $no_preinscritos = [];
 
@@ -24,7 +26,7 @@ class InscripcionController extends Controller
         }
 
         $materia = Materia::find($id);
-        return view('aside.materias.acreditables.preinscribir', compact('no_preinscritos', 'materia'));
+        return view('aside.materias.acreditables.preinscribir', compact('no_preinscritos', 'materia', 'periodo'));
     }
     /**
      * Store a newly created resource in storage.
@@ -34,10 +36,6 @@ class InscripcionController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->get('usuario_id') === '0') {
-            return redirect()->back()->with('usuario-invalido', 'error');
-        }
-
         $asistencia = Asistencia::create([
             'sem1' => 0,
             'sem2' => 0,
@@ -53,19 +51,23 @@ class InscripcionController extends Controller
             'sem12' => 0,
         ]);
 
-        Estudiante_materia::updateOrCreate(
-            ['estudiante_id' => $request->get('usuario_id')],
-            [
-                'calificacion' => 0,
-                'codigo' => Str::random(20),
-                'validacion_estudiante' => 0,
-                'materia_id' => $request->get('materia_id'),
-                'asistencia_id' => $asistencia->id,
-            ]
-        );
+        $estudiantes = $request->get('estudiantes');
+
+        foreach ($estudiantes as $estudiante) {
+            Estudiante_materia::updateOrCreate(
+                ['estudiante_id' => $estudiante],
+                [
+                    'calificacion' => 0,
+                    'codigo' => Str::random(20),
+                    'validacion_estudiante' => 0,
+                    'materia_id' => $request->get('materia_id'),
+                    'asistencia_id' => $asistencia->id,
+                ]
+            );
+        }
 
         $materia = Materia::find($request->get('materia_id'));
-        $materia->cupos_disponibles = $materia->cupos_disponibles === 0 ? 0 : $materia->cupos_disponibles - 1;
+        $materia->cupos_disponibles = $materia->cupos_disponibles === 0 ? 0 : $materia->cupos_disponibles - count($estudiantes);
         $materia->save();
         
         if (!empty($request->get('validador'))) {

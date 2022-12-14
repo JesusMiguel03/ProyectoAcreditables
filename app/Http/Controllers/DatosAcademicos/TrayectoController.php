@@ -4,6 +4,7 @@ namespace App\Http\Controllers\DatosAcademicos;
 
 use App\Models\DatosAcademicos\Trayecto;
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,8 +20,9 @@ class TrayectoController extends Controller
     public function index()
     {
         // Lista todos los trayectos
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $trayectos = Trayecto::all();
-        return view('aside.academico.trayecto.index', compact('trayectos'));
+        return view('aside.academico.trayecto.index', compact('trayectos', 'periodo'));
     }
 
     public function store(Request $request)
@@ -50,8 +52,9 @@ class TrayectoController extends Controller
     public function edit($id)
     {
         // Trae el trayecto correspondiente
+        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $trayecto = Trayecto::find($id);
-        return view('aside.academico.trayecto.edit', compact('trayecto'));
+        return view('aside.academico.trayecto.edit', compact('trayecto', 'periodo'));
     }
 
     public function update(Request $request, $id)
