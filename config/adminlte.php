@@ -296,12 +296,12 @@ return [
             'text'        => 'Inicio',
             'url'         => '/',
             'icon'        => 'fas fa-home',
-            'can'         => 'materias.gestion',
         ],
         [
-            'text'        => 'Período',
+            'text'        => 'Periodo',
             'url'         => '/periodo',
-            'icon'        => 'fas fa-calendar'
+            'icon'        => 'fas fa-calendar',
+            'can'         => 'materias.gestion',
         ],
         [
             'text'        => 'Registrar',

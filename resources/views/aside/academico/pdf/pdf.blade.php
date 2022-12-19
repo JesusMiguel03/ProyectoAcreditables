@@ -197,7 +197,7 @@
                             una inscripción en la acreditable de <span
                                 class="font-weight-bold">{{ $estudiante->preinscrito->materia->nom_materia }}</span>
                             el día <span
-                                class="font-weight-bold">{{ date('d') . ' de ' . ('Illuminate\Support\Carbon')::now()->locale('es')->monthName . ' de ' . date('Y') }}</span>,
+                            class="font-weight-bold">{{ date('d') . ' de ' . ('Illuminate\Support\Carbon')::now()->locale('es')->monthName . ' de ' . date('Y') }}</span>,
                             para la formación integral del participante dentro de la
                             institución.
                         </h6>
