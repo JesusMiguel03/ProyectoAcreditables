@@ -4,20 +4,23 @@ namespace App\Http\Controllers\Informacion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Informacion\Noticia;
-use App\Models\Informacion\Periodo;
-use Illuminate\Http\Request;
 
 class InicioController extends Controller
 {
-    /*
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
+    public function __construct()
+    {
+        // Valida la autenticación
+        $this->middleware('auth');
+        $this->middleware('prevent-back-history');
+    }
+
     public function index()
     {
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
+        // Valida si tiene el permiso
+        permiso('inicio');
+
+        // Lista todas las noticias
         $noticias = Noticia::all();
-        return view('welcome', compact('noticias', 'periodo'));
+        return view('welcome', compact('noticias'));
     }
 }

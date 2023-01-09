@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Http\Controllers\Soporte;
+
+use App\Http\Controllers\Controller;
+use App\Models\Academico\AreaConocimiento;
+use App\Models\Academico\Horario;
+use App\Models\Academico\PNF;
+use App\Models\Academico\Trayecto;
+use App\Models\Informacion\Noticia;
+use App\Models\Informacion\Pregunta_frecuente;
+use App\Models\Materia\Categoria;
+use App\Models\Materia\Materia;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+class SoporteController extends Controller
+{
+    public function __construct()
+    {
+        // Valida la autenticación
+        $this->middleware('auth');
+        $this->middleware('prevent-back-history');
+    }
+
+    public function index()
+    {
+        $conocimientos = AreaConocimiento::onlyTrashed()->pluck('id', 'nom_conocimiento');
+        $pnfs = PNF::onlyTrashed()->pluck('id', 'nom_pnf');
+        $trayectos = Trayecto::onlyTrashed()->pluck('id', 'num_trayecto');
+        $noticias = Noticia::onlyTrashed()->pluck('id', 'encabezado');
+        $preguntas = Pregunta_frecuente::onlyTrashed()->pluck('id', 'titulo');
+        $categorias = Categoria::onlyTrashed()->pluck('id', 'nom_categoria');
+        $materias = Materia::onlyTrashed()->pluck('id', 'nom_materia');
+        $horarios = Horario::onlyTrashed()->pluck('id', 'espacio');
+
+        return view('soporte.index', compact('conocimientos', 'pnfs', 'trayectos', 'noticias', 'preguntas', 'categorias', 'materias', 'horarios'));
+    }
+
+    public function recuperar($id, $modelo)
+    {
+        if ($modelo === 'AreaConocimiento') {
+            AreaConocimiento::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+
+        if ($modelo === 'PNF') {
+            PNF::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+
+        if ($modelo === 'Trayecto') {
+            Trayecto::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+
+        if ($modelo === 'Noticia') {
+            Noticia::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+
+        if ($modelo === 'Pregunta') {
+            Pregunta_frecuente::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+
+        if ($modelo === 'Categoria') {
+            Categoria::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+
+        if ($modelo === 'Materia') {
+            Materia::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+
+        if ($modelo === 'Horario') {
+            Horario::withTrashed()->find($id)->restore();
+            return redirect()->back()->with('recuperado', 'recuperado');
+        }
+    }
+
+    public function restaurarContrasena()
+    {
+        return view('soporte.contrasena');
+    }
+
+    public function recuperarContrasena(Request $request)
+    {
+        $usuario = User::where('email', '=', $request->get('usuario'))->first();
+
+        if (empty($usuario)) {
+            return redirect()->back()->with('error', 'error');
+        }
+
+        $contrasena = Str::random(10);
+        $usuario->forceFill([
+            'password' => Hash::make($contrasena),
+        ])->save();
+
+        return redirect()->back()->with('contrasena', $contrasena);
+    }
+}

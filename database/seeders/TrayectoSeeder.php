@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\DatosAcademicos\Trayecto;
+use App\Models\Academico\Trayecto;
 use Illuminate\Database\Seeder;
 
 class TrayectoSeeder extends Seeder

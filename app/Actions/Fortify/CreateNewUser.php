@@ -20,13 +20,13 @@ class CreateNewUser implements CreatesNewUsers
     public function create(array $input)
     {
         Validator::make($input, [
-            'nombre' => ['required', 'string', 'max:20'],
-            'apellido' => ['required', 'string', 'max:20'],
-            'cedula' => ['required', 'numeric', 'digits_between:7,8', 'unique:users'],
-            'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'nombre' => ['required', 'string', 'max:' . config('variables.usuarios.nombre')],
+            'apellido' => ['required', 'string', 'max:' . config('variables.usuarios.apellido')],
+            'cedula' => ['required', 'numeric', 'digits_between:' . config('variables.usuarios.cedula')[0] . ',' . config('variables.usuarios.cedula')[1] , 'unique:users'],
+            'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), 'unique:users'],
             'password' => $this->passwordRules(),
         ], [
-            'cedula.digits_between' => 'La cedula debe estar entre los 7 y 8 dígitos.'
+            'cedula.digits_between' => 'La cedula debe estar entre los ' . config('variables.usuarios.cedula')[0] . ' y ' . config('variables.usuarios.cedula')[1] . 'dígitos.'
         ])->validate();
 
         return $usuario = User::create([

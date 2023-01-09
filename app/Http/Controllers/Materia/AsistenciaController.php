@@ -3,25 +3,35 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
-use App\Models\Academico\Periodo;
-use App\Models\Estudiante;
+use App\Models\Academico\Estudiante;
+use App\Models\Academico\Estudiante_materia;
+use App\Models\Materia\Asistencia;
 use Illuminate\Http\Request;
 
 class AsistenciaController extends Controller
 {
+    public function __construct()
+    {
+        // Valida la autenticación
+        $this->middleware('auth');
+        $this->middleware('prevent-back-history');
+    }
+
     public function index()
     {
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
-        $estudiantes = Estudiante::all();
+        // Valida si tiene el permiso
+        permiso('asistencias');
+
+        $periodo = periodoActual();
+        $estudiantes = Estudiante_materia::all();
+
         $asistenciaEstudiantes = [];
 
         foreach ($estudiantes as $estudiante) {
-            $asistencia = $estudiante->asistencia;
+            $asistencia = $estudiante->esEstudiante->asistencia;
 
-            // Se inicializan los contadores
             $asistencias = 0;
 
-            // Añade las asistencias
             for ($i = 1; $i <= 12; $i++) {
                 $sem = 'sem' . $i;
                 $asistencia[$sem] === 1 ? $asistencias++ : '';
@@ -30,11 +40,14 @@ class AsistenciaController extends Controller
             array_push($asistenciaEstudiantes, $asistencias);
         }
 
-        return view('aside.materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes', 'periodo'));
+        return view('materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes', 'periodo'));
     }
 
     public function update(Request $request)
     {
+        // Valida si tiene el permiso
+        permiso('asistencias');
+
         $asistencia = Estudiante::find($request->get('id'))->asistencia;
 
         for ($i = 1; $i <= 12; $i++) {
@@ -48,13 +61,16 @@ class AsistenciaController extends Controller
 
     public function edit($id)
     {
+        // Valida si tiene el permiso
+        permiso('asistencias');
+
         // Busca al estudiante y su asistencia
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $estudiante = Estudiante::find($id);
+        $periodo = periodoActual();
 
         // Valida que tenga perfil de estudiante o esté inscrito en una materia
-        if (!$estudiante || !$estudiante->preinscrito) {
-            return redirect()->back();
+        if (!$estudiante || $estudiante->inscrito->validacion_estudiante === 0) {
+            return redirect()->back()->with('no puede participar', 'no puede');
         }
 
         $asistencia = $estudiante->asistencia;
@@ -68,6 +84,6 @@ class AsistenciaController extends Controller
             $asistencia[$sem] === 1 ? $asistencias++ : '';
         }
 
-        return view('aside.materias.asistencias.edit', compact('estudiante', 'asistencias', 'periodo'));
+        return view('materias.asistencias.edit', compact('estudiante', 'asistencias', 'periodo'));
     }
 }

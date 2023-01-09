@@ -1,0 +1,33 @@
+.avatar,
+.avatar-contenedor {
+    width: 5rem;
+    height: 5rem;
+    cursor: pointer;
+}
+
+.avatar-seleccionado {
+    width: 7rem;
+    height: 7rem;
+}
+
+.avatar-contenedor {
+    border-color: #dee2e6 !important;
+    transition: 0.7s border-color;
+}
+
+.avatar-contenedor:hover,
+.avatar-contenedor:focus,
+.avatar-contenedor:active {
+    border-color: #007bff !important;
+}
+
+div.avatar {
+    border: 1px solid #dee2e6 !important;
+    transition: 0.7s border-color;
+}
+
+div>img.avatar:hover,
+div.avatar:focus,
+div.avatar:active {
+    border-color: #007bff !important;
+}

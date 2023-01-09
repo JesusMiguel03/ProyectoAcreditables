@@ -4,50 +4,64 @@ namespace App\Http\Controllers\Materia;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Academico\Periodo;
-use App\Models\Estudiante;
+use App\Models\Academico\Profesor;
+use App\Models\Academico\Estudiante;
+use App\Models\Academico\Estudiante_materia;
+use App\Models\Academico\Horario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
-use App\Models\Profesor\Profesor;
-
+use Illuminate\Support\Facades\DB;
 
 class MateriaController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('can:materias.gestion')->only('create', 'edit');
+        $this->middleware('prevent-back-history');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
-        $materias = Materia::all();
+        // Valida si tiene el permiso
+        permiso(['materias.principal', 'materias.estudiante']);
 
-        return view('aside.materias.acreditables.index', compact('materias', 'periodo'));
+        $periodo = periodoActual();
+
+        if (estudiante(auth()->user(), 'materia')) {
+            $materias = Materia::find(estudiante(auth()->user(), 'materia'));
+
+            return view('materias.acreditables.index', compact('materias', 'periodo'));
+        }
+
+        if (rol('Profesor') && profesor()) {
+            $materiasImpartidasProfesor = [];
+            foreach (profesor()->imparteMateria as $materia) {
+                array_push($materiasImpartidasProfesor, $materia->id);
+            }
+
+            $materias = Materia::whereIn('informacion_id', $materiasImpartidasProfesor)->get();
+
+            return view('materias.acreditables.index', compact('materias', 'periodo'));
+        }
+
+        $materias = Materia::where([['estado_materia', '=', 'Activo'], ['cupos_disponibles', '>', 0]])->get();
+
+        return view('materias.acreditables.index', compact('materias', 'periodo'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nom_materia' => ['required', 'string', 'max:40'],
-            'cupos' => ['required', 'numeric', 'max:50'],
-            'desc_materia' => ['required', 'string', 'max:255'],
+        // Valida si tiene el permiso
+        permiso('materias.modificar');
+
+        $validador = Validator::make($request->all(), [
+            'nom_materia' => ['required', 'string', 'max:' . config('variables.materias.nombre')],
+            'cupos' => ['required', 'numeric', 'max:' . config('variables.materias.cupos')],
+            'desc_materia' => ['required', 'string', 'max:' . config('variables.materias.descripcion')],
             'num_acreditable' => ['required', 'numeric', 'max:4', 'not_in:0'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
         ], [
@@ -59,61 +73,54 @@ class MateriaController extends Controller
             'imagen_materia.max' => 'La imagen no debe pesar más de 1 MB.',
             'imagen_materia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
         ]);
+        validacion($validador);
 
+        /**
+         * ! Campo (cupos) acepta letra e y no muestra mensaje de error.
+         */
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput()->with('error', 'error');
-        };
+        /**
+         *  Evita duplicidad
+         * 
+         *  ! Revisar
+         */
+        // duplicado(
+        //     Materia::where([['nom_materia', '=', $request->get('nom_materia')], ['num_acreditable', '=', $request->get('num_acreditable')]])
+        // );
 
-        $materia = new Materia();
+        $imagen = '';
 
-        if ($request->hasFile('imagen_materia')) {
-            $imagen = $request->file('imagen_materia')->storeAs('uploads', date('Y-m-d') . $request->get('nom_materia') . '.jpg', 'public');
-            $materia->imagen_materia = $imagen;
-        } else {
-            $materia->imagen_materia = null;
-        }
+        $request->hasFile('imagen_materia') ?
+            $imagen = $request->file('imagen_materia')->storeAs('uploads', date('Y-m-d') . $request->get('nom_materia') . '.jpg', 'public') :
+            $imagen = null;
 
-        $materia->nom_materia = $request->get('nom_materia');
-        $materia->cupos = $request->get('cupos');
-        $materia->cupos_disponibles = $materia->cupos;
-        $materia->desc_materia = $request->get('desc_materia');
-        $materia->num_acreditable = $request->get('num_acreditable');
-        $materia->estado_materia = 'Activo';
-        $materia->informacion_id = null;
-
-        $materia->save();
+        Materia::create([
+            'informacion_id' => null,
+            'nom_materia' => $request->get('nom_materia'),
+            'cupos' => $request->get('cupos'),
+            'cupos_disponibles' => $request->get('cupos'),
+            'desc_materia' => $request->get('desc_materia'),
+            'num_acreditable' => $request->get('num_acreditable'),
+            'imagen_materia' => $imagen,
+            'estado_materia' => 'Activo',
+        ]);
 
         return redirect('materias')->with('creado', 'Curso creado exitosamente');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        // Busca la id del curso
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
-        $materia = Materia::find($id);
+        // Valida si tiene el permiso
+        permiso(['materias.principal', 'materias.estudiante']);
 
-        if (!$materia) {
-            return redirect()->back()->with('inexistente', 'inexistente');
-        }
+        // Busca el id del curso
+        $materia = Materia::find($id);
+        $periodo = periodoActual();
+
+        existe($materia);
 
         // Trae a todos los estudiantes inscritos
-        $estudiantes = Estudiante::all();
-        $preinscritos = [];
-
-        foreach ($estudiantes as $estudiante) {
-            if (!empty($estudiante->preinscrito)) {
-                if ($estudiante->preinscrito->materia->id === $materia->id) {
-                    array_push($preinscritos, $estudiante);
-                }
-            }
-        }
+        $inscritos = Estudiante_materia::where('materia_id', '=', $id)->get();
 
         // En caso de que no se complete la materia se colocan valores por defecto
         $validacion = [];
@@ -124,40 +131,37 @@ class MateriaController extends Controller
             $validacion = ['Sin asignar'];
         }
 
-        return view('aside.materias.acreditables.show', compact('materia', 'validacion', 'datos_materia', 'preinscritos', 'periodo'));
+        return view('materias.acreditables.show', compact('materia', 'validacion', 'datos_materia', 'inscritos', 'periodo'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
+        // Valida si tiene el permiso
+        permiso('materias.modificar');
+
         // Busca todos los valores necesarios para editar un curso
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
         $materia = Materia::find($id);
         $categorias = Categoria::all();
         $profesores = Profesor::all();
+        $horarios = Horario::all();
+        $periodo = periodoActual();
 
-        return view('aside.materias.acreditables.edit', compact('materia', 'categorias', 'profesores', 'periodo'));
+        // Valida que exista
+        existe($materia);
+
+        return view('materias.acreditables.edit', compact('materia', 'categorias', 'profesores', 'horarios', 'periodo'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
+        // Valida si tiene el permiso
+        permiso('materias.modificar');
+
         $validador = Validator::make($request->all(), [
-            'nom_materia' => ['required', 'string', 'max:40'],
-            'cupos' => ['required', 'numeric', 'max:50'],
+            'nom_materia' => ['required', 'string', 'max:' . config('variables.materias.nombre')],
+            'cupos' => ['required', 'numeric', 'max:' . config('variables.materias.cupos')],
+            'desc_materia' => ['required', 'string', 'max:' . config('variables.materias.descripcion')],
             'num_acreditable' => ['required', 'numeric', 'not_in:0'],
-            'desc_materia' => ['required', 'string', 'max:255'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
             'estado_materia' => ['required'],
         ], [
@@ -169,10 +173,16 @@ class MateriaController extends Controller
             'imagen_materia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
             'estado_materia.digits_between' => 'El valor del campo estado debe ser alguno de la lista.',
         ]);
+        validacion($validador);
 
-        if ($validador->fails()) {
-            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
-        }
+        /**
+         *  Evita duplicidad
+         * 
+         *  ! Revisar
+         */
+        // duplicado(
+        //     Materia::where([['nom_materia', '=', $request->get('nom_materia')], ['num_acreditable', '=', $request->get('num_acreditable')]])
+        // );
 
         // Busca la relacion curso - informacion
         $informacion = Informacion_materia::updateOrCreate(
@@ -181,6 +191,7 @@ class MateriaController extends Controller
                 'metodologia_aprendizaje' => $request->get('tipo') === '0' ? 'Sin asignar' : $request->get('tipo'),
                 'categoria_id' => $request->get('categoria') === '0' ? null : $request->get('categoria'),
                 'profesor_id' => $request->get('profesor') === '0' ? null : $request->get('profesor'),
+                'horario_id' => $request->get('horario') === '0' ? null : $request->get('horario'),
             ],
         );
 
@@ -212,5 +223,14 @@ class MateriaController extends Controller
 
 
         return redirect('materias')->with('actualizado', 'Curso actualizado exitosamente');
+    }
+
+    public function delete($id)
+    {
+        // Valida si tiene el permiso
+        permiso('materias.modificar');
+
+        Materia::find($id)->delete();
+        return redirect()->back()->with('borrado', 'borrado');
     }
 }

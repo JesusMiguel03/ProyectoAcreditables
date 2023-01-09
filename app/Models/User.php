@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Profesor\Profesor;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Academico\Estudiante;
+use App\Models\Academico\Profesor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;

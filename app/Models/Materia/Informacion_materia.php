@@ -2,13 +2,16 @@
 
 namespace App\Models\Materia;
 
-use App\Models\Profesor\Profesor;
+use App\Models\Academico\Horario;
+use App\Models\Academico\Profesor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Informacion_materia extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'informacion_materia';
 
@@ -21,7 +24,7 @@ class Informacion_materia extends Model
 
     public function materia()
     {
-        return $this->belongsTo(Materia::class, 'informacion_id');
+        return $this->belongsTo(Materia::class, 'id', 'informacion_id');
     }
 
     public function categoria()
@@ -29,13 +32,13 @@ class Informacion_materia extends Model
         return $this->hasOne(Categoria::class, 'id', 'categoria_id');
     }
 
-    public function horario()
-    {
-        return $this->hasOne(Horario::class,  'id', 'horario_id');
-    }
-
     public function profesor()
     {
         return $this->hasOne(Profesor::class,  'id', 'profesor_id');
+    }
+
+    public function horario()
+    {
+        return $this->hasOne(Horario::class,  'id', 'horario_id');
     }
 }

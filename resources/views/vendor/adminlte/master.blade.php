@@ -19,23 +19,14 @@
         @yield('title_postfix', config('adminlte.title_postfix', ''))
     </title>
 
-    {{-- Page icon --}}
+    {{-- Icono --}}
     <link rel="icon" href="{{ asset('vendor/img/logo.png') }}">
 
-    {{-- Font --}}
+    {{-- Fuente --}}
     <link rel="stylesheet" href="{{ asset('vendor/fonts/fonts.css') }}">
 
-    {{-- Hr style --}}
-    <style>
-        hr.dropdown-divider {
-            width: 80%;
-            margin: 0.5rem auto;
-            opacity: 0.5;
-        }
-        a.link-muted:hover {
-            color: #007bff;
-        }
-    </style>
+    {{-- Estilos personalizados --}}
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios.css') }}">
 
     {{-- Base Stylesheets --}}
     @if (!config('adminlte.enabled_laravel_mix'))
@@ -49,15 +40,6 @@
         <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
     @else
         <link rel="stylesheet" href="{{ mix(config('adminlte.laravel_mix_css_path', 'css/app.css')) }}">
-    @endif
-
-    {{-- Livewire Styles --}}
-    @if (config('adminlte.livewire'))
-        @if (app()->version() >= 7)
-            @livewireStyles
-        @else
-            <livewire:styles />
-        @endif
     @endif
 
     {{-- Custom Stylesheets (post AdminLTE) --}}
@@ -108,19 +90,8 @@
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
     @endif
 
-    {{-- Livewire Script --}}
-    @if (config('adminlte.livewire'))
-        @if (app()->version() >= 7)
-            @livewireScripts
-        @else
-            <livewire:scripts />
-        @endif
-    @endif
-
     {{-- Custom Scripts --}}
     @yield('adminlte_js')
-
-    @include('popper::assets')
 </body>
 
 </html>

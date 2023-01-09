@@ -9,17 +9,24 @@ use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class ListadoController extends Controller
 {
+    public function __construct()
+    {
+        // Valida la autenticación
+        $this->middleware('auth');
+        $this->middleware('prevent-back-history');
+    }
+
     public function show($id)
     {
-        // Lista a todos los estudiantes
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
-        $estudiantes = Materia::find($id)->estudiantes;
+        // Valida si tiene el permiso
+        permiso('registrar.usuario');
 
-        // Busca el último periodo
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
+        // Lista a todos los estudiantes
+        $materia = Materia::find($id);
+        $estudiantes = $materia->estudiantes;
 
         // Carga la vista con el listado
-        $pdf = FacadePdf::loadView('aside.academico.pdf.estudiantes', ['estudiantes' => $estudiantes, 'periodo' => $periodo]);
+        $pdf = FacadePdf::loadView('academico.pdf.estudiantes', ['materia' => $materia, 'estudiantes' => $estudiantes]);
         return $pdf->stream('Listado de estudiantes.pdf');
     }
 }

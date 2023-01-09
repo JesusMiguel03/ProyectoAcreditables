@@ -1,24 +1,26 @@
 <?php
 
+use App\Http\Controllers\Academico\AreaConocimientoController;
+use App\Http\Controllers\Academico\EstudianteController;
+use App\Http\Controllers\Academico\HorarioController;
 use App\Http\Controllers\Academico\PeriodoController;
-use App\Http\Controllers\Coordinador\EspecialidadController;
-use App\Http\Controllers\Coordinador\ProfesorController;
-use App\Http\Controllers\Coordinador\RegistrarEstudianteController;
-use App\Http\Controllers\Coordinador\RegistrarProfesorController;
-use App\Http\Controllers\Coordinador\UsuarioController;
+use App\Http\Controllers\Academico\PNFController;
+use App\Http\Controllers\Academico\RegistrarEstudianteController;
+use App\Http\Controllers\Academico\RegistrarProfesorController;
+use App\Http\Controllers\Academico\ProfesorController;
+use App\Http\Controllers\Academico\TrayectoController;
+use App\Http\Controllers\Informacion\InicioController;
+use App\Http\Controllers\Informacion\NoticiaController;
+use App\Http\Controllers\Informacion\PreguntaFrecuenteController;
 use App\Http\Controllers\Materia\CategoriaController;
 use App\Http\Controllers\Materia\InscripcionController;
-use App\Http\Controllers\DatosAcademicos\PnfController;
-use App\Http\Controllers\DatosAcademicos\TrayectoController;
-use App\Http\Controllers\Estudiante\EstudianteController;
-use App\Http\Controllers\Informacion\InicioController;
-use App\Http\Controllers\Informacion\NoticiasController;
-use App\Http\Controllers\Informacion\PreguntasFrecuentesController;
-use App\Http\Controllers\Materia\AsistenciaController as MateriaAsistenciaController;
+use App\Http\Controllers\Materia\AsistenciaController;
 use App\Http\Controllers\Materia\ListadoController;
 use App\Http\Controllers\Materia\MateriaController;
 use App\Http\Controllers\Perfil\ContrasenaController;
-use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\Perfil\UsuarioController;
+use App\Http\Controllers\Perfil\PerfilController;
+use App\Http\Controllers\Soporte\SoporteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,88 +35,147 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Inicio
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-    'prevent-back-history'
-])->group(function () {
-    Route::resource('/', InicioController::class)->only([
-        'index'
-    ])->names('inicio');
-});
+Route::get('/', [InicioController::class, 'index'])
+    ->middleware(['auth:sanctum', config('jetstream.auth_session', 'verified', 'prevent-back-history')])
+    ->name('inicio.index');
 
 // Áreas de conocimiento
-Route::resource('/conocimiento', EspecialidadController::class)->middleware('prevent-back-history')->except([
-    'create', 'show', 'destroy'
-]);
+Route::controller(AreaConocimientoController::class)->group(function () {
+    Route::get('/conocimientos', 'index')->name('conocimientos.index');
+    Route::post('/conocimientos/store', 'store')->name('conocimientos.store');
+    Route::get('/conocimientos/{id}/edit', 'edit')->name('conocimientos.edit');
+    Route::put('/conocimientos/{id}/update', 'update')->name('conocimientos.update');
+    Route::delete('/conocimientos/{id}/delete', 'delete')->name('conocimientos.destroy');
+});
 
 // Profesor
-Route::resource('/profesores', ProfesorController::class)->middleware('prevent-back-history')->except([
-    'create', 'destroy'
-]);
-Route::post('/registrar-profesor', [RegistrarProfesorController::class, 'store'])->middleware('prevent-back-history')->name('registrar-profesor');
+Route::controller(ProfesorController::class)->group(function () {
+    Route::get('/profesores', 'index')->name('profesores.index');
+    Route::post('/profesores/store', 'store')->name('profesores.store');
+    Route::get('/profesores/{id}/edit', 'edit')->name('profesores.edit');
+    Route::get('/profesores/{id}', 'show')->name('profesores.show');
+    Route::put('/profesores/{id}/update', 'update')->name('profesores.update');
+});
 
-// Usuarios [Solo para coordinador]
-Route::resource('/usuarios', UsuarioController::class)
-    ->middleware('prevent-back-history')
-    ->names('coordinador.usuarios');
+Route::post('/registrar-profesor', [RegistrarProfesorController::class, 'store'])->middleware('prevent-back-history')->name('profesor.registrar');
+
+// Estudiantes [Solo para coordinador]
+Route::controller(UsuarioController::class)->group(function () {
+    Route::get('/estudiantes', 'index')->name('estudiantes.index');
+    Route::get('/estudiantes/{id}/edit', 'edit')->name('estudiantes.edit');
+    Route::put('/estudiantes/{id}/update', 'update')->name('estudiantes.update');
+});
 
 // Categorias
-Route::resource('/categoria', CategoriaController::class)->middleware('prevent-back-history')->except([
-    'create', 'show', 'destroy'
-]);
-    
+Route::controller(CategoriaController::class)->group(function () {
+    Route::get('/categorias', 'index')->name('categorias.index');
+    Route::post('/categorias/store', 'store')->name('categorias.store');
+    Route::get('/categorias/{id}/edit', 'edit')->name('categorias.edit');
+    Route::get('/categorias/{id}', 'show')->name('categorias.show');
+    Route::put('/categorias/{id}/update', 'update')->name('categorias.update');
+    Route::delete('/categorias/{id}/delete', 'delete')->name('categorias.destroy');
+});
+
+Route::controller(HorarioController::class)->group(function () {
+    Route::get('/horarios', 'index')->name('horarios.index');
+    Route::post('/horarios/store', 'store')->name('horarios.store');
+    Route::get('/horarios/{id}/edit', 'edit')->name('horarios.edit');
+    Route::get('/horarios/{id}', 'show')->name('horarios.show');
+    Route::put('/horarios/{id}/update', 'update')->name('horarios.update');
+    Route::delete('/horarios/{id}/delete', 'delete')->name('horarios.destroy');
+});
+
 // Materias
-Route::resource('/materias', MateriaController::class)
-    ->except('create')
-    ->middleware('prevent-back-history')
-    ->names('materias');
-Route::get('listado/{id}', [ListadoController::class, 'show'])->middleware('prevent-back-history')->name('listadoEstudiantes');
+Route::controller(MateriaController::class)->group(function () {
+    Route::get('/materias', 'index')->name('materias.index');
+    Route::post('/materias/store', 'store')->name('materias.store');
+    Route::get('/materias/{id}/edit', 'edit')->name('materias.edit');
+    Route::get('/materias/{id}', 'show')->name('materias.show');
+    Route::put('/materias/{id}/update', 'update')->name('materias.update');
+    Route::delete('/materias/{id}/delete', 'delete')->name('materias.destroy');
+});
+
+Route::get('listado/{id}', [ListadoController::class, 'show'])->name('listadoEstudiantes');
 
 // Asistencia
-Route::get('/asistencia', [MateriaAsistenciaController::class, 'index'])->middleware(['prevent-back-history'])->name('asistencia');
-Route::get('/asistencia/{id}', [MateriaAsistenciaController::class, 'edit'])->middleware(['prevent-back-history'])->name('asistencia-ver');
-Route::post('/asistencia/actualizar', [MateriaAsistenciaController::class, 'update'])->middleware(['prevent-back-history'])->name('asistencia-actualizar');
+Route::controller(AsistenciaController::class)->group(function () {
+    Route::get('/asistencias', 'index')->name('asistencias.index');
+    Route::get('/asistencias/{id}', 'edit')->name('asistencias.edit');
+    Route::put('/asistencias/actualizar', 'update')->name('asistencias.update');
+});
 
 // PNF
-Route::resource('/pnf', PnfController::class)->middleware('prevent-back-history')->except([
-    'create', 'show', 'destroy'
-]);
+Route::controller(PNFController::class)->group(function () {
+    Route::get('/pnfs', 'index')->name('pnfs.index');
+    Route::post('/pnfs/store', 'store')->name('pnfs.store');
+    Route::get('/pnfs/{id}/edit', 'edit')->name('pnfs.edit');
+    Route::put('/pnfs/{id}/update', 'update')->name('pnfs.update');
+    Route::delete('/pnfs/{id}/delete', 'delete')->name('pnfs.destroy');
+});
 
 // Trayecto
-Route::resource('/trayecto', TrayectoController::class)->middleware('prevent-back-history')->except([
-    'create', 'show', 'destroy'
-]);
+Route::controller(TrayectoController::class)->group(function () {
+    Route::get('/trayectos', 'index')->name('trayectos.index');
+    Route::post('/trayectos/store', 'store')->name('trayectos.store');
+    Route::get('/trayectos/{id}/edit', 'edit')->name('trayectos.edit');
+    Route::put('/trayectos/{id}/update', 'update')->name('trayectos.update');
+    Route::delete('/trayectos/{id}/delete', 'delete')->name('trayectos.destroy');
+});
 
 // Noticias
-Route::resource('/noticias', NoticiasController::class)
-    ->middleware('prevent-back-history')
-    ->only('index', 'store', 'edit', 'update');
-
-// Preguntas frecuentes
-Route::resource('/preguntas-frecuentes', PreguntasFrecuentesController::class)
-    ->middleware('prevent-back-history')
-    ->only(['index', 'store', 'edit', 'update'])
-    ->names('preguntas');
+Route::controller(NoticiaController::class)->group(function () {
+    Route::get('/noticias', 'index')->name('noticias.index');
+    Route::post('/noticias/store', 'store')->name('noticias.store');
+    Route::get('/noticias/{id}/edit', 'edit')->name('noticias.edit');
+    Route::put('/noticias/{id}/update', 'update')->name('noticias.update');
+    Route::delete('/noticias/{id}/delete', 'delete')->name('noticias.destroy');
+});
 
 // Perfil
-Route::resource('/perfil', PerfilController::class)->middleware('prevent-back-history')->only('index');
-Route::put('/perfil/actualizar-contrasena', [ContrasenaController::class, 'update'])->middleware('prevent-back-history')->name('actualizarContrasena');
+Route::controller(PerfilController::class)->group(function () {
+    Route::get('/perfil', 'index')->name('perfil.index');
+    Route::put('/perfil/update', 'update')->name('perfil.avatar');
+});
+Route::put('/perfil/actualizar-contrasena', [ContrasenaController::class, 'update'])->name('actualizarContrasena');
 
 // Inscripcion
-Route::resource('/preinscripcion', InscripcionController::class)->middleware('prevent-back-history')->only('store');
+Route::controller(InscripcionController::class)->group(function () {
+    Route::post('/inscripcion', 'store')->name('inscripcion.store');
+    Route::post('/inscripcion/{id}/validar', 'validar')->name('validacion');
+    Route::post('/inscripcion/{id}/invalidar', 'invalidar')->name('invalidacion');
+    Route::get('/materias/{id}/inscribir', 'inscribir')->name('inscribir');
+});
 
 // Estudiante
-Route::resource('/estudiante', EstudianteController::class)->middleware('prevent-back-history')->only('store');
-Route::post('/registrar-estudiante', [RegistrarEstudianteController::class, 'store'])->middleware('prevent-back-history')->name('registrar-estudiante');
-Route::get('/estudiante/comprobante/{id}', [EstudianteController::class, 'comprobante'])->middleware('prevent-back-history')->name('comprobante');
-Route::post('/validar', [InscripcionController::class, 'validar'])->middleware('prevent-back-history')->name('validacion');
-Route::post('/invalidar', [InscripcionController::class, 'invalidar'])->middleware('prevent-back-history')->name('invalidacion');
-Route::get('/materias/inscribir/{id}', [InscripcionController::class, 'inscribir'])->middleware('prevent-back-history')->name('inscribir');
+Route::controller(EstudianteController::class)->group(function () {
+    Route::post('/estudiante', 'store')->name('estudiante');
+    Route::get('/estudiante/{id}/comprobante', 'comprobante')->name('comprobante');
+});
+
+Route::post('/registrar-estudiante', [RegistrarEstudianteController::class, 'store'])->name('estudiante.store');
 
 // Periodo
-Route::get('/periodo', [PeriodoController::class, 'index'])->middleware('prevent-back-history')->name('periodo');
-Route::post('/periodo/store', [PeriodoController::class, 'store'])->middleware('prevent-back-history')->name('periodo.store');
-Route::get('/periodo/{id}/edit', [PeriodoController::class, 'edit'])->middleware('prevent-back-history')->name('periodo.edit');
-Route::put('/periodo/update', [PeriodoController::class, 'update'])->middleware('prevent-back-history')->name('periodo.update');
+Route::controller(PeriodoController::class)->group(function () {
+    Route::get('/periodos', 'index')->name('periodos.index');
+    Route::post('/periodos/store', 'store')->name('periodos.store');
+    Route::get('/periodos/{id}/edit', 'edit')->name('periodos.edit');
+    Route::put('/periodos/update', 'update')->name('periodos.update');
+    // Route::delete('/periodos/{id}/delete', 'delete')->name('periodos.destroy');
+});
+
+// Preguntas frecuentes
+Route::controller(PreguntaFrecuenteController::class)->group(function () {
+    Route::get('/preguntas-frecuentes', 'index')->name('preguntas.index');
+    Route::post('/preguntas-frecuentes/store', 'store')->name('preguntas.store');
+    Route::get('/preguntas-frecuentes/{id}/edit', 'edit')->name('preguntas.edit');
+    Route::put('/preguntas-frecuentes/{id}/update', 'update')->name('preguntas.update');
+    Route::delete('/preguntas-frecuentes/{id}/delete', 'delete')->name('preguntas.destroy');
+});
+
+// Soporte
+Route::controller(SoporteController::class)->group(function () {
+    Route::get('/soporte/recuperar-elementos', 'index')->name('soporte.index');
+    Route::get('/soporte/{id}/{modelo}', 'recuperar')->name('soporte.recuperar');
+    Route::get('/soporte/restaurar-contrasena', 'restaurarContrasena')->name('soporte.restaurarContrasena');
+    Route::put('/soporte/recuperarContrasena', 'recuperarContrasena')->name('soporte.recuperarContrasena');
+});

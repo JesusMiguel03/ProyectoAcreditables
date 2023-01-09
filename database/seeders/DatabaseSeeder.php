@@ -17,6 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(TrayectoSeeder::class);
         $this->call(PNFSeeder::class);
-        // \App\Models\User::factory(10)->create();
+        $this->call(PreguntasFrecuentesSeeder::class);
     }
 }

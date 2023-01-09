@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
-use App\Models\Academico\Periodo;
-use App\Models\DatosAcademicos\Estudiante_materia;
-use App\Models\Estudiante;
+use App\Models\Academico\Estudiante;
+use App\Models\Academico\Estudiante_materia;
 use App\Models\Materia\Asistencia;
 use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
@@ -13,29 +12,42 @@ use Illuminate\Support\Str;
 
 class InscripcionController extends Controller
 {
+    public function __construct()
+    {
+        // Valida la autenticación
+        $this->middleware('auth');
+        $this->middleware('prevent-back-history');
+    }
+    
     public function inscribir($id)
     {
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
+        // Valida si tiene el permiso
+        permiso('materias.inscribir');
+
+        $materia = Materia::find($id);
         $estudiantes = Estudiante::all();
-        $no_preinscritos = [];
+        $periodo = periodoActual();
+        $no_inscritos = [];
 
         foreach ($estudiantes as $estudiante) {
-            if (empty($estudiante->preinscrito)) {
-                array_push($no_preinscritos, $estudiante);
+            if (empty($estudiante->inscrito) && $estudiante->trayecto->num_trayecto === $materia->num_acreditable) {
+                array_push($no_inscritos, $estudiante);
             }
         }
 
-        $materia = Materia::find($id);
-        return view('aside.materias.acreditables.preinscribir', compact('no_preinscritos', 'materia', 'periodo'));
+        return view('materias.acreditables.inscribir', compact('no_inscritos', 'materia', 'periodo'));
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
+        // Valida si tiene el permiso
+        permiso('materias.inscribir');
+
+        $materia = Materia::find($request->get('materia_id'));
+        if ($materia->cupos_disponibles === 0) {
+            return redirect()->back();
+        }
+
         $asistencia = Asistencia::create([
             'sem1' => 0,
             'sem2' => 0,
@@ -66,7 +78,7 @@ class InscripcionController extends Controller
             );
         }
 
-        $materia = Materia::find($request->get('materia_id'));
+        
         $materia->cupos_disponibles = $materia->cupos_disponibles === 0 ? 0 : $materia->cupos_disponibles - count($estudiantes);
         $materia->save();
         
@@ -77,18 +89,22 @@ class InscripcionController extends Controller
         return redirect('materias/' . $request->get('materia_id'))->with('registrado', 'registrado');
     }
 
-    public function validar(Request $request)
+    public function validar($id)
     {
-        $id = $request->get('id');
+        // Valida si tiene el permiso
+        permiso('validar.estudiante');
+
         $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
         $estudiante->validacion_estudiante = 1;
         $estudiante->update();
         return redirect()->back()->with('validado', 'Se ha validado');
     }
 
-    public function invalidar(Request $request)
+    public function invalidar($id)
     {
-        $id = $request->get('id');
+        // Valida si tiene el permiso
+        permiso('validar.estudiante');
+
         $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
         $estudiante->validacion_estudiante = 0;
         $estudiante->update();

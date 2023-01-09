@@ -1,16 +1,20 @@
 "use strict";
 
-let [displayTime, updaterContainer] = ["", 0];
+// Iniacializa las variables
+let [mostrarTiempo, actualizarContador] = ["", 0];
 
+// Busca el elemento donde mostrar la hora
 document.getElementById("time")
-    ? (displayTime = document.getElementById("time"))
+    ? (mostrarTiempo = document.getElementById("time"))
     : "";
 
-const addZero = (time) => {
-    return time.toString().length >= 2 ? time : "0".concat(time);
+// Devuelve el número en formato 00
+const ceros = (tiempo) => {
+    return tiempo.toString().length >= 2 ? tiempo : "0".concat(tiempo);
 };
 
-const [day, month] = [
+// Arrays con los dias y meses abreviados
+const [dia, mes] = [
     ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
     [
         "Ene",
@@ -28,18 +32,21 @@ const [day, month] = [
     ],
 ];
 
-const update = () => {
-    if (displayTime !== "") {
-        const time = new Date();
-        displayTime.innerHTML = `${
-            day[time.getDay()]
-        }, ${time.getDate()} de ${
-            month[time.getMonth()]
-        } de ${time.getFullYear()} - ${addZero(time.getHours() > 12 ? time.getHours()- 12 : time.getHours())}:${addZero(
-            time.getMinutes()
-        )} ${time.getHours() >= 12 ? "PM" : "AM"}`;
+// Actualiza la fecha
+const actualizar = () => {
+    if (mostrarTiempo !== "") {
+        const tiempo = new Date();
+        mostrarTiempo.innerHTML = `${
+            dia[tiempo.getDay()]
+        }, ${tiempo.getDate()} de ${
+            mes[tiempo.getMonth()]
+        } de ${tiempo.getFullYear()} - ${ceros(
+            tiempo.getHours() > 12 ? tiempo.getHours() - 12 : tiempo.getHours()
+        )}:${ceros(tiempo.getMinutes())} ${
+            tiempo.getHours() >= 12 ? "PM" : "AM"
+        }`;
     }
 };
-setInterval(update, 1000);
+setInterval(actualizar, 1000);
 
-displayTime ? (updaterContainer = update()) : "";
+mostrarTiempo ? (actualizarContador = actualizar()) : "";

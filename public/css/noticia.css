@@ -1,0 +1,6 @@
+.card-img-top {filter: brightness(0.8);}
+.card-noticia {height: 17rem;}
+.titulo-noticia {z-index: 100;margin-top: -5rem;background-color:rgba(0, 0, 0, 0.5);color:#fff;text-align:center;}
+.fecha-noticia {border-left: 5px solid rgba(33, 37, 41, 0.3)}
+.card-img-ajuste {max-height: 144px; max-width: 273px}
+.info-box:hover,.info-box:focus,.info-box:active {background-color: #6c757d !important}

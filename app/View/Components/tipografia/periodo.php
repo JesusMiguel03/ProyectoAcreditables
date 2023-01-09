@@ -6,18 +6,14 @@ use Illuminate\View\Component;
 
 class periodo extends Component
 {
-    public $fecha;
-    public $fase;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($fase, $fecha)
+    public function __construct()
     {
-        $this->fase = $fase;
-        $this->fecha = $fecha;
+        // 
     }
 
     /**

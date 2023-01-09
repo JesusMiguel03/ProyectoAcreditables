@@ -19,35 +19,53 @@ class RoleSeeder extends Seeder
         $profesor = Role::create(['name' => 'Profesor']);
         $coordinador = Role::create(['name' => 'Coordinador']);
 
+        // Acciones de Coordinador
+        Permission::create(['name' => 'registrar.usuario'])->syncRoles([$coordinador]);
+
         // Inicio
-        Permission::create(['name' => 'home'])->syncRoles([$estudiante, $profesor, $coordinador]);
-
-        // Perfiles
-        Permission::create(['name' => 'perfiles'])->syncRoles([$coordinador]);
-
-        // Acreditables
-        Permission::create(['name' => 'materias.gestion'])->syncRoles([$coordinador]);
-        Permission::create(['name' => 'materias'])->syncRoles([$estudiante, $profesor]);
-
-        Permission::create(['name' => 'categorias'])->syncRoles([$coordinador]);
-
-        // Preinscripcion en materia
-        Permission::create(['name' => 'preinscribir'])->syncRoles([$estudiante]);
-
-        // Datos académicos
-        Permission::create(['name' => 'pnf'])->syncRoles([$coordinador]);
-        Permission::create(['name' => 'trayecto'])->syncRoles([$coordinador]);
-
-        // Información
-        Permission::create(['name' => 'preguntas.create'])->syncRoles([$coordinador]);
-        Permission::create(['name' => 'noticias.create'])->syncRoles([$coordinador]);
+        Permission::create(['name' => 'inicio'])->syncRoles([$estudiante, $profesor, $coordinador]);
         
-        Permission::create(['name' => 'preguntas'])->syncRoles([$estudiante, $profesor, $coordinador]);
-        Permission::create(['name' => 'noticias'])->syncRoles([$estudiante, $profesor, $coordinador]);
+        // Periodo
+        Permission::create(['name' => 'periodo'])->syncRoles([$coordinador]);
+        
+        // Área de Conocimiento, profesores, estudiantes
+        Permission::create(['name' => 'registrar'])->syncRoles([$coordinador]);
+        
+        // Categorias
+        Permission::create(['name' => 'categorias'])->syncRoles([$coordinador]);
+        
+        // Horarios
+        Permission::create(['name' => 'horarios'])->syncRoles([$coordinador]);
+        
+        // Inscripcion
+        Permission::create(['name' => 'inscribir'])->syncRoles([$estudiante]);
 
-        Permission::create(['name' => 'asistencia'])->syncRoles([$profesor, $coordinador]);
+        // Materias
+        Permission::create(['name' => 'materias.principal'])->syncRoles([$profesor, $coordinador]);
+        Permission::create(['name' => 'materias.estudiante'])->syncRoles([$estudiante]);
+        Permission::create(['name' => 'materias.modificar'])->syncRoles([$coordinador]);
+        Permission::create(['name' => 'materias.inscribir'])->syncRoles([$estudiante, $coordinador]);
+        Permission::create(['name' => 'validar.estudiante'])->syncRoles([$coordinador]);
+        
+        // Estudiante
+        Permission::create(['name' => 'estudiante'])->syncRoles([$estudiante]);
+
+        // Asistencias
+        Permission::create(['name' => 'asistencias'])->syncRoles([$profesor, $coordinador]);
+
+        // Pnfs, trayectos
+        Permission::create(['name' => 'academico'])->syncRoles([$coordinador]);
+        
+        // Información
+        Permission::create(['name' => 'noticias'])->syncRoles([$coordinador]);
+        Permission::create(['name' => 'preguntas.principal'])->syncRoles([$estudiante, $profesor, $coordinador]);
+        Permission::create(['name' => 'preguntas.modificar'])->syncRoles([$coordinador]);
 
         // Cuenta
-        Permission::create(['name' => 'ver.perfil'])->syncRoles([$estudiante, $profesor, $coordinador]);
+        Permission::create(['name' => 'perfil'])->syncRoles([$estudiante, $profesor, $coordinador]);
+        
+        // Soporte
+        Permission::create(['name' => 'soporte'])->syncRoles([$coordinador]);
+
     }
 }

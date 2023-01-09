@@ -11,29 +11,47 @@ class PeriodoController extends Controller
 {
     public function __construct()
     {
-        // Validación de autenticación y permiso
+        // Valida la autenticación
         $this->middleware('auth');
-        $this->middleware('can:materias.gestion');
+        $this->middleware('prevent-back-history');
     }
 
     public function index()
     {
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
+        // Valida si tiene el permiso
+        permiso('periodo');
+
         $periodos = Periodo::all();
-        return view('aside.principal.periodo.index', compact('periodos', 'periodo'));
+        $periodo = periodoActual();
+        return view('academico.periodo.index', compact('periodos', 'periodo'));
     }
 
     public function store(Request $request)
     {
+        // Valida si tiene el permiso
+        permiso('periodo');
+
         $validador = Validator::make($request->all(), [
             'fase' => ['required', 'numeric', 'max:3'],
             'inicio' => ['required', 'date'],
             'fin' => ['required', 'date'],
+        ], [
+            'fase.max' => 'El número no debe ser mayor a :max.'
         ]);
+        validacion($validador);
 
-        if ($validador->fails()) {
-            return redirect()->back()->withErrors($validador)->withInput()->with('error', 'error');
-        }
+        /**
+         * Evita la duplicidad
+         * 
+         * ! Revisar
+         */
+        // duplicado(
+        //     Periodo::where(
+        //         ['fase', '=', $request->get('fase')],
+        //         ['inicio', '=', $request->get('inicio')],
+        //         ['fin', '=', $request->get('fin')]
+        //     )
+        // );
 
         Periodo::create([
             'fase' => $request->get('fase'),
@@ -46,13 +64,44 @@ class PeriodoController extends Controller
 
     public function edit($id)
     {
-        $periodo = Periodo::orderBy('inicio', 'desc')->first();
+        // Valida si tiene el permiso
+        permiso('periodo');
+
         $periodoEditar = Periodo::find($id);
-        return view('aside.principal.periodo.edit', compact('periodoEditar', 'periodo'));
+        $periodo = periodoActual();
+        
+        existe($periodoEditar);
+
+        return view('academico.periodo.edit', compact('periodoEditar', 'periodo'));
     }
 
     public function update(Request $request)
     {
+        // Valida si tiene el permiso
+        permiso('periodo');
+
+        $validador = Validator::make($request->all(), [
+            'fase' => ['required', 'numeric', 'max:3'],
+            'inicio' => ['required', 'date'],
+            'fin' => ['required', 'date'],
+        ], [
+            'fase.max' => 'El número no debe ser mayor a :max.'
+        ]);
+        validacion($validador);
+
+        /**
+         * Evita la duplicidad
+         * 
+         * ! Revisar
+         */
+        // duplicado(
+        //     Periodo::where(
+        //         ['fase', '=', $request->get('fase')],
+        //         ['inicio', '=', $request->get('inicio')],
+        //         ['fin', '=', $request->get('fin')]
+        //     )
+        // );
+
         Periodo::updateOrCreate(
             ['id' => $request->get('id')],
             [
@@ -61,7 +110,15 @@ class PeriodoController extends Controller
                 'fin' => $request->get('fin'),
             ]
         );
-        
-        return redirect('periodo')->with('actualizado', 'actualizado');
+
+        return redirect('periodos')->with('actualizado', 'actualizado');
     }
+
+    // public function delete($id)
+    // {
+    //     permiso('periodo');
+
+    //     Periodo::find($id)->delete();
+    //     return redirect()->back()->with('borrado', 'borrado');
+    // }
 }

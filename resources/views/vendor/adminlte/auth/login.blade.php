@@ -29,7 +29,7 @@
         {{-- Email field --}}
         <div class="input-group mb-3">
             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}" autofocus>
+                value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}" autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -47,7 +47,7 @@
         {{-- Password field --}}
         <div class="input-group mb-3">
             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                placeholder="{{ __('Contraseña') }}">
+                placeholder="{{ __('Contraseña') }}" required>
 
             <div class="input-group-append">
                 <div class="input-group-text">

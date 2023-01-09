@@ -1,0 +1,16 @@
+hr.dropdown-divider {
+    width: 80%;
+    margin: 0.5rem auto;
+    opacity: 0.5;
+}
+a.link-muted:hover {
+    color: #007bff;
+}
+.avatar-usuario {
+    padding: 1px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    transition: 0.4s border-color;
+}
+.avatar-usuario:hover, .avatar-usuario:focus, .avatar-usuario:active {
+    border-color: #007bff;
+}

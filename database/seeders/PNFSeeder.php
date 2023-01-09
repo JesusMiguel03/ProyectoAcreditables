@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\DatosAcademicos\Pnf;
+use App\Models\Academico\PNF;
 use Illuminate\Database\Seeder;
 
 class PNFSeeder extends Seeder
@@ -14,47 +14,47 @@ class PNFSeeder extends Seeder
      */
     public function run()
     {
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Administración',
-            'cod_pnf' => '?'
+            'cod_pnf' => null
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Agroalimentación',
-            'cod_pnf' => '?'
+            'cod_pnf' => null
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Contaduría Pública',
-            'cod_pnf' => '?'
+            'cod_pnf' => null
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Electricidad',
             'cod_pnf' => 'PEUA'
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Electrónica',
             'cod_pnf' => 'PLUA'
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Informática',
             'cod_pnf' => 'PIUA'
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Instrumentación y Control',
             'cod_pnf' => 'PCUN'
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Mantenimiento',
             'cod_pnf' => 'PNAA'
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Mecánica',
-            'cod_pnf' => 'No ve'
+            'cod_pnf' => null
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Sistemas de Calidad y Ambiente',
-            'cod_pnf' => '?'
+            'cod_pnf' => null
         ]);
-        Pnf::create([
+        PNF::create([
             'nom_pnf' => 'Telecomunicaciones',
             'cod_pnf' => 'PTUA'
         ]);

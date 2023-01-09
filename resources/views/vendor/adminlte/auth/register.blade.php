@@ -1,14 +1,14 @@
 @extends('adminlte::auth.auth-page', ['auth_type' => 'register'])
 
-@php( $login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login') )
-@php( $register_url = View::getSection('register_url') ?? config('adminlte.register_url', 'register') )
+@php($login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login'))
+@php($register_url = View::getSection('register_url') ?? config('adminlte.register_url', 'register'))
 
 @if (config('adminlte.use_route_url', false))
-    @php( $login_url = $login_url ? route($login_url) : '' )
-    @php( $register_url = $register_url ? route($register_url) : '' )
+    @php($login_url = $login_url ? route($login_url) : '')
+    @php($register_url = $register_url ? route($register_url) : '')
 @else
-    @php( $login_url = $login_url ? url($login_url) : '' )
-    @php( $register_url = $register_url ? url($register_url) : '' )
+    @php($login_url = $login_url ? url($login_url) : '')
+    @php($register_url = $register_url ? url($register_url) : '')
 @endif
 
 @section('title', 'Acreditables | Registrarme')
@@ -19,10 +19,10 @@
     <form action="{{ $register_url }}" method="post">
         @csrf
 
-        {{-- Name field --}}
+        {{-- Nombre --}}
         <div class="input-group mb-3">
             <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
-                   value="{{ old('nombre') }}" placeholder="{{ __('Nombre') }}" autofocus>
+                value="{{ old('nombre') }}" placeholder="{{ __('Nombre') }}" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -37,10 +37,10 @@
             @enderror
         </div>
 
-        {{-- Name field --}}
+        {{-- Apellido --}}
         <div class="input-group mb-3">
             <input type="text" name="apellido" class="form-control @error('apellido') is-invalid @enderror"
-                   value="{{ old('apellido') }}" placeholder="{{ __('Apellido') }}" autofocus>
+                value="{{ old('apellido') }}" placeholder="{{ __('Apellido') }}" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -55,10 +55,10 @@
             @enderror
         </div>
 
-        {{-- Cedula field --}}
+        {{-- Cedula --}}
         <div class="input-group mb-3">
             <input type="text" name="cedula" class="form-control @error('cedula') is-invalid @enderror"
-                   value="{{ old('cedula') }}" placeholder="{{ __('Cedula') }}" autofocus>
+                value="{{ old('cedula') }}" placeholder="{{ __('Cedula') }}" autofocus>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -73,10 +73,10 @@
             @enderror
         </div>
 
-        {{-- Email field --}}
+        {{-- Correo --}}
         <div class="input-group mb-3">
             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                   value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}">
+                value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}">
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -91,10 +91,10 @@
             @enderror
         </div>
 
-        {{-- Password field --}}
+        {{-- Contraseña --}}
         <div class="input-group mb-3">
             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                   placeholder="{{ __('Contraseña') }}">
+                placeholder="{{ __('Contraseña') }}">
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -109,11 +109,11 @@
             @enderror
         </div>
 
-        {{-- Confirm password field --}}
+        {{-- Confirmar contraseña --}}
         <div class="input-group mb-3">
             <input type="password" name="password_confirmation"
-                   class="form-control @error('password_confirmation') is-invalid @enderror"
-                   placeholder="{{ __('Confirmar contraseña') }}">
+                class="form-control @error('password_confirmation') is-invalid @enderror"
+                placeholder="{{ __('Confirmar contraseña') }}">
 
             <div class="input-group-append">
                 <div class="input-group-text">

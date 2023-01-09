@@ -2,385 +2,93 @@
 
 @section('title', 'Acreditables | Mi cuenta')
 
+@section('rutas')
+    <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
+    <li class="breadcrumb-item active"><a href="" class="text-primary">Perfil</a></li>
+@stop
+
 @section('content_header')
-<div class="row">
-    <div class="col-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-            <li class="breadcrumb-item active"><a href="" class="text-primary">Cuenta</a></li>
-        </ol>
-    </div>
-
-    <x-tipografia.periodo fase="{{ !empty($periodo->fase) ? $periodo->fase : '' }}"
-        fecha="{{ !empty($periodo->inicio) ? explode('-', explode(' ', $periodo->inicio)[0])[0] : 'Sin asignar' }}" />
-</div>
-
     <x-tipografia.titulo>Mi cuenta</x-tipografia.titulo>
 @stop
 
 @section('content')
-    <div class="col-md-8 col-sm-12 mx-auto">
-        <div class="card">
+    <div class="modal fade" id="avatar" tabindex="-1" role="dialog" aria-labelledby="campoCategoria" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content rounded-top">
+                <header class="modal-header bg-primary">
+                    <h5 class="modal-title text-center" id="campoAvatar">Avatares disponibles</h5>
+                </header>
+                <main class="modal-body">
+                    <form action="{{ route('perfil.avatar') }}" method="post">
+                        @csrf
+                        {{ method_field('PUT') }}
 
-            {{-- Información de perfil --}}
-            <section class="card-body">
-                <x-tipografia.titulo-formulario-perfil>
-                    Información de perfil
-                </x-tipografia.titulo-formulario-perfil>
+                        <input type="number" name="usuarioID" class="d-none" hidden value="{{ auth()->user()->id }}">
+                        <input type="number" id="avatarID" name="avatarID" class="d-none" hidden>
 
-                <main class="row">
-                    <x-tipografia.mensajePerfil>
-                        Actualice su información de usuario, nombre, apellido o correo en
-                        este formulario.
-                    </x-tipografia.mensajePerfil>
-
-                    <div class="col-md-7 col-sm-12">
-                        <form action="{{ route('user-profile-information.update') }}" method="post">
-                            @csrf
-                            {{ method_field('PUT') }}
-
-                            {{-- Nombre --}}
-                            <div class="input-group mb-3">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label>Nombre</label>
-                                        <input type="text" name="nombre" class="form-control"
-                                            value="{{ auth()->user()->nombre }}">
+                        <section class="card">
+                            <div class="row mx-auto p-4">
+                                @for ($i = 1; $i <= 9; $i++)
+                                    <div class="col-4">
+                                        <div class="border mx-auto my-2 rounded-circle avatar-contenedor"
+                                            {{ Popper::arrow()->pop('Avatar ' . $i) }}>
+                                            <img src="{{ asset('vendor/img/avatares/avatar' . $i . '.webp') }}"
+                                                alt="Avatar " . {{ $i }} id="{{ $i }}"
+                                                class="p-2 avatar">
+                                        </div>
                                     </div>
-
-                                    <div class="col-6">
-                                        <label>Apellido</label>
-                                        <input type="text" name="apellido" class="form-control"
-                                            value="{{ auth()->user()->apellido }}">
-                                    </div>
-                                </div>
+                                @endfor
                             </div>
+                        </section>
 
-                            {{-- Correo --}}
-                            <div class="form-group mb-3">
-                                <label>Correo</label>
-                                <input type="text" name="email" class="form-control"
-                                    value="{{ auth()->user()->email }}">
-                            </div>
+                        <section id="avatarSeleccionado" class="d-none card">
+                            <header class="p-2 rounded-top border-bottom card-head bg-secondary text-center">
+                                <h5>Avatar seleccionado</h5>
+                            </header>
+                            <main class="card-body text-center">
+                                <img alt="Avatar seleccionado" id="seleccion"
+                                    class="p-3 border border-primary rounded-circle avatar-seleccionado">
+                            </main>
+                        </section>
 
-                            {{-- Botones --}}
-                            <x-botones.actualizar />
-                        </form>
-                    </div>
+                        <x-modal.footer-aceptar />
+                    </form>
                 </main>
-            </section>
-
-            {{-- Contraseña --}}
-            <section class="card-body">
-                <x-tipografia.titulo-formulario-perfil>
-                    Seguridad de la cuenta
-                </x-tipografia.titulo-formulario-perfil>
-
-                <main class="row">
-                    <x-tipografia.mensajePerfil>
-                        Mantenga su cuenta segura con una robusta y confiable
-                        contraseña, puede cambiarla aquí cuando desee.
-                    </x-tipografia.mensajePerfil>
-
-                    <div class="col-md-7 col-sm-12">
-                        <form action="{{ route('actualizarContrasena') }}" method="post">
-                            @csrf
-                            {{ method_field('PUT') }}
-
-                            <input type="number" class="d-none" name="usuario" value="{{ auth()->user()->id }}" hidden>
-
-                            <div class="form-group mb-3">
-                                <label for="current_password">Contraseña actual</label>
-                                <input type="password" name="current_password"
-                                    class="form-control @error('current_password') is-invalid @enderror" autofocus required>
-
-                                @error('current_password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="password">Nueva contraseña</label>
-                                        <input type="password" name="password"
-                                            class="form-control @error('password') is-invalid @enderror" autofocus required>
-
-                                        @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-6">
-                                        <label for="password_confirmation">Confirmar contraseña</label>
-                                        <input type="password" name="password_confirmation"
-                                            class="form-control @error('password_confirmation') is-invalid @enderror"
-                                            autofocus required>
-
-                                        @error('password_confirmation')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Botones --}}
-                            <x-botones.actualizar />
-                        </form>
-                    </div>
-                </main>
-            </section>
-
-            {{-- Perfil academico --}}
-            @can('preinscribir')
-                <section class="card-body">
-                    <x-tipografia.titulo-formulario-perfil>
-                        Perfil académico
-                    </x-tipografia.titulo-formulario-perfil>
-
-                    <main class="row">
-                        <x-tipografia.mensajePerfil>
-                            Esta información valida sus estudios al momento de inscribir una acreditable de su preferencia,
-                            si no están asignados los campos comuníquese con el Coordinador de Acreditables para
-                            actualizarlo.
-                        </x-tipografia.mensajePerfil>
-
-                        <div class="col-md-7 col-sm-12">
-                            <div class="form-group mb-3">
-                                <label>Trayecto</label>
-                                <input type="text" class="form-control"
-                                    value="{{ !empty(auth()->user()->estudiante) ? auth()->user()->estudiante->trayecto->num_trayecto : 'Sin asignar' }}"
-                                    readonly disabled>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label>PNF</label>
-                                <input type="text" class="form-control"
-                                    value="{{ !empty(auth()->user()->estudiante) ? auth()->user()->estudiante->pnf->nom_pnf : 'Sin asignar' }}"
-                                    readonly disabled>
-                            </div>
-                        </div>
-                    </main>
-                </section>
-            @endcan
-
-            {{-- Comprobante --}}
-            @if (auth()->user()->getRoleNames()[0] === 'Estudiante')
-                <section class="card-body">
-                    <x-tipografia.titulo-formulario-perfil>
-                        Comprobante de inscripción
-                    </x-tipografia.titulo-formulario-perfil>
-
-                    <main class="row">
-                        @if (!empty(auth()->user()->estudiante->preinscrito) &&
-                            !empty(auth()->user()->estudiante->preinscrito->materia->info->profesor))
-                            <a href="{{ route('comprobante', auth()->user()->estudiante->id) }}" class="px-3">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-danger"><i class="far fa-file-pdf"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text text-primary">Descargar</span>
-                                    </div>
-                                </div>
-                            </a>
-                        @else
-                            <p class="card-text text-muted text-justify p-4">
-                                {{ empty(auth()->user()->estudiante->preinscrito->materia->info->profesor) ? 'Su comprobante no se encuentra finalizado, por favor, comuníquese con el Coordinador de Acreditables para que añada un profesor a la acreditable, hasta entonces su comprobante no estará disponible.' : 'Aún no se ha inscrito en una acreditable, cuando lo haga aparecerá un comprobante en esta sección' }}
-                            </p>
-                        @endif
-                    </main>
-                </section>
-            @endif
+            </div>
         </div>
     </div>
 
-    {{-- <div class="row mt-3">
+    <div class="col-md-8 col-sm-12 mx-auto">
+        <div class="card">
 
-        <div class="col-6">
-            <div class="card">
-                <header class="card-header bg-primary">
-                    <h5>Información de perfil</h5>
-                </header>
+            <x-perfil.usuario.avatar />
 
-                <main class="card-body">
-                    <form action="{{ route('user-profile-information.update') }}" method="post">
-                        @csrf
-                        {{ method_field('PUT') }}
+            <x-perfil.usuario.informacion :nombre="usuario(auth()->user(), 'nombre')" :apellido="usuario(auth()->user(), 'apellido')" :correo="usuario(auth()->user(), 'correo')" />
 
-                        <div class="input-group mb-3">
-                            <div class="col-6 px-2">
-                                <label>Nombre</label>
-                                <input type="text" name="nombre" class="form-control"
-                                    value="{{ auth()->user()->nombre }}">
-                            </div>
+            <x-perfil.usuario.seguridad :id="usuario(auth()->user(), 'id')" />
 
-                            <div class="col-6 px-2">
-                                <label>Apellido</label>
-                                <input type="text" name="apellido" class="form-control"
-                                    value="{{ auth()->user()->apellido }}">
-                            </div>
-                        </div>
+            @can('inscribir')
+                <x-perfil.usuario.perfil-academico />
 
-                        <div class="form-group mb-3 px-2">
-                            <label>Correo</label>
-                            <input type="text" name="email" class="form-control"
-                                value="{{ auth()->user()->email }}">
-                        </div>
-
-                        <div class="row px-2">
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-block btn-outline-primary">
-                                    {{ __('Actualizar perfil ') }}
-                                </button>
-                            </div>
-                        </div>
-
-                    </form>
-                </main>
-            </div>
+                <x-perfil.usuario.comprobante />
+            @endcan
         </div>
-
-        <div class="col-6">
-            <div class="card">
-                <header class="card-header bg-primary">
-                    <h5>Seguridad de la cuenta</h5>
-                </header>
-                <main class="card-body" style="height: 15.625rem">
-                    <form action="{{ route('actualizarContrasena') }}" method="post">
-                        @csrf
-                        {{ method_field('PUT') }}
-
-                        <input type="number" class="d-none" name="usuario" value="{{ auth()->user()->id }}" hidden>
-
-                        <div class="form-group mb-3">
-                            <label for="current_password">Contraseña actual</label>
-                            <input type="password" name="current_password"
-                                class="form-control @error('current_password') is-invalid @enderror" autofocus required>
-
-                            @error('current_password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <div class="row">
-                                <div class="col-6">
-                                    <label for="password">Nueva contraseña</label>
-                                    <input type="password" name="password"
-                                        class="form-control @error('password') is-invalid @enderror" autofocus required>
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="password_confirmation">Confirmar contraseña</label>
-                                    <input type="password" name="password_confirmation"
-                                        class="form-control @error('password_confirmation') is-invalid @enderror" autofocus
-                                        required>
-
-                                    @error('password_confirmation')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <x-botones.actualizar />
-                    </form>
-                </main>
-            </div>
-        </div>
-
-        @can('preinscribir')
-            @if (empty(auth()->user()->estudiante))
-                <div class="col-6">
-                    <div class="card">
-                        <header class="card-header bg-primary">
-                            <h5>Perfil académico</h5>
-                        </header>
-                        <main class="card-body" style="height: 15.625rem">
-                            <div class="form-group mb-3">
-                                <label>Trayecto</label>
-                                <input type="text" class="form-control"
-                                    value="{{ !empty(auth()->user()->estudiante) ? auth()->user()->estudiante->pnf->num_trayecto : 'Sin asignar' }}"
-                                    readonly disabled>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label>PNF</label>
-                                <input type="text" class="form-control"
-                                    value="{{ !empty(auth()->user()->estudiante) ? auth()->user()->estudiante->pnf->nom_pnf : 'Sin asignar' }}"
-                                    readonly disabled>
-                            </div>
-                        </main>
-                    </div>
-                </div>
-            @else
-                <div class="col-6">
-                    <div class="card">
-                        <header class="card-header bg-primary">
-                            <h5>Perfil académico</h5>
-                        </header>
-
-                        <main class="card-body" style="min-height: 15.625rem">
-                            <div class="form-group mb-3 px-2">
-                                <label>Trayecto</label>
-                                <input type="text" class="form-control"
-                                    placeholder="{{ auth()->user()->estudiante->trayecto_id }}" disabled>
-                            </div>
-
-                            <div class="form-group mb-3 px-2">
-                                <label>PNF</label>
-                                <input type="text" class="form-control"
-                                    placeholder="{{ auth()->user()->estudiante->pnf->nom_pnf }}" disabled>
-                            </div>
-                        </main>
-                    </div>
-                </div>
-            @endif
-        @endcan
-
-        @if (!empty(auth()->user()->estudiante->preinscrito) && !empty(auth()->user()->estudiante->preinscrito->materia->info->profesor))
-            <section class="col-4 p-2">
-                <a href="{{ route('comprobante', auth()->user()->estudiante->id) }}">
-                    <div class="info-box">
-                        <span class="info-box-icon bg-danger"><i class="far fa-file-pdf"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-text text-primary">Descargar comprobante</span>
-                        </div>
-                    </div>
-                </a>
-            </section>
-        @else
-            <section class="col-6 p-2">
-                <div class="card p-4">
-                    <p class="card-text text-muted text-justify">
-                        {{ !empty(auth()->user()->estudiante->preinscrito->materia->info->profesor) ? 'Su comprobante no se encuentra finalizado, por favor, comuníquese con el Coordinador de Acreditables para que añada un profesor a la acreditable, hasta entonces su comprobante no estará disponible.' : 'Aún no se ha inscrito en una acreditable, cuando lo haga aparecerá un comprobante en esta sección' }}
-                    </p>
-                </div>
-            </section>
-        @endif
-
-    </div> --}}
+    </div>
 @stop
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/avatarPerfil.css') }}">
 @stop
 
 @section('js')
+    @include('popper::assets')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    {{-- Personalizados --}}
+    <script src="{{ asset('js/seleccionarAvatar.js') }}"></script>
+
+    {{-- Mensajes --}}
     <script>
         @if ($message = session('actualizado'))
             let timerInterval
@@ -388,6 +96,28 @@
                 icon: 'success',
                 title: '¡Contraseña actualizada!',
                 html: 'Ahora podrá ingresar con su nueva contraseña.',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('avatar'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Avatar actualizado!',
+                html: 'Felicidades por personalizar su perfil con ese increíble avatar.',
+                confirmButtonColor: '#28a745',
+                customClass: {
+                    confirmButton: 'btn px-5'
+                },
+            })
+        @elseif ($message = session('perfil-actualizado'))
+            let timerInterval
+            Swal.fire({
+                icon: 'success',
+                title: '¡Perfil actualizado!',
+                html: 'Sus credenciales han sido actualizadas correctamente.',
                 confirmButtonColor: '#28a745',
                 customClass: {
                     confirmButton: 'btn px-5'
