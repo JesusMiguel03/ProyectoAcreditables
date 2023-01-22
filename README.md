@@ -5,17 +5,15 @@
 </p>
 
 ## 🖥Código
-
-Para clonar y trabajar con el repositorio seguir las siguientes instrucciones:
-Abrir la consola de comandos en la carpeta del servidor local (xampp: /htdocs o laragon y wampp /www), pegar el siguiente enlace y darle enter.
+Clone el repositorio en la ubicación que desee.
 ```
 git clone https://github.com/JesusMiguel03/ProyectoAcreditables.git
 ```
-Se require tener instalado [composer](https://getcomposer.org/download/)
+Requiere tener instalado [composer](https://getcomposer.org/download/)
 ```
 composer install
 ```
-Dentro del IDE de su preferencia y en la ruta donde se encuentra la carpeta descargada, pegar los siguientes enlaces y darle enter.
+En el editor de su preferencia, abra la carpeta clonada y use los siguientes comandos:
 ```
 cp .env.example .env
 ```
