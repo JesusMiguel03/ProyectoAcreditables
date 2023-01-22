@@ -46,13 +46,13 @@ php artisan migrate:fresh --seed
 
 ## Sobre el proyecto
 
-Componente web diseñado para la gestión administrativa de procesos dentro de la Coordinación de Acreditables, como bien son:
+Componente web diseñado para la gestión administrativa de procesos dentro de la Coordinación de Acreditables. Dispone de las siguientes funciones:
 
-- Pre-inscripción de estudiantes.
-- Inscripciones de los mismos.
-- Creación y apertura de cursos.
-- Cursos de formación integral.
-- Entre otros aspectos importantes.
+- Inscripción de estudiantes y profesores.
+- Creación, apertura y cierre de cursos.
+- Manejo de cursos, cambio de acreditable.
+- Gráficos, estadísticas y reportes.
+- Listados de estudiantes y comprobantes de inscripción en formato PDF.
 
 Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas, como lo son:
 
@@ -66,7 +66,6 @@ Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas,
 - [jQuery](https://jquery.com/download/).
 - [SweetAlert2](https://sweetalert2.github.io).
 - [DataTables](https://datatables.net).
-- [Bs stepper](https://johann-s.github.io/bs-stepper/).
 - [Slick](http://kenwheeler.github.io/slick/).
 - [Spatie](https://spatie.be/docs/laravel-permission/v5/introduction).
 
