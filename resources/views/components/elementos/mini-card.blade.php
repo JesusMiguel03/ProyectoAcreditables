@@ -1,12 +1,14 @@
+@php
+    $datos = atributo($attributes, 'datos');
+    $nombre = $datos[0];
+    $contenido = $datos[1];
+@endphp
+
 <div class="col-sm-12 col-md-3">
     <div class="card border pt-2 text-center">
-        <strong>{{ atributo($attributes, 'nombre') }}</strong>
-        <p class="{{ atributo($attributes, 'contenido') === 'Sin asignar' ? 'text-info' : 'text-muted' }} campo">
-            {{ atributo($attributes, 'contenido') }}
+        <strong>{{ $nombre }}</strong>
+        <p class="{{ $contenido === 'Sin asignar' ? 'text-info' : 'text-muted' }} campo">
+            {{ $contenido }}
         </p>
     </div>
 </div>
-
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/decoracion.css') }}">
-@endsection

@@ -17,11 +17,6 @@ class HorarioController extends Controller
         $this->middleware('prevent-back-history');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         // Valida si tiene el permiso
@@ -31,51 +26,39 @@ class HorarioController extends Controller
         return view('academico.horarios.index', compact('horarios'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // Valida si tiene el permiso
         permiso('horarios');
 
         // Valida los campos
-        $validador = Validator::make($request->all(), [
+        $validar = Validator::make($request->all(), [
             'espacio' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio')],
-            'edificio_numero' => ['nullable', 'numeric', 'max:' . config('variables.horarios.edificio_numero')],
+            'edificio' => ['nullable', 'numeric', 'max:' . config('variables.horarios.edificio')],
             'dia' => ['required', 'numeric', 'digits_between:1,5'],
             'hora' => ['required', 'date_format:g:i a'],
         ], [
-            'hora.date_format' => 'El campo hora no coincide con el formato 00:00 AM',
-            'desc_conocimiento.required' => 'El campo descripción es necesario.',
-            'nom_conocimiento.required' => 'El campo nombre es necesario.',
-            'desc_conocimiento.string' => 'El campo descripción debe ser una oración.',
-            'nom_conocimiento.regex' => 'El campo nombre solo puede contener letras y espacios.',
-            'nom_conocimiento.string' => 'El campo nombre debe ser una oración.',
-            'desc_conocimiento.regex' => 'El campo nombre solo puede contener letras y espacios.',
-            'nom_conocimiento.max' => 'El campo nombre no debe tener más de :max carácteres.',
-            'desc_conocimiento.max' => 'El campo descripción no debe tener más de :max carácteres.',
+            'hora.date_format' => 'La hora no coincide con el formato 00:00 AM',
+            'nom_conocimiento.required' => 'El nombre es necesario.',
+            'nom_conocimiento.string' => 'El nombre debe ser una oración.',
+            'nom_conocimiento.regex' => 'El nombre solo puede contener letras y espacios.',
+            'nom_conocimiento.max' => 'El nombre no debe tener más de :max caracteres.',
+            'desc_conocimiento.required' => 'La descripción es necesario.',
+            'desc_conocimiento.string' => 'La descripción debe ser una oración.',
+            'desc_conocimiento.regex' => 'La descripción solo puede contener letras y espacios.',
+            'desc_conocimiento.max' => 'La descripción no debe tener más de :max caracteres.',
         ]);
-        validacion($validador);
+        validacion($validar, 'error');
 
         Horario::create([
-            'espacio' => $request->get('espacio'),
-            'edificio_numero' => $request->get('edificio_numero'),
-            'dia' => $request->get('dia'),
-            'hora' => Carbon::parse($request->get('hora'))->format('Y-m-d H:i:s'),
+            'espacio' => $request['espacio'],
+            'edificio' => $request['edificio'],
+            'dia' => $request['dia'],
+            'hora' => Carbon::parse($request['hora'])->format('Y-m-d H:i:s'),
         ]);
         return redirect()->back()->with('creado', 'creado');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Academico\Horario  $horario
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         // Valida si tiene el permiso
@@ -88,61 +71,47 @@ class HorarioController extends Controller
         return view('academico.horarios.edit', compact('horario'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Academico\Horario  $horario
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         // Valida si tiene el permiso
         permiso('horarios');
 
         // Valida los campos
-        $validador = Validator::make($request->all(), [
+        $validar = Validator::make($request->all(), [
             'espacio' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio')],
-            'edificio_numero' => ['numeric', 'max:' . config('variables.horarios.edificio_numero')],
+            'edificio' => ['numeric', 'max:' . config('variables.horarios.edificio')],
             'dia' => ['required', 'numeric', 'digits_between:1,5'],
-            'hora' => ['required', 'date_format:h:i a'],
+            'hora' => ['required', 'date_format:g:i a'],
         ], [
-            'hora.date_format' => 'El campo hora no coincide con el formato 00:00 AM',
-            'desc_conocimiento.required' => 'El campo descripción es necesario.',
-            'nom_conocimiento.required' => 'El campo nombre es necesario.',
-            'desc_conocimiento.string' => 'El campo descripción debe ser una oración.',
-            'nom_conocimiento.regex' => 'El campo nombre solo puede contener letras y espacios.',
-            'nom_conocimiento.string' => 'El campo nombre debe ser una oración.',
-            'desc_conocimiento.regex' => 'El campo nombre solo puede contener letras y espacios.',
-            'nom_conocimiento.max' => 'El campo nombre no debe tener más de :max carácteres.',
-            'desc_conocimiento.max' => 'El campo descripción no debe tener más de :max carácteres.',
+            'hora.date_format' => 'La hora no coincide con el formato 00:00 AM',
+            'nom_conocimiento.required' => 'El nombre es necesario.',
+            'nom_conocimiento.string' => 'El nombre debe ser una oración.',
+            'nom_conocimiento.regex' => 'El nombre solo puede contener letras y espacios.',
+            'nom_conocimiento.max' => 'El nombre no debe tener más de :max caracteres.',
+            'desc_conocimiento.required' => 'La descripción es necesario.',
+            'desc_conocimiento.string' => 'La descripción debe ser una oración.',
+            'desc_conocimiento.regex' => 'La descripción solo puede contener letras y espacios.',
+            'desc_conocimiento.max' => 'La descripción no debe tener más de :max caracteres.',
         ]);
-        validacion($validador);
+        validacion($validar, 'error');
 
-        Horario::updateOrCreate(
-            ['id' => $id],
-            [
-                'espacio' => $request->get('espacio'),
-                'edificio_numero' => $request->get('edificio_numero'),
-                'dia' => $request->get('dia'),
-                'hora' => Carbon::parse($request->get('hora'))->format('Y-m-d H:i:s'),
-            ]
-        );
+        Horario::find($id)->update([
+            'espacio' => $request['espacio'],
+            'edificio' => $request['edificio'],
+            'dia' => $request['dia'],
+            'hora' => Carbon::parse($request['hora'])->format('Y-m-d H:i:s'),
+        ]);
+
         return redirect('horarios')->with('actualizado', 'actualizado');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Academico\Horario  $horario
-     * @return \Illuminate\Http\Response
-     */
     public function delete($id)
     {
         // Valida si tiene el permiso
         permiso('horarios');
 
         Horario::find($id)->delete();
+
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

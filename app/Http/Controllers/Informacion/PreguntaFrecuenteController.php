@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Informacion\Pregunta_frecuente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
 class PreguntaFrecuenteController extends Controller
 {
     public function __construct()
@@ -23,9 +22,8 @@ class PreguntaFrecuenteController extends Controller
 
         // Lista todas las preguntas
         $preguntas = Pregunta_frecuente::all();
-        $periodo = periodoActual();
 
-        return view('informacion.preguntas.index', compact('preguntas', 'periodo'));
+        return view('informacion.preguntas.index', compact('preguntas'));
     }
 
     public function store(Request $request)
@@ -38,24 +36,19 @@ class PreguntaFrecuenteController extends Controller
             'titulo' => ['required', 'string', 'max:' . config('variables.preguntas.titulo')],
             'explicacion' => ['required', 'string', 'max:' . config('variables.preguntas.explicacion')],
         ], [
-            'titulo.required' => 'El campo pregunta es necesario.',
-            'explicacion.required' => 'El campo respuesta es necesario.',
-            'titulo.string' => 'El campo pregunta debe ser una oración.',
-            'explicacion.string' => 'El campo respuesta debe ser una oración.',
-            'titulo.max' => 'El campo pregunta no debe ser mayor a :max carácteres.',
-            'explicacion.max' => 'El campo respuesta no debe ser mayor a :max carácteres.',
+            'titulo.required' => 'La pregunta es necesaria.',
+            'explicacion.required' => 'La respuesta es necesaria.',
+            'titulo.string' => 'La pregunta debe ser una oración.',
+            'explicacion.string' => 'La respuesta debe ser una oración.',
+            'titulo.max' => 'La pregunta no debe ser mayor a :max caracteres.',
+            'explicacion.max' => 'La respuesta no debe ser mayor a :max caracteres.',
         ]);
-        validacion($validador);
-        
-        // Evita duplicidad
-        duplicado(
-            Pregunta_frecuente::where([['titulo', '=', $request->get('titulo')], ['explicacion', '=', $request->get('explicacion')]])
-        );
+        validacion($validador, 'error');
         
         // Guarda la pregunta
         Pregunta_frecuente::create([
-            'titulo' => $request->get('titulo'),
-            'explicacion' => $request->get('explicacion')
+            'titulo' => $request['titulo'],
+            'explicacion' => $request['explicacion']
         ]);
         
         return redirect('preguntas-frecuentes')->with('creado', 'creado');
@@ -68,11 +61,11 @@ class PreguntaFrecuenteController extends Controller
         
         // Trae la pregunta correspondiente
         $pregunta = Pregunta_frecuente::find($id);
-        $periodo = periodoActual();
 
+        // Valida que exista
         existe($pregunta);
         
-        return view('informacion.preguntas.edit', compact('pregunta', 'periodo'));
+        return view('informacion.preguntas.edit', compact('pregunta'));
     }
 
     public function update(Request $request, $id)
@@ -85,28 +78,20 @@ class PreguntaFrecuenteController extends Controller
             'titulo' => ['required', 'string', 'max:' . config('variables.preguntas.titulo')],
             'explicacion' => ['required', 'string', 'max:' . config('variables.preguntas.explicacion')],
         ], [
-            'titulo.required' => 'El campo pregunta es necesario.',
-            'explicacion.required' => 'El campo respuesta es necesario.',
-            'titulo.string' => 'El campo pregunta debe ser una oración.',
-            'explicacion.string' => 'El campo respuesta debe ser una oración.',
-            'titulo.max' => 'El campo pregunta no debe ser mayor a :max carácteres.',
-            'explicacion.max' => 'El campo respuesta no debe ser mayor a :max carácteres.',
+            'titulo.required' => 'La pregunta es necesaria.',
+            'explicacion.required' => 'La respuesta es necesaria.',
+            'titulo.string' => 'La pregunta debe ser una oración.',
+            'explicacion.string' => 'La respuesta debe ser una oración.',
+            'titulo.max' => 'La pregunta no debe ser mayor a :max caracteres.',
+            'explicacion.max' => 'La respuesta no debe ser mayor a :max caracteres.',
         ]);
-        validacion($validador);
+        validacion($validador, 'error');
 
-        // Evita duplicidad
-        duplicado(
-            Pregunta_frecuente::where([['titulo', '=', $request->get('titulo')], ['explicacion', '=', $request->get('explicacion')]])
-        );
-
-        // Busca y actualiza
-        Pregunta_frecuente::updateOrCreate(
-            ['id' => $id],
-            [
-                'titulo' => $request->get('titulo'),
-                'explicacion' => $request->get('explicacion')
-            ]
-        );
+        // Actualiza la pregunta
+        Pregunta_frecuente::find($id)->update([
+            'titulo' => $request['titulo'],
+            'explicacion' => $request['explicacion']
+        ]);
 
         return redirect('preguntas-frecuentes')->with('actualizado', 'actualizado');
     }
@@ -117,6 +102,7 @@ class PreguntaFrecuenteController extends Controller
         permiso('preguntas.modificar');
 
         Pregunta_frecuente::find($id)->delete();
+        
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

@@ -26,5 +26,8 @@ class TrayectoSeeder extends Seeder
         Trayecto::create([
             'num_trayecto' => 4
         ]);
+        Trayecto::create([
+            'num_trayecto' => 5
+        ]);
     }
 }

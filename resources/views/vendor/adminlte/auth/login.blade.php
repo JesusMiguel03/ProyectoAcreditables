@@ -26,45 +26,58 @@
     <form action="{{ $login_url }}" method="post">
         @csrf
 
-        {{-- Email field --}}
-        <div class="input-group mb-3">
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}" autofocus required>
+        {{-- Correo --}}
+        <div class="form-group required">
+            <label for="email" class="control-label">Correo</label>
+            <div class="input-group mb-3">
+                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                    value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}" autofocus required>
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    </div>
                 </div>
-            </div>
 
-            @error('email')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+                @error('email')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
         </div>
 
-        {{-- Password field --}}
-        <div class="input-group mb-3">
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                placeholder="{{ __('Contraseña') }}" required>
+        {{-- Contraseña --}}
+        <div class="form-group required">
+            <label for="password" class="control-label">Contraseña</label>
+            <div class="input-group mb-3">
+                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                    placeholder="{{ __('Contraseña') }}" required>
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                    </div>
                 </div>
-            </div>
 
-            @error('password')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+                @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
         </div>
 
-        {{-- Login field --}}
+        <x-modal.mensaje-obligatorio />
+
         <div class="row">
-            <div class="col-7">
+            {{-- Recuérdame --}}
+            <div class="col-6 text-center">
+                <a href="{{ $register_url }}" class="btn text-primary">
+                    {{ __('Registrarme') }}
+                </a>
+            </div>
+            {{-- <div class="col-7">
                 <div class="icheck-primary" title="{{ __('Recuérdame') }}">
                     <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
@@ -72,9 +85,9 @@
                         {{ __('Recuérdame') }}
                     </label>
                 </div>
-            </div>
+            </div> --}}
 
-            <div class="col-5">
+            <div class="col-6">
                 <button type=submit class="btn btn-block btn-primary">
                     {{ __('Iniciar Sesión') }}
                 </button>
@@ -86,11 +99,15 @@
 
 @section('auth_footer')
     {{-- Register link --}}
-    @if ($register_url)
+    {{-- @if ($register_url)
         <p class="my-0">
             <a href="{{ $register_url }}">
                 {{ __('Registrarme') }}
             </a>
         </p>
-    @endif
+    @endif --}}
 @stop
+
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+@endsection

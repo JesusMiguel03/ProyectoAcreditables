@@ -10,11 +10,9 @@
         </x-perfil.card-mensaje>
 
         <div class="col-md-7 col-sm-12">
-            <form action="{{ route('actualizarContrasena') }}" method="post">
+            <form action="{{ route('actualizarContrasena', atributo($attributes, 'id')) }}" method="post">
                 @csrf
                 {{ method_field('PUT') }}
-
-                <input type="number" class="d-none" name="usuario" value="{{ atributo($attributes, 'id') }}" hidden>
 
                 <div class="form-group mb-3">
                     <label for="current_password">Contraseña actual</label>

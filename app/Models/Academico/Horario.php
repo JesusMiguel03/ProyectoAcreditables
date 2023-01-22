@@ -12,5 +12,5 @@ class Horario extends Model
 
     use SoftDeletes;
 
-    protected $fillable = ['espacio', 'edificio_numero', 'dia', 'hora'];
+    protected $fillable = ['espacio', 'edificio', 'dia', 'hora'];
 }

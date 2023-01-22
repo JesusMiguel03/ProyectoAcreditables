@@ -21,7 +21,7 @@
                     </header>
 
                     <main class="modal-body">
-                        <form action="{{ route('estudiante.store') }}" method="post">
+                        <form action="{{ route('registrar.usuario', 'Estudiante') }}" method="post">
                             @csrf
 
                             <x-formularios.usuario />
@@ -60,15 +60,11 @@
             <tbody>
                 @foreach ($estudiantes as $estudiante)
                     <tr>
-                        <td>{{ 'V-' . number_format($estudiante->cedula, 0, ',', '.') }}</td>
-                        <td>{{ $estudiante->nombre }}</td>
-                        <td>{{ $estudiante->apellido }}</td>
-                        <td>
-                            {{ !empty($estudiante->estudiante->pnf) ? $estudiante->estudiante->pnf->nom_pnf : 'Sin asignar' }}
-                        </td>
-                        <td>
-                            {{ !empty($estudiante->estudiante->trayecto) ? $estudiante->estudiante->trayecto->num_trayecto : 'Sin asignar' }}
-                        </td>
+                        <td>{{ datosUsuario($estudiante, 'Usuario', 'CI') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'Usuario', 'nombre') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'Usuario', 'apellido') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'Usuario', 'PNF') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'Usuario', 'trayecto') }}</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 <a href="{{ route('estudiantes.edit', $estudiante) }}" class="btn btn-primary"
@@ -92,7 +88,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
@@ -101,57 +97,54 @@
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Estudiante registrado!',
                 html: 'Un nuevo estudiante ha sido añadido.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error al registrar',
+                title: '¡Error al registrar!',
                 html: 'Uno de los parámetros parece estar mal.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'info',
-                title: 'Ya fue registrado',
-                html: 'El estudiante ya se encuentra registrado.',
-                confirmButtonColor: '#17a2b8',
+                title: '¡Ya registrado!',
+                html: 'El estudiante se encuentra registrado.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @elseif ($message = session('academico'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
                 html: 'Los datos del estudiante han sido actualizados.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-primary px-5'
                 },
             })
         @endif

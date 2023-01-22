@@ -23,130 +23,7 @@
                         <form action="{{ route('materias.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
 
-                            {{-- Nombre --}}
-                            <div class="form-group required mb-3">
-                                <label for="nom_materia" class="control-label">Nombre</label>
-                                <div class="input-group">
-                                    <input type="text" name="nom_materia"
-                                        class="form-control @error('nom_materia') is-invalid @enderror"
-                                        value="{{ old('nom_materia') }}" placeholder="{{ __('Nombre de la materia') }}"
-                                        autofocus required>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-font"></span>
-                                        </div>
-                                    </div>
-
-                                    @error('nom_materia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group" style="margin-bottom: -0.3rem">
-                                <div class="row">
-
-                                    {{-- Cupos --}}
-                                    <div class="form-group required col-6">
-                                        <label for="cupos" class="control-label">Cupos disponibles</label>
-                                        <div class="input-group">
-                                            <input type="number" name="cupos"
-                                                class="form-control @error('cupos') is-invalid @enderror"
-                                                value="{{ old('cupos') }}"
-                                                placeholder="{{ __('Cupos iniciales, límite: ' . config('variables.materias.cupos')) }}"
-                                                required>
-
-                                            @error('Cupos')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    {{-- Numero --}}
-                                    <div class="form-group required col-6">
-                                        <label for="num_acreditable" class="control-label">Acreditable Nro</label>
-                                        <div class="input-group">
-                                            <select name="num_acreditable"
-                                                class="form-control @error('num_acreditable') is-invalid @enderror">
-                                                <option value="0" disabled>Seleccione una</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                            </select>
-
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-list-ol"></span>
-                                                </div>
-                                            </div>
-
-                                            @error('num_acreditable')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            {{-- Descripción --}}
-                            <div class="form-group required mb-3">
-                                <label for="desc_materia" class="control-label">Descripción</label>
-                                <div class="input-group">
-                                    <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
-                                        value="{{ old('desc_materia') }}" placeholder="{{ __('Descripción') }}" spellcheck="false" required></textarea>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-quote-right"></span>
-                                        </div>
-                                    </div>
-
-                                    @error('desc_materia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Imagen (opcional) --}}
-                            <div class="form-group mb-3">
-                                <label for="imagen_materia">Imagen</label>
-                                <div class="input-group">
-                                    <input type="file"
-                                        class="custom-file-input @error('imagen_materia') is-invalid @enderror" id="imagen"
-                                        name="imagen_materia" accept="image/jpeg">
-                                    <label class="custom-file-label text-muted" for="imagen_materia" id="campoImagen">
-                                        Seleccione una imagen
-                                    </label>
-                                    <small id="ayudaImagen" class="form-text text-muted">
-                                        La imagen debe pesar menos de 1 MB.
-                                    </small>
-                                </div>
-                                @error('imagen_materia')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            {{-- Previsualizar imagen --}}
-                            <div class="card" style="max-width: 540px">
-                                <img src="" alt="" id="previsualizar" class="rounded">
-                            </div>
-
-                            <x-modal.mensaje-obligatorio />
-
-                            <x-modal.footer-aceptar />
+                            <x-formularios.acreditables />
                         </form>
                     </main>
                 </div>
@@ -160,21 +37,17 @@
 @section('content')
     @if (rol('Estudiante'))
 
-        @php
-            $categoria = !empty($materias->info) ? $materias->info->categoria->nom_categoria : 'Sin asignar';
-        @endphp
-
         {{-- No tiene perfil academico --}}
-        @if (!estudiante(Auth::user(), 'academico'))
+        @if (!datosUsuario(Auth::user(), 'Estudiante', 'academico'))
+
             <x-elementos.perfil-incompleto />
 
             {{-- Esta inscrito --}}
-        @elseif (estudiante(Auth::user(), 'inscrito'))
+        @elseif (datosUsuario(Auth::user(), 'Estudiante', 'inscrito'))
             <div id="slick" class="px-5">
                 <div class="slide">
 
-                    <x-elementos.card-materia :id="$materias->id" :img="$materias->imagen_materia" :nombre="$materias->nom_materia" :cupos="$materias->cupos_disponibles"
-                        :acreditable="$materias->num_acreditable" :categoria="$categoria" :contenido="$materias->desc_materia" />
+                    <x-elementos.card-materia :materia="$materias" />
 
                 </div>
             </div>
@@ -190,8 +63,7 @@
                         @if ($loop->index < config('variables.carrusel'))
                             <div class="slide">
 
-                                <x-elementos.card-materia :id="$materia->id" :img="$materia->imagen_materia" :nombre="$materia->nom_materia"
-                                    :cupos="$materia->cupos_disponibles" :acreditable="$materia->num_acreditable" :categoria="$categoria" :contenido="$materia->desc_materia" />
+                                <x-elementos.card-materia :materia="$materia" />
                             </div>
                         @endif
                     @endforeach
@@ -200,7 +72,7 @@
         @endif
     @endif
 
-    @if (estudiante(Auth::user(), 'materia') || !rol('Estudiante'))
+    @if (empty(datosUsuario(Auth::user(), 'Estudiante', 'materia')) || !rol('Estudiante'))
         <div class="card table-responsive-sm p-3 {{ rol('Estudiante') ? 'mt-5' : 'mt-1' }} mb-3 col-12">
 
             @if (rol('Estudiante'))
@@ -296,7 +168,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/carousel/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/carousel/carousel.css') }}">
-    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
@@ -314,8 +186,9 @@
 
     {{-- Personalizados --}}
     @if (rol('Coordinador'))
-        <script src="{{ asset('js/previsualizacion.js') }}" defer></script>
+        <script src="{{ asset('js/previsualizacion.js') }}"></script>
         <script src="{{ asset('js/borrar.js') }}"></script>
+        <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
     @endif
 
     <script src="{{ asset('js/tablas.js') }}"></script>
@@ -323,81 +196,74 @@
     {{-- Mensajes --}}
     <script>
         @if ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Registro actualizado!',
                 html: 'La materia ha sido actualizada correctamente.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Materia registrada!',
                 html: 'Una nueva materia ha sido añadida.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-sucess px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Error al registrar!',
                 html: 'Uno de los campos parece estar mal.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
             $('materias').modal('show')
         @elseif ($message = session('inexistente'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Materia no encontrada!',
                 html: 'La materia a la que intenta acceder no existe.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @elseif ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Te has inscrito exitosamente!',
-                html: 'Ahora podrás cursar la materia inscrita, pero recuerda llevar tu comprobante de inscripción a la Coordinación de Acreditables para ser validado.',
-                confirmButtonColor: '#28a745',
+                html: 'Ahora podrá cursar la materia inscrita, pero recuerda llevar su comprobante de inscripción a la Coordinación de Acreditables para ser validado.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('borrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Acreditable borrada exitosamente!',
                 html: 'La acreditable ha sido borrada.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('no encontrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Acreditable no encontrada!',
-                html: 'La acreditable que desea buscar o editar no se encuentra disponible.',
-                confirmButtonColor: '#dc3545',
+                html: 'La acreditable que desea buscar no se encuentra disponible.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

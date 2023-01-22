@@ -14,22 +14,23 @@ botones.forEach((boton) => {
         form.action = `${url}/${this.id}/delete`;
 
         Swal.fire({
-            title: '¿Está seguro?',
-            html: `${this.getAttribute("data-type")} <strong>${this.getAttribute("data-name")}</strong> será borrado`,
-            icon: 'warning',
+            title: "¿Está seguro?",
+            html: `${this.getAttribute(
+                "data-type"
+            )} <strong>${this.getAttribute("data-name")}</strong> será borrado`,
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: '#dc3545',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Confirmar',
-            cancelButtonText: 'Cancelar',
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar",
+            buttonsStyling: false,
             customClass: {
-                confirmButton: 'btn px-5',
-                cancelButton: 'btn px-5'
+                confirmButton: "btn btn-danger px-5",
+                cancelButton: "btn btn-secondary px-5",
             },
         }).then((result) => {
             if (result.isConfirmed) {
-                form.submit()
+                form.submit();
             }
-        })
+        });
     });
 });

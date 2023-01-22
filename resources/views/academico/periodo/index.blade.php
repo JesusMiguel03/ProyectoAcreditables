@@ -10,7 +10,7 @@
 @section('content_header')
     <x-tipografia.titulo>Periodo</x-tipografia.titulo>
 
-    {{-- Registrar usuario --}}
+    {{-- Registrar --}}
     <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="camporegistrar" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -23,73 +23,7 @@
                     <form action="{{ route('periodos.store') }}" method="post">
                         @csrf
 
-                        {{-- Fase --}}
-                        <div class="form-row" style="margin-bottom: -0.75rem">
-                            <div class="form-group required col-4">
-                                <label for="fase" class="control-label">Fase</label>
-                                <div class="input-group">
-                                    <input type="number" name="fase"
-                                        class="form-control @error('fase') is-invalid @enderror" value="{{ old('fase') }}"
-                                        placeholder="{{ __('Ej: 1, 2 o 3') }}" autofocus required>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-calendar-day "></span>
-                                        </div>
-                                    </div>
-
-                                    @error('fase')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Fecha de inicio --}}
-                            <div class="form-group required col-4">
-                                <label for="inicio" class="control-label">Fecha inicio</label>
-                                <div class="input-group date" id="inicio" data-target-input="nearest">
-                                    <input type="text" name="inicio"
-                                        class="form-control datetimepicker-input @error('inicio') is-invalid @enderror"
-                                        data-target="#inicio" value="{{ old('inicio') }}"
-                                        placeholder="{{ __('2015-01-01') }}" required>
-                                    <div class="input-group-append" data-target="#inicio" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-
-                                    @error('inicio')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Fecha de fin --}}
-                            <div class="form-group required col-4">
-                                <label for="fin" class="control-label">Fecha fin</label>
-                                <div class="input-group date" id="fin" data-target-input="nearest">
-                                    <input type="text" name="fin"
-                                        class="form-control datetimepicker-input @error('fin') is-invalid @enderror"
-                                        data-target="#fin" value="{{ old('fin') }}" placeholder="{{ __('2015-04-09') }}"
-                                        required>
-                                    <div class="input-group-append" data-target="#fin" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-
-                                    @error('fin')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <x-modal.mensaje-obligatorio />
-
-                        <x-modal.footer-aceptar />
+                        <x-formularios.periodo />
                     </form>
                 </main>
             </div>
@@ -123,8 +57,8 @@
                 @foreach ($periodos as $periodo)
                     <tr>
                         <td>{{ $periodo->fase }}</td>
-                        <td>{{ explode(' ', $periodo->inicio)[0] }}</td>
-                        <td>{{ explode(' ', $periodo->fin)[0] }}</td>
+                        <td>{{ $periodo->inicio }}</td>
+                        <td>{{ $periodo->fin }}</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 <a href="{{ route('periodos.edit', $periodo->id) }}" class="btn btn-primary"
@@ -155,7 +89,7 @@
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/moment/moment.js') }}"></script>
     <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    <script type="text/javascript">
+    <script>
         $(function() {
             $('#inicio').datetimepicker({
                 format: 'YYYY-MM-DD'
@@ -176,75 +110,58 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/borrar.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: 'Periodo registrado!',
+                title: '¡Periodo registrado!',
                 html: 'Un nuevo periodo ha sido añadido.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error al registrar',
+                title: '¡Error al registrar!',
                 html: 'Uno de los parámetros parece estar mal.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('repetido'))
-            let timerInterval
             Swal.fire({
                 icon: 'info',
-                title: 'Ya fue registrado',
-                html: 'El periodo ya se encuentra registrado.',
-                confirmButtonColor: '#17a2b8',
+                title: '¡Ya registrado!',
+                html: 'El periodo se encuentra registrado.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @elseif ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
                 html: 'Los datos del periodo han sido actualizados.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
-                },
-            })
-        @elseif ($message = session('borrado'))
-            let timerInterval
-            Swal.fire({
-                icon: 'success',
-                title: '¡Periodo borrado exitosamente!',
-                html: 'El periodo ha sido borrado.',
-                confirmButtonColor: '#28a745',
-                customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('no encontrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Periodo no encontrado!',
                 html: 'El periodo que desea buscar o editar no se encuentra disponible.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

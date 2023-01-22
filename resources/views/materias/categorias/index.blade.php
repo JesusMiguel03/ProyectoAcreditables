@@ -21,33 +21,8 @@
                 <main class="modal-body">
                     <form action="{{ route('categorias.store') }}" method="post">
                         @csrf
-
-                        {{-- Campo de nombre --}}
-                        <div class="form-group required mb-3">
-                            <label for="nom_categoria" class="control-label">Nombre</label>
-                            <div class="input-group">
-                                <input type="text" name="nom_categoria" id="nom_categoria"
-                                    class="form-control @error('nom_categoria') is-invalid @enderror"
-                                    value="{{ old('nom_categoria') }}" placeholder="{{ __('Nombre de la categoria') }}"
-                                    autofocus required>
-
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-font"></span>
-                                    </div>
-                                </div>
-
-                                @error('nom_categoria')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <x-modal.mensaje-obligatorio />
-
-                        <x-modal.footer-aceptar />
+                        
+                        <x-formularios.categorias />
                     </form>
                 </main>
             </div>
@@ -102,7 +77,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
@@ -115,65 +90,61 @@
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('/js/tablas.js') }}"></script>
+    <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
+    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Categoria registrada!',
                 html: 'Ahora la categoria se encuentra disponible.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡La categoria se ha actualizado!',
                 html: 'La categoria se puede encontrar con el nuevo nombre.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Hubo un problema!',
                 html: 'Parece que uno de los campos no cumple los requisitos.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('borrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Categoría borrada exitosamente!',
                 html: 'La categoría ha sido borrada.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('no encontrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Categoría no encontrada!',
                 html: 'La categoría que desea buscar o editar no se encuentra disponible.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

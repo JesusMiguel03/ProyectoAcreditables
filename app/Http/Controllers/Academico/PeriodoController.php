@@ -22,8 +22,7 @@ class PeriodoController extends Controller
         permiso('periodo');
 
         $periodos = Periodo::all();
-        $periodo = periodoActual();
-        return view('academico.periodo.index', compact('periodos', 'periodo'));
+        return view('academico.periodo.index', compact('periodos'));
     }
 
     public function store(Request $request)
@@ -38,25 +37,12 @@ class PeriodoController extends Controller
         ], [
             'fase.max' => 'El número no debe ser mayor a :max.'
         ]);
-        validacion($validador);
-
-        /**
-         * Evita la duplicidad
-         * 
-         * ! Revisar
-         */
-        // duplicado(
-        //     Periodo::where(
-        //         ['fase', '=', $request->get('fase')],
-        //         ['inicio', '=', $request->get('inicio')],
-        //         ['fin', '=', $request->get('fin')]
-        //     )
-        // );
+        validacion($validador, 'error');
 
         Periodo::create([
-            'fase' => $request->get('fase'),
-            'inicio' => $request->get('inicio'),
-            'fin' => $request->get('fin'),
+            'fase' => $request['fase'],
+            'inicio' => $request['inicio'],
+            'fin' => $request['fin'],
         ]);
 
         return redirect()->back()->with('creado', 'creado');
@@ -68,14 +54,14 @@ class PeriodoController extends Controller
         permiso('periodo');
 
         $periodoEditar = Periodo::find($id);
-        $periodo = periodoActual();
-        
+
+        // Valida que exista
         existe($periodoEditar);
 
-        return view('academico.periodo.edit', compact('periodoEditar', 'periodo'));
+        return view('academico.periodo.edit', compact('periodoEditar'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         // Valida si tiene el permiso
         permiso('periodo');
@@ -87,38 +73,14 @@ class PeriodoController extends Controller
         ], [
             'fase.max' => 'El número no debe ser mayor a :max.'
         ]);
-        validacion($validador);
+        validacion($validador, 'error');
 
-        /**
-         * Evita la duplicidad
-         * 
-         * ! Revisar
-         */
-        // duplicado(
-        //     Periodo::where(
-        //         ['fase', '=', $request->get('fase')],
-        //         ['inicio', '=', $request->get('inicio')],
-        //         ['fin', '=', $request->get('fin')]
-        //     )
-        // );
-
-        Periodo::updateOrCreate(
-            ['id' => $request->get('id')],
-            [
-                'fase' => $request->get('fase'),
-                'inicio' => $request->get('inicio'),
-                'fin' => $request->get('fin'),
-            ]
-        );
+        Periodo::find($id)->update([
+            'fase' => $request['fase'],
+            'inicio' => $request['inicio'],
+            'fin' => $request['fin'],
+        ]);
 
         return redirect('periodos')->with('actualizado', 'actualizado');
     }
-
-    // public function delete($id)
-    // {
-    //     permiso('periodo');
-
-    //     Periodo::find($id)->delete();
-    //     return redirect()->back()->with('borrado', 'borrado');
-    // }
 }

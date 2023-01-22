@@ -22,104 +22,7 @@
                         <form action="{{ route('noticias.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
 
-                            {{-- Encabezado --}}
-                            <div class="form-group required mb-3">
-                                <label for="encabezado" class="control-label">Encabezado</label>
-                                <div class="input-group">
-                                    <input type="text" name="encabezado" id="encabezado"
-                                        class="form-control @error('encabezado') is-invalid @enderror"
-                                        value="{{ old('encabezado') }}" placeholder="{{ __('Nombre de la noticia') }}"
-                                        autofocus required>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-heading"></span>
-                                        </div>
-                                    </div>
-
-                                    @error('encabezado')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Descripcion --}}
-                            <div class="form-group required mb-3">
-                                <label for="desc_noticia" class="control-label">Descripción</label>
-                                <div class="input-group">
-                                    <textarea name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror descripcion"
-                                        placeholder="{{ __('Descripción') }}" required>{{ old('desc_noticia') }}</textarea>
-    
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-comment"></span>
-                                        </div>
-                                    </div>
-    
-                                    @error('desc_noticia')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Mostrar noticia --}}
-                            <div class="form-group required mb-3">
-                                <label for="mostrar" class="control-label">¿Mostrar noticia?</label>
-                                <div class="input-group">
-                                    <select name="mostrar" class="form-control @error('mostrar') is-invalid @enderror">
-                                        <option disabled>¿Desea mostrar la noticia?</option>
-                                        <option value="1">Si</option>
-                                        <option value="0">No</option>
-                                    </select>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-eye"></span>
-                                        </div>
-                                    </div>
-    
-                                    @error('mostrar')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Imagen (opcional) --}}
-                            <div class="form-group mb-3">
-                                <label for="imagen_noticia">Imagen</label>
-                                <div class="input-group">
-                                    <input type="file"
-                                        class="custom-file-input @error('imagen_noticia') is-invalid @enderror"
-                                        id="imagen" name="imagen_noticia" accept="image/jpeg">
-                                    <label class="custom-file-label text-muted" for="imagen_noticia" id="campoImagen">
-                                        Seleccione una imagen
-                                    </label>
-                                    <small id="ayudaImagen" class="form-text text-muted">
-                                        La imagen debe pesar menos de 1 MB.
-                                    </small>
-                                </div>
-
-                                @error('imagen_noticia')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            {{-- Previsualizar imagen --}}
-                            <div class="card" style="max-width: 540px">
-                                <img src="" alt="" id="previsualizar" class="rounded">
-                            </div>
-
-                            <x-modal.mensaje-obligatorio />
-
-                            <x-modal.footer-aceptar />
+                            <x-formularios.noticias />
                         </form>
                     </div>
                 </main>
@@ -154,7 +57,7 @@
         <table id='tabla' class="table table-striped">
             <thead>
                 <tr class="bg-secondary">
-                    <th>Encabezado</th>
+                    <th>Título</th>
                     <th>Descripcion</th>
                     <th>Estado</th>
                     <th>Acciones</th>
@@ -163,9 +66,9 @@
             <tbody>
                 @foreach ($noticias as $noticia)
                     <tr>
-                        <td>{{ $noticia->encabezado }}</td>
+                        <td>{{ $noticia->titulo }}</td>
                         <td style="max-width: 20vw">{{ $noticia->desc_noticia }}</td>
-                        <td>{{ $noticia->mostrar === 0 ? 'Inactivo' : 'Activo' }}</td>
+                        <td>{{ $noticia->activo === 0 ? 'Inactivo' : 'Activo' }}</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 <a href="{{ route('noticias.edit', $noticia->id) }}" class="btn btn-primary"
@@ -175,7 +78,7 @@
 
                                 <button id="{{ $noticia->id }}" class="btn btn-danger borrar"
                                     {{ Popper::arrow()->pop('Borrar') }} data-type="Noticia"
-                                    data-name="{{ $noticia->encabezado }}">
+                                    data-name="{{ $noticia->titulo }}">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -189,7 +92,7 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
 
     {{-- Personalizados --}}
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
@@ -199,81 +102,76 @@
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/previsualizacion.js') }}" defer></script>
+    <script src="{{ asset('js/previsualizacion.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
+    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: 'Noticia registrado!',
+                title: '¡Noticia registrada!',
                 html: 'Una nueva noticia ha sido añadida.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error al registrar',
+                title: '¡Error al registrar!',
                 html: 'Uno de los parámetros parece estar mal.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'info',
-                title: 'Ya fue registrado',
+                title: '¡Ya registrada!',
                 html: 'La noticia ya se encuentra registrada.',
-                confirmButtonColor: '#17a2b8',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @elseif ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
                 html: 'La noticia ha sido actualizada.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('borrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Noticia borrada exitosamente!',
                 html: 'La noticia ha sido borrada.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('no encontrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Noticia no encontrada!',
                 html: 'La noticia que desea buscar o editar no se encuentra disponible.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

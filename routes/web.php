@@ -9,6 +9,7 @@ use App\Http\Controllers\Academico\RegistrarEstudianteController;
 use App\Http\Controllers\Academico\RegistrarProfesorController;
 use App\Http\Controllers\Academico\ProfesorController;
 use App\Http\Controllers\Academico\TrayectoController;
+use App\Http\Controllers\Estadisticas\EstadisticasController;
 use App\Http\Controllers\Informacion\InicioController;
 use App\Http\Controllers\Informacion\NoticiaController;
 use App\Http\Controllers\Informacion\PreguntaFrecuenteController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Materia\MateriaController;
 use App\Http\Controllers\Perfil\ContrasenaController;
 use App\Http\Controllers\Perfil\UsuarioController;
 use App\Http\Controllers\Perfil\PerfilController;
+use App\Http\Controllers\RegistrarUsuarioController;
 use App\Http\Controllers\Soporte\SoporteController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,8 +58,6 @@ Route::controller(ProfesorController::class)->group(function () {
     Route::get('/profesores/{id}', 'show')->name('profesores.show');
     Route::put('/profesores/{id}/update', 'update')->name('profesores.update');
 });
-
-Route::post('/registrar-profesor', [RegistrarProfesorController::class, 'store'])->middleware('prevent-back-history')->name('profesor.registrar');
 
 // Estudiantes [Solo para coordinador]
 Route::controller(UsuarioController::class)->group(function () {
@@ -101,7 +101,7 @@ Route::get('listado/{id}', [ListadoController::class, 'show'])->name('listadoEst
 Route::controller(AsistenciaController::class)->group(function () {
     Route::get('/asistencias', 'index')->name('asistencias.index');
     Route::get('/asistencias/{id}', 'edit')->name('asistencias.edit');
-    Route::put('/asistencias/actualizar', 'update')->name('asistencias.update');
+    Route::put('/asistencias/{id}/actualizar', 'update')->name('asistencias.update');
 });
 
 // PNF
@@ -134,13 +134,14 @@ Route::controller(NoticiaController::class)->group(function () {
 // Perfil
 Route::controller(PerfilController::class)->group(function () {
     Route::get('/perfil', 'index')->name('perfil.index');
-    Route::put('/perfil/update', 'update')->name('perfil.avatar');
+    Route::put('/perfil/{id}/update', 'update')->name('perfil.avatar');
 });
-Route::put('/perfil/actualizar-contrasena', [ContrasenaController::class, 'update'])->name('actualizarContrasena');
+Route::put('/perfil/{id}/actualizar-contrasena', [ContrasenaController::class, 'update'])->name('actualizarContrasena');
 
 // Inscripcion
 Route::controller(InscripcionController::class)->group(function () {
     Route::post('/inscripcion', 'store')->name('inscripcion.store');
+    Route::post('/inscripcion/{id}/{materia_id}/cambiar', 'cambiar')->name('inscripcion.cambiar');
     Route::post('/inscripcion/{id}/validar', 'validar')->name('validacion');
     Route::post('/inscripcion/{id}/invalidar', 'invalidar')->name('invalidacion');
     Route::get('/materias/{id}/inscribir', 'inscribir')->name('inscribir');
@@ -152,15 +153,15 @@ Route::controller(EstudianteController::class)->group(function () {
     Route::get('/estudiante/{id}/comprobante', 'comprobante')->name('comprobante');
 });
 
-Route::post('/registrar-estudiante', [RegistrarEstudianteController::class, 'store'])->name('estudiante.store');
+// Usuario
+Route::post('/registrar-usuario/{rol}', [RegistrarUsuarioController::class, 'store'])->name('registrar.usuario');
 
 // Periodo
 Route::controller(PeriodoController::class)->group(function () {
     Route::get('/periodos', 'index')->name('periodos.index');
     Route::post('/periodos/store', 'store')->name('periodos.store');
     Route::get('/periodos/{id}/edit', 'edit')->name('periodos.edit');
-    Route::put('/periodos/update', 'update')->name('periodos.update');
-    // Route::delete('/periodos/{id}/delete', 'delete')->name('periodos.destroy');
+    Route::put('/periodos/{id}/update', 'update')->name('periodos.update');
 });
 
 // Preguntas frecuentes
@@ -178,4 +179,10 @@ Route::controller(SoporteController::class)->group(function () {
     Route::get('/soporte/{id}/{modelo}', 'recuperar')->name('soporte.recuperar');
     Route::get('/soporte/restaurar-contrasena', 'restaurarContrasena')->name('soporte.restaurarContrasena');
     Route::put('/soporte/recuperarContrasena', 'recuperarContrasena')->name('soporte.recuperarContrasena');
+});
+
+// Estadísticas
+Route::controller(EstadisticasController::class)->group(function () {
+    Route::get('/estadisticas/materias', 'materias')->name('estadisticas.materias');
+    Route::get('/estadisticas/{modelo}/{condicion}')->name('estadisticas');
 });

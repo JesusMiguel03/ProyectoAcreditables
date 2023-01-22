@@ -23,32 +23,7 @@
                         <form action="{{ route('trayectos.store') }}" method="post">
                             @csrf
 
-                            <div class="form-group required mb-3">
-                                <label for="num_trayecto" class="control-label">Número</label>
-                                <div class="input-group">
-                                    <input type="number" name="num_trayecto" id="num_trayecto"
-                                        class="form-control @error('num_trayecto') is-invalid @enderror"
-                                        value="{{ old('num_trayecto') }}" placeholder="{{ __('Número del trayecto') }}"
-                                        autofocus required>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-sort-numeric-down"></span>
-                                        </div>
-                                    </div>
-
-                                    @error('num_trayecto')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <x-modal.mensaje-obligatorio />
-
-                            {{-- Botón de registrar --}}
-                            <x-modal.footer-aceptar />
+                            <x-formularios.trayectos />
 
                         </form>
                     </main>
@@ -126,71 +101,65 @@
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: 'Trayecto registrado!',
+                title: '¡Trayecto registrado!',
                 html: 'Un nuevo trayecto ha sido añadido.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error al registrar',
+                title: '¡Error al registrar!',
                 html: 'Uno de los parámetros parece estar mal.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
                 html: 'El trayecto ha sido actualizado.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-sucess px-5'
                 },
             })
         @elseif ($message = session('borrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Trayecto borrado exitosamente!',
                 html: 'El trayecto ha sido borrado.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'info',
-                title: 'Ya fue registrado',
+                title: '¡Ya registrado!',
                 html: 'El trayecto ya se encuentra registrado.',
-                confirmButtonColor: '#17a2b8',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('no encontrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Trayecto no encontrado!',
                 html: 'El trayecto que desea buscar o editar no se encuentra disponible.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

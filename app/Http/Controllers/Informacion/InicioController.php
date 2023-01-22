@@ -20,7 +20,8 @@ class InicioController extends Controller
         permiso('inicio');
 
         // Lista todas las noticias
-        $noticias = Noticia::all();
+        $noticias = Noticia::where('activo', '=', 1)->get();
+
         return view('welcome', compact('noticias'));
     }
 }

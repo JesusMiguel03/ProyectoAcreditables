@@ -23,9 +23,8 @@ class PNFController extends Controller
 
         // Lista todos los pnf
         $pnfs = PNF::all();
-        $periodo = periodoActual();
 
-        return view('academico.pnf.index', compact('pnfs', 'periodo'));
+        return view('academico.pnf.index', compact('pnfs'));
     }
 
     public function store(Request $request)
@@ -35,25 +34,21 @@ class PNFController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_pnf' => ['required', 'string', 'max:' . config('variables.pnfs.nombre')],
+            'nom_pnf' => ['required', 'string', 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $request['nom_pnf']],
             'cod_pnf' => ['max:' . config('variables.pnfs.codigo')],
         ], [
-            'nom_pnf.required' => 'El campo nombre es necesario.',
-            'nom_pnf.string' => 'El campo nombre debe ser una oración.',
-            'nom_pnf.max' => 'El campo nombre no puede contener mas de :max carácteres.',
-            'cod_pnf.max' => 'El campo código no puede contener mas de :max carácteres.'
+            'nom_pnf.required' => 'El nombre es necesario.',
+            'nom_pnf.string' => 'El nombre debe ser una oración.',
+            'nom_pnf.unique' => 'El PNF ' . $request['nom_pnf'] . ' ya ha sido registrado.',
+            'nom_pnf.max' => 'El nombre no puede contener mas de :max caracteres.',
+            'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.'
         ]);
-        validacion($validador);
-
-        // Evita duplicidad
-        duplicado(
-            PNF::where('nom_pnf', '=', $request->get('nom_pnf'))
-        );
+        validacion($validador, 'error');
 
         // Guarda el pnf
         PNF::create([
-            'nom_pnf' => $request->get('nom_pnf'),
-            'cod_pnf' => $request->get('cod_pnf') === null ? '?' : $request->get('cod_pnf')
+            'nom_pnf' => $request['nom_pnf'],
+            'cod_pnf' => $request['cod_pnf'] === null ? '?' : $request['cod_pnf']
         ]);
 
         return redirect('pnfs')->with('creado', 'creado');
@@ -66,44 +61,38 @@ class PNFController extends Controller
 
         // Trea el pnf correspondiente
         $pnf = PNF::find($id);
-        $periodo = periodoActual();
 
         // Valida que exista
         existe($pnf);
 
-        return view('academico.pnf.edit', compact('pnf', 'periodo'));
+        return view('academico.pnf.edit', compact('pnf'));
     }
 
     public function update(Request $request, $id)
     {
         // Valida si tiene el permiso
         permiso('academico');
-        
+
+        /**
+         * TODO [Cod_pnf] falta validar que sea unico
+         */
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_pnf' => ['required', 'string', 'max:' . config('variables.pnfs.nombre')],
+            'nom_pnf' => ['required', 'string', 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $id],
             'cod_pnf' => ['max:' . config('variables.pnfs.codigo')],
         ], [
-            'nom_pnf.required' => 'El campo nombre es necesario.',
-            'nom_pnf.string' => 'El campo nombre debe ser una oración.',
-            'nom_pnf.max' => 'El campo nombre no puede contener mas de :max carácteres.',
-            'cod_pnf.max' => 'El campo código no puede contener mas de :max carácteres.'
+            'nom_pnf.required' => 'El nombre es necesario.',
+            'nom_pnf.string' => 'El nombre debe ser una oración.',
+            'nom_pnf.unique' => 'El PNF ' . $request['nom_pnf'] . ' ya ha sido registrado.',
+            'nom_pnf.max' => 'El nombre no puede contener mas de :max caracteres.',
+            'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.'
         ]);
-        validacion($validador);
+        validacion($validador, 'error');
 
-        // Evita duplicidad
-        duplicado(
-            PNF::where('nom_pnf', '=', $request->get('nom_pnf'))
-        );
-
-        // Busca y actualiza
-        PNF::updateOrCreate(
-            ['id' => $id],
-            [
-                'nom_pnf' => $request->get('nom_pnf'), 
-                'cod_pnf' => $request->get('cod_pnf') === null ? null : $request->get('cod_pnf')
-            ]
-        );
+        PNF::find($id)->update([
+            'nom_pnf' => $request['nom_pnf'],
+            'cod_pnf' => $request['cod_pnf'] === null ? null : $request['cod_pnf']
+        ]);
 
         return redirect('pnfs')->with('actualizado', 'actualizado');
     }

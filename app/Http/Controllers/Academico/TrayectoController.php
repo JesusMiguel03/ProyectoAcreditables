@@ -23,9 +23,8 @@ class TrayectoController extends Controller
 
         // Lista todos los trayectos
         $trayectos = Trayecto::all();
-        $periodo = periodoActual();
 
-        return view('academico.trayecto.index', compact('trayectos', 'periodo'));
+        return view('academico.trayecto.index', compact('trayectos'));
     }
 
     public function store(Request $request)
@@ -35,21 +34,16 @@ class TrayectoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'num_trayecto' => ['required', 'integer', 'unique:trayectos'],
+            'num_trayecto' => ['required', 'integer', 'unique:trayectos,num_trayecto,' . $request['num_trayecto']],
         ], [
-            'num_trayecto.required' => 'El campo número es necesario.',
-            'num_trayecto.unique' => 'El trayecto ' . $request->get('num_trayecto') . ' ya ha sido registrado.',
-            'num_trayecto.integer' => 'El campo número debe ser un número.',
+            'num_trayecto.required' => 'El número es necesario.',
+            'num_trayecto.unique' => 'El trayecto ' . $request['num_trayecto'] . ' ya ha sido registrado.',
+            'num_trayecto.integer' => 'El número debe ser un número.',
         ]);
-        validacion($validador);
-
-        // Evita duplicidad
-        duplicado(
-            Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))
-        );
+        validacion($validador, 'error');
 
         // Guarda el trayecto
-        Trayecto::create(['num_trayecto' => $request->get('num_trayecto')]);
+        Trayecto::create(['num_trayecto' => $request['num_trayecto']]);
 
         return redirect('trayectos')->with('creado', 'creado');
     }
@@ -61,12 +55,11 @@ class TrayectoController extends Controller
 
         // Trae el trayecto correspondiente
         $trayecto = Trayecto::find($id);
-        $periodo = periodoActual();
 
         // Valida que existe
         existe($trayecto);
 
-        return view('academico.trayecto.edit', compact('trayecto', 'periodo'));
+        return view('academico.trayecto.edit', compact('trayecto'));
     }
 
     public function update(Request $request, $id)
@@ -76,24 +69,15 @@ class TrayectoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'num_trayecto' => ['required', 'integer', 'unique:trayectos'],
+            'num_trayecto' => ['required', 'integer', 'unique:trayectos,num_trayecto,' . $id],
         ], [
-            'num_trayecto.required' => 'El campo número es necesario.',
-            'num_trayecto.unique' => 'El trayecto ' . $request->get('num_trayecto') . ' ya ha sido registrado.',
-            'num_trayecto.integer' => 'El campo número debe ser un número.',
+            'num_trayecto.required' => 'El número es necesario.',
+            'num_trayecto.unique' => 'El trayecto ' . $request['num_trayecto'] . ' ya ha sido registrado.',
+            'num_trayecto.integer' => 'El número debe ser un número.',
         ]);
-        validacion($validador);
+        validacion($validador, 'error');
 
-        // Evita duplicidad
-        duplicado(
-            Trayecto::where('num_trayecto', '=', $request->get('num_trayecto'))
-        );
-
-        // Busca y actualiza
-        Trayecto::updateOrCreate(
-            ['id' => $id],
-            ['num_trayecto' => $request->get('num_trayecto')]
-        );
+        Trayecto::find($id)->update(['num_trayecto' => $request['num_trayecto']]);
 
         return redirect('trayectos')->with('actualizado', 'actualizado');
     }

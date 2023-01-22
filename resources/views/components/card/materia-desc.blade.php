@@ -1,50 +1,76 @@
+@php
+    // Modelo
+    $materia = atributo($attributes, 'materia');
+    
+    // Campos
+    $materiaID = $materia->id;
+    $cuposActuales = $materia->cupos;
+    $cuposDisponibles = $materia->cupos_disponibles;
+    $descripcion = $materia->desc_materia;
+    
+    // Relacion
+    $avatar = materia($materia, 'profAvatar');
+    $profesor = materia($materia, 'profesor');
+    $profesorID = materia($materia, 'profID');
+    
+@endphp
+
 <div class="col-sm-12 col-md-9">
     <div class="card">
         <main class="card-body" style="min-height: 13.52rem">
 
-            <h2 class="d-none d-md-block">
+            <h3>
                 Cupos disponibles
-                [ <span class="text-info">{{ atributo($attributes, 'cupos-disponibles') }}</span> /
-                <span class="text-info">{{ atributo($attributes, 'cupos') }}</span> ]
-            </h2>
-            <h2 class="d-md-none">Cupos disponibles</h2>
-            <h2 class="d-md-none">
-                [ <span class="text-info">{{ atributo($attributes, 'cupos-disponibles') }}</span> /
-                <span class="text-info">{{ atributo($attributes, 'cupos') }}</span>]
-            </h2>
+                (<span class="text-info">{{ $cuposDisponibles }}</span> /
+                <span class="text-info">{{ $cuposActuales }}</span>)
+            </h3>
 
-            <p class="text-justify text-muted">{{ atributo($attributes, 'contenido') }}</p>
+            <p class="text-justify text-muted">{{ $descripcion }}</p>
 
             @can('inscribir')
-                @if (rol('Estudiante'))
-                    <div class="text-center pt-5">
-                        <form action="{{ route('inscripcion.store') }}" method="post">
+                <div class="text-center pt-5">
+
+                    @if (datosUsuario(Auth::user(), 'Estudiante', 'materia') === $materiaID)
+                        <button class="btn btn-secondary" style="pointer-events: none">
+                            Se encuentra inscrito
+                        </button>
+                    @else
+                        <form id="form" action="{{ route('inscripcion.store') }}" method="post">
                             @csrf
 
-                            <input type="number" name="estudiantes[]" class="d-none" hidden
-                                value="{{ estudiante(auth()->user()->estudiante, 'id') }}">
-                            <input type="number" name="materia_id" class="d-none" hidden value="{{ atributo($attributes, 'materiaID') }}">
+                            @if (datosUsuario(Auth::user(), 'Estudiante', 'inscrito'))
+                                <section class="row">
+                                    <article class="col-6">
+                                        <a href="{{ route('materias.show', datosUsuario(Auth::user(), 'Estudiante', 'materia')) }}"
+                                            class="btn btn-block btn-primary">
+                                            Se encuentra inscrito
+                                        </a>
+                                    </article>
 
-                            @if (estudiante(auth()->user()->estudiante, 'inscrito') ? estudiante(auth()->user()->estudiante, 'materia') === atributo($attributes, 'materiaID') : '')
-                                <button class="btn btn-secondary disabled">Se encuentra inscrito en esta
-                                    acreditable</button>
+                                    <article class="col-6">
+                                        <button id="cambiarAcreditable"
+                                            data-id="{{ datosUsuario(Auth::user()->estudiante, 'Estudiante', 'ID') }}"
+                                            data-materia="{{ $materiaID }}" class="btn btn-block btn-outline-primary">
+                                            Cambiar de acreditable
+                                        </button>
+                                    </article>
+                                </section>
                             @else
-                                @if (estudiante(auth()->user()->estudiante, 'inscrito'))
-                                    <a href="{{ route('materias.show', estudiante(auth()->user()->estudiante, 'materia')) }}" class="btn btn-primary">
-                                        Ya estás inscrito en una acreditable
-                                    </a>
-                                @else
-                                    <button type="submit"
-                                        class="btn btn-{{ atributo($attributes, 'cupos-disponibles') === 0 ? 'secondary' : 'primary' }}"
-                                        {{ atributo($attributes, 'cupos-disponibles') === 0 ? 'disabled' : '' }}>
-                                        {{ atributo($attributes, 'cupos-disponibles') === 0 ? 'No hay cupos disponibles' : 'Inscribir' }}
-                                    </button>
-                                @endif
+                                <input type="number" name="estudiante_id" class="d-none"
+                                    value="{{ datosUsuario(Auth::user(), 'Estudiante', 'ID') }}" hidden>
+                                <input type="number" name="materia_id" class="d-none" value="{{ $materiaID }}" hidden>
+
+                                <button type="submit"
+                                    class="btn btn-{{ $cuposDisponibles === 0 ? 'secondary' : 'primary' }}"
+                                    {{ $cuposDisponibles === 0 ? 'disabled' : '' }}>
+                                    {{ $cuposDisponibles === 0 ? 'No hay cupos disponibles' : 'Inscribir' }}
+                                </button>
                             @endif
 
                         </form>
-                    </div>
-                @endif
+                    @endif
+
+                </div>
             @endcan
         </main>
 

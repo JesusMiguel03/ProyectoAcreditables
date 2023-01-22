@@ -23,53 +23,7 @@
                         <form action="{{ route('pnfs.store') }}" method="post">
                             @csrf
 
-                            {{-- Nombre --}}
-                            <div class="form-group required mb-3">
-                                <label for="nom_pnf" class="control-label">Nombre</label>
-                                <div class="input-group">
-                                    <input type="text" name="nom_pnf" id="nom_pnf"
-                                        class="form-control @error('nom_pnf') is-invalid @enderror" value="{{ old('nom_pnf') }}"
-                                        placeholder="{{ __('Nombre del PNF') }}" autofocus required>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-font"></span>
-                                        </div>
-                                    </div>
-
-                                    @error('nom_pnf')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            {{-- Código --}}
-                            <div class="form-group mb-3">
-                                <label for="cod_pnf">Código</label>
-                                <div class="input-group">
-                                    <input type="text" name="cod_pnf" id="cod_pnf"
-                                        class="form-control @error('cod_pnf') is-invalid @enderror" value="{{ old('cod_pnf') }}"
-                                        placeholder="{{ __('Código del PNF') }}">
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-hashtag"></span>
-                                        </div>
-                                    </div>
-
-                                    @error('cod_pnf')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <x-modal.mensaje-obligatorio />
-
-                            <x-modal.footer-aceptar />
+                            <x-formularios.pnfs />
                         </form>
                     </main>
                 </div>
@@ -106,8 +60,7 @@
                 <tbody>
                     @foreach ($pnfs as $pnf)
                         <tr>
-                            <td>
-                                {{ $pnf->cod_pnf === null ? 'No cursa acreditable' : $pnf->cod_pnf }}</td>
+                            <td>{{ $pnf->cod_pnf ?? 'No cursa acreditable' }}</td>
                             <td>{{ $pnf->nom_pnf }}</td>
                             <td>
                                 <div class="btn-group mx-1" role="group" aria-label="Acciones">
@@ -132,7 +85,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
@@ -143,78 +96,73 @@
     @include('popper::assets')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-
+    
     {{-- Personalizados --}}
-    <script src="{{ asset('/js/tablas.js') }}"></script>
+    <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
+    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡PNF registrado!',
                 html: 'Un nuevo PNF ha sido añadido.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error al registrar',
+                title: '¡Error al registrar!',
                 html: 'Uno de los parámetros parece estar mal.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
-            $('#pnf').modal('show')
+            $('#registrar').modal('show')
         @elseif ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'info',
-                title: 'Ya fue registrado',
-                html: 'El PNF ya se encuentra registrado.',
-                confirmButtonColor: '#17a2b8',
+                title: '¡Ya registrado!',
+                html: 'El PNF se encuentra registrado.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @elseif ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
                 html: 'El PNF ha sido actualizado.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('borrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: 'PNF borrado exitosamente!',
-                html: 'El PNF ha sido borrado.',
-                confirmButtonColor: '#28a745',
+                title: '¡PNF borrado!',
+                html: 'El PNF ha sido borrado exitosamente.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('no encontrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'PNF no encontrado!',
+                title: '¡PNF no encontrado!',
                 html: 'El PNF que desea buscar o editar no se encuentra disponible.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

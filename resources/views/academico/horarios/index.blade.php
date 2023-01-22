@@ -23,99 +23,7 @@
                         <form action="{{ route('horarios.store') }}" method="post">
                             @csrf
 
-                            {{-- Espacio --}}
-                            <div class="form-group required">
-                                <label for="espacio" class="control-label">Espacio</label>
-                                <div class="input-group">
-                                    <input type="text" name="espacio" id="espacio"
-                                        class="form-control @error('espacio') is-invalid @enderror" value="{{ old('espacio') }}"
-                                        placeholder="{{ __('Espacio a ocupar, Ej: Edificio B o B') }}" autofocus required>
-
-                                    <div class="input-group-append">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-search-location"></span>
-                                        </div>
-                                    </div>
-
-                                    @error('espacio')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="form-row">
-                                    {{-- Numero --}}
-                                    <div class="form-group col-6">
-                                        <label for="edificio_numero" class="control-label">Edificio Nro</label>
-                                        <div class="input-group">
-                                            <input type="number" name="edificio_numero" id="edificio_numero"
-                                                class="form-control @error('edificio_numero') is-invalid @enderror contador"
-                                                value="{{ old('edificio_numero') }}" placeholder="{{ __('Ej: 12') }}">
-
-
-                                            @error('edificio_numero')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    {{-- Dia --}}
-                                    <div class="form-group col-6">
-                                        <label for="dia" class="control-label">Dia</label>
-                                        <div class="input-group">
-                                            <select name="dia" class="form-control" required>
-                                                <option value="0" disabled>Seleccione uno</option>
-                                                <option value="1">Lunes</option>
-                                                <option value="2">Martes</option>
-                                                <option value="3">Miércoles</option>
-                                                <option value="4">Jueves</option>
-                                                <option value="5">Viernes</option>
-                                            </select>
-
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-calendar-day"></span>
-                                                </div>
-                                            </div>
-    
-                                            @error('dia')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Hora --}}
-                            <div class="form-group required mb-3" style="margin-top: -10px">
-                                <label for="hora" class="control-label">Hora</label>
-                                <div class="input-group date" id="hora" data-target-input="nearest">
-                                    <input type="text" name="hora"
-                                        class="form-control datetimepicker-input @error('hora') is-invalid @enderror"
-                                        data-target="#hora" value="{{ old('hora') }}" placeholder="{{ __('Ej: 10:45') }}"
-                                        required>
-                                    <div class="input-group-append" data-target="#hora" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-                                    @error('hora')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <x-modal.mensaje-obligatorio />
-
-                            <x-modal.footer-aceptar />
-
+                            <x-formularios.horarios />
                         </form>
                     </main>
                 </div>
@@ -154,7 +62,7 @@
                 @foreach ($horarios as $horario)
                     <tr>
                         <td>{{ $horario->espacio }}</td>
-                        <td>{{ $horario->edificio_numero }}</td>
+                        <td>{{ $horario->edificio }}</td>
                         <td>{{ diaSemana($horario->dia) }}</td>
                         <td>{{ \Carbon\Carbon::parse($horario->hora)->format('g:i A') }}</td>
                         <td>
@@ -193,7 +101,7 @@
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/moment/moment.js') }}"></script>
     <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    <script type="text/javascript">
+    <script>
         $(function() {
             $('#hora').datetimepicker({
                 format: 'h:mm a'
@@ -204,75 +112,70 @@
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
+    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: 'Hora registrada!',
+                title: '¡Hora registrada!',
                 html: 'Una nueva hora ha sido añadida.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
-                title: 'Error al registrar',
+                title: '¡Error al registrar!',
                 html: 'Uno de los parámetros parece estar mal.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
                 html: 'El horario ha sido actualizado.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('borrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
-                title: 'Hora borrada exitosamente!',
-                html: 'La hora ha sido borrada.',
-                confirmButtonColor: '#28a745',
+                title: '¡Hora borrada!',
+                html: 'La hora ha sido borrada exitosamente.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'info',
-                title: 'Ya fue registrada',
-                html: 'La hora ya se encuentra registrada.',
-                confirmButtonColor: '#17a2b8',
+                title: '¡Ya registrada!',
+                html: 'La hora se encuentra registrada.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
             $('#registrar').modal('show')
         @elseif ($message = session('no encontrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Hora no encontrada!',
-                html: 'La hora que desea buscar o editar no se encuentra disponible.',
-                confirmButtonColor: '#dc3545',
+                html: 'La hora que desea buscar no se encuentra disponible.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

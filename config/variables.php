@@ -7,7 +7,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | En este archivo se encuentran todas las variables importantes que se usan
-    | en el proyecto, tales como los ellimite de un campo, su tipo u otro valor.
+    | en el proyecto, tales como la cantidad de caracteres permitidos por campos,
+    / su tipo u otro valor.
     | Algunos valores se aconseja se mantengan por defecto para no provocar mal
     | funcionamiento de la página.
     |
@@ -42,9 +43,13 @@ return [
     | Migraciones
     |--------------------------------------------------------------------------
     |
-    | Límite de carácteres por campo
+    | Límite de caracteres por campo
     |
     */
+
+    'regex' => [
+        'alfanumerico' => "/^[\w\s]*$/",
+    ],
 
     'usuarios' => [
         'nombre' => 20,
@@ -69,7 +74,7 @@ return [
     ],
 
     'noticias' => [
-        'encabezado' => 25,
+        'titulo' => 25,
         'descripcion' => 60,
         'imagen' => 80,
     ],
@@ -81,7 +86,7 @@ return [
 
     'horarios' => [
         'espacio' => 30,
-        'edificio_numero' => 12,
+        'edificio' => 12,
     ],
 
     'profesores' => [
@@ -107,7 +112,7 @@ return [
     ],
 
     'estudiante_materia' => [
-        'calificacion' => 3,
+        'nota' => 3,
         'codigo' => 20
     ],
 ];

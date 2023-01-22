@@ -16,7 +16,7 @@ class Informacion_materia extends Model
     protected $table = 'informacion_materia';
 
     protected $fillable = [
-        'metodologia_aprendizaje',
+        'metodologia',
         'horario_id',
         'categoria_id',
         'profesor_id'

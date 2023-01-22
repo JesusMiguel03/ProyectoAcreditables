@@ -31,7 +31,8 @@
                         <div class="form-group mb-3">
                             <label for="usuario">Correo del usuario a restaurar</label>
                             <div class="input-group">
-                                <input type="text" id="correo" name="usuario" class="form-control" placeholder="correo@gmail.com">
+                                <input type="text" id="correo" name="usuario" class="form-control"
+                                    placeholder="correo@gmail.com" required>
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -58,58 +59,29 @@
 @section('js')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
-    <script>
-        const form = document.getElementById('recuperar')
-        const btn = document.querySelector('button')
-        const correo = document.getElementById('correo')
-
-        
-        btn.addEventListener('click', (e) => {
-            e.preventDefault()
-
-            Swal.fire({
-                title: '¿Está seguro?',
-                html: `Al hacer clic en confirmar se generará una nueva contraseña para el usuario cuyo correo es: <strong>${correo.value}</strong>`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#dc3545',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Confirmar',
-                cancelButtonText: 'Cancelar',
-                customClass: {
-                    confirmButton: 'btn px-5',
-                    cancelButton: 'btn px-5'
-                },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit()
-                }
-            })
-        })
-    </script>
+    {{-- Personalizados --}}
+    <script src="{{ asset('js/validarCorreo.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('contrasena'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Contraseña restablecida!',
                 html: `Su nueva contrasena es: {{ session('contrasena') }}.`,
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Correo inválido!',
-                html: `El correo suministrado es inválido o no se encuentra.`,
-                confirmButtonColor: '#dc3545',
+                html: `El correo suministrado es inválido o no se encuentra registrado.`,
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @endif

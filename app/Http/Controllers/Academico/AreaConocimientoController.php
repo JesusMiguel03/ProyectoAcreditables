@@ -34,29 +34,23 @@ class AreaConocimientoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_conocimiento' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.conocimiento.nombre')],
+            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfanumerico'), 'max:' . config('variables.conocimiento.nombre')],
             'desc_conocimiento' => ['required', 'string', 'max:' . config('variables.conocimiento.descripcion')]
         ], [
-            'desc_conocimiento.required' => 'El campo descripción es necesario.',
-            'nom_conocimiento.required' => 'El campo nombre es necesario.',
-            'desc_conocimiento.string' => 'El campo descripción debe ser una oración.',
-            'nom_conocimiento.regex' => 'El campo nombre solo puede contener letras y espacios.',
-            'nom_conocimiento.string' => 'El campo nombre debe ser una oración.',
-            'desc_conocimiento.regex' => 'El campo nombre solo puede contener letras y espacios.',
-            'nom_conocimiento.max' => 'El campo nombre no debe tener más de :max carácteres.',
-            'desc_conocimiento.max' => 'El campo descripción no debe tener más de :max carácteres.',
+            'nom_conocimiento.required' => 'El nombre es necesario.',
+            'nom_conocimiento.string' => 'El nombre debe ser una oración.',
+            'nom_conocimiento.regex' => 'El nombre  solo puede contener caracteres alfanuméricos.',
+            'nom_conocimiento.max' => 'El nombre no debe tener más de :max caracteres.',
+            'desc_conocimiento.required' => 'La descripción es necesario.',
+            'desc_conocimiento.string' => 'La descripción debe ser una oración.',
+            'desc_conocimiento.max' => 'La descripción no debe tener más de :max caracteres.',
         ]);
-        validacion($validador);
-
-        // Evita duplicidad
-        duplicado(
-            AreaConocimiento::where('nom_conocimiento', '=', $request->get('nom_conocimiento'))
-        );
+        validacion($validador, 'error');
 
         // Guarda el área de conocimiento
         AreaConocimiento::create([
-            'nom_conocimiento' => $request->get('nom_conocimiento'),
-            'desc_conocimiento' => $request->get('desc_conocimiento'),
+            'nom_conocimiento' => $request['nom_conocimiento'],
+            'desc_conocimiento' => $request['desc_conocimiento'],
         ]);
 
         return redirect('conocimientos')->with('creado', 'creado');
@@ -72,9 +66,8 @@ class AreaConocimientoController extends Controller
 
         // Valida que exista
         existe($conocimiento);
-        $periodo = periodoActual();
 
-        return view('academico.conocimiento.edit', compact('conocimiento', 'periodo'));
+        return view('academico.conocimiento.edit', compact('conocimiento'));
     }
 
     public function update(Request $request, $id)
@@ -84,32 +77,24 @@ class AreaConocimientoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_conocimiento' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.conocimiento.nombre')],
+            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfanumerico'), 'max:' . config('variables.conocimiento.nombre')],
             'desc_conocimiento' => ['required', 'string', 'max:' . config('variables.conocimiento.descripcion')]
         ], [
-            'desc_conocimiento.required' => 'El campo descripción es necesario.',
-            'nom_conocimiento.required' => 'El campo nombre es necesario.',
-            'desc_conocimiento.string' => 'El campo descripción debe ser una oración.',
-            'nom_conocimiento.string' => 'El campo nombre debe ser una oración.',
-            'desc_conocimiento.regex' => 'El campo nombre solo puedo contener letras y espacios.',
-            'nom_conocimiento.max' => 'El campo nombre no debe tener más de :max carácteres.',
-            'desc_conocimiento.max' => 'El campo descripción no debe tener más de :max carácteres.',
+            'nom_conocimiento.required' => 'El nombre es necesario.',
+            'nom_conocimiento.string' => 'El nombre debe ser una oración.',
+            'nom_conocimiento.regex' => 'El nombre  solo puede contener caracteres alfanuméricos.',
+            'nom_conocimiento.max' => 'El nombre no debe tener más de :max caracteres.',
+            'desc_conocimiento.required' => 'La descripción es necesario.',
+            'desc_conocimiento.string' => 'La descripción debe ser una oración.',
+            'desc_conocimiento.max' => 'La descripción no debe tener más de :max caracteres.',
         ]);
-        validacion($validador);
-
-        // Evita duplicidad
-        duplicado(
-            AreaConocimiento::where('nom_conocimiento', '=', $request->get('nom_conocimiento'))
-        );
+        validacion($validador, 'error');
 
         // Busca y actualiza
-        AreaConocimiento::updateOrCreate(
-            ['id' => $id],
-            [
-                'nom_conocimiento' => $request->get('nom_conocimiento'),
-                'desc_conocimiento' => $request->get('desc_conocimiento')
-            ]
-        );
+        AreaConocimiento::find($id)->update([
+            'nom_conocimiento' => $request['nom_conocimiento'],
+            'desc_conocimiento' => $request['desc_conocimiento']
+        ]);
 
         return redirect('conocimientos')->with('actualizado', 'actualizado');
     }
@@ -120,6 +105,7 @@ class AreaConocimientoController extends Controller
         permiso('materias.modificar');
 
         AreaConocimiento::find($id)->delete();
+
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

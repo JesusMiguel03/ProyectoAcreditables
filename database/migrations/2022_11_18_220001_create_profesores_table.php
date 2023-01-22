@@ -29,7 +29,7 @@ class CreateProfesoresTable extends Migration
             $table->char('estado', config('variables.profesores.estado'));
             $table->date('fecha_de_nacimiento');
             $table->date('fecha_ingreso_institucion');
-            $table->boolean('estado_profesor');
+            $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,89 +1,133 @@
 /**
+ *  Cambiar el color del texto de un elemento
  *
- * @param {arr} $array
- * @param {valor} $string
- * @returns
+ *  @param {HTMLInputElement} elemento
+ *  @param {int} max
+ *  @param {HTMLSmallElement} textoAyuda
+ *  @param {boolean} numero
+ *  @returns void
  */
-const remover = (arr, valor) => {
-    for (let i = 0; i < arr.length; i++) {
-        arr[i] === valor ? arr.splice(i, 1) : "";
+const cambiarColorAyuda = (elemento, max, textoAyuda, numero = "") => {
+    let condicion = "";
+
+    numero.length === 0
+        ? (condicion = elemento.value.length <= max)
+        : (condicion = parseInt(elemento.value) <= parseInt(max));
+
+    if (numero.length !== 0 && elemento.value === "") {
+        textoAyuda.classList.remove("text-success", "text-danger");
+        textoAyuda.classList.add("text-muted");
+
+        return;
     }
-    return arr;
+
+    if (condicion) {
+        if (numero === "invertido") {
+            textoAyuda.classList.remove("text-success", "text-muted");
+            textoAyuda.classList.add("text-danger");
+
+            return;
+        }
+        textoAyuda.classList.remove("text-danger", "text-muted");
+        textoAyuda.classList.add("text-success");
+    } else {
+        if (numero === "invertido") {
+            textoAyuda.classList.remove("text-danger", "text-muted");
+            textoAyuda.classList.add("text-success");
+
+            return;
+        }
+        textoAyuda.classList.remove("text-success", "text-muted");
+        textoAyuda.classList.add("text-danger");
+    }
 };
 
 /**
- *
- * @param {elemento} $HTMLelement
- * @param {max} $int
- * @param {textoAyuda} $HTMLelement
- * 
- * ! Si el nro es 0 no se coloca danger
- * ! En la vista de /horarios se muestra cupos en vez de número
+ *  Inicializa variables
  */
-const cambiarColorAyuda = (elemento, max, textoAyuda) => {
-    let condicion =
-        elemento.type === "number"
-            ? elemento.value > max
-            : elemento.value.length > max;
-
-    condicion
-        ? (textoAyuda.classList.add("text-danger"),
-          textoAyuda.classList.remove("text-muted", "text-success"))
-        : (textoAyuda.classList.add("text-success"),
-          textoAyuda.classList.remove("text-muted", "text-danger"));
-};
-
-/**
- *  @param {contadores} $array
- *  @param {temporal} $HTMLelement
- *  @param {btn} $HTMLelement
- */
-const [contadores, temporal, btn] = [
-    document.querySelectorAll(".contador"),
-    document.getElementById("temporal"),
+const [input, contadores, btn] = [
+    document.querySelectorAll("input, textarea"),
+    [],
     document.querySelector(".btn-success"),
 ];
 
-const limites = remover(temporal.innerText.replace(/\s+/g, ",").split(","), "");
-
-// Remueve el elemento con los limites
-temporal.remove();
-
-// Itera cada elemento a contar
-contadores.forEach((contador, i) => {
-    // Crea un elemento <small>
-    let small = document.createElement("small");
-
-    // Estila
-    small.classList.add("ayuda", "text-muted");
-
-    // Corrige el limite de telefeno descontando el codigo
-    contador.getAttribute('name') === 'telefono' ? limites[i] -= 4 : '';
-
-    // Asigna texto
-    contador.type === "number"
-        ? (small.textContent = `${contador.value.length} / ${limites[i]} cupos`)
-        : (small.textContent = `${contador.value.length} / ${limites[i]} carácteres`);
-
-    // Añade al contendor
-    contador.parentNode.insertBefore(small, contador.nextSibling);
+/**
+ *  Filtra solo los <input> que tendrán mensaje
+ */
+input.forEach((elemento) => {
+    if (
+        elemento.hasAttribute("maxlength") ||
+        (elemento.hasAttribute("minlength") &&
+            elemento.hasAttribute("data-nombre"))
+    ) {
+        contadores.push(elemento);
+    }
 });
 
-// Selecciona todos los elementos <small> creados
+/**
+ *  Crea elementos <div> y <small>, le asigna sus clases y contenido
+ */
+contadores.forEach((contador) => {
+    let [cantidad, tipo] = [
+        contador.getAttribute("maxlength") ||
+            contador.getAttribute("minlength"),
+        contador.getAttribute("data-nombre"),
+    ];
+    let [div, small] = [
+        document.createElement("div"),
+        document.createElement("small"),
+    ];
+
+    div.classList.add("input-group");
+
+    small.classList.add("ayuda", "text-muted");
+
+    let inicio = tipo !== "caracteres" ? contador.value : contador.value.length;
+    inicio === "" ? (inicio = contador.value.length) : "";
+
+    small.textContent = `${inicio} / ${cantidad} ${tipo}`;
+
+    div.append(small);
+    contador.parentNode.append(div);
+});
+
+/**
+ *  Guarda todos los elementos <small> con clase
+ */
 const textoAyuda = document.querySelectorAll(".ayuda");
 
-// Itera de nuevo
+/**
+ *  Actualiza en tiempo real la cantidad de caracteres
+ */
 contadores.forEach((contador, i) => {
-    // Deshabilita el boton si se pasa el limite
-    contador.addEventListener("input", function () {
-        // Cambia el color de la ayuda
-        cambiarColorAyuda(this, limites[i], textoAyuda[i]);
+    let [cantidad, tipo] = [
+        contador.getAttribute("maxlength") ||
+            contador.getAttribute("minlength"),
+        contador.getAttribute("data-nombre"),
+    ];
 
-        // Actualiza el contador de carácteres
-        this.type === "number"
-            ? (textoAyuda[i].innerText = `${this.value} / ${limites[i]} cupos`)
-            : (textoAyuda[
-                  i
-              ].innerText = `${this.value.length} / ${limites[i]} carácteres.`);
+    let valorNumerico = tipo !== "caracteres" ? "numero" : "";
+
+    if (contador.getAttribute("minlength")) {
+        valorNumerico = "invertido";
+    }
+
+    contador.addEventListener("input", function () {
+        cambiarColorAyuda(this, cantidad, textoAyuda[i], valorNumerico);
+
+        let valor = "";
+        if (tipo !== "caracteres") {
+            valor = this.value;
+
+            parseInt(valor) > parseInt(cantidad)
+                ? ((this.value = cantidad), (valor = cantidad))
+                : "";
+        } else {
+            valor = this.value.length;
+        }
+
+        valor === "" ? (valor = 0) : "";
+
+        textoAyuda[i].innerText = `${valor} / ${cantidad} ${tipo}`;
     });
 });

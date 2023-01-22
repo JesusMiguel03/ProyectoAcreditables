@@ -22,26 +22,26 @@ class ContrasenaController extends Controller
         permiso('inicio');
 
         // Busca al usuario y los campos de contraseñas
-        $usuario = User::find($request->get('usuario'));
-        $contrasena_actual = $request->get('current_password');
-        $contrasena = $request->get('password');
-        $confirmar_contrasena = $request->get('password_confirmation');
+        $usuario = User::find($request['usuario']);
 
-        
-        // Si no coincide la contraseña actual con la hash
+        $contrasena_actual = $request['current_password'];
+        $contrasena = $request['password'];
+        $confirmar_contrasena = $request['password_confirmation'];
+
+        // Si no coincide la contraseña actual con la encriptada.
         if (!Hash::check($contrasena_actual, $usuario->password)) {
             return redirect()->back()->with('errorHash', 'error');
         }
         
-        // Si la nueva contraseña y confirmar contraseña no coinciden
+        // Si la nueva contraseña y la confirmación no coinciden
         if ($contrasena !== $confirmar_contrasena) {
             return redirect()->back()->with('errorConfirmacion', 'error');
         }
         
-        // Valida que la contrasena en db y la suministrada sean iguales, e igualmente con la nueva contraseña y la confirmacion
+        // Valida que la contrasena en la base de datos y la suministrada sean iguales, e igualmente con la nueva contraseña y la confirmacion.
         if (Hash::check($contrasena_actual, $usuario->password) && $contrasena === $confirmar_contrasena) {
 
-            // Actualiza la contraseña
+            // Actualiza la contraseña.
             $usuario->forceFill([
                 'password' => Hash::make($contrasena),
             ])->save();

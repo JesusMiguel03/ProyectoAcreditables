@@ -12,12 +12,12 @@
 
 @section('content')
     @if ($noticias->isEmpty())
-        <x-elementos.noticia :sin-noticias="true" />
+        <x-elementos.noticia />
     @else
         <div id="slick" class="px-5 mb-5">
             @foreach ($noticias as $noticia)
                 @if ($loop->index < config('variables.carrusel'))
-                    <x-elementos.noticia :img="$noticia->imagen_noticia" :encabezado="$noticia->encabezado" :fecha="$noticia->created_at" :contenido="$noticia->desc_noticia" />
+                    <x-elementos.noticia :noticia="$noticia" />
                 @endif
             @endforeach
         </div>

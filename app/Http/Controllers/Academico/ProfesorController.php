@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Academico;
 
 use App\Models\Academico\AreaConocimiento;
 use App\Models\Academico\Profesor;
-use App\Models\Academico\Pnf;
+use App\Models\Academico\PNF;
 use App\Http\Controllers\Controller;
 use App\Models\Materia\Informacion_materia;
 use App\Models\User;
@@ -27,12 +27,16 @@ class ProfesorController extends Controller
 
         // Lista profesores, usuarios, áreas de conocimiento y departamentos
         $profesores = Profesor::all();
-        $usuarios = User::all();
+
+        // Busca solamente a los usuarios registrados con rol de profesor
+        $usuarios = User::whereHas('roles', function ($q) {
+            $q->where('name', 'Profesor');
+        })->get();
+
         $conocimientos = AreaConocimiento::all();
         $departamentos = Pnf::all();
-        $periodo = periodoActual();
 
-        return view('academico.profesores.index', compact('profesores', 'usuarios', 'conocimientos', 'departamentos', 'periodo'));
+        return view('academico.profesores.index', compact('profesores', 'usuarios', 'conocimientos', 'departamentos'));
     }
 
     public function store(Request $request)
@@ -40,50 +44,60 @@ class ProfesorController extends Controller
         // Valida si tiene el permiso
         permiso('registrar.usuario');
 
+        // Si el area de conocimiento esta vacia
+        if ($request['vacio'] === '0') {
+            return redirect()->back();
+        }
+
         // Valida los campos
-        $validador = Validator::make($request->all(), [
+        $validar = Validator::make($request->all(), [
             'usuarios' => ['required', 'not_in:0'],
-            'telefono' => ['required', 'string', 'regex:/^[0-9]{' . (config('variables.profesores.telefono') - 4) . '}$/'],
-            'conocimiento' => ['required'],
+            'departamento' => ['required', 'not_in:0'],
+            'conocimiento' => ['required', 'not_in:0'],
             'casa' => ['required', 'string', 'max:' . config('variables.profesores.casa')],
             'calle' => ['required', 'string', 'max:' . config('variables.profesores.calle')],
             'urb' => ['required', 'string', 'max:' . config('variables.profesores.urb')],
             'ciudad' => ['required', 'string', 'max:' . config('variables.profesores.ciudad')],
             'estado' => ['required', 'string', 'max:' . config('variables.profesores.estado')],
+            'codigo' => ['required', 'not_in:0'],
+            'telefono' => ['required', 'string', 'regex:/^[0-9]{' . (config('variables.profesores.telefono') - 4) . '}$/'],
             'fecha_de_nacimiento' => ['required', 'date'],
             'fecha_ingreso_institucion' => ['required', 'date'],
-            'departamento' => ['required'],
         ], [
             'usuarios.not_in' => 'El usuario seleccionado es inválido.',
-            'telefono.regex' => 'El número de teléfono debe tener ' . (config('variables.profesores.telefono') - 4) . ' números.',
+            'departamento.not_in' => 'El departamento seleccionado es inválido.',
+            'codigo.not_in' => 'El código seleccionado es inválido.',
+            'conocimiento.not_in' => 'El conocimiento seleccionado es inválido.',
             'conocimiento.required' => 'El área de conocimiento es requerida',
-            'casa.required' => 'El campo de casa es requerida',
-            'casa.max' => 'El campo de casa no debe contener más de :max carácteres',
-            'calle.required' => 'El campo de calle es requerida',
-            'calle.max' => 'El campo de calle no debe contener más de :max carácteres',
-            'urb.required' => 'El campo de urbanización es requerida',
-            'urb.max' => 'El campo de urbanización no debe contener más de :max carácteres',
-            'ciudad.required' => 'El campo de ciudad es requerida',
-            'ciudad.max' => 'El campo de ciudad no debe contener más de :max carácteres',
-            'estado.required' => 'El campo de estado es requerida',
-            'estado.max' => 'El campo de estado no debe contener más de :max carácteres',
+            'telefono.regex' => 'El número de teléfono debe tener ' . (config('variables.profesores.telefono') - 4) . ' números.',
+            'casa.required' => 'La casa es requerida',
+            'casa.max' => 'La casa no debe contener más de :max caracteres',
+            'calle.required' => 'La calle es requerida',
+            'calle.max' => 'La calle no debe contener más de :max caracteres',
+            'urb.required' => 'La urbanización es requerida',
+            'urb.max' => 'La urbanización no debe contener más de :max caracteres',
+            'ciudad.required' => 'La ciudad es requerida',
+            'ciudad.max' => 'La ciudad no debe contener más de :max caracteres',
+            'estado.required' => 'El estado es requerida',
+            'estado.max' => 'El estado no debe contener más de :max caracteres',
         ]);
-        validacion($validador);
+
+        validacion($validar, 'error');
 
         // Guarda un profesor
         Profesor::create([
-            'usuario_id' => $request->get('usuarios'),
-            'conocimiento_id' => $request->get('conocimiento'),
-            'departamento_id' => $request->get('departamento'),
-            'telefono' => $request->get('codigo') . $request->get('telefono'),
-            'casa' => $request->get('casa'),
-            'calle' => $request->get('calle'),
-            'urb' => $request->get('urb'),
-            'ciudad' => $request->get('ciudad'),
-            'estado' => $request->get('estado'),
-            'fecha_de_nacimiento' => $request->get('fecha_de_nacimiento'),
-            'fecha_ingreso_institucion' => $request->get('fecha_ingreso_institucion'),
-            'estado_profesor' => 1
+            'usuario_id' => $request['usuarios'],
+            'conocimiento_id' => $request['conocimiento'],
+            'departamento_id' => $request['departamento'],
+            'telefono' => $request['codigo'] . $request['telefono'],
+            'casa' => $request['casa'],
+            'calle' => $request['calle'],
+            'urb' => $request['urb'],
+            'ciudad' => $request['ciudad'],
+            'estado' => $request['estado'],
+            'fecha_de_nacimiento' => $request['fecha_de_nacimiento'],
+            'fecha_ingreso_institucion' => $request['fecha_ingreso_institucion'],
+            'activo' => 1
         ])->save();
 
         return redirect('profesores')->with('creado', 'creado');
@@ -105,9 +119,8 @@ class ProfesorController extends Controller
 
         // Muestra al profesor específico
         $profesor = Profesor::find($id);
-        $periodo = periodoActual();
 
-        return view('academico.profesores.show', compact('profesor', 'periodo', 'materias'));
+        return view('academico.profesores.show', compact('profesor', 'materias'));
     }
 
     public function edit($id)
@@ -117,64 +130,68 @@ class ProfesorController extends Controller
 
         // Lista las áreas de conocimiento y al profesor
         $conocimientos = AreaConocimiento::all();
+        $departamentos = PNF::all();
         $profesor = Profesor::find($id);
-        $periodo = periodoActual();
 
-        return view('academico.profesores.edit', compact('profesor', 'conocimientos', 'periodo'));
+        return view('academico.profesores.edit', compact('profesor', 'conocimientos', 'departamentos'));
     }
 
     public function update(Request $request, $id)
     {
         // Valida si tiene el permiso
         permiso('registrar.usuario');
-        
+
+        /**
+         * TODO Cambiar de departamento.
+         */
+
         // Valida los campos
-        $validador = Validator::make($request->all(), [
-            'telefono' => ['required', 'string', 'regex:/^[0-9]{' . config('variables.profesores.telefono') . '}$/'],
-            'conocimiento' => ['required'],
+        $validar = Validator::make($request->all(), [
+            'conocimiento' => ['required', 'not_in:0'],
+            'activo' => ['required', 'not_in:0'],
             'casa' => ['required', 'string', 'max:' . config('variables.profesores.casa')],
             'calle' => ['required', 'string', 'max:' . config('variables.profesores.calle')],
             'urb' => ['required', 'string', 'max:' . config('variables.profesores.urb')],
             'ciudad' => ['required', 'string', 'max:' . config('variables.profesores.ciudad')],
             'estado' => ['required', 'string', 'max:' . config('variables.profesores.estado')],
+            'codigo' => ['required', 'not_in:0'],
+            'telefono' => ['required', 'string', 'regex:/^[0-9]{' . (config('variables.profesores.telefono') - 4) . '}$/'],
             'fecha_de_nacimiento' => ['required', 'date'],
             'fecha_ingreso_institucion' => ['required', 'date'],
-            'estado_profesor' => ['required', 'not_in:0'],
         ], [
-            'usuarios.not_in' => 'El usuario seleccionado es inválido.',
-            'telefono.regex' => 'El número de teléfonod debe tener ' . config('variables.profesores.telefono') . ' números.',
+            'departamento.not_in' => 'El departamento seleccionado es inválido.',
+            'codigo.not_in' => 'El código seleccionado es inválido.',
+            'activo.not_in' => 'El estado del profesor seleccionado es inválido.',
+            'conocimiento.not_in' => 'El conocimiento seleccionado es inválido.',
             'conocimiento.required' => 'El área de conocimiento es requerida',
-            'casa.required' => 'El campo de casa es requerida',
-            'casa.max' => 'El campo de casa no debe contener más de :max carácteres',
-            'calle.required' => 'El campo de calle es requerida',
-            'calle.max' => 'El campo de calle no debe contener más de :max carácteres',
-            'urb.required' => 'El campo de urbanización es requerida',
-            'urb.max' => 'El campo de urbanización no debe contener más de :max carácteres',
-            'ciudad.required' => 'El campo de ciudad es requerida',
-            'ciudad.max' => 'El campo de ciudad no debe contener más de :max carácteres',
-            'estado.required' => 'El campo de estado es requerida',
-            'estado.max' => 'El campo de estado no debe contener más de :max carácteres',
-            'estado_profesor.not_in' => 'El estado del profesor es inválido.'
+            'telefono.regex' => 'El número de teléfono debe tener ' . (config('variables.profesores.telefono') - 4) . ' números.',
+            'casa.required' => 'La casa es requerida',
+            'casa.max' => 'La casa no debe contener más de :max caracteres',
+            'calle.required' => 'La calle es requerida',
+            'calle.max' => 'La calle no debe contener más de :max caracteres',
+            'urb.required' => 'La urbanización es requerida',
+            'urb.max' => 'La urbanización no debe contener más de :max caracteres',
+            'ciudad.required' => 'La ciudad es requerida',
+            'ciudad.max' => 'La ciudad no debe contener más de :max caracteres',
+            'estado.required' => 'El estado es requerida',
+            'estado.max' => 'El estado no debe contener más de :max caracteres',
         ]);
 
-        validacion($validador);
+        validacion($validar, 'error');
 
         // Busca y actualiza
-        Profesor::updateOrCreate(
-            ['id' => $id],
-            [
-                'telefono' => $request->get('codigo') . $request->get('telefono'),
-                'conocimiento_id' => $request->get('conocimiento'),
-                'casa' => $request->get('casa'),
-                'calle' => $request->get('calle'),
-                'urb' => $request->get('urb'),
-                'ciudad' => $request->get('ciudad'),
-                'estado' => $request->get('estado'),
-                'fecha_de_nacimiento' => $request->get('fecha_de_nacimiento'),
-                'fecha_ingreso_institucion' => $request->get('fecha_ingreso_institucion'),
-                'estado_profesor' => $request->get('estado_profesor'),
-            ]
-        );
+        Profesor::find($id)->update([
+            'telefono' => $request['codigo'] . $request['telefono'],
+            'conocimiento_id' => $request['conocimiento'],
+            'casa' => $request['casa'],
+            'calle' => $request['calle'],
+            'urb' => $request['urb'],
+            'ciudad' => $request['ciudad'],
+            'estado' => $request['estado'],
+            'fecha_de_nacimiento' => $request['fecha_de_nacimiento'],
+            'fecha_ingreso_institucion' => $request['fecha_ingreso_institucion'],
+            'activo' => $request['activo'],
+        ]);
 
         return redirect('profesores')->with('actualizado', 'actualizado');
     }

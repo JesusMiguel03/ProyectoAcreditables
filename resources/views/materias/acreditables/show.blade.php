@@ -15,20 +15,18 @@
 @section('content')
     <div class="row mt-2">
 
-        <x-card.materia-perfil :profID="materia($materia, 'profID')" :profNombre="materia($materia, 'profesor')" :profAvatar="materia($materia, 'profAvatar')" />
+        <x-card.materia-perfil :materia="$materia" />
 
-        <x-card.materia-desc :cupos-disponibles="$materia->cupos_disponibles" :cupos="$materia->cupos" :contenido="$materia->desc_materia" :avatar="materia($materia, 'profAvatar')" :nombre-profesor="materia($materia, 'profesor')" :perfil-prof="materia($materia, 'profID')" :materiaID="$materia->id" />
-
+        <x-card.materia-desc :materia="$materia" />
 
         {{-- Tarjetas información materia --}}
         <section class="col-12 border-bottom">
             <div class="row">
-                <x-elementos.mini-card :nombre="'Tipo'" :contenido='materiaRelacion($materia, "Tipo")' />
-                <x-elementos.mini-card :nombre="'Categoría'" :contenido='materiaRelacion($materia, "Categoria")' />
-                <x-elementos.mini-card :nombre="'Horario'" :contenido='materiaRelacion($materia, "Horario")' />
-                <x-elementos.mini-card :nombre="'Acreditable'" :contenido='materiaRelacion($materia, "Acreditable")' />
+                <x-elementos.mini-card :datos="['Tipo', materiaRelacion($materia, 'Tipo')]" />
+                <x-elementos.mini-card :datos="['Categoría', materiaRelacion($materia, 'Categoria')]" />
+                <x-elementos.mini-card :datos="['Horario', materiaRelacion($materia, 'Horario')]" />
+                <x-elementos.mini-card :datos="['Acreditable', materiaRelacion($materia, 'Acreditable')]" />
             </div>
-
         </section>
 
         {{-- Listado de estudiantes --}}
@@ -58,47 +56,49 @@
                             @endif
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach ($inscritos as $estudiante)
                             <tr>
                                 @if (!rol('Estudiante'))
-                                    <td>{{ parsearCedula(estudiante_materia($estudiante, 'cedula')) }}</td>
+                                    <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'CI') }}</td>
                                 @endif
 
-                                <td>{{ estudiante_materia($estudiante, 'nombre') }}</td>
-                                <td>{{ estudiante_materia($estudiante, 'apellido') }}</td>
+                                <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'nombre') }}</td>
+                                <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'apellido') }}</td>
                                 <td
-                                    class="{{ estudiante_materia($estudiante, 'estaValidado') ? 'text-success' : 'text-danger' }}">
-                                    {{ estudiante_materia($estudiante, 'estaValidado') ? 'Validado' : 'No validado' }}
+                                    class="{{ datosUsuario($estudiante, 'EstudianteInscrito', 'validado') ? 'text-success' : 'text-danger' }}">
+                                    {{ datosUsuario($estudiante, 'EstudianteInscrito', 'validado') ? 'Validado' : 'No validado' }}
                                 </td>
 
                                 @if (!rol('Estudiante'))
-                                    <td>{{ estudiante_materia($estudiante, 'codigo') }}</td>
+                                    <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'codigo') }}</td>
                                     <td>
                                         <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                             @can('materias.modificar')
-                                                <a href="{{ route('comprobante', $estudiante->id) }}"
+                                                <a href="{{ route('comprobante', $estudiante->esEstudiante->id) }}"
                                                     class="btn btn-danger mr-2"
                                                     {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
                                                     <i class="fas fa-file-pdf" style="width: 15px"></i>
                                                 </a>
 
                                                 @php
-                                                    $ruta = estudiante_materia($estudiante, 'estaValidado') ? 'invalidacion' : 'validacion';
+                                                    $ruta = datosUsuario($estudiante, 'EstudianteInscrito', 'validado') ? 'invalidacion' : 'validacion';
                                                 @endphp
 
                                                 <form action="{{ route($ruta, $estudiante->id) }}" method="POST">
                                                     @csrf
 
                                                     <button type="submit"
-                                                        class="btn btn-{{ estudiante_materia($estudiante, 'estaValidado') ? 'secondary' : 'primary' }} mr-2"
+                                                        class="btn btn-{{ datosUsuario($estudiante, 'EstudianteInscrito', 'validado') ? 'secondary' : 'primary' }} mr-2"
                                                         {{ Popper::arrow()->pop('Validar inscripción') }}>
-                                                        <i class="fas {{ estudiante_materia($estudiante, 'estaValidado') ? 'fa-eraser' : 'fa-user-check' }}"
+                                                        <i class="fas {{ datosUsuario($estudiante, 'EstudianteInscrito', 'validado') ? 'fa-eraser' : 'fa-user-check' }}"
                                                             style="width: 15px"></i>
                                                     </button>
                                                 </form>
                                             @endcan
-                                            <a href="{{ route('asistencias.edit', $estudiante->id) }}"
+
+                                            <a href="{{ route('asistencias.edit', $estudiante->esEstudiante->id) }}"
                                                 class="btn btn-primary" {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                 <i class="fas fa-calendar" style="width: 15px"></i>
                                             </a>
@@ -115,73 +115,81 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/decoracion.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/cambiarAcreditable.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
+    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ asset('js/cambiarAcreditable.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
         @if ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Inscripción exitosa!',
                 html: 'Ya se encuentra inscrito en la materia, a continuación lleve el comprobante ubicado en su pefil a la Coordinación de Acreditables para finalizar su inscripción. <br>[<strong>Nota</strong>] <span class="text-muted"><a href="{{ route('profile.show') }}">Haga clic aquí</a> o vaya a su perfil (avatar al lado de su nombre) para descargar el comprobante.<span>',
-                confirmButtonColor: '#28a745',
+                    buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Asistencia actualizada!',
                 html: 'El registro de asistencia fue actualizado.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('invalidado'))
-            let timerInterval
             Swal.fire({
                 icon: 'info',
                 title: '¡Estudiante invalidado!',
                 html: 'El estudiante no podrá cursar esta acreditable.',
-                confirmButtonColor: '#DC3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @elseif ($message = session('validado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Estudiante validado!',
                 html: 'El estudiante ya puede cursar su acreditable.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
+                },
+            })
+        @elseif ($message = session('cambioExitoso'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Acreditable cambiada!',
+                html: 'Se ha cambiado de acreditable exitosamente.',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('no puede participar'))
-            let timerInterval
             Swal.fire({
                 icon: 'warning',
                 title: '¡No puede cursar!',
                 html: 'Este estudiante no se encuentra validado, en caso de que haya traído su comprobante por favor valídelo en la lista, hasta entonces no podrá tener asistencia o lo que es igual, no contará la acreditable.',
-                confirmButtonColor: '#DC3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @endif

@@ -27,6 +27,7 @@ class ListadoController extends Controller
 
         // Carga la vista con el listado
         $pdf = FacadePdf::loadView('academico.pdf.estudiantes', ['materia' => $materia, 'estudiantes' => $estudiantes]);
+        
         return $pdf->stream('Listado de estudiantes.pdf');
     }
 }

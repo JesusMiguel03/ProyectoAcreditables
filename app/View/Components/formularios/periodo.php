@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components\elementos;
+namespace App\View\Components\formularios;
 
 use Illuminate\View\Component;
 
-class contador extends Component
+class periodo extends Component
 {
     /**
      * Create a new component instance.
@@ -23,6 +23,6 @@ class contador extends Component
      */
     public function render()
     {
-        return view('components.elementos.contador');
+        return view('components.formularios.periodo');
     }
 }

@@ -33,12 +33,13 @@
         <div class="col-12">
             <header class="text-center mt-2 mb-2">
                 <h6 style="font-size: 1.1rem; font-weight: 400">República Bolivariana de Venezuela</h6>
-                <h6 style="font-size: 1.1rem; font-weight: 400">Ministerio del Poder Popular para la Educación
-                    Universitaria</h6>
-                <h6 style="font-size: 1.1rem; font-weight: 400">Universidad Politécnica Territorial del Estado Aragua
-                    “Federico Brito Figueroa”</h6>
+                <h6 style="font-size: 1.1rem; font-weight: 400">
+                    Ministerio del Poder Popular para la Educación Universitaria
+                </h6>
+                <h6 style="font-size: 1.1rem; font-weight: 400">
+                    Universidad Politécnica Territorial del Estado Aragua “Federico Brito Figueroa”
+                </h6>
                 <h6 style="font-size: 1.1rem; font-weight: 400">La Victoria - Estado Aragua</h6>
-
                 <h6 class="my-5" style="font-size: 2rem">Comprobante de Inscripción</h6>
             </header>
 
@@ -57,7 +58,7 @@
                             </th>
                             <th style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ usuario($estudiante->usuario, 'nombreCompleto') }}
+                                    {{ datosUsuario($estudiante, 'Estudiante', 'nombreCompleto') }}
                                 </h6>
                             </th>
                         </tr>
@@ -71,7 +72,7 @@
                             </th>
                             <td style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ number_format(usuario($estudiante->usuario, 'cedula'), 0, ',', '.') }}
+                                    {{ datosUsuario($estudiante, 'Estudiante', 'CI') }}
                                 </h6>
                             </td>
                         </tr>
@@ -85,7 +86,7 @@
                             </th>
                             <td style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ estudiante($estudiante, 'pnfNombre') }}
+                                    {{ datosUsuario($estudiante, 'Estudiante', 'PNF') }}
                                 </h6>
                             </td>
                         </tr>
@@ -98,7 +99,7 @@
                             </th>
                             <td style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ estudiante($estudiante, 'trayectoNumero') }}
+                                    {{ datosUsuario($estudiante, 'Estudiante', 'trayecto') }}
                                 </h6>
                             </td>
                         </tr>
@@ -147,7 +148,7 @@
                             </th>
                             <td>
                                 <h6 style="font-weight: 400;">
-                                    {{ estudiante($estudiante, 'codigo') }}
+                                    {{ datosUsuario($estudiante, 'Estudiante', 'codigo') }}
                                 </h6>
                             </td>
                         </tr>
@@ -161,7 +162,7 @@
                             </th>
                             <td>
                                 <h6 style="font-weight: 400;">
-                                    {{ !empty(periodo()) ? periodo() : 'No definido' }}
+                                    {{ periodo() ?? 'No definido' }}
                                 </h6>
                             </td>
                         </tr>
@@ -175,20 +176,16 @@
                 </h6>
 
                 <div class="row px-5">
-                    @if (!empty($estudiante->inscrito->materia->info->profesor))
-                        <h6 class="text-justify" style="font-weight: 400; font-size: 0.9rem">
-                            Este comprobante certifica al estudiante <span
-                                class="font-weight-bold">{{ estudiante($estudiante, 'nombreCompleto') }},</span>
-                            cédula <span
-                                class="font-weight-bold">{{ number_format(usuario($estudiante->usuario, 'cedula'), 0, ',', '.') }}</span>
-                            de
-                            haber solicitado
-                            una inscripción en la acreditable de <span
-                                class="font-weight-bold">{{ $materia->nom_materia }}</span>
-                            el día <span
+                    @if (!empty(datosUsuario($estudiante, 'Estudiante', 'profEncargado')))
+                        <h6 class="text-justify" style="font-weight: 400; font-size: 0.9rem"> Este comprobante certifica
+                            al estudiante <span class="font-weight-bold">
+                                {{ datosUsuario($estudiante, 'Estudiante', 'nombreCompleto') }}, </span> cédula <span
+                                class="font-weight-bold">
+                                {{ datosUsuario($estudiante, 'Estudiante', 'CI') }} </span> de haber solicitado una
+                            inscripción en la acreditable de <span
+                                class="font-weight-bold">{{ $materia->nom_materia }}</span> el día <span
                                 class="font-weight-bold">{{ \Carbon\Carbon::parse($estudiante->inscrito->created_at)->locale('es')->isoFormat('ll') }}</span>,
-                            para la formación integral del participante dentro de la
-                            institución.
+                            para la formación integral del participante dentro de la institución.
                         </h6>
                         <h6 class="mt-4 text-justify" style="font-weight: 400; font-size: 0.9rem">
                             Para la validación de este comprobante, llevarse a la coordinación de Acreditables para ser
@@ -203,7 +200,7 @@
                 </div>
 
                 <div class="row my-5 pt-5 text-center" style="padding: 2rem 8rem 0">
-                    @if (!empty($estudiante->inscrito->materia->info->profesor))
+                    @if (!empty(datosUsuario($estudiante, 'Estudiante', 'profEncargado')))
                         <h4 class="px-5 pt-4 border-top border-dark" style="width: 80%">Firma del Coordinador de
                             Acreditables</h4>
                     @endif

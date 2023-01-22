@@ -27,10 +27,11 @@ class SoporteController extends Controller
 
     public function index()
     {
+        // Busca todos los elementos y regresa su id y nombre/número.
         $conocimientos = AreaConocimiento::onlyTrashed()->pluck('id', 'nom_conocimiento');
         $pnfs = PNF::onlyTrashed()->pluck('id', 'nom_pnf');
         $trayectos = Trayecto::onlyTrashed()->pluck('id', 'num_trayecto');
-        $noticias = Noticia::onlyTrashed()->pluck('id', 'encabezado');
+        $noticias = Noticia::onlyTrashed()->pluck('id', 'titulo');
         $preguntas = Pregunta_frecuente::onlyTrashed()->pluck('id', 'titulo');
         $categorias = Categoria::onlyTrashed()->pluck('id', 'nom_categoria');
         $materias = Materia::onlyTrashed()->pluck('id', 'nom_materia');
@@ -41,6 +42,7 @@ class SoporteController extends Controller
 
     public function recuperar($id, $modelo)
     {
+        // Filtra el modelo y recupera el elemento por su id.
         if ($modelo === 'AreaConocimiento') {
             AreaConocimiento::withTrashed()->find($id)->restore();
             return redirect()->back()->with('recuperado', 'recuperado');
@@ -89,12 +91,15 @@ class SoporteController extends Controller
 
     public function recuperarContrasena(Request $request)
     {
+        // Recupera al usuario que coincida con el correo
         $usuario = User::where('email', '=', $request->get('usuario'))->first();
 
+        // Si no se encuentra.
         if (empty($usuario)) {
             return redirect()->back()->with('error', 'error');
         }
 
+        // Genera una contraseña aleatoria de 10 caracteres y la asigna al usuario.
         $contrasena = Str::random(10);
         $usuario->forceFill([
             'password' => Hash::make($contrasena),

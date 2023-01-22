@@ -21,6 +21,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
+            
             <tbody>
                 @foreach ($conocimientos as $nombre => $id)
                     <tr>
@@ -193,14 +194,13 @@
     {{-- Mensajes --}}
     <script>
         @if ($message = session('recuperado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Elemento recuperado!',
-                html: 'Ahora puede volver a ser utilizado.',
-                confirmButtonColor: '#28a745',
+                html: 'El elemento ahora puede volver a ser utilizado.',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @endif

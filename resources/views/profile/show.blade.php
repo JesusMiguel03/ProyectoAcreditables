@@ -19,11 +19,10 @@
                     <h5 class="modal-title text-center" id="campoAvatar">Avatares disponibles</h5>
                 </header>
                 <main class="modal-body">
-                    <form action="{{ route('perfil.avatar') }}" method="post">
+                    <form action="{{ route('perfil.avatar', auth()->user()->id) }}" method="post">
                         @csrf
                         {{ method_field('PUT') }}
 
-                        <input type="number" name="usuarioID" class="d-none" hidden value="{{ auth()->user()->id }}">
                         <input type="number" id="avatarID" name="avatarID" class="d-none" hidden>
 
                         <section class="card">
@@ -63,9 +62,9 @@
 
             <x-perfil.usuario.avatar />
 
-            <x-perfil.usuario.informacion :nombre="usuario(auth()->user(), 'nombre')" :apellido="usuario(auth()->user(), 'apellido')" :correo="usuario(auth()->user(), 'correo')" />
+            <x-perfil.usuario.informacion :nombre="auth()->user()->nombre" :apellido="auth()->user()->apellido" :correo="auth()->user()->email" />
 
-            <x-perfil.usuario.seguridad :id="usuario(auth()->user(), 'id')" />
+            <x-perfil.usuario.seguridad :id="auth()->user()->id" />
 
             @can('inscribir')
                 <x-perfil.usuario.perfil-academico />
@@ -91,58 +90,53 @@
     {{-- Mensajes --}}
     <script>
         @if ($message = session('actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Contraseña actualizada!',
                 html: 'Ahora podrá ingresar con su nueva contraseña.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('avatar'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Avatar actualizado!',
                 html: 'Felicidades por personalizar su perfil con ese increíble avatar.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('perfil-actualizado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Perfil actualizado!',
                 html: 'Sus credenciales han sido actualizadas correctamente.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('errorHash'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Error al actualizar!',
                 html: 'El campo de <b>Contraseña actual</b> no coincide con la registrada.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @elseif ($message = session('errorConfirmacion'))
-            let timerInterval
             Swal.fire({
                 icon: 'error',
                 title: '¡Error al actualizar!',
                 html: 'El campo de <b>Nueva contraseña</b> y <b>Confirmar contraseña</b> no coinciden.',
-                confirmButtonColor: '#dc3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @endif

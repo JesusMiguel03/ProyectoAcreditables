@@ -2,6 +2,7 @@
 
 namespace App\Models\Academico;
 
+use App\Models\Materia\Asistencia;
 use App\Models\Materia\Materia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,7 @@ class Estudiante_materia extends Model
     protected $table = 'estudiantes_materias';
 
     protected $fillable = [
-        'estudiante_id', 'calificacion', 'codigo', 'validacion_estudiante', 'materia_id', 'asistencia_id'
+        'estudiante_id', 'nota', 'codigo', 'validado', 'materia_id', 'asistencia_id'
     ];
 
     public function materia()
@@ -26,5 +27,10 @@ class Estudiante_materia extends Model
     public function esEstudiante()
     {
         return $this->hasOne(Estudiante::class, 'id', 'estudiante_id');
+    }
+
+    public function asistencia()
+    {
+        return $this->hasOne(Asistencia::class, 'id', 'asistencia_id');
     }
 }

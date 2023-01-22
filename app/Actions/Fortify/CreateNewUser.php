@@ -22,6 +22,7 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'nombre' => ['required', 'string', 'max:' . config('variables.usuarios.nombre')],
             'apellido' => ['required', 'string', 'max:' . config('variables.usuarios.apellido')],
+            'nacionalidad' => ['required', 'string'],
             'cedula' => ['required', 'numeric', 'digits_between:' . config('variables.usuarios.cedula')[0] . ',' . config('variables.usuarios.cedula')[1] , 'unique:users'],
             'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), 'unique:users'],
             'password' => $this->passwordRules(),
@@ -29,9 +30,10 @@ class CreateNewUser implements CreatesNewUsers
             'cedula.digits_between' => 'La cedula debe estar entre los ' . config('variables.usuarios.cedula')[0] . ' y ' . config('variables.usuarios.cedula')[1] . 'dígitos.'
         ])->validate();
 
-        return $usuario = User::create([
+        return User::create([
             'nombre' => $input['nombre'],
             'apellido' => $input['apellido'],
+            'nacionalidad' => $input['nacionalidad'],
             'cedula' => $input['cedula'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),

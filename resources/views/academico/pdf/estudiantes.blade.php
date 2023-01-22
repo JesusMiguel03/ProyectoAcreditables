@@ -59,16 +59,18 @@
             <tbody>
                 @foreach ($estudiantes as $estudiante)
                     <tr>
-                        <td>{{ parsearCedula(estudiante_materia($estudiante, 'cedula')) }}</td>
-                        <td>{{ estudiante_materia($estudiante, 'nombre') }}</td>
-                        <td>{{ estudiante_materia($estudiante, 'apellido') }}</td>
-                        <td>{{ estudiante($estudiante->esEstudiante, 'pnfNombre') }}</td>
-                        <td>{{ estudiante($estudiante->esEstudiante, 'trayectoNumero') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'CI') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'nombre') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'apellido') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'pnfNombre') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'trayectoNumero') }}</td>
                         <td
-                            class="{{ estudiante_materia($estudiante, 'estaValidado') ? 'text-success' : 'text-danger' }}">
-                            {{ estudiante_materia($estudiante, 'estaValidado') ? 'V' : 'NV' }}
+                            class="{{ datosUsuario($estudiante, 'EstudianteInscrito', 'validado') ? 'text-success' : 'text-danger' }}">
+                            <strong>
+                                {{ datosUsuario($estudiante, 'EstudianteInscrito', 'validado') ? 'V' : 'NV' }}
+                            </strong>
                         </td>
-                        <td>{{ estudiante($estudiante->esEstudiante, 'codigo') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'codigo') }}</td>
                     </tr>
                 @endforeach
             </tbody>

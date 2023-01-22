@@ -22,9 +22,8 @@ class CategoriaController extends Controller
         permiso('categorias');
 
         $categorias = Categoria::all();
-        $periodo = periodoActual();
 
-        return view('materias.categorias.index', compact('categorias', 'periodo'));
+        return view('materias.categorias.index', compact('categorias'));
     }
 
     public function store(Request $request)
@@ -33,20 +32,15 @@ class CategoriaController extends Controller
         permiso('categorias');
 
         $validador = Validator::make($request->all(), [
-            'nom_categoria' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.categorias.nombre'), 'unique:categorias']
+            'nom_categoria' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.categorias.nombre'), 'unique:categorias,nom_categoria,' . $request['nom_categoria']]
         ], [
-            'nom_categoria.required' => 'El campo categoría es necesario.',
-            'nom_categoria.string' => 'El campo categoría debe ser una oración.',
-            'nom_categoria.regex' => 'El campo nombre solo puedo contener letras y espacios.',
-            'nom_categoria.max' => 'El campo categoría debe contener mas de :max carácteres.',
-            'nom_categoria.unique' => 'La categoría debe ser única.',
+            'nom_categoria.required' => 'La categoría es necesario.',
+            'nom_categoria.string' => 'La categoría debe ser una oración.',
+            'nom_categoria.regex' => 'El nombre solo puedo contener letras y espacios.',
+            'nom_categoria.max' => 'La categoría debe contener mas de :max caracteres.',
+            'nom_categoria.unique' => 'La categoría ' . $request['nom_categoria'] .  ' debe ser única.',
         ]);
-        validacion($validador);
-
-        // Evita duplicidad
-        duplicado(
-            Categoria::where('nom_categoria', '=', $request->get('nom_categoria'))
-        );
+        validacion($validador, 'error');
 
         Categoria::create(['nom_categoria' => $request->get('nom_categoria')]);
 
@@ -59,12 +53,11 @@ class CategoriaController extends Controller
         permiso('categorias');
 
         $categoria = Categoria::find($id);
-        $periodo = periodoActual();
 
         // Valida que exista
         existe($categoria);
 
-        return view('materias.categorias.edit', compact('categoria', 'periodo'));
+        return view('materias.categorias.edit', compact('categoria'));
     }
 
     public function update(Request $request, $id)
@@ -73,31 +66,17 @@ class CategoriaController extends Controller
         permiso('categorias');
         
         $validador = Validator::make($request->all(), [
-            'nom_categoria' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.categorias.nombre')]
+            'nom_categoria' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.categorias.nombre'), 'unique:categorias,nom_categoria,' . $id]
         ], [
-            'nom_categoria.required' => 'El campo categoria es necesario.',
-            'nom_categoria.string' => 'El campo categoria debe ser una oración.',
-            'nom_categoria.regex' => 'El campo nombre solo puedo contener letras y espacios.',
-            'nom_categoria.max' => 'El campo categoria debe contener mas de :max carácteres.',
+            'nom_categoria.required' => 'La categoría es necesario.',
+            'nom_categoria.string' => 'La categoría debe ser una oración.',
+            'nom_categoria.regex' => 'El nombre solo puedo contener letras y espacios.',
+            'nom_categoria.max' => 'La categoría debe contener mas de :max caracteres.',
+            'nom_categoria.unique' => 'La categoría ' . $request['nom_categoria'] .  ' debe ser única.',
         ]);
-        validacion($validador);
+        validacion($validador, 'error');
 
-        /**
-         * Evita la duplicidad
-         * 
-         * ! Al guardar tira error de duplicado
-         * 
-         * duplicado(
-         *   Categoria::where('nom_categoria', '=', $request->get('nom_categoria'))
-         * );
-         */
-
-        Categoria::updateOrCreate(
-            ['id' => $id],
-            [
-                'nom_categoria' => $request->get('nom_categoria'),
-            ]
-        );
+        Categoria::find($id)->update(['nom_categoria' => $request->get('nom_categoria')]);
 
         return redirect('categorias')->with('actualizado', 'actualizado');
     }

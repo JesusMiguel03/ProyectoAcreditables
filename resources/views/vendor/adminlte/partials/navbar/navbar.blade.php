@@ -34,10 +34,6 @@
             @endif
         @endif
         
-
-        {{-- @if (config('adminlte.right_sidebar'))
-            @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
-        @endif --}}
     </ul>
 
 </nav>

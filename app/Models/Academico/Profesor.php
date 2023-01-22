@@ -28,7 +28,7 @@ class Profesor extends Model
         'estado',
         'fecha_de_nacimiento',
         'fecha_ingreso_institucion',
-        'estado_profesor'
+        'activo'
     ];
 
     public function usuario()

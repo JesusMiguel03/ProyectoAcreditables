@@ -17,15 +17,15 @@
 
     {{-- User menu toggler --}}
     <a href="#" class="nav-link dropdown-toggle p-2" data-toggle="dropdown">
-        <img src="{{ !empty(usuario(Auth::user(), 'avatar')) ? asset('vendor/img/avatares/' . usuario(Auth::user(), 'avatar') . '.webp') : asset('vendor/img/defecto/usuario.webp') }}"
+        <img src="{{ !empty(Auth::user()->avatar) ? asset('vendor/img/avatares/' . Auth::user()->avatar . '.webp') : asset('vendor/img/defecto/usuario.webp') }}"
             class="avatar-usuario user-image img-circle" alt="Imagen de usuario">
     </a>
 
     <div style="margin-top: -0.2rem">
         <h6 class="d-block text-muted font-weight-bold" style="margin-bottom: -0.5rem">
-            {{ usuario(Auth::user(), 'nombreCompleto') }}
+            {{ datosUsuario(Auth::user(), 'Usuario',  'nombreCompleto') }}
         </h6>
-        <small class="text-muted text-weight-bold">{{ Auth::user()->getRoleNames()[0] }}</small>
+        <small class="text-muted text-weight-bold">{{ rolUsuarioConectado() }}</small>
     </div>
 
     {{-- User menu dropdown --}}

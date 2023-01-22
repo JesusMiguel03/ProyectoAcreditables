@@ -27,7 +27,7 @@ return [
     'between' => [
         'numeric' => 'El :attribute debe estar entre :min y :max.',
         'file' => 'El :attribute debe pesar entre :min y :max kilobytes.',
-        'string' => 'El :attribute debe contener entre :min y :max carácteres.',
+        'string' => 'El :attribute debe contener entre :min y :max caracteres.',
         'array' => 'El :attribute debe contener entre :min y :max elementos.',
     ],
     'boolean' => 'El :attribute campo debe ser verdadero o falso.',
@@ -52,13 +52,13 @@ return [
     'gt' => [
         'numeric' => 'El :attribute debe ser mayor a :value.',
         'file' => 'El :attribute debe ser mayor que :value kilobytes.',
-        'string' => 'El :attribute debe ser mayor que :value carácteres.',
+        'string' => 'El :attribute debe ser mayor que :value caracteres.',
         'array' => 'El :attribute debe contener más de :value elementos.',
     ],
     'gte' => [
         'numeric' => 'El :attribute debe ser superior o igual a :value.',
         'file' => 'El :attribute debe ser superior o igual a :value kilobytes.',
-        'string' => 'El :attribute debe ser superior o igual a :value carácteres.',
+        'string' => 'El :attribute debe ser superior o igual a :value caracteres.',
         'array' => 'El :attribute debe contener :value elementos o más.',
     ],
     'image' => 'El :attribute debe ser una imágen.',
@@ -72,20 +72,20 @@ return [
     'lt' => [
         'numeric' => 'El :attribute debe ser menor a :value.',
         'file' => 'El :attribute debe ser menor a :value kilobytes.',
-        'string' => 'El :attribute debe ser menor a :value carácteres.',
+        'string' => 'El :attribute debe ser menor a :value caracteres.',
         'array' => 'El :attribute debe contener menos elementos que :value.',
     ],
     'lte' => [
         'numeric' => 'El :attribute debe ser menor o igual a :value.',
         'file' => 'El :attribute debe ser menor o igual a :value kilobytes.',
-        'string' => 'El :attribute debe ser menor o igual a :value carácteres.',
+        'string' => 'El :attribute debe ser menor o igual a :value caracteres.',
         'array' => 'El :attribute no debe contener más de :value elementos.',
     ],
     'mac_address' => 'El :attribute debe ser una dirección MAC válida.',
     'max' => [
         'numeric' => 'El :attribute no debe ser mayor a :max.',
         'file' => 'El :attribute no debe ser mayor a :max kilobytes.',
-        'string' => 'El :attribute no debe ser mayor a :max carácteres.',
+        'string' => 'El :attribute no debe ser mayor a :max caracteres.',
         'array' => 'El :attribute no debe contener más de :max elementos.',
     ],
     'mimes' => 'El :attribute debe ser un archivo de tipo: :values.',
@@ -93,7 +93,7 @@ return [
     'min' => [
         'numeric' => 'El :attribute debe ser por lo menos :min.',
         'file' => 'El :attribute debe ser por lo menos :min kilobytes.',
-        'string' => 'El :attribute debe ser por lo menos :min carácteres.',
+        'string' => 'El :attribute debe ser por lo menos :min caracteres.',
         'array' => 'El :attribute debe contener por lo menos :min elementos.',
     ],
     'multiple_of' => 'El :attribute debe ser un multiplo de :value.',
@@ -119,7 +119,7 @@ return [
     'size' => [
         'numeric' => 'El :attribute debe ser :size.',
         'file' => 'El :attribute debe pesar :size kilobytes.',
-        'string' => 'El :attribute debe contener :size carácteres.',
+        'string' => 'El :attribute debe contener :size caracteres.',
         'array' => 'El :attribute debe contener :size elementos.',
     ],
     'starts_with' => 'El :attribute debe empezar por uno de los siguientes: :values.',

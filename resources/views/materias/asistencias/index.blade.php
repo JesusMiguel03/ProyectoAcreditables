@@ -29,7 +29,7 @@
             <tbody>
                 @foreach ($estudiantes as $index => $estudiante)
                     <tr>
-                        @if (!empty(estudiante_materia($estudiante, 'inscrito')))
+                        @if (!empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')))
                             <td
                                 class="font-weight-bold {{ $asistenciaEstudiantes[$index] < 9 ? 'text-danger' : 'text-success' }}">
                                 {{ $asistenciaEstudiantes[$index] < 9 ? 'Reprobado' : 'Aprobado' }}
@@ -39,17 +39,20 @@
                             <td></td>
                             <td></td>
                         @endif
-                        <td>{{ parsearCedula(estudiante_materia($estudiante, 'cedula')) }}</td>
-                        <td>{{ estudiante_materia($estudiante, 'nombre') }}</td>
-                        <td>{{ estudiante_materia($estudiante, 'apellido') }}</td>
-                        <td class="{{ !empty(estudiante_materia($estudiante, 'inscrito')) ? '' : 'font-weight-bold' }}">
-                            {{ !empty(estudiante_materia($estudiante, 'inscrito')) ? estudiante_materia($estudiante, 'inscrito') : 'No inscrito' }}
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'CI') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'nombre') }}</td>
+                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'apellido') }}</td>
+                        <td
+                            class="{{ !empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')) ? '' : 'font-weight-bold' }}">
+                            {{ !empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito'))
+                                ? datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')
+                                : 'No inscrito' }}
                         </td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                @if (!empty(estudiante_materia($estudiante, 'inscrito')))
-                                    <a href="{{ route('asistencias.edit', $estudiante->id) }}" class="btn btn-primary"
-                                        {{ Popper::arrow()->pop('Ver') }}>
+                                @if (!empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')))
+                                    <a href="{{ route('asistencias.edit', $estudiante->esEstudiante->id) }}"
+                                        class="btn btn-primary" {{ Popper::arrow()->pop('Ver') }}>
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 @endif
@@ -81,18 +84,16 @@
     {{-- Mensajes --}}
     <script>
         @if ($message = session('registrado'))
-            let timerInterval
             Swal.fire({
                 icon: 'success',
                 title: '¡Asistencia registrada!',
                 html: 'Se ha actualizado la asistencia del estudiante.',
-                confirmButtonColor: '#28a745',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('no puede participar'))
-            let timerInterval
             Swal.fire({
                 icon: 'warning',
                 title: '¡No puede cursar!',
@@ -101,9 +102,9 @@
                 @else
                     html: 'Este estudiante no se encuentra validado, para validarse debe llevar su respectivo comprobante a la Coordinación de Acreditables para ser firmado, hasta entonces no podrá tener asistencia o lo que es igual, no contará la acreditable.',
                 @endif
-                confirmButtonColor: '#DC3545',
+                buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn px-5'
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @endif

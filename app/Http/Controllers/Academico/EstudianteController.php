@@ -23,10 +23,10 @@ class EstudianteController extends Controller
         permiso('estudiante');
 
         Estudiante::updateOrCreate(
-            ['usuario_id' => $request->get('usuario')],
+            ['usuario_id' => $request['usuario']],
             [
-                'trayecto_id' => $request->get('trayecto'),
-                'pnf_id' => $request->get('pnf')
+                'trayecto_id' => $request['trayecto'],
+                'pnf_id' => $request['pnf']
             ]
         );
 
@@ -37,18 +37,20 @@ class EstudianteController extends Controller
     {
         // Busca al estudiante y carga sus datos
         $estudiante = Estudiante::find($id);
-        $materia = Materia::find(estudiante($estudiante, 'materia'));
-        $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia]);
+        $materia = Materia::find(datosUsuario($estudiante, 'Estudiante', 'materia'));
 
+        $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia]);
+        
         // Si es profesor no puede ver el comprobante
         if (rol('Profesor')) {
             return redirect()->back();
         }
-
+        
         // En caso de que el coordinador desee revisar el comprobante
         if (rol('Coordinador')) {
             return $pdf->stream('Comprobante de inscripción.pdf');
         }
+        
 
         // Flujo normal, al estudiante se le descarga directamente el pdf
         return $pdf->download('Comprobante de inscripcion.pdf');
