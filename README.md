@@ -49,12 +49,10 @@ php artisan migrate:fresh --seed
 Componente web diseñado para la gestión administrativa de procesos dentro de la Coordinación de Acreditables. Dispone de las siguientes funciones:
 
 - Inscripción de estudiantes y profesores.
-- Creación, apertura y cierre de cursos.
-- Manejo de cursos, cambio de acreditable.
+- Gestión de cursos/materias.
+- Personalización de perfil, cambio de contraseña y nombre.
 - Gráficos, estadísticas y reportes.
 - Listados de estudiantes y comprobantes de inscripción en formato PDF.
-
-Este proyecto se conforma por el uso de diferentes lenguajes y sus herramientas, como lo son:
 
 **Lenguajes**
 - HTML5.
