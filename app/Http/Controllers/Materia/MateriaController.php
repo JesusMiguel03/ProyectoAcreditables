@@ -26,9 +26,19 @@ class MateriaController extends Controller
         // Valida si tiene el permiso.
         permiso(['materias.principal', 'materias.estudiante']);
 
+        if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'academico')) {
+            return view('materias.acreditables.index');
+        }
+
         // Si es un estudiante y está inscrito.
-        if (datosUsuario(auth()->user(), 'Estudiante', 'materia')) {
-            $materias = Materia::find(datosUsuario(auth()->user(), 'Estudiante', 'materia'));
+        if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')) {
+            $materias = Materia::find(datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')->materia_id);
+
+            return view('materias.acreditables.index', compact('materias'));
+        }
+
+        if (rol('Estudiante')) {
+            $materias = Materia::where('num_acreditable', '=', datosUsuario(auth()->user()->estudiante, 'Estudiante', 'trayecto'))->get();
 
             return view('materias.acreditables.index', compact('materias'));
         }
@@ -101,10 +111,15 @@ class MateriaController extends Controller
 
         // Busca el id del curso
         $materia = Materia::find($id);
-
+        
         // Valida que exista
         existe($materia);
 
+        // Evita que el estudiante vea las materias que no coinciden con su trayecto
+        if (rol('Estudiante') && $materia->num_acreditable !== datosUsuario(auth()->user()->estudiante, 'Estudiante', 'trayecto')) {
+            return redirect()->back();
+        }
+        
         // Trae a todos los estudiantes inscritos
         $inscritos = Estudiante_materia::where('materia_id', '=', $id)->get();
 

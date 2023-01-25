@@ -91,7 +91,7 @@
                             @foreach ($preguntas as $pregunta)
                                 <a class="list-group-item list-group-item-action {{ $loop->first ? 'active' : '' }}"
                                     id="list-{{ $pregunta->id }}-list" data-toggle="list" href="#list-{{ $pregunta->id }}"
-                                    role="tab" aria-controls="{{ $pregunta->id }}">¿{{ $pregunta->pregunta }}?</a>
+                                    role="tab" aria-controls="{{ $pregunta->id }}">¿{{ $pregunta->titulo }}?</a>
                             @endforeach
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                                     id="list-{{ $pregunta->id }}" role="tabpanel"
                                     aria-labelledby="list-{{ $pregunta->id }}-list">
                                     {{ $pregunta->explicacion }}.
-                                    @if ($pregunta->pregunta === 'Cuáles son las opciones')
+                                    @if ($pregunta->titulo === 'Cuáles son las opciones')
                                         <a href="{{ route('materias.index') }}">Ver acreditables</a>.
                                     @endif
                                 </div>

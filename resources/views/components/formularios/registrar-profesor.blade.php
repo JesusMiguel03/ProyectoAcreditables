@@ -254,7 +254,7 @@
                 <div class="input-group">
                     <input type="tel" name="telefono"
                         class="form-control @error('telefono') is-invalid @enderror"
-                        value="{{ $tlf ?? old('telefono') }}" placeholder="{{ __('0193451') }}" maxlength="{{ config('variables.profesores.telefono') - 4 }}" data-nombre="números" required>
+                        value="{{ $tlf ?? old('telefono') }}" placeholder="{{ __('0193451') }}" maxlength="{{ config('variables.profesores.telefono') - 4 }}" data-nombre="dígitos" required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -332,5 +332,5 @@
     @if (Route::is('profesores.edit'))
         <x-modal.footer-editar ruta="{{ route('profesores.index') }}" />
     @else
-        <x-modal.footer-aceptar :enviar="true" />
+        <x-modal.footer-aceptar />
     @endif

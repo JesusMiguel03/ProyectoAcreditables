@@ -1,12 +1,9 @@
-"use strict";
-
 // Iniacializa las variables
 let [mostrarTiempo, actualizarContador] = ["", 0];
 
 // Busca el elemento donde mostrar la hora
-document.getElementById("time")
-    ? (mostrarTiempo = document.getElementById("time"))
-    : "";
+const ubicacion = document.getElementById("time") || "";
+mostrarTiempo = ubicacion;
 
 // Devuelve el número en formato 00
 const ceros = (tiempo) => {
@@ -36,15 +33,21 @@ const [dia, mes] = [
 const actualizar = () => {
     if (mostrarTiempo !== "") {
         const tiempo = new Date();
-        mostrarTiempo.innerHTML = `${
-            dia[tiempo.getDay()]
-        }, ${tiempo.getDate()} de ${
-            mes[tiempo.getMonth()]
-        } de ${tiempo.getFullYear()} - ${ceros(
-            tiempo.getHours() > 12 ? tiempo.getHours() - 12 : tiempo.getHours()
-        )}:${ceros(tiempo.getMinutes())} ${
-            tiempo.getHours() >= 12 ? "PM" : "AM"
-        }`;
+        let [diaSemana, diaNumero, mesActual, fecha, hora, minutos, amPM] = [
+            dia[tiempo.getDay()],
+            tiempo.getDate(),
+            mes[tiempo.getMonth()],
+            tiempo.getFullYear(),
+            ceros(
+                tiempo.getHours() > 12
+                    ? tiempo.getHours() - 12
+                    : tiempo.getHours()
+            ),
+            ceros(tiempo.getMinutes()),
+            tiempo.getHours() >= 12 ? "PM" : "AM",
+        ];
+
+        mostrarTiempo.innerText = `${diaSemana}, ${diaNumero} de ${mesActual} de ${fecha} - ${hora}:${minutos} ${amPM}`;
     }
 };
 setInterval(actualizar, 1000);

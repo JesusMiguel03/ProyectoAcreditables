@@ -99,6 +99,30 @@
     <script src="{{ asset('js/borrar.js') }}"></script>
 
     {{-- Mensajes --}}
+    {{-- <script>
+        @if ($session = session('alerta'))
+            {
+                const [encabezado, contenido, icono] = [
+                    "{{ $session['encabezado'] }}",
+                    "{{ $session['contenido'] }}",
+                    "{{ $session['icono'] }}"
+                ]
+                // let encabezado = "{{ $session['encabezado'] }}"
+                // let contenido = "{{ $session['contenido'] }}"
+                // let icono = "{{ $session['icono'] }}"
+                console.log(encabezado, contenido, icono)
+                Swal.fire({
+                    icon: `${icono}`,
+                    title: `¡${encabezado}!`,
+                    html: `${contenido}`,
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: `btn btn-${icono} px-5`
+                    },
+                })
+            }
+        @endif
+    </script> --}}
     <script>
         @if ($message = session('creado'))
             Swal.fire({

@@ -19,6 +19,9 @@ class UsuarioController extends Controller
         $this->middleware('prevent-back-history');
     }
 
+    /**
+     *  Muestra a todos los estudiantes
+     */
     public function index()
     {
         // Valida si tiene el permiso.
@@ -38,6 +41,9 @@ class UsuarioController extends Controller
         return view('academico.estudiantes.index', compact('estudiantes'));
     }
 
+    /**
+     *  Crea perfil académico del estudiante.
+     */
     public function edit($id)
     {
         // Valida si tiene el permiso.

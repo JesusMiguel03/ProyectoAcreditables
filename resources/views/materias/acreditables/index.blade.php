@@ -38,12 +38,12 @@
     @if (rol('Estudiante'))
 
         {{-- No tiene perfil academico --}}
-        @if (!datosUsuario(Auth::user(), 'Estudiante', 'academico'))
+        @if (datosUsuario(Auth::user()->estudiante, 'Estudiante', 'academico'))
 
             <x-elementos.perfil-incompleto />
 
             {{-- Esta inscrito --}}
-        @elseif (datosUsuario(Auth::user(), 'Estudiante', 'inscrito'))
+        @elseif (datosUsuario(Auth::user()->estudiante, 'Estudiante', 'inscrito'))
             <div id="slick" class="px-5">
                 <div class="slide">
 
@@ -54,25 +54,21 @@
 
             {{-- No esta inscrito --}}
         @else
-            @if ($materias->isEmpty())
-                <x-elementos.card-materia :existe="true" />
-            @else
-                <div id="slick" class="px-5">
+            <div id="slick" class="px-5">
 
-                    @foreach ($materias as $materia)
-                        @if ($loop->index < config('variables.carrusel'))
-                            <div class="slide">
+                @foreach ($materias as $materia)
+                    @if ($loop->index < config('variables.carrusel'))
+                        <div class="slide">
 
-                                <x-elementos.card-materia :materia="$materia" />
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-            @endif
+                            <x-elementos.card-materia :materia="$materia" />
+                        </div>
+                    @endif
+                @endforeach
+            </div>
         @endif
     @endif
 
-    @if (empty(datosUsuario(Auth::user(), 'Estudiante', 'materia')) || !rol('Estudiante'))
+    @if (!empty($materias) && $materias instanceof Illuminate\Support\Collection)
         <div class="card table-responsive-sm p-3 {{ rol('Estudiante') ? 'mt-5' : 'mt-1' }} mb-3 col-12">
 
             @if (rol('Estudiante'))
@@ -80,8 +76,7 @@
                     <p class="px-5 text-muted">
                         <strong>Nota:</strong>
                         El carrusel solo mostrará las primeras {{ config('variables.carrusel') }} acreditables activas para
-                        no sobrecargar la vista del usuario, el resto de acreditables estarán disponibles en la tabla pero
-                        no visibles.
+                        no sobrecargar la vista del usuario, el resto de acreditables estarán disponibles en esta tabla.
                     </p>
                 </div>
             @endif
@@ -90,7 +85,7 @@
                 <div class="w-100 row mx-auto my-2">
                     <p class="px-5 text-muted">
                         <strong>Nota:</strong>
-                        Cuando sea asignado a una o varias acreditables se mostrarán en la tabla.
+                        Cuando sea asignado a una o varias acreditables se mostrarán en esta tabla.
                     </p>
                 </div>
             @endif
@@ -119,6 +114,7 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach ($materias as $materia)
                         <tr>
@@ -212,7 +208,7 @@
                 html: 'Una nueva materia ha sido añadida.',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-sucess px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('error'))

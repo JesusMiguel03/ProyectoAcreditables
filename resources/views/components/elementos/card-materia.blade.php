@@ -1,6 +1,6 @@
 @php
     $materia = atributo($attributes, 'materia');
-    // dd($materia);
+
     $info = !empty($materia->info) ? $materia->info->categoria : null;
     $categoria = !empty($info) ? $info->nom_categoria : 'Sin asignar';
     $id = $materia->id;

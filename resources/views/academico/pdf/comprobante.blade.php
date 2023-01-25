@@ -44,6 +44,15 @@
             </header>
 
             <main class="px-5">
+                @php
+                    $nombreEstudiante = datosUsuario($estudiante, 'EstudianteInscrito', 'nombreCompleto');
+                    $CI = datosUsuario($estudiante, 'EstudianteInscrito', 'CI');
+                    $pnf = datosUsuario($estudiante, 'EstudianteInscrito', 'pnfNombre');
+                    $trayecto = datosUsuario($estudiante, 'EstudianteInscrito', 'trayectoNumero');
+                    $profesor = materia($materia, 'profesor') ?? 'Sin asignar';
+                    $codigoEstudiante = datosUsuario($estudiante, 'Estudiante', 'codigo');
+                    $fecha = \Carbon\Carbon::parse($estudiante->created_at)->locale('es')->isoFormat('ll');
+                @endphp
 
                 <h6 style="font-size: 1.1rem">Datos del estudiante</h6>
 
@@ -58,7 +67,7 @@
                             </th>
                             <th style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ datosUsuario($estudiante, 'Estudiante', 'nombreCompleto') }}
+                                    {{ $nombreEstudiante }}
                                 </h6>
                             </th>
                         </tr>
@@ -72,7 +81,7 @@
                             </th>
                             <td style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ datosUsuario($estudiante, 'Estudiante', 'CI') }}
+                                    {{ $CI }}
                                 </h6>
                             </td>
                         </tr>
@@ -86,7 +95,7 @@
                             </th>
                             <td style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ datosUsuario($estudiante, 'Estudiante', 'PNF') }}
+                                    {{ $pnf }}
                                 </h6>
                             </td>
                         </tr>
@@ -99,7 +108,7 @@
                             </th>
                             <td style="padding-left: 9rem">
                                 <h6 style="font-size: 1.1rem; font-weight: 400;">
-                                    {{ datosUsuario($estudiante, 'Estudiante', 'trayecto') }}
+                                    {{ $trayecto }}
                                 </h6>
                             </td>
                         </tr>
@@ -134,7 +143,7 @@
                             <td>
                                 <h6
                                     style="{{ !empty(materia($materia, 'tieneProf')) ? 'font-weight: 400' : 'font-weight: 700' }}">
-                                    {{ materia($materia, 'profesor') ?? 'Sin asignar' }}
+                                    {{ $profesor }}
                                 </h6>
                             </td>
                         </tr>
@@ -148,7 +157,7 @@
                             </th>
                             <td>
                                 <h6 style="font-weight: 400;">
-                                    {{ datosUsuario($estudiante, 'Estudiante', 'codigo') }}
+                                    {{ $codigoEstudiante }}
                                 </h6>
                             </td>
                         </tr>
@@ -176,15 +185,15 @@
                 </h6>
 
                 <div class="row px-5">
-                    @if (!empty(datosUsuario($estudiante, 'Estudiante', 'profEncargado')))
+                    @if (!empty(datosUsuario($estudiante, 'EstudianteInscrito', 'profEncargado')))
                         <h6 class="text-justify" style="font-weight: 400; font-size: 0.9rem"> Este comprobante certifica
                             al estudiante <span class="font-weight-bold">
-                                {{ datosUsuario($estudiante, 'Estudiante', 'nombreCompleto') }}, </span> cédula <span
+                                {{ $nombreEstudiante }}, </span> cédula <span
                                 class="font-weight-bold">
-                                {{ datosUsuario($estudiante, 'Estudiante', 'CI') }} </span> de haber solicitado una
+                                {{ $CI }} </span> de haber solicitado una
                             inscripción en la acreditable de <span
                                 class="font-weight-bold">{{ $materia->nom_materia }}</span> el día <span
-                                class="font-weight-bold">{{ \Carbon\Carbon::parse($estudiante->inscrito->created_at)->locale('es')->isoFormat('ll') }}</span>,
+                                class="font-weight-bold">{{ $fecha }}</span>,
                             para la formación integral del participante dentro de la institución.
                         </h6>
                         <h6 class="mt-4 text-justify" style="font-weight: 400; font-size: 0.9rem">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academico;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Estudiante;
+use App\Models\Academico\Estudiante_materia;
 use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
@@ -36,8 +37,18 @@ class EstudianteController extends Controller
     public function comprobante($id)
     {
         // Busca al estudiante y carga sus datos
-        $estudiante = Estudiante::find($id);
-        $materia = Materia::find(datosUsuario($estudiante, 'Estudiante', 'materia'));
+        $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
+
+        // Si el estudiante no tiene comprobante, redirecciona
+        if (empty($estudiante)) {
+            return redirect()->back();
+        }
+
+        if (empty(auth()->user()->estudiante) || auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
+            return redirect()->back();
+        }
+
+        $materia = Materia::find($estudiante->materia_id);
 
         $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia]);
         
@@ -51,7 +62,6 @@ class EstudianteController extends Controller
             return $pdf->stream('Comprobante de inscripción.pdf');
         }
         
-
         // Flujo normal, al estudiante se le descarga directamente el pdf
         return $pdf->download('Comprobante de inscripcion.pdf');
     }

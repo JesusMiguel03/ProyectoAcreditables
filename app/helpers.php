@@ -285,6 +285,8 @@ if (!function_exists('datosUsuario')) {
 
         if ($modelo === 'Estudiante') {
             switch ($datoBuscar) {
+                case 'estudiante':
+                    return $usuario ?? null;
                 case 'ID':
                     return $usuario->id;
                     break;
@@ -316,10 +318,10 @@ if (!function_exists('datosUsuario')) {
                     return !empty($usuario->inscrito) ? $usuario->inscrito->materia->info->profesor : null;
                     break;
                 case 'materia':
-                    return !empty($usuario->estudiante->inscrito) ? $usuario->estudiante->inscrito->materia_id : null;
+                    return !empty($usuario->estudiante->inscrito) ? $usuario->estudiante->inscrito->materia_id : '';
                     break;
                 case 'inscrito':
-                    return $usuario->estudiante->inscrito ?? null;
+                    return $usuario->inscrito ?? null;
                     break;
             }
         }
@@ -385,6 +387,9 @@ if (!function_exists('datosUsuario')) {
                     break;
                 case 'codigo':
                     return $usuario->codigo;
+                    break;
+                case 'profEncargado':
+                    return $usuario->materia->info->profesor;
                     break;
                 case 'inscrito':
                     return !empty($usuario->esEstudiante->inscrito) ? $usuario->esEstudiante->inscrito->materia->nom_materia : null;
