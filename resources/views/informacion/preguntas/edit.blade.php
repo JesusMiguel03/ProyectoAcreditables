@@ -37,5 +37,5 @@
 @stop
 
 @section('js')
-    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
+    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 @stop

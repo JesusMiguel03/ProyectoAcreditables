@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,10 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(RoleSeeder::class);
-        $this->call(UserSeeder::class);
+        // Estático
         $this->call(TrayectoSeeder::class);
         $this->call(PNFSeeder::class);
         $this->call(PreguntasFrecuentesSeeder::class);
+        $this->call(RoleSeeder::class);
+
+        // Pruebas
+        $this->call(UserSeeder::class);
+        $this->call(MateriaSeeder::class);
+        $this->call(AreaConocimientoSeeder::class);
+        $this->call(NoticiaSeeder::class);
     }
 }

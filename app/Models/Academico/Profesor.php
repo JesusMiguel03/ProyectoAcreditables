@@ -3,7 +3,6 @@
 namespace App\Models\Academico;
 
 use App\Models\Materia\Informacion_materia;
-use App\Models\Materia\Materia;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

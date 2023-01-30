@@ -12,7 +12,11 @@
     $avatar = materia($materia, 'profAvatar');
     $profesor = materia($materia, 'profesor');
     $profesorID = materia($materia, 'profID');
-    
+
+    $usuario = Auth::user()->estudiante;
+    $estudianteInscrito = $usuario->inscrito ?? null;
+    $estudianteID = $usuario->id;
+    $estudianteMateriaID = !empty($usuario->inscrito) ? $usuario->inscrito->materia_id : ''
 @endphp
 
 <div class="col-sm-12 col-md-9">
@@ -38,10 +42,10 @@
                         <form id="form" action="{{ route('inscripcion.store') }}" method="post">
                             @csrf
 
-                            @if (datosUsuario(Auth::user(), 'Estudiante', 'inscrito'))
+                            @if ($estudianteInscrito)
                                 <section class="row">
                                     <article class="col-6">
-                                        <a href="{{ route('materias.show', datosUsuario(Auth::user(), 'Estudiante', 'materia')) }}"
+                                        <a href="{{ route('materias.show', $estudianteMateriaID) }}"
                                             class="btn btn-block btn-primary">
                                             Se encuentra inscrito
                                         </a>
@@ -49,7 +53,7 @@
 
                                     <article class="col-6">
                                         <button id="cambiarAcreditable"
-                                            data-id="{{ datosUsuario(Auth::user()->estudiante, 'Estudiante', 'ID') }}"
+                                            data-id="{{ $estudianteID }}"
                                             data-materia="{{ $materiaID }}" class="btn btn-block btn-outline-primary">
                                             Cambiar de acreditable
                                         </button>
@@ -57,7 +61,7 @@
                                 </section>
                             @else
                                 <input type="number" name="estudiante_id" class="d-none"
-                                    value="{{ datosUsuario(Auth::user(), 'Estudiante', 'ID') }}" hidden>
+                                    value="{{ $estudianteID }}" hidden>
                                 <input type="number" name="materia_id" class="d-none" value="{{ $materiaID }}" hidden>
 
                                 <button type="submit"

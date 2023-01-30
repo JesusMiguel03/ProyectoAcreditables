@@ -152,7 +152,7 @@
                 html: 'El trayecto ha sido actualizado.',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-sucess px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif ($message = session('borrado'))

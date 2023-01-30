@@ -29,8 +29,8 @@ btn.addEventListener("click", (e) => {
             cancelButtonText: "Cancelar",
             buttonsStyling: false,
             customClass: {
-                confirmButton: "btn btn-danger px-5",
-                cancelButton: "btn btn-secondary px-5",
+                confirmButton: "btn btn-danger px-5 mr-2",
+                cancelButton: "btn btn-secondary px-5 ml-2",
             },
         }).then((result) => {
             if (result.isConfirmed) {

@@ -102,7 +102,7 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
+    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 
     {{-- Mensajes --}}
     <script>
@@ -144,7 +144,7 @@
                 html: 'Los datos del estudiante han sido actualizados.',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-primary px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @endif

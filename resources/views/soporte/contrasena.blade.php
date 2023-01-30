@@ -68,7 +68,7 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡Contraseña restablecida!',
-                html: `Su nueva contrasena es: {{ session('contrasena') }}.`,
+                html: `Su nueva contrasena es: <strong>{{ session('contrasena') }}</strong>.`,
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-success px-5'

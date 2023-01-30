@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+
 
 class UserSeeder extends Seeder
 {
@@ -14,64 +15,65 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $estudiante = User::create([
+        // Coordinador
+        User::create([
+            'nombre' => 'Luis',
+            'apellido' => 'Santander',
+            'nacionalidad' => 'V',
+            'cedula' => '1111113',
+            'email' => 'u6@email.com',
+            'password' => bcrypt('password'),
+        ])->assignRole('Coordinador');
+
+        // Estudiante
+        User::create([
             'nombre' => 'Marco',
             'apellido' => 'Andrade',
             'nacionalidad' => 'V',
             'cedula' => '1111111',
             'email' => 'u1@email.com',
             'password' => bcrypt('password'),
-        ]);
-        $estudiante->assignRole('Estudiante');
+        ])->assignRole('Estudiante');
 
-        $profesor = User::create([
-            'nombre' => 'Ana',
-            'apellido' => 'Flores',
-            'nacionalidad' => 'V',
-            'cedula' => '1111112',
-            'email' => 'u2@email.com',
-            'password' => bcrypt('password'),
-        ]);
-        $profesor->assignRole('Profesor');
-
-        $coordinador = User::create([
-            'nombre' => 'Luis',
-            'apellido' => 'Santander',
-            'nacionalidad' => 'V',
-            'cedula' => '1111113',
-            'email' => 'u3@email.com',
-            'password' => bcrypt('password'),
-        ]);
-        $coordinador->assignRole('Coordinador');
-
-        $estudiante1 = User::create([
+        User::create([
             'nombre' => 'Andrea',
             'apellido' => 'Nuñez',
             'nacionalidad' => 'V',
             'cedula' => '1111114',
-            'email' => 'u4@email.com',
+            'email' => 'u2@email.com',
             'password' => bcrypt('password'),
-        ]);
-        $estudiante1->assignRole('Estudiante');
+        ])->assignRole('Estudiante');
 
-        $estudiante1 = User::create([
+        User::create([
             'nombre' => 'Luisa',
             'apellido' => 'Muñoz',
             'nacionalidad' => 'V',
             'cedula' => '1111115',
-            'email' => 'u5@email.com',
+            'email' => 'u3@email.com',
             'password' => bcrypt('password'),
-        ]);
-        $estudiante1->assignRole('Estudiante');
+        ])->assignRole('Estudiante');
 
-        $estudiante1 = User::create([
+        // Profesor
+        User::create([
+            'nombre' => 'Ana',
+            'apellido' => 'Flores',
+            'nacionalidad' => 'V',
+            'cedula' => '1111112',
+            'email' => 'u4@email.com',
+            'password' => bcrypt('password'),
+        ])->assignRole('Profesor');
+
+        User::create([
             'nombre' => 'Marcus',
             'apellido' => 'Perez',
             'nacionalidad' => 'V',
             'cedula' => '1111116',
-            'email' => 'u6@email.com',
+            'email' => 'u5@email.com',
             'password' => bcrypt('password'),
-        ]);
-        $estudiante1->assignRole('Profesor');
+        ])->assignRole('Profesor');
+
+        \App\Models\User::factory()->count(20)->create()->each(function ($usuario) {
+            $usuario->assignRole(rand(1, 2) === 1 ? 'Estudiante' : 'Profesor');
+        });
     }
 }

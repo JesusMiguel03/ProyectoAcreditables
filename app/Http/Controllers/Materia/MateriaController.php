@@ -26,19 +26,8 @@ class MateriaController extends Controller
         // Valida si tiene el permiso.
         permiso(['materias.principal', 'materias.estudiante']);
 
-        if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'academico')) {
-            return view('materias.acreditables.index');
-        }
-
-        // Si es un estudiante y está inscrito.
-        if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')) {
-            $materias = Materia::find(datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')->materia_id);
-
-            return view('materias.acreditables.index', compact('materias'));
-        }
-
-        if (rol('Estudiante')) {
-            $materias = Materia::where('num_acreditable', '=', datosUsuario(auth()->user()->estudiante, 'Estudiante', 'trayecto'))->get();
+        if (rol('Coordinador')) {
+            $materias = Materia::all();
 
             return view('materias.acreditables.index', compact('materias'));
         }
@@ -56,6 +45,23 @@ class MateriaController extends Controller
             return view('materias.acreditables.index', compact('materias'));
         }
 
+        if (empty(auth()->user()->estudiante->pnf)) {
+            return view('materias.acreditables.index');
+        }
+
+        // Si es un estudiante y está inscrito.
+        if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')) {
+            $materias = Materia::find(datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')->materia_id);
+            
+            return view('materias.acreditables.index', compact('materias'));
+        }
+        
+        if (rol('Estudiante')) {
+            $materias = Materia::where('num_acreditable', '=', datosUsuario(auth()->user()->estudiante, 'Estudiante', 'trayecto'))->get();
+            
+            return view('materias.acreditables.index', compact('materias'));
+        }
+        
         // Trae las materias activas y disponibles
         $materias = Materia::where([['estado_materia', '=', 'Activo'], ['cupos_disponibles', '>', 0]])->get();
 

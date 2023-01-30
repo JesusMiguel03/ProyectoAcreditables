@@ -144,7 +144,7 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script>
+    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 
     {{-- Mensajes --}}
     <script>
