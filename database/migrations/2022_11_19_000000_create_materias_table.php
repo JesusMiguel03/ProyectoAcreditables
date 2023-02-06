@@ -16,11 +16,12 @@ class CreateMateriasTable extends Migration
         Schema::create('materias', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('informacion_id')->nullable();
+            $table->unsignedBigInteger('trayecto_id')->nullable();
             $table->foreign('informacion_id')->references('id')->on('informacion_materia')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('trayecto_id')->references('id')->on('trayectos')->onUpdate('cascade')->onDelete('cascade');
             $table->char('nom_materia', config('variables.materias.nombre'));
             $table->tinyInteger('cupos');
             $table->tinyInteger('cupos_disponibles');
-            $table->tinyInteger('num_acreditable');
             $table->char('desc_materia', config('variables.materias.descripcion'));
             $table->char('estado_materia', config('variables.materias.estado'));
             $table->char('imagen_materia', config('variables.materias.imagen'))->nullable();

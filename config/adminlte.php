@@ -65,7 +65,7 @@ return [
 
     'logo' => '<b>Coord. Acreditables</b>',
     'logo_img' => 'vendor/img/logo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo_img_class' => 'brand-image elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Logo de la universidad',
@@ -433,8 +433,8 @@ return [
             'can'         => 'soporte',
         ],
         [
-            'text'        => 'Recuperar contraseña',
-            'url'         => '/soporte/restaurar-contrasena',
+            'text'        => 'Recuperar datos',
+            'url'         => '/soporte',
             'active'      => ['soporte/restaurar'],
             'icon'        => 'fas fa-user',
             'can'         => 'soporte',

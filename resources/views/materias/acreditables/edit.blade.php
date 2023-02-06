@@ -26,7 +26,7 @@
                     @csrf
                     {{ method_field('PUT') }}
 
-                    <x-formularios.acreditables :materia="$materia" :categorias="$categorias" :profesores="$profesores" :horarios="$horarios" />
+                    <x-formularios.acreditables :materia="$materia" :categorias="$categorias" :profesores="$profesores" :horarios="$horarios" :trayectos="$trayectos" />
                 </form>
             </main>
         </div>

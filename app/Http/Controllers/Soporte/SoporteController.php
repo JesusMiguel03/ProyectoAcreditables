@@ -24,9 +24,17 @@ class SoporteController extends Controller
         $this->middleware('auth');
         $this->middleware('prevent-back-history');
     }
-
     public function index()
     {
+        permiso('soporte');
+
+        return view('soporte.index');
+    }
+
+    public function restaurarElementos()
+    {
+        permiso('soporte');
+
         // Busca todos los elementos y regresa su id y nombre/número.
         $conocimientos = AreaConocimiento::onlyTrashed()->pluck('id', 'nom_conocimiento');
         $pnfs = PNF::onlyTrashed()->pluck('id', 'nom_pnf');
@@ -37,11 +45,13 @@ class SoporteController extends Controller
         $materias = Materia::onlyTrashed()->pluck('id', 'nom_materia');
         $horarios = Horario::onlyTrashed()->pluck('id', 'espacio');
 
-        return view('soporte.index', compact('conocimientos', 'pnfs', 'trayectos', 'noticias', 'preguntas', 'categorias', 'materias', 'horarios'));
+        return view('soporte.elementos', compact('conocimientos', 'pnfs', 'trayectos', 'noticias', 'preguntas', 'categorias', 'materias', 'horarios'));
     }
 
     public function recuperar($id, $modelo)
     {
+        permiso('soporte');
+
         // Filtra el modelo y recupera el elemento por su id.
         if ($modelo === 'AreaConocimiento') {
             AreaConocimiento::withTrashed()->find($id)->restore();
@@ -82,17 +92,14 @@ class SoporteController extends Controller
             Horario::withTrashed()->find($id)->restore();
             return redirect()->back()->with('recuperado', 'recuperado');
         }
-    }
-
-    public function restaurarContrasena()
-    {
-        return view('soporte.contrasena');
-    }
+    }   
 
     public function recuperarContrasena(Request $request)
     {
+        permiso('soporte');
+
         // Recupera al usuario que coincida con el correo
-        $usuario = User::where('email', '=', $request->get('usuario'))->first();
+        $usuario = User::where('email', '=', $request['usuario'])->first();
 
         // Si no se encuentra.
         if (empty($usuario)) {
@@ -105,6 +112,26 @@ class SoporteController extends Controller
             'password' => Hash::make($contrasena),
         ])->save();
 
-        return redirect()->back()->with('contrasena', $contrasena);
+        return redirect()->back()->with('contrasena', $contrasena)->with('usuario', "$usuario->nombre $usuario->apellido");
+    }
+
+    public function cambiarCedula(Request $request)
+    {
+        permiso('soporte');
+
+        $usuario = User::where('email', '=', $request['usuario'])->first();
+
+        // Si no se encuentra.
+        if (empty($usuario)) {
+            return redirect()->back()->with('error', 'error');
+        }
+        
+        $usuario->update([
+            'cedula' => $request['cedula']
+        ]);
+
+        $cedula = $usuario->nacionalidad . '-' . number_format($request['cedula'], 0, ',', '.');
+
+        return redirect()->back()->with('cedula', $cedula)->with('usuario', "$usuario->nombre $usuario->apellido");
     }
 }

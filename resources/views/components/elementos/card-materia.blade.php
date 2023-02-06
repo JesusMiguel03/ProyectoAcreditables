@@ -7,7 +7,7 @@
     $imagen = $materia->imagen_materia;
     $nombre = $materia->nom_materia;
     $cupos = $materia->cupos_disponibles;
-    $nro = $materia->num_acreditable;
+    $nro = $materia->trayecto->num_trayecto;
     $descripcion = $materia->desc_materia;
 @endphp
 

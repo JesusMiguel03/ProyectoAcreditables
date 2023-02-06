@@ -19,4 +19,9 @@ class PNF extends Model
     {
         return $this->belongsTo(Estudiante::class, 'pnf_id');
     }
+
+    public function profesores()
+    {
+        return $this->hasMany(Profesor::class, 'departamento_id');
+    }
 }

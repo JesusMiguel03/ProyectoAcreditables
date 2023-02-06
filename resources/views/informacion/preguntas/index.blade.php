@@ -156,7 +156,7 @@
                     confirmButton: 'btn btn-danger px-5'
                 },
             })
-            $('#pregunta').modal('show')
+            $('#registrar').modal('show')
         @elseif ($message = session('registrado'))
             Swal.fire({
                 icon: 'info',

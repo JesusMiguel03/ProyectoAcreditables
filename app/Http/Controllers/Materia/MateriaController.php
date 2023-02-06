@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Estudiante_materia;
 use App\Models\Academico\Horario;
+use App\Models\Academico\Trayecto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -28,38 +29,51 @@ class MateriaController extends Controller
 
         if (rol('Coordinador')) {
             $materias = Materia::all();
+            $trayectos = Trayecto::all();
 
-            return view('materias.acreditables.index', compact('materias'));
+            return view('materias.acreditables.index', compact('materias', 'trayectos'));
         }
 
         // Si es un profesor y tiene perfil.
-        if (rol('Profesor') && auth()->user()->profesor) {
-            $materiasImpartidasProfesor = [];
-
-            foreach (auth()->user()->profesor->imparteMateria as $materia) {
-                array_push($materiasImpartidasProfesor, $materia->id);
+        if (rol('Profesor')) {
+            if (auth()->user()->profesor) {
+                $materiasImpartidasProfesor = [];
+        
+                foreach (auth()->user()->profesor->imparteMateria as $materia) {
+                    array_push($materiasImpartidasProfesor, $materia->id);
+                }
+        
+                $materias = Materia::whereIn('informacion_id', $materiasImpartidasProfesor)->get();
+        
+                return view('materias.acreditables.index', compact('materias'));
             }
 
-            $materias = Materia::whereIn('informacion_id', $materiasImpartidasProfesor)->get();
+            $materias = [];
 
             return view('materias.acreditables.index', compact('materias'));
         }
 
-        if (empty(auth()->user()->estudiante->pnf)) {
-            return view('materias.acreditables.index');
-        }
-
-        // Si es un estudiante y está inscrito.
-        if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')) {
-            $materias = Materia::find(datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')->materia_id);
-            
-            return view('materias.acreditables.index', compact('materias'));
-        }
-        
         if (rol('Estudiante')) {
-            $materias = Materia::where('num_acreditable', '=', datosUsuario(auth()->user()->estudiante, 'Estudiante', 'trayecto'))->get();
-            
-            return view('materias.acreditables.index', compact('materias'));
+            // No tiene perfil academico
+            if (empty(auth()->user()->estudiante->pnf)) {
+                return view('materias.acreditables.index');
+            }
+
+            // Si está inscrito.
+            if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')) {
+                $materias = Materia::find(datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')->materia_id);
+                
+                return view('materias.acreditables.index', compact('materias'));
+            } else {
+
+                // Materias disponibles
+                $materias = Materia::where([
+                    ['trayecto_id', '=', auth()->user()->estudiante->trayecto->id], ['estado_materia', '=', 'Activo']
+                ])->get();
+                $mostrarTabla = count($materias) >= config('variables.carrusel');
+                
+                return view('materias.acreditables.index', compact('materias', 'mostrarTabla'));
+            }
         }
         
         // Trae las materias activas y disponibles
@@ -77,12 +91,12 @@ class MateriaController extends Controller
             'nom_materia' => ['required', 'string', 'max:' . config('variables.materias.nombre')],
             'cupos' => ['required', 'numeric', 'max:' . config('variables.materias.cupos')],
             'desc_materia' => ['required', 'string', 'max:' . config('variables.materias.descripcion')],
-            'num_acreditable' => ['required', 'numeric', 'max:4', 'not_in:0'],
+            'trayecto' => ['required', 'numeric', 'max:4', 'not_in:0'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
         ], [
-            'num_acreditable.not_in' => 'El número de acreditable seleccionado es inválido.',
-            'num_acreditable.required' => 'El número de la acreditable es necesario.',
-            'num_acreditable.max' => 'El número de la acreditable no debe ser mayor a :max.',
+            'trayecto.not_in' => 'El número de acreditable seleccionado es inválido.',
+            'trayecto.required' => 'El número de la acreditable es necesario.',
+            'trayecto.max' => 'El número de la acreditable no debe ser mayor a :max.',
             'cupos.max' => 'Los cupos no deben ser mayor a :max',
             'desc_materia.max' => 'La descripción no debe ser mayor a :max caracteres',
             'imagen_materia.max' => 'La imagen no debe pesar más de 1 MB.',
@@ -102,7 +116,7 @@ class MateriaController extends Controller
             'cupos' => $request['cupos'],
             'cupos_disponibles' => $request['cupos'],
             'desc_materia' => $request['desc_materia'],
-            'num_acreditable' => $request['num_acreditable'],
+            'trayecto_id' => $request['trayecto'],
             'imagen_materia' => $imagen,
             'estado_materia' => 'Activo',
         ]);
@@ -122,7 +136,7 @@ class MateriaController extends Controller
         existe($materia);
 
         // Evita que el estudiante vea las materias que no coinciden con su trayecto
-        if (rol('Estudiante') && $materia->num_acreditable !== datosUsuario(auth()->user()->estudiante, 'Estudiante', 'trayecto')) {
+        if (rol('Estudiante') && $materia->trayecto_id !== auth()->user()->estudiante->trayecto->id) {
             return redirect()->back();
         }
         
@@ -152,11 +166,12 @@ class MateriaController extends Controller
         $categorias = Categoria::all();
         $profesores = Profesor::all();
         $horarios = Horario::all();
+        $trayectos = Trayecto::all();
 
         // Valida que exista
         existe($materia);
 
-        return view('materias.acreditables.edit', compact('materia', 'categorias', 'profesores', 'horarios'));
+        return view('materias.acreditables.edit', compact('materia', 'categorias', 'profesores', 'horarios', 'trayectos'));
     }
 
     public function update(Request $request, $id)
@@ -168,13 +183,13 @@ class MateriaController extends Controller
             'nom_materia' => ['required', 'string', 'max:' . config('variables.materias.nombre')],
             'cupos' => ['required', 'numeric', 'max:' . config('variables.materias.cupos')],
             'desc_materia' => ['required', 'string', 'max:' . config('variables.materias.descripcion')],
-            'num_acreditable' => ['required', 'numeric', 'not_in:0'],
+            'trayecto' => ['required', 'numeric', 'not_in:0'],
             'imagen_materia' => ['image', 'mimes:jpg', 'max:1024'],
             'estado_materia' => ['required'],
         ], [
-            'num_acreditable.not_in' => 'El número de acreditable seleccionado es inválido.',
-            'num_acreditable.required' => 'El número de la acreditable es necesario.',
-            'num_acreditable.max' => 'El número de la acreditable no debe ser mayor a :max.',
+            'trayecto.not_in' => 'El número de acreditable seleccionado es inválido.',
+            'trayecto.required' => 'El número de la acreditable es necesario.',
+            'trayecto.max' => 'El número de la acreditable no debe ser mayor a :max.',
             'cupos.max' => 'Los cupos no deben ser mayor a :max',
             'desc_materia.max' => 'La descripción no debe ser mayor a :max caracteres',
             'imagen_materia.max' => 'La imagen no debe pesar más de 1 MB.',
@@ -214,7 +229,7 @@ class MateriaController extends Controller
         $materia->update([
             'nom_materia' => $request['nom_materia'],
             'cupos' => $request['cupos'],
-            'num_acreditable' => $request['num_acreditable'],
+            'trayecto_id' => $request['trayecto'],
             'desc_materia' => $request['desc_materia'],
             'imagen_materia' => $imagen ? $imagen : $materia->imagen_materia,
             'estado_materia' => $request['estado_materia'],

@@ -21,7 +21,7 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        static $id = 2;
+        static $id = 1;
 
         $correo = 'u' . $id++ . '@test.com';
 
@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'nombre' => $this->faker->firstName,
             'apellido' => $this->faker->lastName,
             'nacionalidad' => rand(1, 2) === 1 ? 'V' : 'E',
-            'cedula' => rand(1111111, 40000000),
+            'cedula' => rand(80000000, 90000000),
             'email' => $correo,
             'password' => bcrypt('password'),
         ];

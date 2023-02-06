@@ -13,6 +13,9 @@
 @stop
 
 @section('content')
+    @php
+        $mensajes = [['comando' => 'Ctrl + clic', 'accion' => 'Selección 1 a 1.'], ['comando' => 'Shift + clic', 'accion' => 'Selección múltiple.'], ['comando' => 'Clic y arrastrar', 'accion' => 'Selección múltiple.'], ['comando' => 'Clic y Ctrl + a', 'accion' => 'Selecciona a todos.']];
+    @endphp
     <div class="col-md-6 col-sm-12 mx-auto">
         <div class="card">
             <header class="card-header bg-primary">
@@ -25,15 +28,12 @@
 
                     <div class="form-group text-justify" style="margin-bottom: -10px">
                         <strong class="text-info">Nota:</strong>
-                        <p class="pl-2">
-                            [Ctrl + clic] <span class="text-muted">Selección 1 a 1.</span>
-                        </p>
-                        <p class="pl-2" style="margin-top: -1rem">
-                            [Shift + clic] <span class="text-muted">Selección múltiple..</span>
-                        </p>
-                        <p class="pl-2" style="margin-top: -1rem">
-                            [Clic y arrastrar] <span class="text-muted">Selección múltiple..</span>
-                        </p>
+
+                        @foreach ($mensajes as $index => $mensaje)
+                            <p class="pl-2{{ $index > 0 ? ' mt-n3' : '' }}">
+                                [{{ $mensaje['comando'] }}] <span class="text-muted">{{ $mensaje['accion'] }}</span>
+                            </p>
+                        @endforeach
                     </div>
 
                     <div class="form-group required mb-3">
@@ -60,7 +60,8 @@
 
                     <x-modal.mensaje-obligatorio />
 
-                    <x-modal.footer-editar ruta="{{ route('materias.index') }}" />
+                    <x-modal.footer-editar sinEstudiantes="{{ !count($no_inscritos) > 0 }}"
+                        ruta="{{ route('materias.index') }}" />
                 </form>
             </main>
         </div>

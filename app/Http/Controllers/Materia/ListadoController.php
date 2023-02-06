@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
-use App\Models\Academico\Periodo;
 use App\Models\Materia\Materia;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 

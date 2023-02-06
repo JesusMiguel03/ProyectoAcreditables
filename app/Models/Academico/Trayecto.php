@@ -2,6 +2,7 @@
 
 namespace App\Models\Academico;
 
+use App\Models\Materia\Materia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,5 +19,10 @@ class Trayecto extends Model
     public function estudiante()
     {
         return $this->belongsTo(Estudiante::class, 'trayecto_id');
+    }
+
+    public function materias()
+    {
+        return $this->hasMany(Materia::class, 'trayecto_id');
     }
 }

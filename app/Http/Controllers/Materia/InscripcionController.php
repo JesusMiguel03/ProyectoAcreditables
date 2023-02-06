@@ -26,12 +26,14 @@ class InscripcionController extends Controller
 
         // Busca la materia y todos los estudiantes
         $materia = Materia::find($id);
-        $acreditable = $materia->num_acreditable;
+        $acreditable = $materia->trayecto->id;
 
         // Busca a todos los estudiantes que esten en el trayecto igual al número de la acreditable.
-        $estudiantes = Estudiante::whereHas('trayecto', function ($query) use ($acreditable) {
-            $query->where('num_trayecto', '=', $acreditable);
-        })->get();
+
+        $estudiantes = Estudiante::where('trayecto_id', '=', $materia->trayecto->id)->get();
+        // $estudiantes = Estudiante::whereHas('trayecto', function ($query) use ($acreditable) {
+        //     $query->where('trayecto_id', '=', $acreditable);
+        // })->get();
 
         $no_inscritos = [];
 
@@ -39,7 +41,7 @@ class InscripcionController extends Controller
          * * NOTA: Si el trayecto es borrado dará error al cargar los estudiantes.
          */
         foreach ($estudiantes as $estudiante) {
-            if (empty($estudiante->inscrito) && $estudiante->trayecto->num_trayecto === $materia->num_acreditable) {
+            if (empty($estudiante->inscrito) && $estudiante->trayecto->num_trayecto === $materia->trayecto->num_trayecto) {
                 array_push($no_inscritos, $estudiante);
             }
         }
@@ -92,8 +94,8 @@ class InscripcionController extends Controller
                 ['estudiante_id' => is_array($estudiantes) ? $estudiante : $estudiantes->id],
                 [
                     'nota' => 0,
-                    'codigo' => Str::random(20),
-                    'validado' => 0,
+                    'codigo' => Str::random(6),
+                    'validado' => rol('Coordinador') ? 1 : 0,
                     'materia_id' => $id,
                     'asistencia_id' => $asistencia->id,
                 ]
@@ -119,7 +121,17 @@ class InscripcionController extends Controller
 
     public function cambiar($usuarioID, $materiaID)
     {
-        $usuario = Estudiante_materia::find($usuarioID);
+        $usuario = Estudiante_materia::where('estudiante_id', '=', $usuarioID)->first();
+
+        /**
+         *  Añade un cupo disponible a la materia anterior y resta uno a la que se desea cambiar.
+         */
+        $materiaAnterior = Materia::find($usuario->materia_id);
+        $materiaAnterior->update(['cupos_disponibles' => $materiaAnterior->cupos_disponibles + 1]);
+
+        $materiaActual = Materia::find($materiaID);
+        $materiaActual->update(['cupos_disponibles' => $materiaAnterior->cupos_disponibles - 1]);
+
         $usuario->update([
             'materia_id' => $materiaID,
             'validado' => 0,

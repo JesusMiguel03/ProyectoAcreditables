@@ -116,7 +116,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('error'))
+        @elseif ($message = session('mostrarModalUsuario'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Error al registrar!',

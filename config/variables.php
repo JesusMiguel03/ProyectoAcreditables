@@ -48,7 +48,9 @@ return [
     */
 
     'regex' => [
-        'alfanumerico' => "/^[\w\s]*$/",
+        'alfanumerico' => "/^[a-zA-Z0-9]+/",
+        'alfanumespacio' => "/^[\w\s]*$/",
+        'alfaespacio' => "/[A-zÀ-ÿ\s]+/",
     ],
 
     'usuarios' => [

@@ -20,7 +20,14 @@
         }
     @endphp
 
+    <section class="card col-md-4 col-sm-12 p-1 card-estudiante">
+        <h5 class="m-1 text-center">
+            {{ datosUsuario($estudiante, 'Estudiante', 'nombreCompleto') }} {{ datosUsuario($estudiante, 'Estudiante', 'CI') }}
+        </h5>
+    </section>
+
     <div class="card col-12 table-responsive-sm p-3 mt-1 mb-3">
+
         <form action="{{ route('asistencias.update', $estudiante->id) }}" method="post">
             @csrf
             {{ method_field('PUT') }}
@@ -43,7 +50,8 @@
                             <td>
                                 <div class="icheck-primary">
                                     <input type="checkbox" data-name="sem" name="{{ $sem }}"
-                                        id="{{ $sem }}" {{ $estudiante->asistencia->$sem === 1 ? 'checked' : '' }}>
+                                        id="{{ $sem }}"
+                                        {{ $estudiante->asistencia->$sem === 1 ? 'checked' : '' }}>
 
                                     <label for="{{ $sem }}">
                                         {{ __('') }}
@@ -95,15 +103,18 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+
+    {{-- Personalizados --}}
+    <link rel="stylesheet" href="{{ asset('css/asistenciaEstudiante.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
-    
+
     {{-- Personalizados --}}
     <script src="{{ asset('js/mostrarPorcentajeAsistencia.js') }}"></script>
-    
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))

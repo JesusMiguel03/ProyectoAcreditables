@@ -38,7 +38,7 @@ class CategoriaController extends Controller
             'nom_categoria.string' => 'La categoría debe ser una oración.',
             'nom_categoria.regex' => 'El nombre solo puedo contener letras y espacios.',
             'nom_categoria.max' => 'La categoría debe contener mas de :max caracteres.',
-            'nom_categoria.unique' => 'La categoría ' . $request['nom_categoria'] .  ' debe ser única.',
+            'nom_categoria.unique' => 'La categoría (' . $request['nom_categoria'] .  ') ya ha sido registrada.',
         ]);
         validacion($validador, 'error');
 
@@ -72,7 +72,7 @@ class CategoriaController extends Controller
             'nom_categoria.string' => 'La categoría debe ser una oración.',
             'nom_categoria.regex' => 'El nombre solo puedo contener letras y espacios.',
             'nom_categoria.max' => 'La categoría debe contener mas de :max caracteres.',
-            'nom_categoria.unique' => 'La categoría ' . $request['nom_categoria'] .  ' debe ser única.',
+            'nom_categoria.unique' => 'La categoría (' . $request['nom_categoria'] .  ') ya ha sido registrada.',
         ]);
         validacion($validador, 'error');
 

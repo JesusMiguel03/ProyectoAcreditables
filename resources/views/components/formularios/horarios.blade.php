@@ -88,9 +88,9 @@
 <div class="form-group required mb-3" style="margin-top: -10px">
     <label for="hora" class="control-label">Hora</label>
 
-    <div class="input-group date" id="hora" data-target-input="nearest">
-        <input type="text" name="hora"
-            class="form-control datetimepicker-input @error('hora') is-invalid @enderror" data-target="#hora"
+    <div class="input-group date" data-target-input="nearest">
+        <input type="text" id="hora" name="hora"
+            class="form-control datetimepicker-input @error('hora') is-invalid @enderror" data-target="#hora" data-toggle="datetimepicker"
             value="{{ $hora ?? old('hora') }}" placeholder="{{ __('Ej: 10:45') }}" required>
 
         <div class="input-group-append" data-target="#hora" data-toggle="datetimepicker">

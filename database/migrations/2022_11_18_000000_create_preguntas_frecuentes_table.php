@@ -16,7 +16,7 @@ class CreatePreguntasFrecuentesTable extends Migration
         Schema::create('preguntas_frecuentes', function (Blueprint $table) {
             $table->id();
             $table->char('titulo', config('variables.preguntas.titulo'))->unique();
-            $table->char('explicacion', config('variables.preguntas.explicacion'));
+            $table->char('explicacion', config('variables.preguntas.explicacion'))->unique();
             $table->timestamps();
             $table->softDeletes();
         });

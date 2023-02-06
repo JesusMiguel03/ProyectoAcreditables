@@ -3,8 +3,7 @@
     $profesorID = materia($materia, 'profID');
     $profesorNombre = materia($materia, 'profesor');
     $profesorAvatar = materia($materia, 'profAvatar');
-    $avatar = 'vendor/img/avatares/' . $profesorAvatar . '.webp';
-    $avatarDefecto = 'vendor/img/defecto/usuario.webp';
+    $avatar = !empty($profesorAvatar) ? 'vendor/img/avatares/' . $profesorAvatar . '.webp' : 'vendor/img/defecto/usuario.webp';;
     
     if (rol('Estudiante')) {
         $altura = '7.133rem';
@@ -18,13 +17,12 @@
     }
 @endphp
 
-<div class="col-sm-12 col-md-3">
-    <div class="card">
+<section class="col-sm-12 col-md-3">
+    <article class="card">
         <main class="card-body box-profile">
             <div class="text-center {{ $margen }}" style="min-height:{{ $altura }}">
-
                 <img class="profile-user-img img-fluid img-circle"
-                    src="{{ !empty($profesorAvatar) ? asset($avatar) : asset($avatarDefecto) }}"
+                    src="{{ asset($avatar) }}"
                     alt="Avatar del profesor">
             </div>
 
@@ -43,5 +41,5 @@
                 @endif
             </footer>
         @endcan
-    </div>
-</div>
+    </article>
+</section>

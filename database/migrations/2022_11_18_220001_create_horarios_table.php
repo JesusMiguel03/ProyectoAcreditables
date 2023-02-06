@@ -15,6 +15,8 @@ class CreateHorariosTable extends Migration
     {
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
+            // $table->unsignedBigInteger('materia_id');
+            // $table->foreign('materia_id')->references('id')->on('materias')->onUpdate('cascade')->onDelete('cascade');
             $table->char('espacio', config('variables.horarios.espacio'));
             $table->tinyInteger('edificio')->nullable();
             $table->tinyInteger('dia');

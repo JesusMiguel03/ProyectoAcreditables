@@ -109,7 +109,7 @@
     <div class="mb-3 text-center">
         <img src="{{ !empty($imagen) ? asset('storage/' . $imagen) : asset('vendor/img/defecto/noticias.png') }}"
             alt="{{ !empty($imagen) ? 'Imagen de la materia' : 'Imagen de materia por defecto' }}"
-            class="rounded img-fluid">
+            class="rounded img-fluid" id="previsualizar">
     </div>
 @else
     <div class="card" style="max-width: 540px">

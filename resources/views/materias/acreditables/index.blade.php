@@ -23,7 +23,7 @@
                         <form action="{{ route('materias.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
 
-                            <x-formularios.acreditables />
+                            <x-formularios.acreditables :trayectos="$trayectos" />
                         </form>
                     </main>
                 </div>
@@ -44,31 +44,32 @@
 
             {{-- Esta inscrito --}}
         @elseif (datosUsuario(Auth::user()->estudiante, 'Estudiante', 'inscrito'))
-            <div id="slick" class="px-5">
-                <div class="slide">
+            <section id="slick" class="px-5">
+                <article class="slide mb-4">
 
                     <x-elementos.card-materia :materia="$materias" />
 
-                </div>
-            </div>
+                </article>
+            </section>
 
             {{-- No esta inscrito --}}
         @else
-            <div id="slick" class="px-5">
+            <section id="slick" class="px-5">
 
                 @foreach ($materias as $materia)
                     @if ($loop->index < config('variables.carrusel'))
-                        <div class="slide">
+                        <article class="slide mb-4">
 
                             <x-elementos.card-materia :materia="$materia" />
-                        </div>
+                        </article>
                     @endif
                 @endforeach
-            </div>
+            </section>
         @endif
     @endif
 
-    @if (!empty($materias) && $materias instanceof Illuminate\Support\Collection)
+    {{-- Old !empty($materias) && $materias instanceof Illuminate\Support\Collection --}}
+    @if (!rol('Estudiante') || !empty($mostrarTabla))
         <div class="card table-responsive-sm p-3 {{ rol('Estudiante') ? 'mt-5' : 'mt-1' }} mb-3 col-12">
 
             @if (rol('Estudiante'))
@@ -117,15 +118,23 @@
 
                 <tbody>
                     @foreach ($materias as $materia)
+
+                    @php
+                        $nombre = $materia->nom_materia;
+                        $cupos = $materia->cupos_disponibles;
+                        $estado = $materia->estado_materia;
+                        $descripcion = Str::limit($materia->desc_materia, 80);
+                        $categoria = $materia->info->categoria->nom_categoria ?? 'Sin categoría';
+                        $acreditable = $materia->trayecto->num_trayecto;
+                    @endphp
+
                         <tr>
-                            <td>{{ $materia->nom_materia }}</td>
-                            <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $materia->cupos_disponibles }}</td>
-                            <td>
-                                {{ !empty($materia->info->categoria->nom_categoria) ? $materia->info->categoria->nom_categoria : 'Sin categoría' }}
-                            </td>
-                            <td>{{ $materia->estado_materia }}</td>
-                            <td class="text-justify">{{ $materia->desc_materia }}</td>
-                            <td>{{ $materia->num_acreditable }}</td>
+                            <td> {{ $nombre }} </td>
+                            <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $cupos }}</td>
+                            <td> {{ $categoria }} </td>
+                            <td> {{ $estado }} </td>
+                            <td class="text-justify">{{ $descripcion }}</td>
+                            <td> {{ $acreditable }} </td>
                             <td>
                                 <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                     @can('materias.modificar')
@@ -140,14 +149,14 @@
                                     </a>
                                     @can('materias.modificar')
                                         <a href="{{ route('inscribir', $materia->id) }}"
-                                            class="btn btn-primary {{ $materia->cupos_disponibles === 0 ? 'disabled' : '' }}"
+                                            class="btn btn-primary {{ $cupos === 0 ? 'disabled' : '' }}"
                                             {{ Popper::arrow()->pop('Inscribir estudiantes') }}>
                                             <i class="fas fa-id-badge"></i>
                                         </a>
 
                                         <button id="{{ $materia->id }}" class="btn btn-danger borrar"
                                             {{ Popper::arrow()->pop('Borrar') }} data-type="Acreditable"
-                                            data-name="{{ $materia->nom_materia }}">
+                                            data-name="{{ $nombre }}">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     @endcan
@@ -168,9 +177,11 @@
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
+    @if (rol('Coordinador'))
+        <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
+    @endif
 @stop
 
 @section('js')

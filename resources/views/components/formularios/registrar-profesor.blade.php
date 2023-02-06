@@ -58,7 +58,7 @@
                 @foreach ($departamentos as $departamento)
                     @if (!empty($profesor))
                         <option value="{{ $departamento->id }}"
-                            {{ $departamento->nom_pnf === $profesor->departamento->nom_pnf ? 'selected' : '' }}>
+                            {{ $departamento->id === $profesor->departamento->id ? 'selected' : '' }}>
                             {{ $departamento->nom_pnf }}
                         </option>
                     @else
@@ -97,9 +97,16 @@
                         <option value=0 readonly> Seleccione... </option>
 
                         @foreach ($conocimientos as $conocimiento)
-                            <option value="{{ $conocimiento->id }}">
-                                {{ $conocimiento->nom_conocimiento }}
-                            </option>
+                            @if (!empty($profesor))
+                                <option value="{{ $conocimiento->id }}"
+                                    {{ $conocimiento->id === $profesor->conocimiento->id ? 'selected' : '' }}>
+                                    {{ $conocimiento->nom_conocimiento }}
+                                </option>
+                            @else
+                                <option value="{{ $conocimiento->id }}">
+                                    {{ $conocimiento->nom_conocimiento }}
+                                </option>
+                            @endif
                         @endforeach
 
                     </select>
@@ -125,8 +132,7 @@
             <div class="form-group required col-6">
                 <label for="activo" class="control-label">¿Se encuentra activo?</label>
                 <div class="input-group">
-                    <select name="activo" class="form-control @error('activo') is-invalid @enderror"
-                        required>
+                    <select name="activo" class="form-control @error('activo') is-invalid @enderror" required>
 
                         <option> Seleccione... </option>
 
@@ -163,7 +169,8 @@
             <div class="form-group col-6">
                 <input type="text" name="estado" id="estado"
                     class="form-control @error('estado') is-invalid @enderror"
-                    value="{{ $profesor->estado ?? old('estado') }}" placeholder="{{ __('Estado') }}" maxlength="{{ config('variables.profesores.estado') }}" data-nombre="caracteres" required>
+                    value="{{ $profesor->estado ?? old('estado') }}" placeholder="{{ __('Estado') }}"
+                    maxlength="{{ config('variables.profesores.estado') }}" data-nombre="caracteres" required>
 
                 @error('estado')
                     <span class="invalid-feedback" role="alert">
@@ -176,7 +183,8 @@
             <div class="form-group col-6">
                 <input type="text" name="ciudad" id="ciudad"
                     class="form-control @error('ciudad') is-invalid @enderror"
-                    value="{{ $profesor->ciudad ?? old('ciudad') }}" placeholder="{{ __('Ciudad') }}" maxlength="{{ config('variables.profesores.ciudad') }}" data-nombre="caracteres" required>
+                    value="{{ $profesor->ciudad ?? old('ciudad') }}" placeholder="{{ __('Ciudad') }}"
+                    maxlength="{{ config('variables.profesores.ciudad') }}" data-nombre="caracteres" required>
 
                 @error('ciudad')
                     <span class="invalid-feedback" role="alert">
@@ -191,7 +199,8 @@
             <div class="form-group col-4">
                 <input type="text" name="urb" id="urb"
                     class="form-control @error('urb') is-invalid @enderror" value="{{ $profesor->urb ?? old('urb') }}"
-                    placeholder="{{ __('Urbanización') }}" maxlength="{{ config('variables.profesores.urb') }}" data-nombre="caracteres" required>
+                    placeholder="{{ __('Urbanización') }}" maxlength="{{ config('variables.profesores.urb') }}"
+                    data-nombre="caracteres" required>
 
                 @error('urb')
                     <span class="invalid-feedback" role="alert">
@@ -204,7 +213,8 @@
             <div class="form-group col-4">
                 <input type="text" name="calle" id="calle"
                     class="form-control @error('calle') is-invalid @enderror"
-                    value="{{ $profesor->calle ?? old('calle') }}" placeholder="{{ __('Calle') }}" maxlength="{{ config('variables.profesores.calle') }}" data-nombre="caracteres" required>
+                    value="{{ $profesor->calle ?? old('calle') }}" placeholder="{{ __('Calle') }}"
+                    maxlength="{{ config('variables.profesores.calle') }}" data-nombre="caracteres" required>
 
                 @error('calle')
                     <span class="invalid-feedback" role="alert">
@@ -217,7 +227,8 @@
             <div class="form-group col-4">
                 <input type="text" name="casa" id="casa"
                     class="form-control @error('casa') is-invalid @enderror"
-                    value="{{ $profesor->casa ?? old('casa') }}" placeholder="{{ __('Casa') }}" maxlength="{{ config('variables.profesores.casa') }}" data-nombre="caracteres" required>
+                    value="{{ $profesor->casa ?? old('casa') }}" placeholder="{{ __('Casa') }}"
+                    maxlength="{{ config('variables.profesores.casa') }}" data-nombre="caracteres" required>
 
                 @error('casa')
                     <span class="invalid-feedback" role="alert">
@@ -253,14 +264,21 @@
             <div class="col-8">
                 <div class="input-group">
                     <input type="tel" name="telefono"
-                        class="form-control @error('telefono') is-invalid @enderror"
-                        value="{{ $tlf ?? old('telefono') }}" placeholder="{{ __('0193451') }}" maxlength="{{ config('variables.profesores.telefono') - 4 }}" data-nombre="dígitos" required>
+                        class="form-control @error('telefono') is-invalid @enderror @error('codigoTelefono') is-invalid @enderror"
+                        value="{{ $tlf ?? old('telefono') }}" placeholder="{{ __('0193451') }}"
+                        maxlength="{{ config('variables.profesores.telefono') - 4 }}" data-nombre="dígitos" required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-phone"></span>
                         </div>
                     </div>
+
+                    @error('codigoTelefono')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
 
                     @error('telefono')
                         <span class="invalid-feedback" role="alert">
@@ -281,10 +299,10 @@
                 <label for="fecha_de_nacimiento" class="control-label">
                     Fecha de nacimiento
                 </label>
-                <div class="input-group date" id="fecha_nacimiento" data-target-input="nearest">
-                    <input type="text" name="fecha_de_nacimiento"
+                <div class="input-group date" data-target-input="nearest">
+                    <input type="text" id="fecha_nacimiento" name="fecha_de_nacimiento"
                         class="form-control datetimepicker-input @error('fecha_de_nacimiento') is-invalid @enderror"
-                        data-target="#fecha_nacimiento"
+                        data-target="#fecha_nacimiento" data-toggle="datetimepicker"
                         value="{{ $profesor->fecha_de_nacimiento ?? old('fecha_de_nacimiento') }}"
                         placeholder="{{ __('Ej: 1983-09-06') }}" required>
 
@@ -306,10 +324,10 @@
                     Fecha de ingreso a la institución
                 </label>
 
-                <div class="input-group date" id="fecha_ingreso" data-target-input="nearest">
-                    <input type="text" name="fecha_ingreso_institucion"
+                <div class="input-group date" data-target-input="nearest">
+                    <input type="text" id="fecha_ingreso" name="fecha_ingreso_institucion"
                         class="form-control datetimepicker-input @error('fecha_ingreso_institucion') is-invalid @enderror"
-                        data-target="#fecha_ingreso"
+                        data-target="#fecha_ingreso" data-toggle="datetimepicker"
                         value="{{ $profesor->fecha_ingreso_institucion ?? old('fecha_ingreso_institucion') }}"
                         placeholder="{{ __('Ej: 2013-03-19') }}" required>
 

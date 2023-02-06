@@ -4,6 +4,7 @@
     $categorias = atributo($attributes, 'categorias');
     $profesores = atributo($attributes, 'profesores');
     $horarios = atributo($attributes, 'horarios');
+    $trayectos = atributo($attributes, 'trayectos');
     
     if (!empty($materia)) {
         // Datos de la materia
@@ -11,7 +12,7 @@
         $cupos = $materia['cupos'];
         $descripcion = $materia['desc_materia'];
         $estado = $materia['estado_materia'];
-        $nro = $materia['num_acreditable'];
+        $nro = $materia['trayecto_id'];
         $imagen = $materia['imagen_materia'];
     
         // Relacion
@@ -26,7 +27,8 @@
         <label for="nom_materia" class="control-label">Nombre</label>
         <div class="input-group">
             <input type="text" name="nom_materia" class="form-control @error('nom_materia') is-invalid @enderror"
-                value="{{ old('nom_materia') }}" placeholder="{{ __('Nombre de la materia') }}" maxlength="{{ config('variables.materias.nombre') }}" data-nombre="caracteres" autofocus required>
+                value="{{ old('nom_materia') }}" placeholder="{{ __('Nombre de la materia') }}"
+                maxlength="{{ config('variables.materias.nombre') }}" data-nombre="caracteres" autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -49,10 +51,10 @@
             <div class="form-group required col-6">
                 <label for="cupos" class="control-label">Cupos disponibles</label>
                 <div class="input-group">
-                    <input type="number" name="cupos" id="cupos" class="form-control @error('cupos') is-invalid @enderror"
-                        value="{{ old('cupos') }}"
-                        placeholder="{{ __('Cupos iniciales') }}" maxlength="{{ config('variables.materias.cupos') }}" data-nombre="cupos"
-                        required>
+                    <input type="number" name="cupos" id="cupos"
+                        class="form-control @error('cupos') is-invalid @enderror" value="{{ old('cupos') }}"
+                        placeholder="{{ __('Cupos iniciales') }}" maxlength="{{ config('variables.materias.cupos') }}"
+                        data-nombre="cupos" required>
 
                     @error('Cupos')
                         <span class="invalid-feedback" role="alert">
@@ -64,14 +66,16 @@
 
             {{-- Numero --}}
             <div class="form-group required col-6">
-                <label for="num_acreditable" class="control-label">Acreditable Nro</label>
+                <label for="trayecto" class="control-label">Acreditable Nro</label>
                 <div class="input-group">
-                    <select name="num_acreditable" class="form-control @error('num_acreditable') is-invalid @enderror">
+                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror">
                         <option value="0" readonly>Seleccione...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
+
+                        @foreach ($trayectos as $trayecto)
+                            <option value={{ $trayecto->id }}>
+                                {{ $trayecto->num_trayecto }}
+                            </option>
+                        @endforeach
                     </select>
 
                     <div class="input-group-append">
@@ -80,7 +84,7 @@
                         </div>
                     </div>
 
-                    @error('num_acreditable')
+                    @error('trayecto')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -96,7 +100,8 @@
         <label for="desc_materia" class="control-label">Descripción</label>
         <div class="input-group">
             <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
-                value="{{ old('desc_materia') }}" placeholder="{{ __('Descripción') }}" spellcheck="false" maxlength="{{ config('variables.materias.descripcion') }}" data-nombre="caracteres"  required></textarea>
+                value="{{ old('desc_materia') }}" placeholder="{{ __('Descripción') }}" spellcheck="false"
+                maxlength="{{ config('variables.materias.descripcion') }}" data-nombre="caracteres" required></textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -122,7 +127,9 @@
                 <div class="input-group">
                     <input type="text" name="nom_materia" id="nom_materia"
                         class="form-control @error('nom_materia') is-invalid @enderror" value="{{ $nombre }}"
-                        placeholder="{{ __('Nombre de la materia') }}" maxlength="{{ config('variables.materias.nombre') }}" data-nombre="caracteres" autofocus required>
+                        placeholder="{{ __('Nombre de la materia') }}"
+                        maxlength="{{ config('variables.materias.nombre') }}" data-nombre="caracteres" autofocus
+                        required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -144,7 +151,8 @@
                 <div class="input-group">
                     <input type="number" name="cupos" id="cupos"
                         class="form-control @error('cupos') is-invalid @enderror" id="cupos"
-                        value="{{ $cupos }}" placeholder="{{ __('Cupos disponibles') }}" maxlength="{{ config('variables.materias.cupos') }}" data-nombre="cupos" required>
+                        value="{{ $cupos }}" placeholder="{{ __('Cupos disponibles') }}"
+                        maxlength="{{ config('variables.materias.cupos') }}" data-nombre="cupos" required>
 
                     @error('cupos')
                         <span class="invalid-feedback" role="alert">
@@ -162,7 +170,8 @@
         <label for="description" class="control-label">Descripción</label>
         <div class="input-group">
             <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
-                placeholder="{{ __('Descripción') }}" spellcheck="false" maxlength="{{ config('variables.materias.descripcion') }}" data-nombre="caracteres" required>{{ $descripcion }}</textarea>
+                placeholder="{{ __('Descripción') }}" spellcheck="false"
+                maxlength="{{ config('variables.materias.descripcion') }}" data-nombre="caracteres" required>{{ $descripcion }}</textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -223,15 +232,16 @@
 
             {{-- Numero --}}
             <div class="col-6">
-                <label for="num_acreditable" class="control-label">Acreditable Nro</label>
+                <label for="trayecto" class="control-label">Acreditable Nro</label>
                 <div class="input-group">
-                    <select name="num_acreditable"
-                        class="form-control @error('num_acreditable') is-invalid @enderror">
+                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror">
                         <option value="0" readonly>Seleccione...</option>
-                        <option value="1" {{ $nro === 1 ? 'selected' : '' }}>1</option>
-                        <option value="2" {{ $nro === 2 ? 'selected' : '' }}>2</option>
-                        <option value="3" {{ $nro === 3 ? 'selected' : '' }}>3</option>
-                        <option value="4" {{ $nro === 4 ? 'selected' : '' }}>4</option>
+
+                        @foreach ($trayectos as $trayecto)
+                            <option value={{ $trayecto->id }} {{ $nro === $trayecto->id ? 'selected' : '' }}>
+                                {{ $trayecto->num_trayecto }}
+                            </option>
+                        @endforeach
                     </select>
 
                     <div class="input-group-append">
@@ -240,7 +250,7 @@
                         </div>
                     </div>
 
-                    @error('num_acreditable')
+                    @error('trayecto')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -297,7 +307,8 @@
                 <label for="metodologia">Metodología</label>
 
                 <div class="input-group">
-                    <select id="metodologia" class="form-control @error('metodologia') is-invalid @enderror" name="metodologia">
+                    <select id="metodologia" class="form-control @error('metodologia') is-invalid @enderror"
+                        name="metodologia">
 
                         <option value="0" readonly>Seleccione...</option>
 

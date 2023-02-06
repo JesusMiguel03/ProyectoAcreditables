@@ -34,14 +34,16 @@ class PNFController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_pnf' => ['required', 'string', 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $request['nom_pnf']],
-            'cod_pnf' => ['max:' . config('variables.pnfs.codigo')],
+            'nom_pnf' => ['required', 'string', 'regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $request['nom_pnf']],
+            'cod_pnf' => ['regex: ' . config('variables.regex.alfanumerico'), 'max:' . config('variables.pnfs.codigo'), 'unique:pnfs,cod_pnf,' . $request['cod_pnf']],
         ], [
             'nom_pnf.required' => 'El nombre es necesario.',
             'nom_pnf.string' => 'El nombre debe ser una oración.',
             'nom_pnf.unique' => 'El PNF ' . $request['nom_pnf'] . ' ya ha sido registrado.',
             'nom_pnf.max' => 'El nombre no puede contener mas de :max caracteres.',
-            'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.'
+            'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.',
+            'cod_pnf.regex' => 'El código solo puede contener números y letras.',
+            'cod_pnf.unique' => 'El código ' . $request['cod_pnf'] . ' ya ha sido registrado.',
         ]);
         validacion($validador, 'error');
 
@@ -73,19 +75,18 @@ class PNFController extends Controller
         // Valida si tiene el permiso
         permiso('academico');
 
-        /**
-         * TODO [Cod_pnf] falta validar que sea unico
-         */
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_pnf' => ['required', 'string', 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $id],
-            'cod_pnf' => ['max:' . config('variables.pnfs.codigo')],
+            'nom_pnf' => ['required', 'string', 'regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $id],
+            'cod_pnf' => ['regex: ' . config('variables.regex.alfanumerico'), 'max:' . config('variables.pnfs.codigo'), 'unique:pnfs,cod_pnf,' . $id],
         ], [
             'nom_pnf.required' => 'El nombre es necesario.',
             'nom_pnf.string' => 'El nombre debe ser una oración.',
             'nom_pnf.unique' => 'El PNF ' . $request['nom_pnf'] . ' ya ha sido registrado.',
             'nom_pnf.max' => 'El nombre no puede contener mas de :max caracteres.',
-            'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.'
+            'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.',
+            'cod_pnf.regex' => 'El código solo puede contener números y letras.',
+            'cod_pnf.unique' => 'El código ' . $request['cod_pnf'] . ' ya ha sido registrado.',
         ]);
         validacion($validador, 'error');
 

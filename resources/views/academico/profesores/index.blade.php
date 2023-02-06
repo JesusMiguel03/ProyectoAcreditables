@@ -132,11 +132,13 @@
     <script>
         $(function() {
             $('#fecha_nacimiento').datetimepicker({
+                locale: 'es',
                 format: 'YYYY-MM-DD'
             });
         });
         $(function() {
             $('#fecha_ingreso').datetimepicker({
+                locale: 'es',
                 format: 'YYYY-MM-DD'
             });
         });

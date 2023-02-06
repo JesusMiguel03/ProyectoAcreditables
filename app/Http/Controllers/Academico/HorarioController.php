@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Academico;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Horario;
+use App\Models\Materia\Materia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class HorarioController extends Controller
 {
@@ -23,7 +25,9 @@ class HorarioController extends Controller
         permiso('horarios');
 
         $horarios = Horario::all();
-        return view('academico.horarios.index', compact('horarios'));
+        $materias = Materia::where('estado_materia', '!=', 'Inactivo')->get();
+
+        return view('academico.horarios.index', compact('horarios', 'materias'));
     }
 
     public function store(Request $request)
@@ -31,13 +35,20 @@ class HorarioController extends Controller
         // Valida si tiene el permiso
         permiso('horarios');
 
+        $hora = "{$request['espacio']} {$request['edificio']} " . diaSemana($request['dia']) . ' - ' . \Carbon\Carbon::parse($request['hora'])->format('g:i A');
+
         // Valida los campos
         $validar = Validator::make($request->all(), [
-            'espacio' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio')],
+            'espacio' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio'),
+                Rule::unique('horarios')->where(function ($query) use ($request) {
+                    return $query->where('espacio', $request['espacio'])->where('edificio', $request['edificio'])->where('dia', $request['dia'])->where('hora', $request['hora']);
+                })
+            ],
             'edificio' => ['nullable', 'numeric', 'max:' . config('variables.horarios.edificio')],
             'dia' => ['required', 'numeric', 'digits_between:1,5'],
             'hora' => ['required', 'date_format:g:i a'],
         ], [
+            'espacio.unique' => "La hora ($hora) ya ha sido registrada",
             'hora.date_format' => 'La hora no coincide con el formato 00:00 AM',
             'nom_conocimiento.required' => 'El nombre es necesario.',
             'nom_conocimiento.string' => 'El nombre debe ser una oración.',

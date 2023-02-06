@@ -92,19 +92,15 @@
     <script>
         $(function() {
             $('#inicio').datetimepicker({
+                locale: 'es',
                 format: 'YYYY-MM-DD'
             });
         });
         $(function() {
             $('#fin').datetimepicker({
-                format: 'YYYY-MM-DD'
+                locale: 'es',
+                format: 'YYYY-MM-DD',
             });
-        });
-        $("#inicio").on("change.datetimepicker", function(e) {
-            $('#fin').datetimepicker('minDate', e.date);
-        });
-        $("#fin").on("change.datetimepicker", function(e) {
-            $('#inicio').datetimepicker('maxDate', e.date);
         });
     </script>
 

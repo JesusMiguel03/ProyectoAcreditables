@@ -1,5 +1,5 @@
-<div class="col-md-4 col-sm-12 mx-auto">
-    <section class="card">
+<section class="col-md-4 col-sm-12 mx-auto">
+    <article class="card">
         <header class="card-header bg-secondary">
             <h5 class="mx-auto text-center">
                 Su perfil académico se encuentra incompleto
@@ -20,5 +20,5 @@
         <footer class="card-footer">
             <p class="text-center">Nos disculpamos por los inconvenientes causados...</p>
         </footer>
-    </section>
-</div>
+    </article>
+</section>

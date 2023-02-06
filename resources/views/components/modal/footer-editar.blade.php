@@ -1,3 +1,7 @@
+@php
+    $validacion = atributo($attributes, 'sinEstudiantes');
+@endphp
+
 <div class="row">
     <div class="col-6">
         <a href="{{ $ruta }}" class="btn btn-block btn-secondary">
@@ -7,9 +11,16 @@
     </div>
 
     <div class="col-6">
-        <button type="submit" class="btn btn-block btn-success">
-            <i class="fas fa-save mr-2"></i>
-            {{ __('Guardar') }}
-        </button>
+        @if ($validacion)
+            <p class="btn btn-block btn-secondary disabled">
+                {{ __('Guardar') }}
+            </p>
+        @else
+            <button type="submit"
+                class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        @endif
     </div>
 </div>

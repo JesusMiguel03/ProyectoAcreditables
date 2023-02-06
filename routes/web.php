@@ -175,10 +175,11 @@ Route::controller(PreguntaFrecuenteController::class)->group(function () {
 
 // Soporte
 Route::controller(SoporteController::class)->group(function () {
-    Route::get('/soporte/recuperar-elementos', 'index')->name('soporte.index');
+    Route::get('/soporte/recuperar-elementos', 'restaurarElementos')->name('soporte.elementosBorrados');
     Route::get('/soporte/{id}/{modelo}', 'recuperar')->name('soporte.recuperar');
-    Route::get('/soporte/restaurar-contrasena', 'restaurarContrasena')->name('soporte.restaurarContrasena');
-    Route::put('/soporte/recuperarContrasena', 'recuperarContrasena')->name('soporte.recuperarContrasena');
+    Route::get('/soporte', 'index')->name('soporte.index');
+    Route::put('/soporte/recuperar-contrasena', 'recuperarContrasena')->name('soporte.recuperarContrasena');
+    Route::put('/soporte/cambiar-cedula', 'cambiarCedula')->name('soporte.cambiarCedula');
 });
 
 // Estadísticas

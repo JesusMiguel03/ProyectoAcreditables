@@ -42,11 +42,13 @@
     <script>
         $(function() {
             $('#inicio').datetimepicker({
+                locale: 'es',
                 format: 'YYYY-MM-DD'
             });
         });
         $(function() {
             $('#fin').datetimepicker({
+                locale: 'es',
                 format: 'YYYY-MM-DD'
             });
         });

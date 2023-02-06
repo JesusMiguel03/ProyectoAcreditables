@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Informacion\Pregunta_frecuente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use \Illuminate\Support\Str;
+
 class PreguntaFrecuenteController extends Controller
 {
     public function __construct()
@@ -16,7 +18,7 @@ class PreguntaFrecuenteController extends Controller
     }
 
     public function index()
-    {        
+    {
         // Valida si tiene el permiso
         permiso('preguntas.principal');
 
@@ -31,40 +33,46 @@ class PreguntaFrecuenteController extends Controller
         // Valida si tiene el permiso
         permiso('preguntas.modificar');
 
+        $descripcionCorta = Str::length($request['explicacion']) > 40
+            ? Str::limit($request['explicacion'], 40)
+            : $request['explicacion'];
+
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'titulo' => ['required', 'string', 'max:' . config('variables.preguntas.titulo')],
-            'explicacion' => ['required', 'string', 'max:' . config('variables.preguntas.explicacion')],
+            'titulo' => ['required', 'string', 'max:' . config('variables.preguntas.titulo'), 'unique:preguntas_frecuentes,titulo'],
+            'explicacion' => ['required', 'string', 'max:' . config('variables.preguntas.explicacion'), 'unique:preguntas_frecuentes,explicacion'],
         ], [
             'titulo.required' => 'La pregunta es necesaria.',
-            'explicacion.required' => 'La respuesta es necesaria.',
             'titulo.string' => 'La pregunta debe ser una oración.',
-            'explicacion.string' => 'La respuesta debe ser una oración.',
             'titulo.max' => 'La pregunta no debe ser mayor a :max caracteres.',
+            'titulo.unique' => "La pregunta ($request[titulo]) ya ha sido registrada.",
+            'explicacion.required' => 'La respuesta es necesaria.',
+            'explicacion.string' => 'La respuesta debe ser una oración.',
             'explicacion.max' => 'La respuesta no debe ser mayor a :max caracteres.',
+            'explicacion.unique' => "La respuesta ($descripcionCorta) ya ha sido registrada.",
         ]);
         validacion($validador, 'error');
-        
+
         // Guarda la pregunta
         Pregunta_frecuente::create([
             'titulo' => $request['titulo'],
             'explicacion' => $request['explicacion']
         ]);
-        
+
         return redirect('preguntas-frecuentes')->with('creado', 'creado');
     }
-    
+
     public function edit($id)
     {
         // Valida si tiene el permiso
         permiso('preguntas.modificar');
-        
+
         // Trae la pregunta correspondiente
         $pregunta = Pregunta_frecuente::find($id);
 
         // Valida que exista
         existe($pregunta);
-        
+
         return view('informacion.preguntas.edit', compact('pregunta'));
     }
 
@@ -72,18 +80,24 @@ class PreguntaFrecuenteController extends Controller
     {
         // Valida si tiene el permiso
         permiso('preguntas.modificar');
-        
+
+        $descripcionCorta = Str::length($request['explicacion']) > 40
+            ? Str::limit($request['explicacion'], 40)
+            : $request['explicacion'];
+
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'titulo' => ['required', 'string', 'max:' . config('variables.preguntas.titulo')],
-            'explicacion' => ['required', 'string', 'max:' . config('variables.preguntas.explicacion')],
+            'titulo' => ['required', 'string', 'max:' . config('variables.preguntas.titulo'), 'unique:preguntas_frecuentes,titulo,' . $id],
+            'explicacion' => ['required', 'string', 'max:' . config('variables.preguntas.explicacion'), 'unique:preguntas_frecuentes,explicacion,' . $id],
         ], [
             'titulo.required' => 'La pregunta es necesaria.',
-            'explicacion.required' => 'La respuesta es necesaria.',
             'titulo.string' => 'La pregunta debe ser una oración.',
-            'explicacion.string' => 'La respuesta debe ser una oración.',
             'titulo.max' => 'La pregunta no debe ser mayor a :max caracteres.',
+            'titulo.unique' => "La pregunta ($request[titulo]) ya ha sido registrada.",
+            'explicacion.required' => 'La respuesta es necesaria.',
+            'explicacion.string' => 'La respuesta debe ser una oración.',
             'explicacion.max' => 'La respuesta no debe ser mayor a :max caracteres.',
+            'explicacion.unique' => "La respuesta ($descripcionCorta) ya ha sido registrada.",
         ]);
         validacion($validador, 'error');
 
@@ -102,7 +116,7 @@ class PreguntaFrecuenteController extends Controller
         permiso('preguntas.modificar');
 
         Pregunta_frecuente::find($id)->delete();
-        
+
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

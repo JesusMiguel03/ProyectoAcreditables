@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+
 class NoticiaController extends Controller
 {
     public function __construct()
@@ -32,16 +34,24 @@ class NoticiaController extends Controller
         // Valida si tiene el permiso
         permiso('noticias');
 
+        $noticia = 'Encabezado: ' . $request['titulo'] . ' | Descripción: ' . $request['desc_noticia'];
+
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'titulo' => ['required', 'string', 'max:' . config('variables.noticias.titulo')],
+            'titulo' => [
+                'required', 'string', 'max:' . config('variables.noticias.titulo'),
+                    Rule::unique('noticias')->where(function ($query) use ($request) {
+                        return $query->where('titulo', $request['titulo'])->where('desc_noticia', $request['desc_noticia']);
+                    })
+                ],
             'desc_noticia' => ['required', 'string', 'max:' . config('variables.noticias.descripcion')],
             'activo' => ['required', 'max:2', 'not_in:0'],
             'imagen_noticia' => ['image', 'mimes:jpg', 'max:1024'],
         ], [
-            'activo.not_in' => 'El campo activo noticia es inválido.',
-            'activo.required' => 'El campo activo noticia es necesiario.',
-            'activo.max' => 'El campo activo noticia debe ser si o no.',
+            'titulo.unique' => "La noticia ($noticia) ya se ha registrado.",
+            'activo.not_in' => 'El campo mostrar es inválido.',
+            'activo.required' => 'El campo mostrar es necesiario.',
+            'activo.max' => 'El campo mostrar debe ser si o no.',
             'desc_noticia.max' => 'La descripcion no debe ser mayor a :max caracteres.',
             'imagen_noticia.max' => 'La imagen no debe pesar más de 1 MB.',
             'imagen_noticia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
@@ -84,17 +94,24 @@ class NoticiaController extends Controller
         // Valida si tiene el permiso
         permiso('noticias');
 
+        $noticia = 'Encabezado: ' . $request['titulo'] . ' | Descripción: ' . $request['desc_noticia'];
+
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'titulo' => ['required', 'string', 'max:' . config('variables.noticias.titulo')],
+            'titulo' => ['required', 'string', 'max:' . config('variables.noticias.titulo'),
+                Rule::unique('noticias')->where(function ($query) use ($request) {
+                    return $query->where('titulo', $request['titulo'])->where('desc_noticia', $request['desc_noticia']);
+                })->ignore($id)
+            ],
             'desc_noticia' => ['required', 'string', 'max:' . config('variables.noticias.descripcion')],
             'activo' => ['required', 'max:2', 'not_in:0'],
             'imagen_noticia' => ['image', 'mimes:jpg', 'max:1024'],
         ], [
+            'titulo.unique' => "La noticia ($noticia) ya se ha registrado.",
+            'activo.not_in' => 'El campo mostrar es inválido.',
+            'activo.required' => 'El campo mostrar es necesiario.',
+            'activo.max' => 'El campo mostrar debe ser si o no.',
             'desc_noticia.max' => 'La descripcion no debe ser mayor a :max caracteres.',
-            'activo.not_in' => 'El campo activo noticia es inválido.',
-            'activo.required' => 'El campo activo noticia es necesiario.',
-            'activo.max' => 'El campo activo noticia debe ser si o no.',
             'imagen_noticia.max' => 'La imagen no debe pesar más de 1 MB.',
             'imagen_noticia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
         ]);
@@ -127,7 +144,7 @@ class NoticiaController extends Controller
         permiso('noticias');
 
         Noticia::find($id)->delete();
-        
+
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

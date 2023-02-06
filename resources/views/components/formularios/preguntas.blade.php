@@ -1,6 +1,10 @@
 @php
-    $pregunta = atributo($attributes, 'titulo');
-    $descripcion = atributo($attributes, 'descripcion');
+    $pregunta = atributo($attributes, 'pregunta');
+
+    if (!empty($pregunta)) {
+        $titulo = $pregunta['titulo'];
+        $descripcion = $pregunta['explicacion'];
+    }
 @endphp
 
 {{-- Pregunta --}}
@@ -8,7 +12,7 @@
     <label for="titulo" class="control-label">Pregunta</label>
     <div class="input-group">
         <input type="text" name="titulo" id="titulo"
-            class="form-control @error('titulo') is-invalid @enderror contador" value="{{ $pregunta ?? old('titulo') }}"
+            class="form-control @error('titulo') is-invalid @enderror contador" value="{{ $titulo ?? old('titulo') }}"
             placeholder="{{ __('Ej: Cómo consulto mi nota') }}" maxlength="{{ config('variables.preguntas.titulo') }}" data-nombre="caracteres" autofocus required>
 
         <div class="input-group-append">

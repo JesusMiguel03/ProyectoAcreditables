@@ -37,7 +37,7 @@ class TrayectoController extends Controller
             'num_trayecto' => ['required', 'integer', 'unique:trayectos,num_trayecto,' . $request['num_trayecto']],
         ], [
             'num_trayecto.required' => 'El número es necesario.',
-            'num_trayecto.unique' => 'El trayecto ' . $request['num_trayecto'] . ' ya ha sido registrado.',
+            'num_trayecto.unique' => 'El trayecto (' . $request['num_trayecto'] . ') ya ha sido registrado.',
             'num_trayecto.integer' => 'El número debe ser un número.',
         ]);
         validacion($validador, 'error');
@@ -72,7 +72,7 @@ class TrayectoController extends Controller
             'num_trayecto' => ['required', 'integer', 'unique:trayectos,num_trayecto,' . $id],
         ], [
             'num_trayecto.required' => 'El número es necesario.',
-            'num_trayecto.unique' => 'El trayecto ' . $request['num_trayecto'] . ' ya ha sido registrado.',
+            'num_trayecto.unique' => 'El trayecto (' . $request['num_trayecto'] . ') ya ha sido registrado.',
             'num_trayecto.integer' => 'El número debe ser un número.',
         ]);
         validacion($validador, 'error');

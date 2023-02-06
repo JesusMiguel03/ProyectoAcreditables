@@ -23,16 +23,20 @@ class RegistrarUsuarioController extends Controller
         // Valida si tiene el permiso
         permiso('registrar.usuario');
 
+        $regex = "/^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/";
+
         // Valida los campos
         $validar = Validator::make($request->all(), [
-            'nombre' => ['required', 'string', 'max:' . config('variables.usuarios.nombre')],
-            'apellido' => ['required', 'string', 'max:' . config('variables.usuarios.apellido')],
+            'nombre' => ['required', 'string', "regex: $regex", 'max:' . config('variables.usuarios.nombre')],
+            'apellido' => ['required', 'string', "regex: $regex", 'max:' . config('variables.usuarios.apellido')],
             'nacionalidad' => ['required', 'string'],
             'cedula' => ['required', 'numeric', 'digits_between:' . config('variables.usuarios.cedula')[0] . ',' . config('variables.usuarios.cedula')[1], 'unique:users'],
             'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), 'unique:users'],
             'password' => ['required', new Password, 'confirmed'],
         ], [
             'cedula.digits_between' => 'La cedula debe estar entre los ' . config('variables.usuarios.cedula')[0] . ' y ' . config('variables.usuarios.cedula')[1] . ' dígitos.',
+            'nombre.regex' => 'El nombre solo debe contener letras.',
+            'apellido.regex' => 'El apellido solo debe contener letras.',
         ]);
         validacion($validar, 'mostrarModalUsuario');
 
@@ -46,6 +50,6 @@ class RegistrarUsuarioController extends Controller
             'password' => Hash::make($request->get('password')),
         ])->assignRole($rol);
 
-        return redirect()->back()->with('usuarioRegistrado'. $rol, 'registrar');
+        return redirect()->back()->with('usuarioRegistrado' . $rol, 'registrar');
     }
 }

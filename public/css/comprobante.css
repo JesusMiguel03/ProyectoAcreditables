@@ -1,0 +1,118 @@
+* {
+font-family: 'Times New Roman';
+}
+
+body {
+  background: url('../vendor/img/comprobante.png') no-repeat fixed 50% 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  background-blend-mode: lighten;
+}
+
+.encabezado {
+  position: relative;
+  margin: 0.5rem 0;
+  padding-left: 5rem;
+  text-align: center;
+}
+
+.sub__encabezado {
+  margin-top: -2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.logo {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: 0;
+  left: 10;
+}
+
+.membrete {
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 0.5rem;
+}
+
+.titulo, .nombre__seccion {
+  position: relative;
+  margin-top: 3rem;
+}
+
+.emision {
+  margin-bottom: -0.35rem;
+}
+
+.informacion {
+  padding: 0 3rem;
+}
+
+.fila {
+  margin-top: 1rem;
+}
+
+.nombre__seccion {
+  padding-left: 2rem;
+  margin-top: 2rem;
+}
+
+.nombre__seccion::after {
+  content: '';
+  position: absolute;
+  top: 20;
+  left: 0;
+  width: 240px;
+  border-bottom: 1px solid #888;
+}
+
+.celda__titulo {
+  font-weight: bold;
+}
+
+.celda-vacia-izq {
+  width: 25px;
+}
+
+.celda-vacia-der {
+  width: 130px;
+}
+
+.nota {
+  margin-top: 1rem;
+  padding: 0 3rem;
+}
+
+.nota__titulo {
+  font-weight: bold;
+}
+
+.nota__mensaje {
+  padding: 0 3rem;
+  text-align: justify;
+  font-size: 0.9rem;
+}
+
+.nota_2 {
+  margin-top: 1.5rem;
+}
+
+.firma__area {
+  position: relative;
+  margin-top: 3.5rem;
+  padding-top: 3rem 8rem 0;
+  text-align: center;
+}
+
+.firma::before {
+  content: '';
+  position: absolute;
+  top: -5;
+  left: 75;
+  width: 400px;
+  border-top: 1px solid #343a40!important;
+}
+
+.negrita {
+  font-weight: bold;
+}

@@ -34,7 +34,7 @@ class AreaConocimientoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfanumerico'), 'max:' . config('variables.conocimiento.nombre')],
+            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfanumespacio'), 'max:' . config('variables.conocimiento.nombre')],
             'desc_conocimiento' => ['required', 'string', 'max:' . config('variables.conocimiento.descripcion')]
         ], [
             'nom_conocimiento.required' => 'El nombre es necesario.',
@@ -77,7 +77,7 @@ class AreaConocimientoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfanumerico'), 'max:' . config('variables.conocimiento.nombre')],
+            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfaespacio'), 'max:' . config('variables.conocimiento.nombre')],
             'desc_conocimiento' => ['required', 'string', 'max:' . config('variables.conocimiento.descripcion')]
         ], [
             'nom_conocimiento.required' => 'El nombre es necesario.',

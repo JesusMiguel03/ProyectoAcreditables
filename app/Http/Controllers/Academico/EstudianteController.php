@@ -38,18 +38,18 @@ class EstudianteController extends Controller
     {
         // Busca al estudiante y carga sus datos
         $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
-
+        
         // Si el estudiante no tiene comprobante, redirecciona
         if (empty($estudiante)) {
             return redirect()->back();
         }
-
-        if (empty(auth()->user()->estudiante) || auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
+        
+        if (rol('Estudiante') && auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
+        // if (empty(auth()->user()->estudiante) || auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
             return redirect()->back();
         }
 
         $materia = Materia::find($estudiante->materia_id);
-
         $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia]);
         
         // Si es profesor no puede ver el comprobante

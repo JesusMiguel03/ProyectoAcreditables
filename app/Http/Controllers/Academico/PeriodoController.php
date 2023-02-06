@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Academico\Periodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PeriodoController extends Controller
 {
@@ -30,12 +31,19 @@ class PeriodoController extends Controller
         // Valida si tiene el permiso
         permiso('periodo');
 
+        $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
+        $periodo = $conversor[$request['fase']] . '-' . \Carbon\Carbon::parse($request['inicio'])->format('Y');
+
         $validador = Validator::make($request->all(), [
-            'fase' => ['required', 'numeric', 'max:3'],
+            'fase' => ['required', 'numeric', 'max:3',
+                Rule::unique('periodos')->where(function ($query) use ($request) {
+                    return $query->where('fase', $request['fase'])->where('inicio', $request['inicio'])->where('fin', $request['fin']);
+                })],
             'inicio' => ['required', 'date'],
             'fin' => ['required', 'date'],
         ], [
-            'fase.max' => 'El número no debe ser mayor a :max.'
+            'fase.max' => 'El número debe estar entre 1 y 3.',
+            'fase.unique' => "El periodo ($periodo) ya ha sido registrado."
         ]);
         validacion($validador, 'error');
 
@@ -66,12 +74,20 @@ class PeriodoController extends Controller
         // Valida si tiene el permiso
         permiso('periodo');
 
+        $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
+        $periodo = $conversor[$request['fase']] . '-' . \Carbon\Carbon::parse($request['inicio'])->format('Y');
+
         $validador = Validator::make($request->all(), [
-            'fase' => ['required', 'numeric', 'max:3'],
+            'fase' => ['required', 'numeric', 'max:3',
+                Rule::unique('periodos')->where(function ($query) use ($request) {
+                    return $query->where('fase', $request['fase'])->where('inicio', $request['inicio'])->where('fin', $request['fin']);
+                })->ignore($id)
+            ],
             'inicio' => ['required', 'date'],
             'fin' => ['required', 'date'],
         ], [
-            'fase.max' => 'El número no debe ser mayor a :max.'
+            'fase.max' => 'El número debe estar entre 1 y 3.',
+            'fase.unique' => "El periodo ($periodo) ya ha sido registrado."
         ]);
         validacion($validador, 'error');
 

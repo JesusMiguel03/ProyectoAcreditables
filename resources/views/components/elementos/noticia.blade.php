@@ -2,10 +2,10 @@
     $noticia = atributo($attributes, 'noticia');
     
     if (!empty($noticia)) {
-        $imagen = $noticia->imagen_noticia;
+        $imagen = !empty($noticia->imagen_noticia) ? 'storage/' . $noticia->imagen_noticia : 'vendor/img/defecto/noticias.png';
         $titulo = $noticia->titulo;
         $descripcion = $noticia->desc_noticia;
-        $fecha = $noticia->created_at;
+        $fecha = \Carbon\Carbon::parse($noticia->created_at)->format('d/m/Y');
     }
 @endphp
 
@@ -26,25 +26,22 @@
         </div>
     </div>
 @else
-    <div class="slide">
-        <div class="card card-noticia mt-3 shadow">
+    <section class="slide mb-4">
+        <article class="card card-noticia mt-3 shadow">
 
-            <img loading="lazy" src="{{ !empty($imagen) ? asset('storage/' . $imagen) : asset('vendor/img/defecto/noticias.png') }}"
-                class="card-img-top card-img-ajuste rounded border border-outline-secondary" alt="Imagen de noticia">
+            <img src="{{ asset($imagen) }}"
+                class="card-img-top mx-auto rounded border border-outline-secondary" alt="Imagen de noticia" style="max-height: 144px">
 
-            <h5 class="titulo-noticia py-2">
-                {{ $titulo }}
-            </h5>
+            <h6 class="titulo-noticia py-2"> {{ $titulo }} </h6>
 
-            <div class="card-body border-bottom border-info">
-
-                <h6 class="my-3 pl-3 py-1 text-muted fecha-noticia">
-                    {{ \Carbon\Carbon::parse($fecha)->format('d/m/Y') }}
-                </h6>
+            <main class="card-body">
+                <p class="mb-2 mt-4 pl-3 text-muted fecha-noticia">
+                    {{ $fecha }}
+                </p>
 
                 <p class="card-text text-justify">{{ $descripcion }}.</p>
-            </div>
+            </main>
 
-        </div>
-    </div>
+        </article>
+    </section>
 @endif

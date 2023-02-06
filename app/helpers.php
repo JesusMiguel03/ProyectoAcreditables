@@ -114,7 +114,7 @@ if (!function_exists('atributo')) {
 if (!function_exists('periodo')) {
     function periodo()
     {
-        $periodo = Periodo::orderBy('fin', 'desc')->first();
+        $periodo = Periodo::orderBy('fin', 'desc')->orderBy('fase', 'desc')->orderBy('inicio', 'desc')->first();
         $existe = !empty($periodo);
 
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
@@ -154,7 +154,7 @@ if (!function_exists('materia')) {
                 return !empty($materia->info->profesor) ? $materia->info->profesor->id : null;
                 break;
             case 'tieneProf':
-                return !empty($materia->info->profesor);
+                return !empty($materia->info->profesor) ? $materia->info->profesor : null;
                 break;
             case 'categoria':
                 return !empty($materia->info->categoria) ? $materia->info->categoria->nom_categoria : null;
@@ -192,7 +192,7 @@ if (!function_exists('materiaRelacion')) {
         $defecto = 'Sin asignar';
 
         if ($relacion === 'Acreditable') {
-            return $materia->num_acreditable;
+            return $materia->trayecto->num_trayecto;
         }
 
         if (!empty($materia->info)) {
@@ -389,7 +389,7 @@ if (!function_exists('datosUsuario')) {
                     return $usuario->codigo;
                     break;
                 case 'profEncargado':
-                    return $usuario->materia->info->profesor;
+                    return $usuario->materia->info->profesor ?? null;
                     break;
                 case 'inscrito':
                     return !empty($usuario->esEstudiante->inscrito) ? $usuario->esEstudiante->inscrito->materia->nom_materia : null;

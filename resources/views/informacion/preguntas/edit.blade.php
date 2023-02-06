@@ -24,7 +24,7 @@
                     @csrf
                     {{ method_field('PUT') }}
 
-                    <x-formularios.preguntas :pregunta="$pregunta->titulo" :descripcion="$pregunta->explicacion" />
+                    <x-formularios.preguntas :pregunta="$pregunta" />
                 </form>
             </main>
         </div>
