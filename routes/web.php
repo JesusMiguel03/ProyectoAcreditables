@@ -76,13 +76,15 @@ Route::controller(CategoriaController::class)->group(function () {
     Route::delete('/categorias/{id}/delete', 'delete')->name('categorias.destroy');
 });
 
+// Horarios
 Route::controller(HorarioController::class)->group(function () {
     Route::get('/horarios', 'index')->name('horarios.index');
     Route::post('/horarios/store', 'store')->name('horarios.store');
     Route::get('/horarios/{id}/edit', 'edit')->name('horarios.edit');
-    Route::get('/horarios/{id}', 'show')->name('horarios.show');
+    // Route::get('/horarios/{id}', 'show')->name('horarios.show');
     Route::put('/horarios/{id}/update', 'update')->name('horarios.update');
-    Route::delete('/horarios/{id}/delete', 'delete')->name('horarios.destroy');
+    // Route::delete('/horarios/{id}/delete', 'delete')->name('horarios.destroy');
+    Route::get('/horarios/pdf', 'pdf')->name('horarios.pdf');
 });
 
 // Materias

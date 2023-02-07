@@ -174,7 +174,7 @@ if (!function_exists('diaSemana')) {
     function diaSemana($dia)
     {
         $dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        return $dias[$dia - 1];
+        return $dias[$dia];
     }
 }
 
@@ -203,14 +203,14 @@ if (!function_exists('materiaRelacion')) {
             if ($relacion === 'Categoria') {
                 return $materia->info->categoria->nom_categoria ?? $defecto;
             }
+        }
 
-            if ($relacion === 'Horario') {
-                $horario = $materia->info->horario;
+        if ($relacion === 'Horario') {
+            $horario = $materia->horario;
 
-                return !empty($materia->info->horario)
-                    ? '[ ' . $horario->espacio . ' ' . $horario->edificio . ' ] ' . diaSemana($horario->dia) . ' - ' . \Carbon\Carbon::parse($horario->hora)->format('g:i A')
-                    : $defecto;
-            }
+            return !empty($horario)
+                ? diaSemana($horario->dia) . ' - ' . \Carbon\Carbon::parse($horario->hora)->format('g:i A') . " ($horario->espacio $horario->edificio)"
+                : $defecto;
         }
         return $defecto;
     }

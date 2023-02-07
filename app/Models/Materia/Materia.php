@@ -3,6 +3,7 @@
 namespace App\Models\Materia;
 
 use App\Models\Academico\Estudiante_materia;
+use App\Models\Academico\Horario;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,5 +37,10 @@ class Materia extends Model
     public function trayecto()
     {
         return $this->hasOne(Trayecto::class, 'id', 'trayecto_id');
+    }
+
+    public function horario()
+    {
+        return $this->belongsTo(Horario::class, 'id', 'materia_id');
     }
 }

@@ -3,7 +3,6 @@
     $materia = atributo($attributes, 'materia');
     $categorias = atributo($attributes, 'categorias');
     $profesores = atributo($attributes, 'profesores');
-    $horarios = atributo($attributes, 'horarios');
     $trayectos = atributo($attributes, 'trayectos');
     
     if (!empty($materia)) {
@@ -372,43 +371,6 @@
                 @enderror
             @endif
 
-        </div>
-    </div>
-
-    {{-- Horario --}}
-    <div class="form-group mb-3">
-        <label for="horario">Horario</label>
-
-        <div class="input-group">
-            @if ($horarios->isEmpty())
-                <x-elementos.vacio :modelo="'horarios'" />
-            @else
-                <select id="horario" class="form-control @error('horario') is-invalid @enderror" name="horario">
-
-                    <option value="0" {{ !empty($horarios) ? '' : 'readonly' }}>
-                        {{ !empty($horarios) ? 'Seleccione...' : 'No hay horarios añadidos' }}
-                    </option>
-
-                    @foreach ($horarios as $horario)
-                        <option value="{{ $horario->id }}"
-                            {{ !empty($info) && $info->horario_id === $horario->id ? 'selected' : '' }}>
-                            {{ horario($horario) }}
-                        </option>
-                    @endforeach
-                </select>
-
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-clock"></span>
-                    </div>
-                </div>
-
-                @error('horario')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            @endif
         </div>
     </div>
 @endif

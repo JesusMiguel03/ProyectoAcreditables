@@ -11,30 +11,9 @@
     <x-tipografia.titulo>Horarios</x-tipografia.titulo>
 
     @can('academico')
-        {{-- Modal para crear --}}
-        <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="campohora" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <header class="modal-header bg-primary">
-                        <h5 class="modal-title" id="campohora">Agregar hora</h5>
-                    </header>
-
-                    <main class="modal-body">
-                        <form action="{{ route('horarios.store') }}" method="post">
-                            @csrf
-
-                            <x-formularios.horarios />
-                        </form>
-                    </main>
-                </div>
-            </div>
-        </div>
-
-        <x-formularios.borrar />
-
         {{-- Horario dinamico --}}
-        {{-- <div class="modal fade" id="horario" tabindex="-1" role="dialog" aria-labelledby="campohora" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade" id="horario" tabindex="-1" role="dialog" aria-labelledby="campohora" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <header class="modal-header bg-primary">
                         <h5 class="modal-title" id="campohora">Agregar hora</h5>
@@ -45,9 +24,14 @@
                             @csrf
 
                             <label for="horaSeleccionada">Día y hora</label>
-                            <input type="text" id="horaSeleccionada" name="horaSeleccionada" class="form-control mb-3" readonly>
+                            <input type="text" id="horaSeleccionada" name="horaSeleccionada" class="form-control mb-3"
+                                value="{{ old('horaSeleccionada') }}" readonly>
 
                             <section class="form-group required">
+
+                                <input type="number" id="dia" name="dia" hidden>
+                                <input type="text" id="hora" name="hora" hidden>
+                                <input type="text" id="campo" name="campo" hidden>
 
                                 <article class="form-row">
                                     <div class="form-group col-6">
@@ -88,10 +72,10 @@
                                 </article>
 
                                 <article class="form-group required">
-                                    <label for="materia" class="control-label">Materia</label>
+                                    <label for="materia_id" class="control-label">Materia</label>
 
-                                    <select id="materia" class="form-control @error('materia') is-invalid @enderror"
-                                        name="materia" required>
+                                    <select id="materia_id" class="form-control @error('materia_id') is-invalid @enderror"
+                                        name="materia_id" required>
 
                                         <option value="0" readonly>Seleccione...</option>
 
@@ -99,6 +83,12 @@
                                             <option value="{{ $materia->id }}">{{ $materia->nom_materia }}</option>
                                         @endforeach
                                     </select>
+
+                                    @error('materia_id')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </article>
                             </section>
 
@@ -107,95 +97,154 @@
                     </main>
                 </div>
             </div>
-        </div> --}}
+        </div>
+
+        <section>
+            <form id="form" action="" method="get">
+                @csrf
+            </form>
+
+            <form id="actualizar" action="" method="post">
+                @csrf
+                {{ @method_field('PUT') }}
+
+                <input type="text" name="actualizar" value="conHora" hidden>
+                <input type="number" id="diaActualizar" name="diaActualizar" hidden>
+                <input type="text" id="horaActualizar" name="horaActualizar" hidden>
+                <input type="text" id="campoActualizar" name="campoActualizar" hidden>
+            </form>
+        </section>
     @endcan
 @stop
 
 @section('content')
-{{-- Horario dinamico --}}
-    {{-- @php
+    @php
         $horas = [['7:30', '8:15'], ['8:15', '9:00'], ['9:00', '9:50'], ['9:50', '10:35'], ['10:35', '11:25'], ['11:25', '12:10'], ['12:10', '1:00']];
     @endphp
 
-    <section class="card table-responsive-sm p-3 mb-3">
+    <section class="card p-3">
+
+        <article class="row mx-auto my-2 px-2">
+            <strong>Nota:</strong>
+            <div class="row">
+                <div class="col-11">
+                    <p class="pl-2 text-muted">
+                        Para añadir un nuevo horario haga clic en cualquier celda en la tabla a continuación.
+                    </p>
+                </div>
+                <div class="col-11">
+                    <p class="pl-2 mt-n3 text-muted">
+                        Para editar un horario existente haga clic en la etiqueta correspondiente.
+                    </p>
+                </div>
+                <div class="col-11 mt-n3">
+                    <span class="pl-2 text-muted">Cada color representa un espacio</span>
+                    <p class="badge badge-primary">Edificio A</p>
+                    <p class="badge badge-success">Edificio B</p>
+                    <p class="badge badge-info">Edificio C</p>
+                    <p class="badge badge-dark">Laboratorios</p>
+                    <p class="badge badge-secondary">Otros</p>
+                </div>
+                <div class="col-1">
+                    <a href="{{ route('horarios.pdf') }}" class="btn btn-primary float-right"
+                        {{ Popper::arrow()->pop('Descargar horario') }}>
+                        <i class="fas fa-download" style="width: 2rem"></i>
+                    </a>
+                </div>
+            </div>
+        </article>
+
         <table class="table table-striped table-bordered">
             <thead>
-                <tr>
-                    <td width="160px">Hora</td>
-                    <td>Lunes</td>
-                    <td>Martes</td>
-                    <td>Miércoles</td>
-                    <td>Jueves</td>
+                <tr class="table-active">
+                    <th class="hora align-middle">Hora</th>
+                    <th class="align-middle">Lunes</th>
+                    <th class="align-middle">Martes</th>
+                    <th class="align-middle">Miércoles</th>
+                    <th class="align-middle">Jueves</th>
+                    <th class="align-middle">Viernes</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach ($horas as $hora)
-                    <tr>
-                        <th> {{ $hora[0] }} - {{ $hora[1] }} </th>
-                        <th class="seleccionable lunes" data-index={{ $loop->index }} data-toggle="modal"
-                            data-target="#horario"></th>
-                        <th class="seleccionable martes" data-index={{ $loop->index }} data-toggle="modal"
-                            data-target="#horario"></th>
-                        <th class="seleccionable miercoles" data-index={{ $loop->index }} data-toggle="modal"
-                            data-target="#horario"></th>
-                        <th class="seleccionable jueves" data-index={{ $loop->index }} data-toggle="modal"
-                            data-target="#horario"></th>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </section> --}}
+                @foreach ($horas as $index => $hora)
+                    @php
+                        $color = ['A' => 'primary', 'B' => 'success', 'C' => 'info', 'Laboratorio' => 'dark'];
+                    @endphp
 
-    <div class="card table-responsive-sm p-3 mb-3">
-
-        <div class="w-100 row mx-auto">
-            <div class="col-md-2 col">
-                <button class="btn btn-block btn-primary my-2" data-toggle="modal" data-target="#registrar"
-                    {{ Popper::arrow()->pop('Nuevo horario') }}>
-                    <i class="fas fa-plus mr-2"></i>
-                    {{ 'Añadir' }}
-                </button>
-            </div>
-        </div>
-
-        <table id='tabla' class="table table-striped">
-            <thead>
-                <tr class="bg-secondary">
-                    <th>Espacio</th>
-                    <th>Edificio número</th>
-                    <th>Día</th>
-                    <th>Hora</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach ($horarios as $horario)
-                    <tr>
-                        <td>{{ $horario->espacio }}</td>
-                        <td>{{ $horario->edificio }}</td>
-                        <td>{{ diaSemana($horario->dia) }}</td>
-                        <td>{{ \Carbon\Carbon::parse($horario->hora)->format('g:i A') }}</td>
+                    <tr data-numero="{{ $index }}">
                         <td>
-                            <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <a href="{{ route('horarios.edit', $horario->id) }}" class="btn btn-primary"
-                                    {{ Popper::arrow()->pop('Editar') }}>
-                                    <i class="fas fa-edit"></i>
-                                </a>
-
-                                <button id="{{ $horario->id }}" class="btn btn-danger borrar"
-                                    {{ Popper::arrow()->pop('Borrar') }} data-type="Horario"
-                                    data-name="{{ $horario->espacio }}">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                            <div class="text-center">
+                                <p class="mb-n2">{{ $hora[0] }}</p>
+                                <p class="mb-n1">a</p>
+                                <p>{{ $hora[1] }}</p>
                             </div>
+                        </td>
+                        <td class="seleccionable" data-index={{ $loop->index }} data-dia="lunes" data-toggle="modal"
+                            data-target="#horario">
+                            @foreach ($horarios as $horario)
+                                @if (!empty($horario) && $horario->campo === "lu${index}")
+                                    <span id="{{ $horario->id }}"
+                                        class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
+                                        draggable="true">{{ $horario->materia->nom_materia }}
+                                        ({{ "$horario->espacio $horario->edificio" }})
+                                    </span>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="seleccionable" data-index={{ $loop->index }} data-dia="martes" data-toggle="modal"
+                            data-target="#horario">
+                            @foreach ($horarios as $horario)
+                                @if (!empty($horario) && $horario->campo === "ma${index}")
+                                    <span id="{{ $horario->id }}"
+                                        class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
+                                        draggable="true">{{ $horario->materia->nom_materia }}
+                                        ({{ "$horario->espacio $horario->edificio" }})
+                                    </span>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="seleccionable" data-index={{ $loop->index }} data-dia="miercoles"
+                            data-toggle="modal" data-target="#horario">
+                            @foreach ($horarios as $horario)
+                                @if (!empty($horario) && $horario->campo === "mi${index}")
+                                    <span id="{{ $horario->id }}"
+                                        class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
+                                        draggable="true">{{ $horario->materia->nom_materia }}
+                                        ({{ "$horario->espacio $horario->edificio" }})
+                                    </span>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="seleccionable" data-index={{ $loop->index }} data-dia="jueves" data-toggle="modal"
+                            data-target="#horario">
+                            @foreach ($horarios as $horario)
+                                @if (!empty($horario) && $horario->campo === "ju${index}")
+                                    <span id="{{ $horario->id }}"
+                                        class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
+                                        draggable="true">{{ $horario->materia->nom_materia }}
+                                        ({{ "$horario->espacio $horario->edificio" }})
+                                    </span>
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="seleccionable" data-index={{ $loop->index }} data-dia="viernes" data-toggle="modal"
+                            data-target="#horario">
+                            @foreach ($horarios as $horario)
+                                @if (!empty($horario) && $horario->campo === "vi${index}")
+                                    <span id="{{ $horario->id }}"
+                                        class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
+                                        draggable="true">{{ $horario->materia->nom_materia }}
+                                        ({{ "$horario->espacio $horario->edificio" }})
+                                    </span>
+                                @endif
+                            @endforeach
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-    </div>
+    </section>
 @stop
 
 @section('css')
@@ -205,37 +254,27 @@
 
     {{-- Personalizados --}}
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/horarios.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('vendor/moment/moment.js') }}"></script>
-    <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    <script>
-        $(function() {
-            $('#hora').datetimepicker({
-                format: 'h:mm a'
-            });
-        });
-    </script>
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/borrar.js') }}"></script>
+    {{-- <script src="{{ asset('js/borrar.js') }}"></script> --}}
     {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 
     {{-- Horario dinamico --}}
-    {{-- <script>
+    <script>
         const horaSeleccionada = document.getElementById('horaSeleccionada')
         const casillas = document.querySelectorAll('.seleccionable')
-        const dias = {
-            lunes: '',
-            martes: '',
-            miercoles: '',
-            jueves: ''
-        }
+
+        const materiasEnHorario = document.querySelectorAll('.materia')
+
+        const celdaHora = document.querySelectorAll('[data-numero]')
 
         const horas = [
             ['7:30 AM', '8:15 AM'],
@@ -247,30 +286,95 @@
             ['12:10 PM', '1:00 PM']
         ];
 
-        casillas.forEach(casilla => {
-            casilla.addEventListener('click', (e) => {
-                let dia = e.currentTarget.className.split(' ')
-                let hora = e.currentTarget.getAttribute('data-index')
+        let [inputDia, inputHora, inputCampo] = ['', '', '']
 
-                let seleccionado = ''
+        const cargarInformacion = (e, actualizar = '') => {
+            let dia = e.getAttribute('data-dia')
+            let hora = e.getAttribute('data-index')
 
+            if (actualizar !== 'actualizar') {
+                [inputDia, inputHora, inputCampo] = [
+                    document.getElementById('dia'),
+                    document.getElementById('hora'),
+                    document.getElementById('campo'),
+                ]
+            } else {
+                [inputDia, inputHora, inputCampo] = [
+                    document.getElementById('diaActualizar'),
+                    document.getElementById('horaActualizar'),
+                    document.getElementById('campoActualizar'),
+                ]
+            }
 
-                if (dia.indexOf('lunes') !== -1) {
-                    seleccionado = `Lunes, ${horas[hora][0]} a ${horas[hora][1]}`
-                } else if (dia.indexOf('martes') !== -1) {
-                    seleccionado = `Martes, ${horas[hora][0]} a ${horas[hora][1]}`
-                } else if (dia.indexOf('miercoles') !== -1) {
-                    seleccionado = `Miércoles, ${horas[hora][0]} a ${horas[hora][1]}`
-                } else if (dia.indexOf('jueves') !== -1) {
-                    seleccionado = `Jueves, ${horas[hora][0]} a ${horas[hora][1]}`
-                } else {
-                    return false
-                }
+            const dias = {
+                lunes: `Lunes - ${horas[hora][0]} a ${horas[hora][1]}.`,
+                martes: `Martes - ${horas[hora][0]} a ${horas[hora][1]}.`,
+                miercoles: `Miércoles - ${horas[hora][0]} a ${horas[hora][1]}.`,
+                jueves: `Jueves - ${horas[hora][0]} a ${horas[hora][1]}.`,
+                viernes: `Viernes - ${horas[hora][0]} a ${horas[hora][1]}.`,
+            }
 
-                horaSeleccionada.value = seleccionado
+            const diasNumero = {
+                lunes: 0,
+                martes: 1,
+                miercoles: 2,
+                jueves: 3,
+                viernes: 4
+            }
+
+            horaSeleccionada.value = dias[dia]
+            inputDia.value = diasNumero[dia]
+            inputHora.value = horas[hora][0]
+            inputCampo.value = `${dia.slice(0, 2)}${e.parentNode.getAttribute('data-numero')}`
+        }
+
+        materiasEnHorario.forEach(materia => {
+            materia.addEventListener('click', (e) => {
+                e.stopPropagation()
+
+                let [form, id] = [document.getElementById('form'), e.currentTarget.id]
+
+                form.action = `${this.location.href}/${id}/edit`
+                form.submit()
+            })
+
+            materia.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('test', e.target.id)
+                e.dataTransfer.effectAllowed = 'move'
+            })
+
+            materia.addEventListener('dragend', (e) => {
+                cargarInformacion(e.currentTarget.parentNode, 'actualizar')
+
+                let [form, id] = [document.getElementById('actualizar'), e.currentTarget.id]
+
+                form.action = `${this.location.href}/${id}/update`
+                form.submit()
+            })
+
+            casillas.forEach(casilla => {
+                casilla.addEventListener('dragover', (e) => {
+                    e.preventDefault()
+                    e.dataTransfer.dropEffect = 'move'
+                })
+
+                casilla.addEventListener('drop', (e) => {
+                    e.preventDefault()
+
+                    const data = e.dataTransfer.getData('test')
+                    let element = document.getElementById(data)
+
+                    e.target.appendChild(element)
+                })
             })
         })
-    </script> --}}
+
+        casillas.forEach(casilla => {
+            casilla.addEventListener('click', (e) => {
+                cargarInformacion(e.currentTarget)
+            })
+        })
+    </script>
 
     {{-- Mensajes --}}
     <script>
@@ -294,7 +398,9 @@
                     confirmButton: 'btn btn-danger px-5'
                 },
             })
-            $('#registrar').modal('show')
+            $('#formulario').toggleClass('d-none')
+            $('#opciones').toggleClass('d-none')
+            $('#horario').modal('show')
         @elseif ($message = session('actualizado'))
             Swal.fire({
                 icon: 'success',

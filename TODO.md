@@ -1,20 +1,23 @@
 ## **Pendiente**
 
--   _[HorarioController]_ no tiene control de duplicados.
--   Cambiar la vista de horario por un drag n' drop table.
 -   Crear controlador y rutas para gráficos y estadísticas.
 -   Componetizar los alerts.
 -   Íconos de cantidad.
+
 -   Actualizar descripción fisica.
 -   Documentación.
+
 -   Paginación.
     -   https://makitweb.com/datatables-ajax-pagination-with-search-and-sort-laravel/
     -   https://packagist.org/packages/singlequote/laravel-datatables
 -   QR.
 -   _MostrarMensajeAyuda_ Re-hacer.
+-   _[HorarioController]_ no tiene control de duplicados.
+-   Renombrar edificio nro -> aula.
+-   Evitar que haya duplicados en horarios.
 
 ## **Commit**
-
+- Schedule changed to a dinamic table with drag and drop API.
 
 ## **Nota**
 
@@ -31,7 +34,6 @@
 
 -   Sistema de puntuación (likes y dislikes) para [Preguntas, noticias].
 -   Opción de ver noticia.
--   Reemplazar acciones en cada fila por una barra de opciones general.
 
 ## **Notas**
 

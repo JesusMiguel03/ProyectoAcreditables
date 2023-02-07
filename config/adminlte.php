@@ -357,20 +357,20 @@ return [
                     'can'         => 'categorias',
                 ],
                 [
-                    'text'        => 'Horarios',
-                    'shift'       => 'ml-1',
-                    'url'         => '/horarios',
-                    'active'      => ['horarios*'],
-                    'icon'        => 'fas fa-clock',
-                    'can'         => 'horarios',
-                ],
-                [
                     'text'        => 'Materias',
                     'shift'       => 'ml-1',
                     'url'         => '/materias',
                     'active'      => ['materias*'],
                     'icon'        => 'fas fa-th-large',
                     'can'         => 'materias.principal',
+                ],
+                [
+                    'text'        => 'Horarios',
+                    'shift'       => 'ml-1',
+                    'url'         => '/horarios',
+                    'active'      => ['horarios*'],
+                    'icon'        => 'fas fa-clock',
+                    'can'         => 'horarios',
                 ],
                 [
                     'text'        => 'Asistencias',
