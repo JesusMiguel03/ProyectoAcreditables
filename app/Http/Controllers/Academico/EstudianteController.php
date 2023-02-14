@@ -31,16 +31,20 @@ class EstudianteController extends Controller
             ]
         );
 
-        return redirect('perfil')->with('registrado', 'Curso creado exitosamente');
+        return redirect('perfil')->with('registrado', 'registrado');
     }
 
     public function comprobante($id)
     {
         // Busca al estudiante y carga sus datos
         $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
-        
+
         // Si el estudiante no tiene comprobante, redirecciona
         if (empty($estudiante)) {
+            return redirect()->back();
+        }
+
+        if (empty($estudiante->materia->profesorEncargado())) {
             return redirect()->back();
         }
         
@@ -51,17 +55,17 @@ class EstudianteController extends Controller
 
         $materia = Materia::find($estudiante->materia_id);
         $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia]);
-        
-        // Si es profesor no puede ver el comprobante
-        if (rol('Profesor')) {
-            return redirect()->back();
-        }
-        
+
         // En caso de que el coordinador desee revisar el comprobante
         if (rol('Coordinador')) {
             return $pdf->stream('Comprobante de inscripción.pdf');
         }
-        
+
+        // Si es profesor no puede ver el comprobante
+        if (rol('Profesor')) {
+            return redirect()->back();
+        }
+
         // Flujo normal, al estudiante se le descarga directamente el pdf
         return $pdf->download('Comprobante de inscripcion.pdf');
     }

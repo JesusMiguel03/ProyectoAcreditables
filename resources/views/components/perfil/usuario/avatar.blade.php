@@ -1,7 +1,5 @@
 <section class="card-body">
-    <x-perfil.card-titulo>
-        Avatar
-    </x-perfil.card-titulo>
+    <x-perfil.card-titulo titulo="Avatar" />
 
     <main class="row">
         <x-perfil.card-mensaje>

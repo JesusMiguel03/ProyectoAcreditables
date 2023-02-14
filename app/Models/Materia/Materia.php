@@ -6,18 +6,46 @@ use App\Models\Academico\Estudiante_materia;
 use App\Models\Academico\Horario;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Materia extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'materias';
 
     protected $fillable = ['informacion_id', 'trayecto_id', 'nom_materia', 'cupos', 'cupos_disponibles', 'desc_materia', 'imagen_materia', 'estado_materia'];
+
+    /**
+     *  Funciones personalizadas
+     */
+
+    public function infoCategoria()
+    {   
+        return $this->info->categoria ?? null;
+    }
+
+    public function infoTipo()
+    {
+        return $this->info->metodologia ?? null;
+    }
+
+    public function infoAcreditable()
+    {
+        return $this->trayecto->num_trayecto ?? null;
+    }
+
+    public function profesorEncargado()
+    {
+        return $this->info->profesor ?? null;
+    }
+
+    /**
+     *  Relaciones
+     */
 
     public function info()
     {
@@ -42,5 +70,13 @@ class Materia extends Model
     public function horario()
     {
         return $this->belongsTo(Horario::class, 'id', 'materia_id');
+    }
+
+    public function scopeCreadoEntre($query, array $fechas)
+    {
+        $inicio = ($fechas[0] instanceof Carbon) ? $fechas[0] : Carbon::parse($fechas[0])->startOfDay();
+        $fin = ($fechas[1] instanceof Carbon) ? $fechas[1] : Carbon::parse($fechas[1])->endOfDay();
+
+        return $query->whereBetween('created_at', [$inicio, $fin]);
     }
 }

@@ -7,7 +7,7 @@
     <li class="breadcrumb-item"><a href="{{ route('profesores.index') }}" class="link-muted">Profesores</a></li>
     <li class="breadcrumb-item active">
         <a href="">
-            {{ datosUsuario($profesor, 'Profesor', 'nombreCompleto') }}
+            {{ $profesor->nombreProfesor() }}
         </a>
     </li>
 @stop
@@ -28,7 +28,7 @@
                     @csrf
                     {{ method_field('PUT') }}
 
-                    <x-formularios.registrar-profesor :profesor="$profesor" :activo="datosUsuario($profesor, 'Profesor', 'activo')" :departamentos="$departamentos"
+                    <x-formularios.registrar-profesor :profesor="$profesor" :departamentos="$departamentos"
                         :conocimientos="$conocimientos" />
 
                 </form>

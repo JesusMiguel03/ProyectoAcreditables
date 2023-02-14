@@ -40,11 +40,11 @@
 
     <div class="input-group">
         <textarea name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror descripcion" spellcheck="false" 
-            placeholder="{{ __('Descripción') }}" maxlength="{{ config('variables.noticias.descripcion') }}" data-nombre="caracteres" required>{{ $descripcion ?? old('desc_noticia') }}</textarea>
+            placeholder="{{ __('Descripción') }}" maxlength="{{ config('variables.noticias.descripcion') }}" required>{{ $descripcion ?? old('desc_noticia') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">
-                <span class="fas fa-comment"></span>
+                <span class="fas fa-pencil"></span>
             </div>
         </div>
 

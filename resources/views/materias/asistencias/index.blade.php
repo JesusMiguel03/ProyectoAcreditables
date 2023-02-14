@@ -28,8 +28,11 @@
 
             <tbody>
                 @foreach ($estudiantes as $index => $estudiante)
+                    @php
+                        $inscrito = $estudiante->materia->nom_materia ?? null;
+                    @endphp
                     <tr>
-                        @if (!empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')))
+                        @if (!empty($inscrito))
                             <td
                                 class="font-weight-bold {{ $asistenciaEstudiantes[$index] < 9 ? 'text-danger' : 'text-success' }}">
                                 {{ $asistenciaEstudiantes[$index] < 9 ? 'Reprobado' : 'Aprobado' }}
@@ -39,18 +42,15 @@
                             <td></td>
                             <td></td>
                         @endif
-                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'CI') }}</td>
-                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'nombre') }}</td>
-                        <td>{{ datosUsuario($estudiante, 'EstudianteInscrito', 'apellido') }}</td>
-                        <td
-                            class="{{ !empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')) ? '' : 'font-weight-bold' }}">
-                            {{ !empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito'))
-                                ? datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')
-                                : 'No inscrito' }}
+                        <td>{{ $estudiante->inscritoCI() }}</td>
+                        <td>{{ $estudiante->inscritoSoloNombre() }}</td>
+                        <td>{{ $estudiante->inscritoSoloApellido() }}</td>
+                        <td class="{{ !empty($inscrito) ? '' : 'font-weight-bold' }}">
+                            {{ !empty($inscrito) ? $inscrito : 'No inscrito' }}
                         </td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                @if (!empty(datosUsuario($estudiante, 'EstudianteInscrito', 'inscrito')))
+                                @if (!empty($inscrito))
                                     <a href="{{ route('asistencias.edit', $estudiante->esEstudiante->id) }}"
                                         class="btn btn-primary" {{ Popper::arrow()->pop('Ver') }}>
                                         <i class="fas fa-eye"></i>

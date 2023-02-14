@@ -1,12 +1,10 @@
 @php
-    $trayecto = datosUsuario(Auth::user()->estudiante, 'Estudiante', 'trayecto');
-    $pnf = datosUsuario(Auth::user()->estudiante, 'Estudiante', 'PNF');
+    $trayecto = Auth::user()->estudiante->trayecto->num_trayecto;
+    $pnf = Auth::user()->estudiante->pnf->nom_pnf;
 @endphp
 
 <section class="card-body">
-    <x-perfil.card-titulo>
-        Perfil académico
-    </x-perfil.card-titulo>
+    <x-perfil.card-titulo titulo="Perfil académico" />
 
     <main class="row">
         <x-perfil.card-mensaje>
@@ -19,9 +17,7 @@
             <div class="form-group mb-3">
                 <label>Trayecto</label>
                 <div class="input-group">
-                    <input type="text" class="form-control"
-                        value="{{ $trayecto }}"
-                        readonly disabled>
+                    <input type="text" class="form-control" value="{{ $trayecto }}" readonly disabled>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -33,9 +29,7 @@
             <div class="form-group mb-3">
                 <label>PNF</label>
                 <div class="input-group">
-                    <input type="text" class="form-control"
-                        value="{{ $pnf }}"
-                        readonly disabled>
+                    <input type="text" class="form-control" value="{{ $pnf }}" readonly disabled>
 
                     <div class="input-group-append">
                         <div class="input-group-text">

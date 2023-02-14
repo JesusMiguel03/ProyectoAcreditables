@@ -1,17 +1,15 @@
 @php
-    $estudiante = datosUsuario(Auth::user()->estudiante, 'Estudiante', 'estudiante');
-
-    if (!empty($estudiante)) {
-        $profesor = datosUsuario(Auth::user()->estudiante, 'Estudiante', 'profEncargado');
-        $inscrito = datosUsuario(Auth::user()->estudiante, 'Estudiante', 'inscrito');
-        $estudianteID = datosUsuario(Auth::user()->estudiante, 'Estudiante', 'ID');
+    $estudiante = Auth::user()->estudiante ?? null;
+    
+    if ($estudiante) {
+        $profesor = Auth::user()->estudiante->inscrito->materia->profesorEncargado() ?? null;
+        $inscrito = Auth::user()->estudiante->inscrito ?? null;
+        $estudianteID = Auth::user()->estudiante->id ?? null;
     }
 @endphp
 
 <section class="card-body">
-    <x-perfil.card-titulo>
-        Comprobante de inscripción
-    </x-perfil.card-titulo>
+    <x-perfil.card-titulo titulo="Comprobante de inscripción" />
 
     <main class="row">
         @if (!empty($profesor))

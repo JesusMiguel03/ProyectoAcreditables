@@ -20,6 +20,7 @@
     }
 @endphp
 
+
 @if (Route::is('materias.index'))
     {{-- Nombre --}}
     <div class="form-group required mb-3">
@@ -49,11 +50,18 @@
             {{-- Cupos --}}
             <div class="form-group required col-6">
                 <label for="cupos" class="control-label">Cupos disponibles</label>
+
                 <div class="input-group">
                     <input type="number" name="cupos" id="cupos"
                         class="form-control @error('cupos') is-invalid @enderror" value="{{ old('cupos') }}"
                         placeholder="{{ __('Cupos iniciales') }}" maxlength="{{ config('variables.materias.cupos') }}"
                         data-nombre="cupos" required>
+
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-clipboard"></span>
+                        </div>
+                    </div>
 
                     @error('Cupos')
                         <span class="invalid-feedback" role="alert">
@@ -100,11 +108,11 @@
         <div class="input-group">
             <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
                 value="{{ old('desc_materia') }}" placeholder="{{ __('Descripción') }}" spellcheck="false"
-                maxlength="{{ config('variables.materias.descripcion') }}" data-nombre="caracteres" required></textarea>
+                maxlength="{{ config('variables.materias.descripcion') }}" required></textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <span class="fas fa-quote-right"></span>
+                    <span class="fas fa-pencil"></span>
                 </div>
             </div>
 
@@ -147,11 +155,18 @@
             {{-- Cupos --}}
             <div class="col-6">
                 <label for="cupos" class="control-label">Cupos</label>
+
                 <div class="input-group">
                     <input type="number" name="cupos" id="cupos"
                         class="form-control @error('cupos') is-invalid @enderror" id="cupos"
                         value="{{ $cupos }}" placeholder="{{ __('Cupos disponibles') }}"
                         maxlength="{{ config('variables.materias.cupos') }}" data-nombre="cupos" required>
+
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-clipboard"></span>
+                        </div>
+                    </div>
 
                     @error('cupos')
                         <span class="invalid-feedback" role="alert">
@@ -170,11 +185,11 @@
         <div class="input-group">
             <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
                 placeholder="{{ __('Descripción') }}" spellcheck="false"
-                maxlength="{{ config('variables.materias.descripcion') }}" data-nombre="caracteres" required>{{ $descripcion }}</textarea>
+                maxlength="{{ config('variables.materias.descripcion') }}" required>{{ $descripcion }}</textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
-                    <span class="fas fa-comment"></span>
+                    <span class="fas fa-pencil"></span>
                 </div>
             </div>
 
@@ -353,7 +368,7 @@
                     @foreach ($profesores as $profesor)
                         <option value="{{ $profesor->id }}"
                             {{ !empty($info) && $info->profesor_id === $profesor->id ? 'selected' : '' }}>
-                            {{ datosUsuario($profesor, 'Profesor', 'nombreCompleto') }}
+                            {{ $profesor->nombreProfesor() }} ({{ $profesor->profesorCI() }})
                         </option>
                     @endforeach
                 </select>
@@ -381,11 +396,12 @@
 
     <div class="input-group">
         <input type="file" class="custom-file-input @error('imagen_materia') is-invalid @enderror" id="imagen"
-            name="imagen_materia" accept="image/jpeg">
-
-        <label class="custom-file-label text-muted" for="imagen_materia" id="campoImagen">
-            {{ !empty($imagen) ? Str::substr($imagen, 18) : 'Seleccione una imagen' }}
-        </label>
+            name="imagen_materia" accept="image/jpeg" >
+            
+            <label class="custom-file-label text-muted" for="imagen_materia" id="campoImagen">
+                {{ !empty($imagen) ? Str::substr($imagen, 18) : 'Seleccione una imagen' }}
+                <i class="fas fa-magnifying-glass"></i>
+            </label>
 
         <small id="ayudaImagen" class="form-text text-muted">
             La imagen debe pesar menos de 1 MB.

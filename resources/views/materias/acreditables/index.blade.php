@@ -38,12 +38,12 @@
     @if (rol('Estudiante'))
 
         {{-- No tiene perfil academico --}}
-        @if (datosUsuario(Auth::user()->estudiante, 'Estudiante', 'academico'))
+        @if (empty(Auth::user()->estudiante->pnf))
 
             <x-elementos.perfil-incompleto />
 
             {{-- Esta inscrito --}}
-        @elseif (datosUsuario(Auth::user()->estudiante, 'Estudiante', 'inscrito'))
+        @elseif (Auth::user()->estudiante->inscrito)
             <section id="slick" class="px-5">
                 <article class="slide mb-4">
 
@@ -118,42 +118,49 @@
 
                 <tbody>
                     @foreach ($materias as $materia)
-
-                    @php
-                        $nombre = $materia->nom_materia;
-                        $cupos = $materia->cupos_disponibles;
-                        $estado = $materia->estado_materia;
-                        $descripcion = Str::limit($materia->desc_materia, 80);
-                        $categoria = $materia->info->categoria->nom_categoria ?? 'Sin categoría';
-                        $acreditable = $materia->trayecto->num_trayecto;
-                    @endphp
+                        @php
+                            $nombre = $materia->nom_materia;
+                            $cupos = $materia->cupos_disponibles;
+                            $cuposTotales = $materia->cupos;
+                            $estado = $materia->estado_materia;
+                            $descripcion = Str::limit($materia->desc_materia, 80);
+                            $categoria = $materia->info->categoria->nom_categoria ?? 'Sin categoría';
+                            $acreditable = $materia->trayecto->num_trayecto;
+                        @endphp
 
                         <tr>
                             <td> {{ $nombre }} </td>
-                            <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $cupos }}</td>
+                            <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $cupos }} / {{ $cuposTotales }}
+                            </td>
                             <td> {{ $categoria }} </td>
                             <td> {{ $estado }} </td>
                             <td class="text-justify">{{ $descripcion }}</td>
                             <td> {{ $acreditable }} </td>
                             <td>
                                 <div class="btn-group mx-1" role="group" aria-label="Acciones">
+                                    {{-- Editar --}}
                                     @can('materias.modificar')
                                         <a href="{{ route('materias.edit', $materia) }}" class="btn btn-primary"
                                             {{ Popper::arrow()->pop('Editar materia') }}>
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     @endcan
+
+                                    {{-- Ver --}}
                                     <a href="{{ route('materias.show', $materia) }}" class="btn btn-primary"
                                         {{ Popper::arrow()->pop('Ver materia') }}>
                                         <i class="fas fa-eye"></i>
                                     </a>
+
                                     @can('materias.modificar')
+                                        {{-- Inscribir --}}
                                         <a href="{{ route('inscribir', $materia->id) }}"
                                             class="btn btn-primary {{ $cupos === 0 ? 'disabled' : '' }}"
                                             {{ Popper::arrow()->pop('Inscribir estudiantes') }}>
-                                            <i class="fas fa-id-badge"></i>
+                                            <i class="fas fa-clipboard-list"></i>
                                         </a>
 
+                                        {{-- Borrar --}}
                                         <button id="{{ $materia->id }}" class="btn btn-danger borrar"
                                             {{ Popper::arrow()->pop('Borrar') }} data-type="Acreditable"
                                             data-name="{{ $nombre }}">
@@ -180,6 +187,7 @@
     @if (rol('Coordinador'))
         <link rel="stylesheet" href="{{ asset('css/required.css') }}">
         <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/lapiz.css') }}">
         <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
     @endif
 @stop

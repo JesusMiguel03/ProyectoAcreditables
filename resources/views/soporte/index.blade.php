@@ -4,7 +4,7 @@
 
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-    <li class="breadcrumb-item active"><a href="">Restaurar contraseña</a></li>
+    <li class="breadcrumb-item active"><a href="">Restaurar datos del usuario</a></li>
 @stop
 
 @section('content_header')
@@ -46,7 +46,6 @@
                 },
             })
         @elseif ($message = session('cedula'))
-        
             Swal.fire({
                 icon: 'success',
                 title: '¡Cédula actualizada!',

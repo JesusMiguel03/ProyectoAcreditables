@@ -3,9 +3,15 @@
     $profesor = atributo($attributes, 'profesor');
     $departamentos = atributo($attributes, 'departamentos');
     $conocimientos = atributo($attributes, 'conocimientos');
-    $activo = atributo($attributes, 'activo');
-    $codigoTlf = !empty($profesor) ? substr($profesor->telefono, 0, 4) : null;
-    $tlf = !empty($profesor) ? substr($profesor->telefono, 4) : null;
+    
+    $activo = null;
+    $codigoTlf = null;
+    $tlf = null;
+    if ($profesor) {
+        $activo = $profesor->activo;
+        $codigoTlf = substr($profesor->telefono, 0, 4);
+        $tlf = substr($profesor->telefono, 4);
+    }
 @endphp
 
 {{-- Usuario --}}
@@ -20,7 +26,10 @@
                 @foreach ($usuarios as $usuario)
                     @if (empty($usuario->profesor))
                         <option value="{{ $usuario->id }}">
-                            {{ datosUsuario($usuario, 'Usuario', 'nombreCompleto') . ' | ' . datosUsuario($usuario, 'Usuario', 'CI') }}
+                            @php
+                                $cedula = 'CI: ' . $usuario->nacionalidad . '-' . number_format($usuario->cedula, 0, '', '.');
+                            @endphp
+                            {{ $usuario->nombreCompleto() . " ({$cedula})" }}
                         </option>
                     @endif
                 @endforeach
@@ -29,8 +38,7 @@
         @else
             <input type="text" name="usuarios" id="usuarios"
                 class="form-control @error('usuarios') is-invalid @enderror"
-                value="{{ datosUsuario($profesor, 'Profesor', 'nombreCompleto') . '- CI: ' . datosUsuario($profesor, 'Profesor', 'CI') }}"
-                readonly disabled>
+                value="{{ $profesor->nombreProfesor() . '- CI: ' . $profesor->profesorCI() }}" readonly disabled>
         @endif
 
         <div class="input-group-append">
@@ -50,32 +58,37 @@
 {{-- Departamento --}}
 <div class="form-group required mb-3">
     <label for="departamento" class="control-label">Adjunto al departamento</label>
+
     <div class="input-group">
-        <div class="input-group">
-            <select name="departamento" class="form-control" required>
-                <option value="0" readonly>Seleccione...</option>
+        <select name="departamento" class="form-control" required>
+            <option value="0" readonly>Seleccione...</option>
 
-                @foreach ($departamentos as $departamento)
-                    @if (!empty($profesor))
-                        <option value="{{ $departamento->id }}"
-                            {{ $departamento->id === $profesor->departamento->id ? 'selected' : '' }}>
-                            {{ $departamento->nom_pnf }}
-                        </option>
-                    @else
-                        <option value="{{ $departamento->id }}">
-                            {{ $departamento->nom_pnf }}
-                        </option>
-                    @endif
-                @endforeach
+            @foreach ($departamentos as $departamento)
+                @if (!empty($profesor))
+                    <option value="{{ $departamento->id }}"
+                        {{ $departamento->id === $profesor->departamento->id ? 'selected' : '' }}>
+                        {{ $departamento->nom_pnf }}
+                    </option>
+                @else
+                    <option value="{{ $departamento->id }}">
+                        {{ $departamento->nom_pnf }}
+                    </option>
+                @endif
+            @endforeach
 
-            </select>
+        </select>
 
-            @error('departamento')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-            @enderror
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-thumbtack"></span>
+            </div>
         </div>
+
+        @error('departamento')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
     </div>
 </div>
 
@@ -163,14 +176,21 @@
     {{-- Residencia --}}
     <div class="form-group required mb-3" {{ $conocimientos->isEmpty() ? 'style="margin-top: -1rem"' : '' }}>
         <label class="control-label">Residencia</label>
-        <div class="form-row">
+
+        <div class="form-row mb-3">
 
             {{-- Estado --}}
-            <div class="form-group col-6">
+            <div class="input-group col-6">
                 <input type="text" name="estado" id="estado"
                     class="form-control @error('estado') is-invalid @enderror"
                     value="{{ $profesor->estado ?? old('estado') }}" placeholder="{{ __('Estado') }}"
-                    maxlength="{{ config('variables.profesores.estado') }}" data-nombre="caracteres" required>
+                    maxlength="{{ config('variables.profesores.estado') }}" required>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-map-marker"></span>
+                    </div>
+                </div>
 
                 @error('estado')
                     <span class="invalid-feedback" role="alert">
@@ -180,11 +200,17 @@
             </div>
 
             {{-- Ciudad --}}
-            <div class="form-group col-6">
+            <div class="input-group col-6">
                 <input type="text" name="ciudad" id="ciudad"
                     class="form-control @error('ciudad') is-invalid @enderror"
                     value="{{ $profesor->ciudad ?? old('ciudad') }}" placeholder="{{ __('Ciudad') }}"
-                    maxlength="{{ config('variables.profesores.ciudad') }}" data-nombre="caracteres" required>
+                    maxlength="{{ config('variables.profesores.ciudad') }}" required>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-map-marker"></span>
+                    </div>
+                </div>
 
                 @error('ciudad')
                     <span class="invalid-feedback" role="alert">
@@ -196,11 +222,17 @@
 
         {{-- Urbanizacion --}}
         <div class="form-row">
-            <div class="form-group col-4">
+            <div class="input-group col-4">
                 <input type="text" name="urb" id="urb"
                     class="form-control @error('urb') is-invalid @enderror" value="{{ $profesor->urb ?? old('urb') }}"
                     placeholder="{{ __('Urbanización') }}" maxlength="{{ config('variables.profesores.urb') }}"
-                    data-nombre="caracteres" required>
+                    required>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-map-marker"></span>
+                    </div>
+                </div>
 
                 @error('urb')
                     <span class="invalid-feedback" role="alert">
@@ -210,11 +242,17 @@
             </div>
 
             {{-- Calle --}}
-            <div class="form-group col-4">
+            <div class="input-group col-4">
                 <input type="text" name="calle" id="calle"
                     class="form-control @error('calle') is-invalid @enderror"
                     value="{{ $profesor->calle ?? old('calle') }}" placeholder="{{ __('Calle') }}"
-                    maxlength="{{ config('variables.profesores.calle') }}" data-nombre="caracteres" required>
+                    maxlength="{{ config('variables.profesores.calle') }}" required>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-map-marker"></span>
+                    </div>
+                </div>
 
                 @error('calle')
                     <span class="invalid-feedback" role="alert">
@@ -224,11 +262,17 @@
             </div>
 
             {{-- Casa --}}
-            <div class="form-group col-4">
+            <div class="input-group col-4">
                 <input type="text" name="casa" id="casa"
                     class="form-control @error('casa') is-invalid @enderror"
                     value="{{ $profesor->casa ?? old('casa') }}" placeholder="{{ __('Casa') }}"
-                    maxlength="{{ config('variables.profesores.casa') }}" data-nombre="caracteres" required>
+                    maxlength="{{ config('variables.profesores.casa') }}" required>
+
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-map-marker"></span>
+                    </div>
+                </div>
 
                 @error('casa')
                     <span class="invalid-feedback" role="alert">

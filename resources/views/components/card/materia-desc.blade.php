@@ -9,15 +9,19 @@
     $descripcion = $materia->desc_materia;
     
     // Relacion
-    $avatar = materia($materia, 'profAvatar');
-    $profesor = materia($materia, 'profesor');
-    $profesorID = materia($materia, 'profID');
+    $materiaProfesor = $materia->profesorEncargado();
     
-    $usuario = Auth::user()->estudiante;
-    if (!empty($usuario)) {
+    if ($materiaProfesor) {
+        $profesor = $materia->profesorEncargado()->nombreProfesor();
+        $profesorID = $materia->profesorEncargado()->id;
+    }
+    
+    $usuario = Auth::user()->estudiante ?? null;
+    
+    if ($usuario) {
         $estudianteInscrito = $usuario->inscrito ?? null;
         $estudianteID = $usuario->id;
-        $estudianteMateriaID = !empty($usuario->inscrito) ? $usuario->inscrito->materia_id : '';
+        $estudianteMateriaID = $usuario->inscrito->materia_id ?? null;
     }
 
     $descripcionLarga = Str::length($descripcion) > 100;
@@ -41,17 +45,16 @@
 
             @can('inscribir')
                 <footer class="text-center pt-5">
-                    @if (datosUsuario(Auth::user(), 'Estudiante', 'materia') === $materiaID)
+                    @if ($estudianteMateriaID === $materiaID)
                         <p class="btn btn-secondary" style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}">
-                            Se encuentra inscrito
+                            Se encuentra inscrito en esta acreditable
                         </p>
                     @else
                         <form id="form" action="{{ route('inscripcion.store') }}" method="post">
                             @csrf
 
                             @if ($estudianteInscrito)
-                                <section class="row"
-                                    style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}">
+                                <section class="row" style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}">
                                     <article class="col-6">
                                         <a href="{{ route('materias.show', $estudianteMateriaID) }}"
                                             class="btn btn-block btn-secondary">
@@ -71,8 +74,7 @@
                                     hidden>
                                 <input type="number" name="materia_id" class="d-none" value="{{ $materiaID }}" hidden>
 
-                                <button type="submit"
-                                    style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}"
+                                <button type="submit" style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}"
                                     class="btn btn-{{ $cuposDisponibles === 0 ? 'secondary' : 'primary' }}"
                                     {{ $cuposDisponibles === 0 ? 'disabled' : '' }}>
                                     {{ $cuposDisponibles === 0 ? 'No hay cupos disponibles' : 'Inscribir' }}

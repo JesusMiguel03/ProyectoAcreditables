@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Materia;
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Estudiante_materia;
-use App\Models\Academico\Horario;
 use App\Models\Academico\Trayecto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
+
 class MateriaController extends Controller
 {
     public function __construct()
@@ -29,6 +29,12 @@ class MateriaController extends Controller
 
         if (rol('Coordinador')) {
             $materias = Materia::all();
+
+            foreach ($materias as $materia) {
+                $materia->update([
+                    'cupos_disponibles' => $materia->cupos - count($materia->estudiantes)
+                ]);
+            }
             $trayectos = Trayecto::all();
 
             return view('materias.acreditables.index', compact('materias', 'trayectos'));
@@ -44,6 +50,15 @@ class MateriaController extends Controller
                 }
         
                 $materias = Materia::whereIn('informacion_id', $materiasImpartidasProfesor)->get();
+
+                if (!empty($materias)) {
+                    foreach ($materias as $materia) {
+                        $materia->update([
+                            'cupos_disponibles' => $materia->cupos - count($materia->estudiantes)
+                        ]);
+                    }
+                }
+
         
                 return view('materias.acreditables.index', compact('materias'));
             }
@@ -60,8 +75,12 @@ class MateriaController extends Controller
             }
 
             // Si está inscrito.
-            if (datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')) {
-                $materias = Materia::find(datosUsuario(auth()->user()->estudiante, 'Estudiante', 'inscrito')->materia_id);
+            if (auth()->user()->estudiante->inscrito) {
+                $materias = Materia::find(auth()->user()->estudiante->inscrito->materia_id ?? null);
+
+                $materias->update([
+                    'cupos_disponibles' => $materias->cupos - count($materias->estudiantes)
+                ]);
                 
                 return view('materias.acreditables.index', compact('materias'));
             } else {
@@ -70,6 +89,13 @@ class MateriaController extends Controller
                 $materias = Materia::where([
                     ['trayecto_id', '=', auth()->user()->estudiante->trayecto->id], ['estado_materia', '=', 'Activo']
                 ])->get();
+
+                foreach ($materias as $materia) {
+                    $materia->update([
+                        'cupos_disponibles' => $materia->cupos - count($materia->estudiantes)
+                    ]);
+                }
+
                 $mostrarTabla = count($materias) >= config('variables.carrusel');
                 
                 return view('materias.acreditables.index', compact('materias', 'mostrarTabla'));
@@ -165,13 +191,12 @@ class MateriaController extends Controller
 
         $categorias = Categoria::all();
         $profesores = Profesor::all();
-        $horarios = Horario::all();
         $trayectos = Trayecto::all();
 
         // Valida que exista
         existe($materia);
 
-        return view('materias.acreditables.edit', compact('materia', 'categorias', 'profesores', 'horarios', 'trayectos'));
+        return view('materias.acreditables.edit', compact('materia', 'categorias', 'profesores', 'trayectos'));
     }
 
     public function update(Request $request, $id)

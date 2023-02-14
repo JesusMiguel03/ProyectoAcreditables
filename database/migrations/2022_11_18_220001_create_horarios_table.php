@@ -16,7 +16,7 @@ class CreateHorariosTable extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->id();
             $table->char('espacio', config('variables.horarios.espacio'));
-            $table->tinyInteger('edificio')->nullable();
+            $table->tinyInteger('aula')->nullable();
             $table->tinyInteger('dia');
             $table->timestamp('hora');
             $table->char('campo', 4);

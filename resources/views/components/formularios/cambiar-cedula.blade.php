@@ -3,9 +3,7 @@
     {{ method_field('PUT') }}
 
     <article class="card-body">
-        <x-perfil.card-titulo>
-            Cambiar cédula
-        </x-perfil.card-titulo>
+        <x-perfil.card-titulo titulo="Cambiar cédula" />
 
         <main class="row">
             <x-perfil.card-mensaje>
@@ -44,9 +42,11 @@
                 </article>
             </section>
 
-            <button class="btn btn-primary btn-block">
-                Recuperar
-            </button>
+            <footer class="col-12">
+                <button class="p-n5 btn btn-primary btn-block">
+                    Recuperar
+                </button>
+            </footer>
         </main>
     </article>
 </form>

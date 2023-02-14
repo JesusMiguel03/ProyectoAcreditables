@@ -62,6 +62,7 @@ Route::controller(ProfesorController::class)->group(function () {
 // Estudiantes [Solo para coordinador]
 Route::controller(UsuarioController::class)->group(function () {
     Route::get('/estudiantes', 'index')->name('estudiantes.index');
+    Route::get('/estudiantes/getEstudiantes', 'getEstudiantes')->name('estudiantes.search');
     Route::get('/estudiantes/{id}/edit', 'edit')->name('estudiantes.edit');
     Route::put('/estudiantes/{id}/update', 'update')->name('estudiantes.update');
 });
@@ -147,6 +148,7 @@ Route::controller(InscripcionController::class)->group(function () {
     Route::post('/inscripcion/{id}/validar', 'validar')->name('validacion');
     Route::post('/inscripcion/{id}/invalidar', 'invalidar')->name('invalidacion');
     Route::get('/materias/{id}/inscribir', 'inscribir')->name('inscribir');
+    Route::post('/estudiantes/{id}/nota', 'asignarNota')->name('asignar.nota');
 });
 
 // Estudiante
@@ -186,6 +188,6 @@ Route::controller(SoporteController::class)->group(function () {
 
 // Estadísticas
 Route::controller(EstadisticasController::class)->group(function () {
-    Route::get('/estadisticas/materias', 'materias')->name('estadisticas.materias');
-    Route::get('/estadisticas/{modelo}/{condicion}')->name('estadisticas');
+    Route::get('/estadisticas', 'index')->name('estadisticas.index');
+    Route::get('/estadisticas/{periodo_id?}', 'estadisticas')->name('estadisticas.show');
 });

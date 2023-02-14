@@ -5,7 +5,7 @@
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
     <li class="breadcrumb-item"><a href="{{ route('asistencias.index') }}" class="link-muted">Asistencias</a></li>
-    <li class="breadcrumb-item active"><a href="">{{ datosUsuario($estudiante, 'Estudiante', 'nombreCompleto') }}</a>
+    <li class="breadcrumb-item active"><a href="">{{ $estudiante->nombreEstudiante() }}</a>
     </li>
 @stop
 
@@ -22,7 +22,7 @@
 
     <section class="card col-md-4 col-sm-12 p-1 card-estudiante">
         <h5 class="m-1 text-center">
-            {{ datosUsuario($estudiante, 'Estudiante', 'nombreCompleto') }} {{ datosUsuario($estudiante, 'Estudiante', 'CI') }}
+            {{ $estudiante->nombreEstudiante() }} {{ $estudiante->estudianteCI() }}
         </h5>
     </section>
 

@@ -89,13 +89,21 @@
             </thead>
             <tbody>
                 @foreach ($profesores as $profesor)
+                @php
+                    $CI = $profesor->usuario->cedula;
+                    $nombre = $profesor->usuario->nombre;
+                    $apellido = $profesor->usuario->apellido;
+                    $conocimiento = $profesor->conocimiento->nom_conocimiento;
+                    $tlf = $profesor->telefono;
+                    $activo = $profesor->activo === 1 ? 'Activo' : 'Inactivo';
+                @endphp
                     <tr>
-                        <td>{{ datosUsuario($profesor, 'Profesor', 'CI') }}</td>
-                        <td>{{ datosUsuario($profesor, 'Profesor', 'nombre') }}</td>
-                        <td>{{ datosUsuario($profesor, 'Profesor', 'apellido') }}</td>
-                        <td>{{ datosUsuario($profesor, 'Profesor', 'conocimiento') }}</td>
-                        <td>{{ datosUsuario($profesor, 'Profesor', 'tlf') }}</td>
-                        <td>{{ datosUsuario($profesor, 'Profesor', 'activo') === 1 ? 'Activo' : 'Inactivo' }}</td>
+                        <td>{{ $CI }}</td>
+                        <td>{{ $nombre }}</td>
+                        <td>{{ $apellido }}</td>
+                        <td>{{ $conocimiento }}</td>
+                        <td>{{ $tlf }}</td>
+                        <td>{{ $activo }}</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 <a href="{{ route('profesores.edit', $profesor) }}" class="btn btn-primary"

@@ -3,6 +3,9 @@
     $trayectos = atributo($attributes, 'trayectos');
     $pnfs = atributo($attributes, 'pnfs');
     $pnfsNoDisponibles = atributo($attributes, 'pnfsNoDisponibles');
+
+    $trayectoID = $usuario->estudiante->trayecto->id ?? null;
+    $pnfID = $usuario->estudiante->pnf->id ?? null;
 @endphp
 
 {{-- Nombre --}}
@@ -10,7 +13,7 @@
     <label>Nombre</label>
     <div class="input-group">
         <input type="text" class="form-control"
-            placeholder="{{ datosUsuario($usuario, 'Usuario', 'nombreCompleto') }}" disabled>
+            placeholder="{{ $usuario->nombreCompleto() }}" disabled>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -25,7 +28,7 @@
     <label>Cédula</label>
     <div class="input-group">
         <input type="text" class="form-control"
-            placeholder="{{ datosUsuario($usuario, 'Usuario', 'CI') }}" disabled>
+            placeholder="{{ $usuario->nacionalidad . '-' . number_format($usuario->cedula, 0, '', '.') }}" disabled>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -47,7 +50,7 @@
 
                 @foreach ($trayectos as $trayecto)
                     <option value="{{ $trayecto->id }}"
-                        {{ datosUsuario($usuario, 'Usuario', 'trayecto_id') === $trayecto->id ? 'selected' : '' }}>
+                        {{ $trayectoID === $trayecto->id ? 'selected' : '' }}>
                         {{ $trayecto->num_trayecto }}
                     </option>
                 @endforeach
@@ -76,7 +79,7 @@
                 @foreach ($pnfs as $pnf)
                     @if (!in_array($pnf->nom_pnf, $pnfsNoDisponibles))
                         <option value="{{ $pnf->id }}"
-                            {{ datosUsuario($usuario, 'Usuario', 'PNF_id') === $pnf->id ? 'selected' : '' }}>
+                            {{ $pnfID === $pnf->id ? 'selected' : '' }}>
                             {{ $pnf->nom_pnf }}
                         </option>
                     @endif

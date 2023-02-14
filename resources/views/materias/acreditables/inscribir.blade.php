@@ -43,9 +43,9 @@
                             <x-elementos.vacio :modelo="'estudiantes'" />
                         @else
                             <select name="estudiantes[]" class="js-example-basic-single form-control" multiple="multiple">
-                                @foreach ($no_inscritos as $no_inscrito)
-                                    <option value="{{ $no_inscrito->id }}">
-                                        {{ datosUsuario($no_inscrito, 'Estudiante', 'CI') . ' - ' . datosUsuario($no_inscrito, 'Estudiante', 'nombreCompleto') }}
+                                @foreach ($no_inscritos as $estudiante)
+                                    <option value="{{ $estudiante->id }}">
+                                        {{ $estudiante->estudianteCI() . ' - ' . $estudiante->nombreEstudiante() }}
                                     </option>
                                 @endforeach
                             </select>

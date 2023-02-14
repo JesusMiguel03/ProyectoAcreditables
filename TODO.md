@@ -1,60 +1,31 @@
 ## **Pendiente**
 
--   Crear controlador y rutas para gráficos y estadísticas.
--   Componetizar los alerts.
--   Íconos de cantidad.
+-   _(Estadisticas)_ Seleccionar periodo y acreditable, mostrar:
+    -   Estudiantes.
+    -   Profesor.
+    -   PNF.
+    -   Trayecto.
+    
+-   _(/materias)_ Si la materia tiene un estado diferente a activo o inactivo no se cargara.
+
+-   Cada estudiante puede tener varios registros.
 
 -   Actualizar descripción fisica.
 -   Documentación.
 
+## **Posible**
+
 -   Paginación.
-    -   https://makitweb.com/datatables-ajax-pagination-with-search-and-sort-laravel/
-    -   https://packagist.org/packages/singlequote/laravel-datatables
+    -   https://dev.to/dalelantowork/laravel-8-datatables-server-side-rendering-5-easy-steps-5464
 -   QR.
 -   _MostrarMensajeAyuda_ Re-hacer.
--   _[HorarioController]_ no tiene control de duplicados.
--   Renombrar edificio nro -> aula.
--   Evitar que haya duplicados en horarios.
 
 ## **Commit**
-- Schedule changed to a dinamic table with drag and drop API.
 
-## **Nota**
-
--   __(/profesores)__ Si se hace clic 2 veces al registrar un profesor da error.
--   __(/profesores)__ Al ir hacia atras despues del error no muestra "Seleccione un usuario...".
--   _(/materias)_ Si la materia tiene un estado diferente a activo o inactivo no se cargara.
-
-## **Sugerencias**
-
--   Mostrar noticia (show).
--   Los trayectos no deberían poder editarse/eliminarse para evitar problemas.
-
-## **Ideas**
-
--   Sistema de puntuación (likes y dislikes) para [Preguntas, noticias].
--   Opción de ver noticia.
 
 ## **Notas**
 
+-   Los trayectos no deberían poder editarse/eliminarse para evitar problemas.
 -   Si se cambia el numero de acreditable, teniendo estudiantes, se deben sacar si su trayecto !== numero.
--   Los trayectos del 1-4_(5)_ no deberían poder editarse/eliminarse para evitar problemas.
--   Si se edita un trayecto y coloca un número previamente registrado pero borrado, dará error de registro (unique field).
-
-## **Estadísticas**
-
--   Materias
-    -   Cantidad.
-    -   Popularidad.
-    -   Cantidad de estudiantes.
-    -   Flujo de estudiantes (estudiantes por semana).
--   Estudiantes
-    -   Cantidad.
-    -   PNF.
-    -   Trayecto.
--   Profesores
-    -   Cantidad.
-    -   Materias impartidas.
--   Horarios
-    -   Espacios.
-    -   Horas.
+-   Los trayectos del _(1-4 o 5)_ no deberían poder editarse/eliminarse para evitar problemas.
+-   Si se intenta registrar un modelo que tenga la opcion de borrar con un _unique field_ dara error de registro (ya existente).

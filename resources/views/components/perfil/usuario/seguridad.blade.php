@@ -1,7 +1,5 @@
 <section class="card-body">
-    <x-perfil.card-titulo>
-        Seguridad de la cuenta
-    </x-perfil.card-titulo>
+    <x-perfil.card-titulo titulo="Seguridad de la cuenta" />
 
     <main class="row">
         <x-perfil.card-mensaje>

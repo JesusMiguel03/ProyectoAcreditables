@@ -31,11 +31,11 @@
     <label for="desc_conocimiento" class="control-label">Descripción</label>
     <div class="input-group">
         <textarea name="desc_conocimiento" class="form-control @error('desc_conocimiento') is-invalid @enderror descripcion" spellcheck="false"
-            placeholder="{{ __('Descripción') }}" maxlength="{{ config('variables.conocimiento.descripcion') }}" data-nombre="caracteres"  required>{{ $descripcion ?? old('desc_conocimiento') }}</textarea>
+            placeholder="{{ __('Descripción') }}" maxlength="{{ config('variables.conocimiento.descripcion') }}"  required>{{ $descripcion ?? old('desc_conocimiento') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">
-                <span class="fas fa-comment"></span>
+                <span class="fas fa-pencil"></span>
             </div>
         </div>
 

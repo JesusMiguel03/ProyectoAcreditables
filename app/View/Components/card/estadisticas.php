@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components\perfil\usuario;
+namespace App\View\Components\card;
 
 use Illuminate\View\Component;
 
-class informacion extends Component
+class estadisticas extends Component
 {
     /**
      * Create a new component instance.
@@ -23,6 +23,6 @@ class informacion extends Component
      */
     public function render()
     {
-        return view('components.perfil.usuario.informacion');
+        return view('components.card.estadisticas');
     }
 }

@@ -97,6 +97,7 @@
     {{-- Personalizados --}}
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
     <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/lapiz.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
 @stop
 

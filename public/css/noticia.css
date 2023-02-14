@@ -7,6 +7,10 @@
   height: 17rem;
 }
 
+.card-noticia:hover, .card-noticia:focus, .card-noticia:active {
+  border: 1px solid #989898;
+}
+
 .card-text {
   padding: 0.25rem;
   border-top: 1px solid rgb(0, 0, 0, 0.2);

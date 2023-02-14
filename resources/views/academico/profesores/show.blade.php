@@ -6,7 +6,7 @@
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
     <li class="breadcrumb-item"><a href="{{ route('profesores.index') }}" class="link-muted">Profesores</a></li>
     <li class="breadcrumb-item active">
-        <a href="">{{ datosUsuario($profesor, 'Profesor', 'nombreCompleto') }}</a>
+        <a href="">{{ $profesor->nombreProfesor() }}</a>
     </li>
 @stop
 
@@ -15,29 +15,31 @@
 @stop
 
 @section('content')
+@php
+    $avatar = !empty($profesor->avatar()) ? "vendor/img/avatares/avatar{$profesor->avatar()}.webp": 'vendor/img/defecto/usuario.webp';
+    $residencia = "Estado: {$profesor->estado} | Ciudad: {$profesor->ciudad} | Urbanización: {$profesor->urb} | Calle: {$profesor->calle} | Casa: {$profesor->casas}"
+@endphp
     <div class="row">
         <div class="col-md-3 col-sm-12">
 
             {{-- Avatar, nombre, estado --}}
             <div class="card">
                 <header
-                    class="card-header {{ datosUsuario($profesor, 'Profesor', 'activo') === 1 ? 'bg-primary' : 'bg-secondary' }} text-center">
+                    class="card-header {{ $profesor->activo === 1 ? 'bg-primary' : 'bg-secondary' }} text-center">
                     <h6>
-                        Se encuentra {{ datosUsuario($profesor, 'Profesor', 'activo') === 1 ? 'Activo' : 'Inactivo' }}
+                        Se encuentra {{ $profesor->activo === 1 ? 'Activo' : 'Inactivo' }}
                     </h6>
                 </header>
 
                 <main class="card-body box-profile" style="height: 11rem;">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle"
-                            src="{{ !empty(datosUsuario($profesor, 'Profesor', 'avatar'))
-                                ? asset('vendor/img/avatares/' . datosUsuario($profesor, 'Profesor', 'avatar') . '.webp')
-                                : asset('vendor/img/defecto/usuario.webp') }}"
+                            src="{{ asset($avatar) }}"
                             alt="Avatar del profesor">
                     </div>
 
                     <h3 class="profile-username text-center">
-                        <strong>{{ datosUsuario($profesor, 'Profesor', 'nombreCompleto') }}</strong>
+                        <strong>{{ $profesor->nombreProfesor() }}</strong>
                     </h3>
                 </main>
             </div>
@@ -64,13 +66,13 @@
                         </div>
                         <div class="col-9">
                             <p class="text-muted">
-                                {{ datosUsuario($profesor, 'Profesor', 'correo') }}
+                                {{ $profesor->usuario->email }}
                             </p>
                             <p class="text-muted">
-                                {{ datosUsuario($profesor, 'Profesor', 'tlf') }}
+                                {{ $profesor->telefono }}
                             </p>
                             <p class="text-muted">
-                                {{ datosUsuario($profesor, 'Profesor', 'residencia') }}
+                                {{  $residencia }}
                             </p>
                         </div>
                     </div>
@@ -89,17 +91,17 @@
                     <div class="row">
 
                         @php
-                            $temp = [];
+                            $informacion = [];
                             $campos = ['Área de conocimiento', 'Descripción', 'Fecha de ingreso al plantel', 'Pertenece al departamento'];
                             if (!empty($profesor->conocimiento)) {
-                                array_push($temp, $profesor->conocimiento->nom_conocimiento, $profesor->conocimiento->desc_conocimiento);
+                                array_push($informacion, $profesor->conocimiento->nom_conocimiento, $profesor->conocimiento->desc_conocimiento);
                             } else {
-                                array_push($temp, 'No asignado', '');
+                                array_push($informacion, 'No asignado', '');
                             }
-                            array_push($temp, $profesor->fecha_ingreso_institucion, $profesor->departamento->nom_pnf);
+                            array_push($informacion, $profesor->fecha_ingreso_institucion, $profesor->departamento->nom_pnf);
                         @endphp
 
-                        @foreach ($temp as $index => $datos)
+                        @foreach ($informacion as $index => $datos)
                             <div class="col-md-3 col-sm-12">
                                 <p class="font-weight-bold border-right">
                                     {{ $campos[$index] }}

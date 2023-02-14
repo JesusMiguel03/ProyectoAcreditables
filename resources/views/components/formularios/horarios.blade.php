@@ -3,7 +3,7 @@
     
     if (!empty($horario)) {
         $espacio = $horario->espacio;
-        $edificio = $horario->edificio;
+        $aula = $horario->aula;
     }
 @endphp
 
@@ -37,16 +37,16 @@
 
         {{-- Numero --}}
         <div class="form-group col-6">
-            <label for="edificio" class="control-label">Aula</label>
+            <label for="aula" class="control-label">Aula</label>
 
             <div class="input-group">
-                <input type="number" name="edificio" id="edificio"
-                    class="form-control @error('edificio') is-invalid @enderror contador"
-                    value="{{ $edificio ?? old('edificio') }}" placeholder="{{ __('Ej: 12') }}"
-                    maxlength="{{ config('variables.horarios.edificio') }}" data-nombre="número">
+                <input type="number" name="aula" id="aula"
+                    class="form-control @error('aula') is-invalid @enderror contador"
+                    value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 12') }}"
+                    maxlength="{{ config('variables.horarios.aula') }}" data-nombre="número">
 
 
-                @error('edificio')
+                @error('aula')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>

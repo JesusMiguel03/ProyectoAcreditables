@@ -48,7 +48,7 @@ class UsuarioController extends Controller
     {
         // Valida si tiene el permiso.
         permiso('registrar.usuario');
-        
+
         // Busca al usurio, pnfs y trayectos.
         $usuario = User::find($id);
         $pnfs = Pnf::all();

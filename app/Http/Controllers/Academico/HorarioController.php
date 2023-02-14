@@ -27,8 +27,7 @@ class HorarioController extends Controller
 
         $horarios = Horario::all();
         $materias = Materia::whereDoesntHave('horario')->get();
-        // Materia::where('estado_materia', '!=', 'Inactivo')->get();
-        
+
         return view('academico.horarios.index', compact('horarios', 'materias'));
     }
 
@@ -37,16 +36,17 @@ class HorarioController extends Controller
         // Valida si tiene el permiso
         permiso('horarios');
 
-        $espacio = "{$request['espacio']} {$request['edificio']} " . diaSemana($request['dia']) . ' - ' . \Carbon\Carbon::parse($request['hora'])->format('g:i A');
+        $espacio = "{$request['espacio']} {$request['aula']} " . diaSemana($request['dia']) . ' - ' . \Carbon\Carbon::parse($request['hora'])->format('g:i A');
 
         // Valida los campos
         $validar = Validator::make($request->all(), [
-            'espacio' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio'),
+            'espacio' => [
+                'required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio'),
                 Rule::unique('horarios')->where(function ($query) use ($request) {
-                    return $query->where('espacio', $request['espacio'])->where('edificio', $request['edificio'])->where('hora', $request['hora']);
+                    return $query->where('espacio', $request['espacio'])->where('aula', $request['aula'])->where('campo', $request['campo']);
                 })
             ],
-            'edificio' => ['nullable', 'numeric', 'max:' . config('variables.horarios.edificio')],
+            'aula' => ['nullable', 'numeric', 'max:' . config('variables.horarios.aula')],
             'materia_id' => ['required', 'not_in:0']
         ], [
             'espacio.unique' => "El espacio ($espacio) ya ha sido registrado",
@@ -58,7 +58,7 @@ class HorarioController extends Controller
         Horario::create([
             'materia_id' => $request['materia_id'],
             'espacio' => $request['espacio'],
-            'edificio' => $request['edificio'],
+            'aula' => $request['aula'],
             'dia' => $request['dia'],
             'hora' => Carbon::parse($request['hora'])->format('Y-m-d H:i:s'),
             'campo' => $request['campo']
@@ -84,26 +84,39 @@ class HorarioController extends Controller
         permiso('horarios');
 
         if (!empty($request['actualizar'])) {
+            $horario = Horario::find($id);
+
             if ($request['actualizar'] === 'sinHora') {
+
+                $espacio = "{$request['espacio']} {$request['aula']} " . diaSemana($horario['dia']) . ' - ' . \Carbon\Carbon::parse($horario['hora'])->format('g:i A');
+
                 $validar = Validator::make($request->all(), [
-                    'espacio' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio')],
-                    'edificio' => ['numeric', 'max:' . config('variables.horarios.edificio')],
+                    'espacio' => [
+                        'required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio'),
+                        Rule::unique('horarios')->where(function ($query) use ($request, $horario) {
+                            return $query->where('espacio', $request['espacio'])->where('aula', $request['aula'])->where('campo', $horario['campo']);
+                        })
+                    ],
+                    'aula' => ['numeric', 'max:' . config('variables.horarios.aula')],
                 ], [
+                    'espacio.unique' => "El espacio ($espacio) ya ha sido registrado",
                     'espacio.required' => 'El nombre del espacio es necesario.',
                     'espacio.string' => 'El nombre del espacio debe ser una oración.',
                     'espacio.regex' => 'El nombre del espacio solo debe contener letras.',
                     'espacio.max' => 'El nombre del espacio no debe tener más de :max carácteres.',
-                    'edificio.numeric' => 'El aula debe ser un número.',
-                    'edificio.max' => 'El aula no debe ser mayor a :max.',
+                    'aula.numeric' => 'El aula debe ser un número.',
+                    'aula.max' => 'El aula no debe ser mayor a :max.',
                 ]);
                 validacion($validar, 'error');
-    
-                Horario::find($id)->update([
+
+                $horario->update([
                     'espacio' => $request['espacio'],
-                    'edificio' => $request['edificio'],
+                    'aula' => $request['aula'],
                 ]);
+
             } else if ($request['actualizar'] === 'conHora') {
-                Horario::find($id)->update([
+
+                $horario->update([
                     'dia' => $request['diaActualizar'],
                     'hora' => Carbon::parse($request['horaActualizar'])->format('Y-m-d H:i:s'),
                     'campo' => $request['campoActualizar'],
@@ -126,7 +139,8 @@ class HorarioController extends Controller
         return redirect()->back()->with('borrado', 'borrado');
     }
 
-    public function pdf() {
+    public function pdf()
+    {
         $horarios = Horario::all();
 
         // return view('academico.pdf.horario', ['horarios' => $horarios]);

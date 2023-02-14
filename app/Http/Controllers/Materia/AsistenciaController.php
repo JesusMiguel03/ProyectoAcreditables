@@ -24,6 +24,22 @@ class AsistenciaController extends Controller
         // Busca a todos los estudiantes inscritos.
         $estudiantes = Estudiante_materia::all();
 
+        if (rol('Profesor')) {
+            $profesor = auth()->user()->profesor;
+
+            if ($profesor) {
+                $estudiantesProfesor = [];
+
+                foreach ($estudiantes as $estudiante) {
+                    if ($estudiante->tieneProfesor() === $profesor->id) {
+                        array_push($estudiantesProfesor,  $estudiante);
+                    }
+                }
+            }
+
+            $estudiantes = $estudiantesProfesor;
+        }
+
         $asistenciaEstudiantes = [];
 
         foreach ($estudiantes as $estudiante) {

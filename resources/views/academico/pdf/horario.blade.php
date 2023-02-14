@@ -81,7 +81,7 @@
                                 @if (!empty($horario) && $horario->campo === "lu${index}")
                                     <span
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -91,7 +91,7 @@
                                 @if (!empty($horario) && $horario->campo === "ma${index}")
                                     <span
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -101,7 +101,7 @@
                                 @if (!empty($horario) && $horario->campo === "mi${index}")
                                     <span
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -111,7 +111,7 @@
                                 @if (!empty($horario) && $horario->campo === "ju${index}")
                                     <span
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -121,7 +121,7 @@
                                 @if (!empty($horario) && $horario->campo === "vi${index}")
                                     <span
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach

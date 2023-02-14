@@ -14,10 +14,56 @@
 
 @section('content')
 
+    @if (!rol('Estudiante'))
+        <div class="modal fade" id="nota" tabindex="-1" role="dialog" aria-labelledby="campoNota" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <header class="modal-header bg-primary">
+                        <h5 class="modal-title" id="campoNota">Asignar nota</h5>
+                    </header>
+
+                    <main class="modal-body">
+
+                        <h4 id="estudianteSeleccionado" class="border border-secondary p-3 rounded text-center"></h4>
+
+                        <form id="asignarNota" action="{{ route('asignar.nota', 1) }}" method="post">
+                            @csrf
+
+                            <div class="form-group required mb-3">
+                                <label for="campoNotaEstudiante" class="control-label">Nota del estudiante</label>
+                                <div class="input-group">
+                                    <input type="text" name="nota" id="campoNotaEstudiante"
+                                        class="form-control @error('nota') is-invalid @enderror" value="{{ old('nota') }}"
+                                        placeholder="{{ __('Nota: 1 - 100') }}" max="100" autofocus required>
+
+                                    @error('nota')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <x-modal.mensaje-obligatorio />
+
+                            <x-modal.footer-aceptar />
+                        </form>
+                    </main>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @php
         $profesorID = auth()->user()->profesor->id ?? false;
         $materiaProfID = $materia->info->profesor_id ?? false;
         $validacion = $profesorID && $materiaProfID;
+        
+        $tipo = $materia->infoTipo() ?? null;
+        $categoria = $materia->infoCategoria()->nom_categoria ?? null;
+        $horario = !empty($materia->horario) ? $materia->horario->horarioEstructurado() : null;
+        $acreditable = $materia->infoAcreditable() ?? null;
     @endphp
 
     <div class="row mt-2">
@@ -29,16 +75,16 @@
         {{-- Tarjetas información materia --}}
         <section class="col-12 border-bottom">
             <div class="row">
-                <x-elementos.mini-card :datos="['Tipo', materiaRelacion($materia, 'Tipo')]" />
-                <x-elementos.mini-card :datos="['Categoría', materiaRelacion($materia, 'Categoria')]" />
-                <x-elementos.mini-card :datos="['Horario', materiaRelacion($materia, 'Horario')]" />
-                <x-elementos.mini-card :datos="['Acreditable', $materia->trayecto->num_trayecto]" />
+                <x-elementos.mini-card nombre=Tipo :contenido="$tipo ?? 'Sin asignar'" />
+                <x-elementos.mini-card nombre='Categoría' :contenido="$categoria ?? 'Sin asignar'" />
+                <x-elementos.mini-card nombre='Horario' :contenido="$horario ?? 'Sin asignar'" />
+                <x-elementos.mini-card nombre='Acreditable' :contenido="$acreditable ?? 'Sin asignar'" />
             </div>
         </section>
 
         {{-- Listado de estudiantes --}}
         <section class="col-12 my-3">
-            @if (rol('Coordinador') && !($inscritos->isEmpty()) || $validacion && !($inscritos->isEmpty()))
+            @if ((rol('Coordinador') && !$inscritos->isEmpty()) || ($validacion && !$inscritos->isEmpty()))
                 <a href="{{ route('listadoEstudiantes', $materia->id) }}" class="btn btn-primary float-right"
                     {{ Popper::arrow()->pop('Descargar listado de estudiantes') }}>
                     <i class="fas fa-download" style="width: 2rem"></i>
@@ -59,6 +105,7 @@
 
                             @if (!rol('Estudiante'))
                                 <th>Código de Validación</th>
+                                <th>Nota</th>
                                 <th>Acciones</th>
                             @endif
                         </tr>
@@ -68,11 +115,13 @@
                         @foreach ($inscritos as $estudiante)
                             @php
                                 $estudianteID = $estudiante->esEstudiante->id;
-                                $CI = datosUsuario($estudiante, 'EstudianteInscrito', 'CI');
-                                $nombre = datosUsuario($estudiante, 'EstudianteInscrito', 'nombre');
-                                $apellido = datosUsuario($estudiante, 'EstudianteInscrito', 'apellido');
-                                $validado = datosUsuario($estudiante, 'EstudianteInscrito', 'validado');
-                                $codValidacion = datosUsuario($estudiante, 'EstudianteInscrito', 'codigo');
+                                $inscritoID = $estudiante->id;
+                                $CI = $estudiante->inscritoCI();
+                                $nombre = $estudiante->inscritoSoloNombre();
+                                $apellido = $estudiante->inscritoSoloApellido();
+                                $validado = $estudiante->validado;
+                                $codigo = $estudiante->codigo;
+                                $nota = $estudiante->nota;
                                 $ruta = $validado ? 'invalidacion' : 'validacion';
                             @endphp
 
@@ -83,19 +132,25 @@
 
                                 <td> {{ $nombre }} </td>
                                 <td> {{ $apellido }} </td>
-                                <td class="{{ $validado ? 'text-success' : 'text-danger' }}">
+                                <td class="font-weight-bold {{ $validado ? 'text-success' : 'text-danger' }}">
                                     {{ $validado ? 'Validado' : 'No validado' }}
                                 </td>
 
                                 @if (!rol('Estudiante'))
-                                    <td> {{ $codValidacion }} </td>
+                                    <td> {{ $codigo }} </td>
+                                    <td
+                                        class="font-weight-bold text-{{ $nota >= 56 ? 'success' : 'danger' }} notaAsignadaEstudiante">
+                                        {{ $nota }} </td>
                                     <td>
                                         <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                             @can('materias.modificar')
+                                            {{-- Comprobante / PDF --}}
                                                 <a href="{{ route('comprobante', $estudianteID) }}" class="btn btn-danger"
                                                     {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
+
+                                                {{-- Validar / invalidar --}}
 
                                                 <form action="{{ route($ruta, $estudiante->id) }}" method="POST">
                                                     @csrf
@@ -108,7 +163,16 @@
                                                 </form>
                                             @endcan
 
-                                            <a href="{{ route('asistencias.edit', $estudiante->esEstudiante->id) }}"
+                                            {{-- Asignar nota --}}
+                                            <button id="{{ $inscritoID }}" class="btn btn-primary notas"
+                                                data-toggle="modal" data-target="#nota" data-CI="{{ $CI }}"
+                                                data-estudiante="{{ $estudiante->inscritoNombre() }}"
+                                                {{ Popper::arrow()->pop('Asignar nota') }} {{ !$validado ? 'disabled' : '' }}>
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+
+                                            {{-- Asistencia --}}
+                                            <a href="{{ route('asistencias.edit', $estudianteID) }}"
                                                 class="btn btn-primary" {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                 <i class="fas fa-calendar"></i>
                                             </a>
@@ -139,6 +203,10 @@
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/cambiarAcreditable.js') }}"></script>
+
+    @if (!rol('Estudiante'))
+        <script src="{{ asset('js/asignarNota.js') }}"></script>
+    @endif
 
     {{-- Mensajes --}}
     <script>
@@ -187,6 +255,16 @@
                 icon: 'success',
                 title: '¡Acreditable cambiada!',
                 html: 'Se ha cambiado de acreditable exitosamente.',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success px-5'
+                },
+            })
+        @elseif ($message = session('notaActualizada'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Nota actualizada!',
+                html: "La nota ha sido asignada al estudiante <strong>{{ session('notaActualizada') }}</strong> correctamente.",
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-success px-5'

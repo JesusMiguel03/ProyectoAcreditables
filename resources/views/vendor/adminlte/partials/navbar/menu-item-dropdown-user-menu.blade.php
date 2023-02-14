@@ -23,7 +23,7 @@
 
     <div style="margin-top: -0.2rem">
         <h6 class="d-block text-muted font-weight-bold" style="margin-bottom: -0.5rem">
-            {{ datosUsuario(Auth::user(), 'Usuario',  'nombreCompleto') }}
+            {{ Auth::user()->nombreCompleto() }}
         </h6>
         <small class="text-muted text-weight-bold">{{ rolUsuarioConectado() }}</small>
     </div>

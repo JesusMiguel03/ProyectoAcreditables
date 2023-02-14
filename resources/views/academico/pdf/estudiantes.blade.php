@@ -40,7 +40,7 @@
         </p>
         <p>
             <span class="font-weight-bold">Período académico: </span>
-            {{ periodo() }}
+            {{ periodo() ?? 'Sin asignar' }}
         </p>
     </section>
 
@@ -62,13 +62,13 @@
                 @foreach ($estudiantes as $estudiante)
 
                 @php
-                    $CI = datosUsuario($estudiante, 'EstudianteInscrito', 'CI');
-                    $nombre = datosUsuario($estudiante, 'EstudianteInscrito', 'nombre');
-                    $apellido = datosUsuario($estudiante, 'EstudianteInscrito', 'apellido');
-                    $pnf = datosUsuario($estudiante, 'EstudianteInscrito', 'pnfNombre');
-                    $trayecto = datosUsuario($estudiante, 'EstudianteInscrito', 'trayectoNumero');
-                    $estaValidado = datosUsuario($estudiante, 'EstudianteInscrito', 'validado');
-                    $codigo = datosUsuario($estudiante, 'EstudianteInscrito', 'codigo');
+                    $CI = $estudiante->inscritoCI() ?? null;
+                    $nombre = $estudiante->inscritoSoloNombre() ?? null;
+                    $apellido = $estudiante->inscritoSoloApellido() ?? null;
+                    $pnf = $estudiante->inscritoPNF()->nom_pnf ?? null;
+                    $trayecto = $estudiante->inscritoTrayecto()->num_trayecto ?? null;
+                    $estaValidado = $estudiante->validado ?? null;
+                    $codigo = $estudiante->codigo ?? null;
                 @endphp
 
                     <tr class="table-active">

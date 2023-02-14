@@ -49,7 +49,7 @@
             <thead>
                 <tr class="bg-secondary">
                     <th>Nombre</th>
-                    <th>Opciones</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
 

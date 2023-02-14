@@ -88,7 +88,7 @@ return [
 
     'horarios' => [
         'espacio' => 30,
-        'edificio' => 12,
+        'aula' => 12,
     ],
 
     'profesores' => [

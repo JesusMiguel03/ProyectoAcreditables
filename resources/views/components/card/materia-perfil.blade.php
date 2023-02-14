@@ -1,9 +1,15 @@
 @php
     $materia = atributo($attributes, 'materia');
-    $profesorID = materia($materia, 'profID');
-    $profesorNombre = materia($materia, 'profesor');
-    $profesorAvatar = materia($materia, 'profAvatar');
-    $avatar = !empty($profesorAvatar) ? 'vendor/img/avatares/' . $profesorAvatar . '.webp' : 'vendor/img/defecto/usuario.webp';;
+
+    $profesor = $materia->profesorEncargado();
+
+    if ($profesor) {
+        $profesorID = $profesor->id;
+        $profesorNombre = $profesor->nombreProfesor();
+        $profesorAvatar = $profesor->avatar();
+    }
+
+    $avatar = !empty($profesorAvatar) ? "vendor/img/avatares/avatar{$profesorAvatar}.webp": 'vendor/img/defecto/usuario.webp';
     
     if (rol('Estudiante')) {
         $altura = '7.133rem';

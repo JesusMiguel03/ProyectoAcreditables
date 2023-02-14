@@ -34,11 +34,11 @@
     <label for="explicacion" class="control-label">Respuesta</label>
     <div class="input-group">
         <textarea name="explicacion" class="form-control @error('explicacion') is-invalid @enderror descripcion" spellcheck="false"
-            placeholder="{{ __('Ej: Vaya a su perfil, ubicado en el avatar al lado de su nombre') }}" maxlength="{{ config('variables.preguntas.explicacion') }}" data-nombre="caracteres" required>{{ $descripcion ?? old('explicacion') }}</textarea>
+            placeholder="{{ __('Ej: Vaya a su perfil, ubicado en el avatar al lado de su nombre') }}" maxlength="{{ config('variables.preguntas.explicacion') }}" required>{{ $descripcion ?? old('explicacion') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">
-                <span class="fas fa-comment"></span>
+                <span class="fas fa-pencil"></span>
             </div>
         </div>
 

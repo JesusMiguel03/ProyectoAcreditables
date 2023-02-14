@@ -3,9 +3,7 @@
     {{ method_field('PUT') }}
     
     <article class="card-body">
-        <x-perfil.card-titulo>
-            Correo de recuperación
-        </x-perfil.card-titulo>
+        <x-perfil.card-titulo titulo="Correo de recuperación" />
 
         <main class="row">
             <x-perfil.card-mensaje>
@@ -28,9 +26,11 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary btn-block" disabled>
-                Recuperar
-            </button>
+            <footer class="col-12">
+                <button class="p-n5 btn btn-primary btn-block" disabled>
+                    Recuperar
+                </button>
+            </footer>
         </main>
     </article>
 </form>

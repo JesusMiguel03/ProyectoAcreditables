@@ -1,4 +1,4 @@
-const url = `${this.location.href}`;
+const url = `${window.location.href}`;
 const botones = document.querySelectorAll(".borrar");
 const form = document.getElementById("form-borrar");
 

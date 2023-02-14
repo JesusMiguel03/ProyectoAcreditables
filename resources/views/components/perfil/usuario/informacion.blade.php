@@ -1,7 +1,5 @@
 <section class="card-body">
-    <x-perfil.card-titulo>
-        Información de perfil
-    </x-perfil.card-titulo>
+    <x-perfil.card-titulo titulo="Información de perfil" />
 
     <main class="row">
         <x-perfil.card-mensaje>

@@ -52,17 +52,17 @@
                                     </div>
 
                                     <div class="form-group col-6">
-                                        <label for="edificio">Número del edificio</label>
+                                        <label for="aula">Número del aula</label>
 
                                         <div class="input-group">
 
-                                            <input type="number" name="edificio" id="edificio"
-                                                class="form-control @error('edificio') is-invalid @enderror contador"
-                                                value="{{ $edificio ?? old('edificio') }}" placeholder="{{ __('Ej: 12') }}"
-                                                maxlength="{{ config('variables.horarios.edificio') }}" data-nombre="número">
+                                            <input type="number" name="aula" id="aula"
+                                                class="form-control @error('aula') is-invalid @enderror"
+                                                value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 7') }}"
+                                                maxlength="{{ config('variables.horarios.aula') }}" data-nombre="número">
 
 
-                                            @error('edificio')
+                                            @error('aula')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -139,9 +139,9 @@
                 </div>
                 <div class="col-11 mt-n3">
                     <span class="pl-2 text-muted">Cada color representa un espacio</span>
-                    <p class="badge badge-primary">Edificio A</p>
-                    <p class="badge badge-success">Edificio B</p>
-                    <p class="badge badge-info">Edificio C</p>
+                    <p class="badge badge-primary">aula A</p>
+                    <p class="badge badge-success">aula B</p>
+                    <p class="badge badge-info">aula C</p>
                     <p class="badge badge-dark">Laboratorios</p>
                     <p class="badge badge-secondary">Otros</p>
                 </div>
@@ -187,7 +187,7 @@
                                     <span id="{{ $horario->id }}"
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
                                         draggable="true">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -199,7 +199,7 @@
                                     <span id="{{ $horario->id }}"
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
                                         draggable="true">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -211,7 +211,7 @@
                                     <span id="{{ $horario->id }}"
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
                                         draggable="true">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -223,7 +223,7 @@
                                     <span id="{{ $horario->id }}"
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
                                         draggable="true">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach
@@ -235,7 +235,7 @@
                                     <span id="{{ $horario->id }}"
                                         class="materia badge badge-{{ $color[$horario->espacio] ?? 'secondary' }}"
                                         draggable="true">{{ $horario->materia->nom_materia }}
-                                        ({{ "$horario->espacio $horario->edificio" }})
+                                        ({{ "$horario->espacio $horario->aula" }})
                                     </span>
                                 @endif
                             @endforeach

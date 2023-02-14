@@ -60,11 +60,11 @@
             <tbody>
                 @foreach ($estudiantes as $estudiante)
                     <tr>
-                        <td>{{ datosUsuario($estudiante, 'Usuario', 'CI') }}</td>
-                        <td>{{ datosUsuario($estudiante, 'Usuario', 'nombre') }}</td>
-                        <td>{{ datosUsuario($estudiante, 'Usuario', 'apellido') }}</td>
-                        <td>{{ datosUsuario($estudiante, 'Usuario', 'PNF') }}</td>
-                        <td>{{ datosUsuario($estudiante, 'Usuario', 'trayecto') }}</td>
+                        <td>{{ $estudiante->nacionalidad . '-' . number_format($estudiante->cedula, 0, '', '.') }}</td>
+                        <td>{{ $estudiante->nombre }}</td>
+                        <td>{{ $estudiante->apellido }}</td>
+                        <td>{{ $estudiante->estudiante->pnf->nom_pnf ?? 'Sin asignar' }}</td>
+                        <td>{{ $estudiante->estudiante->trayecto->num_trayecto ?? 'Sin asignar' }}</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 <a href="{{ route('estudiantes.edit', $estudiante) }}" class="btn btn-primary"
@@ -106,7 +106,7 @@
 
     {{-- Mensajes --}}
     <script>
-        @if ($message = session('creado'))
+        @if ($message = session('usuarioRegistradoEstudiante'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Estudiante registrado!',

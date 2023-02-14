@@ -19,7 +19,7 @@
 
         <div class="input-group-append">
             <div class="input-group-text">
-                <span class="fas fa-calendar-day "></span>
+                <span class="fas fa-list-alt "></span>
             </div>
         </div>
 

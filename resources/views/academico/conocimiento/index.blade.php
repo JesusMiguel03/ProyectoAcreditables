@@ -84,14 +84,15 @@
 
     {{-- Personalizados --}}
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/lapiz.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
-    @stop
-    
+@stop
+
 @section('js')
     @include('popper::assets')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-    
+
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>

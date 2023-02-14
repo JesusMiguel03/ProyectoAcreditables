@@ -135,7 +135,7 @@ class InscripcionController extends Controller
         $usuario->update([
             'materia_id' => $materiaID,
             'validado' => 0,
-            'codigo' => Str::random(20)
+            'codigo' => Str::random(6)
         ]);
 
         $usuario->asistencia->update([
@@ -178,5 +178,15 @@ class InscripcionController extends Controller
         $estudiante->update(['validado' => 0]);
 
         return redirect()->back()->with('invalidado', 'Se ha invalidado');
+    }
+
+    public function asignarNota(Request $request, $estudiante_id)
+    {
+        $estudiante = Estudiante_materia::find($estudiante_id);
+        $estudiante->update([
+            'nota' => $request['nota']
+        ]);
+
+        return redirect()->back()->with('notaActualizada', "({$estudiante->inscritoCI()}) {$estudiante->inscritoNombre()}");
     }
 }

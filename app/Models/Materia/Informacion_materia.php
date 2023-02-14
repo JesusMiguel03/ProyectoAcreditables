@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Informacion_materia extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'informacion_materia';
 

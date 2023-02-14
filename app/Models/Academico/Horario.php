@@ -9,14 +9,33 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Horario extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    use SoftDeletes;
-
-    protected $fillable = ['materia_id', 'espacio', 'edificio', 'dia', 'hora', 'campo'];
+    protected $fillable = ['materia_id', 'espacio', 'aula', 'dia', 'hora', 'campo'];
 
     public function materia()
     {
         return $this->hasOne(Materia::class, 'id', 'materia_id');
+    }
+
+    public function horarioEstructurado()
+    {
+        $diaSemana = [
+            0 => 'Lunes',
+            1 => 'Martes',
+            2 => 'Miércoles',
+            3 => 'Jueves',
+            4 => 'Viernes'
+        ];
+
+        $dia = $diaSemana[$this->dia];
+        $hora = \Carbon\Carbon::parse($this->hora)->format('g:i A');
+        $ubicacion = "$this->espacio $this->aula";
+
+        if (empty($dia)) {
+            return null;
+        }
+
+        return "{$dia} - {$hora} ({$ubicacion})";
     }
 }

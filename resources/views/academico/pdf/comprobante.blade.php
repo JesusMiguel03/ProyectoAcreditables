@@ -28,12 +28,14 @@
 
     <main class="informacion">
         @php
-            $nombreEstudiante = datosUsuario($estudiante, 'EstudianteInscrito', 'nombreCompleto');
-            $CI = datosUsuario($estudiante, 'EstudianteInscrito', 'CI');
-            $pnf = datosUsuario($estudiante, 'EstudianteInscrito', 'pnfNombre');
-            $trayecto = datosUsuario($estudiante, 'EstudianteInscrito', 'trayectoNumero');
-            $profesor = materia($materia, 'profesor') ?? 'Sin asignar';
-            $codigoEstudiante = datosUsuario($estudiante, 'EstudianteInscrito', 'codigo');
+            $nombreEstudiante = $estudiante->inscritoNombre() ?? null;
+            $CI = $estudiante->inscritoCI() ?? null;
+            $pnf = $estudiante->inscritoPNF()->nom_pnf ?? null;
+            $trayecto = $estudiante->inscritoTrayecto()->num_trayecto ?? null;
+            
+            $profesor = $materia->profesorEncargado()->nombreProfesor() ?? 'Sin asignar';
+            
+            $codigoEstudiante = $estudiante->codigo;
             $fecha = \Carbon\Carbon::parse($estudiante->created_at)
                 ->locale('es')
                 ->isoFormat('ll');
@@ -122,7 +124,7 @@
         <h6 class="nota__titulo"> Notas importantes </h6>
 
         <section class="nota__mensaje">
-            @if (!empty(datosUsuario($estudiante, 'EstudianteInscrito', 'profEncargado')))
+            @if (!empty($estudiante->inscritoProfesor()))
                 <p class="nota_1">
                     Este comprobante certifica al estudiante
                     <span class="negrita">{{ $nombreEstudiante }}</span>, cédula
@@ -139,7 +141,8 @@
                 </p>
             @else
                 <p>
-                    Este comprobante requiere de una actualización de estatus de encargado para ratificar la inscripción del estudiante.
+                    Este comprobante requiere de una actualización de estatus de encargado para ratificar la inscripción
+                    del estudiante.
                 </p>
             @endif
         </section>

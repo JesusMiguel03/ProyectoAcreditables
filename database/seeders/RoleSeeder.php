@@ -67,5 +67,7 @@ class RoleSeeder extends Seeder
         // Soporte
         Permission::create(['name' => 'soporte'])->syncRoles([$coordinador]);
 
+        // Gráficos y estadísticas
+        Permission::create(['name' => 'estadisticas'])->syncRoles([$coordinador]);
     }
 }
