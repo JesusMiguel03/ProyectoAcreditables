@@ -1,0 +1,3 @@
+.fa-x::before {
+  content: "\f00d";
+}

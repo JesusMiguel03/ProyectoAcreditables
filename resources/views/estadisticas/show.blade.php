@@ -21,50 +21,7 @@
 @stop
 
 @section('content')
-    <div class="row">
-        <section class="col-md-6 col-sm-12 mx-auto">
-
-            <div class="form-group mb-3 card p-3">
-                <div class="row">
-
-                    {{-- Activo --}}
-                    <main class="col-12">
-                        <label for="periodo" class="control-label">Periodos</label>
-                        <div class="input-group">
-
-                            <select id="periodo" class="form-control @error('periodo') is-invalid @enderror"
-                                name="periodo">
-                                <option value="0" readonly>Seleccione...</option>
-
-                                @foreach ($periodos as $periodo)
-                                    <option value="{{ $periodo->id }}"
-                                        {{ $periodo->id === $periodoActual->id ? 'selected' : '' }}>
-                                        {{ $conversor[$periodo->fase] . '-' . \Carbon\Carbon::parse($periodo->inicio)->format('Y') }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @error('periodo')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
-                        <p class="mt-3 text-center font-weight-bold">{{ $periodoFormateado }}</p>
-                    </main>
-
-                    <footer class="mt-3 mx-auto col-md-4 col-sm-12">
-                        <a id="btnPeriodo" class="btn btn-block btn-success">
-                            <i class="fas fa-search mr-2"></i>
-                            {{ __('Buscar') }}
-                        </a>
-                    </footer>
-
-                </div>
-            </div>
-        </section>
-    </div>
+    <x-formularios.estadisticas :periodos="$periodos" :materias="$materias" :periodoActual="$periodoActual" :periodo="$periodoFormateado" />
 
     <section class="row">
         <x-card.estadisticas nombre="Materias" color="primary" :cantidad="count($materias)" icono="fa-th-large" />
@@ -94,31 +51,55 @@
 @stop
 
 @section('css')
+    {{-- <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 @stop
 
 @section('js')
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/chartjs/chart.js') }}"></script>
 
     {{-- Personalizados --}}
     <script>
         const inputPeriodo = document.getElementById('periodo')
-        const form = document.getElementById('form')
-        const btn = document.getElementById('btnPeriodo')
+        const btnPeriodo = document.getElementById('btnPeriodo')
 
-        let periodo = 0
+        const inputMateria = document.getElementById('materias')
+        const btnMateria = document.getElementById('btnMateria')
+
+        const activarBotones = () => {
+            periodo == 0 ?
+                btnPeriodo.classList.add('disabled') :
+                btnPeriodo.classList.remove('disabled')
+
+            materia == 0 ?
+                btnMateria.classList.add('disabled') :
+                btnMateria.classList.remove('disabled')
+        }
+
+        let [periodo, materia] = [
+            inputPeriodo.options[inputPeriodo.selectedIndex].value || 0,
+            inputMateria.options[inputMateria.selectedIndex].value || 0
+        ]
 
         inputPeriodo.addEventListener('change', (e) => {
             periodo = e.currentTarget.options[e.currentTarget.selectedIndex].value
 
-            if (periodo == 0) {
-                btn.classList.add('disabled')
-            } else {
-                btn.classList.remove('disabled')
-            }
+            activarBotones()
         })
 
-        btn.addEventListener('click', (e) => {
+        inputMateria.addEventListener('change', (e) => {
+            materia = e.currentTarget.options[e.currentTarget.selectedIndex].value
+
+            activarBotones()
+        })
+
+        btnPeriodo.addEventListener('click', (e) => {
             e.currentTarget.href = `${"{{ route('estadisticas.show') }}"}/${periodo}`
+        })
+
+        btnMateria.addEventListener('click', (e) => {
+            e.currentTarget.href = `${"{{ route('estadisticas.materia') }}"}/${periodo}/${materia}`
         })
     </script>
 
@@ -160,4 +141,26 @@
     <script src="{{ asset('js/graficoMaterias.js') }}"></script>
     <script src="{{ asset('js/graficoPNF.js') }}"></script>
     <script src="{{ asset('js/graficoTrayecto.js') }}"></script>
+
+    <script>
+        @if ($message = session('sinDatos'))
+            icon: 'info',
+            title: '¡No se encontraron datos!',
+            html: "La acreditable <b>{{ session('sinDatos') }}</b> no pertenece al periodo <b>{{ session('periodo') }}</b>, por favor intente con otra.",
+            buttonsStyling: false,
+            customClass: {
+                confirmButton: 'btn btn-success px-5'
+            }
+        @elseif ($message = session('noEncontrado'))
+            Swal.fire({
+                icon: 'error',
+                title: '¡El periodo o acreditable no existen!',
+                html: 'La estadística que desea visualizar no puede ser cargada si no selecciona un periodo o acreditable.',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success px-5'
+                }
+            })
+        @endif
+    </script>
 @stop

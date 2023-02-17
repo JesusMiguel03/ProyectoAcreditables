@@ -1,10 +1,6 @@
 ## **Pendiente**
 
--   _(Estadisticas)_ Seleccionar periodo y acreditable, mostrar:
-    -   Estudiantes.
-    -   Profesor.
-    -   PNF.
-    -   Trayecto.
+-   El comprobante usa el ID del estudiante en vez de estudiante_materia.
     
 -   _(/materias)_ Si la materia tiene un estado diferente a activo o inactivo no se cargara.
 
@@ -21,7 +17,8 @@
 -   _MostrarMensajeAyuda_ Re-hacer.
 
 ## **Commit**
-
+-   New statistic added (Pick subject to see data).
+-   Period and subject statistics validation added.
 
 ## **Notas**
 

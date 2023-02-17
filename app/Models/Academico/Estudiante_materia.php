@@ -47,9 +47,19 @@ class Estudiante_materia extends Model
         return $this->esEstudiante->pnf ?? null;
     }
 
+    public function inscritoPNFNombre()
+    {
+        return $this->esEstudiante->pnf->nom_pnf ?? null;
+    }
+
     public function inscritoTrayecto()
     {
         return $this->esEstudiante->trayecto ?? null;
+    }
+
+    public function inscritoTrayectoNumero()
+    {
+        return $this->esEstudiante->trayecto->num_trayecto ?? null;
     }
 
     public function inscritoProfesor()

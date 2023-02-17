@@ -85,10 +85,10 @@ class AsistenciaController extends Controller
         permiso('asistencias');
 
         // Busca al estudiante y su asistencia
-        $estudiante = Estudiante::find($id);
+        $estudiante = Estudiante_materia::find($id);
 
         // Valida que tenga perfil de estudiante o esté inscrito en una materia
-        if (!$estudiante || $estudiante->inscrito->validado === 0) {
+        if (!$estudiante || $estudiante->validado === 0) {
             return redirect()->back()->with('no puede participar', 'no puede');
         }
 

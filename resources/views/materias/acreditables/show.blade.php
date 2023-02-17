@@ -116,6 +116,7 @@
                             @php
                                 $estudianteID = $estudiante->esEstudiante->id;
                                 $inscritoID = $estudiante->id;
+                                $inscritoID = $estudiante->id;
                                 $CI = $estudiante->inscritoCI();
                                 $nombre = $estudiante->inscritoSoloNombre();
                                 $apellido = $estudiante->inscritoSoloApellido();
@@ -151,8 +152,7 @@
                                                 </a>
 
                                                 {{-- Validar / invalidar --}}
-
-                                                <form action="{{ route($ruta, $estudiante->id) }}" method="POST">
+                                                <form action="{{ route($ruta, $inscritoID) }}" method="POST">
                                                     @csrf
 
                                                     <button type="submit"
@@ -172,7 +172,7 @@
                                             </button>
 
                                             {{-- Asistencia --}}
-                                            <a href="{{ route('asistencias.edit', $estudianteID) }}"
+                                            <a href="{{ route('asistencias.edit', $inscritoID) }}"
                                                 class="btn btn-primary" {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                 <i class="fas fa-calendar"></i>
                                             </a>

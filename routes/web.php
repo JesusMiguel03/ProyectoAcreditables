@@ -190,4 +190,5 @@ Route::controller(SoporteController::class)->group(function () {
 Route::controller(EstadisticasController::class)->group(function () {
     Route::get('/estadisticas', 'index')->name('estadisticas.index');
     Route::get('/estadisticas/{periodo_id?}', 'estadisticas')->name('estadisticas.show');
+    Route::get('/estadisticas/{periodo_id?}/{materia_id?}', 'materia')->name('estadisticas.materia');
 });

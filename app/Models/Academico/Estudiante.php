@@ -54,6 +54,11 @@ class Estudiante extends Model
         return $this->inscrito->materia->trayecto->num_trayecto ?? null;
     }
 
+    public function nombrePNF()
+    {
+        return $this->pnf->nom_pnf ?? null;
+    }
+
     /**
      *  Relaciones
      */

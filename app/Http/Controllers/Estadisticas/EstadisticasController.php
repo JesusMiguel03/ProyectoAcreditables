@@ -29,6 +29,69 @@ class EstadisticasController extends Controller
         return view('estadisticas.index', compact('periodos'));
     }
 
+    public function materia($periodo_id, $materia_id)
+    {
+        $periodos = Periodo::all();
+        $periodoActual = Periodo::find($periodo_id);
+        $materiaActual = Materia::find($materia_id);
+
+        if (!$periodoActual || !$materiaActual) {
+            return redirect()->back()->with('noEncontrado', 'error');
+        }
+
+        $trayecto = $materiaActual->infoAcreditable();
+        
+        // Formato de periodo a mostrar
+        $inicioFormato = \Carbon\Carbon::parse($periodoActual->inicio)->format('d-m-Y');
+        $finFormato = \Carbon\Carbon::parse($periodoActual->fin)->format('d-m-Y');
+        $periodoFormateado = "Fase ({$periodoActual->fase}) - [{$inicioFormato} al {$finFormato}]";
+        
+        $materias = Materia::creadoEntre([$inicioFormato, $finFormato])->get();
+
+        $estudiantes = $materiaActual->estudiantes;
+        $profesor = $materiaActual->profesor ?? null;
+
+        if (!empty($profesor)) {
+            $profesor = $profesor->nombreProfesor() . ' ' . $profesor->profesorCI();
+        }
+
+        $datosEstudiantes = [];
+        $pnfs = [];
+        $totalEstudiantes = count($estudiantes);
+
+        $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
+
+        foreach ($estudiantes as $estudianteM) {
+
+            if (!$estudianteM->creadoEntre([$inicioFormato, $finFormato])->first()) {
+                return redirect()->back()->with('sinDatos', $materiaActual->nom_materia)->with('periodo', $conversor[$periodoActual->fase] . '-' . \Carbon\Carbon::parse($periodoActual->inicio)->format('Y'));
+            }
+
+            $asistencias = 0;
+            for ($i = 1; $i <= 12; $i++) {
+                $sem = 'sem' . $i;
+                $estudianteM->asistencia[$sem] === 1 ? $asistencias += 833 : '';
+            }
+
+            $asistencia = number_format(round($asistencias / 100), 0, '', '');
+            $nota = $estudianteM->nota;
+
+            $pnf = $estudianteM->inscritoPNFNombre();
+
+            !empty($pnfs[$pnf]) ? $pnfs[$pnf]++ : $pnfs[$pnf] = 1;
+
+            $nombreCI = $estudianteM->inscritoNombre() . ' ' . $estudianteM->inscritoCI();
+
+            $datos = "$nombreCI, $asistencia, $nota";
+
+            array_push($datosEstudiantes, $datos);
+        }
+
+        sort($datosEstudiantes);
+        
+        return view('estadisticas.materia', compact('periodoFormateado', 'datosEstudiantes', 'pnfs', 'trayecto', 'profesor', 'totalEstudiantes', 'materiaActual', 'periodos', 'periodoActual', 'materias'));
+    }
+
     public function estadisticas($id)
     {
         try {
@@ -96,35 +159,34 @@ class EstadisticasController extends Controller
 
                 foreach ($trayecto->materias as $materiaT) {
                     $nombre = $materiaT->nom_materia;
-    
+
                     foreach ($materiaT->estudiantes as $estudianteT) {
-    
+
                         $pnf = $estudianteT->esEstudiante->pnf->nom_pnf;
-    
+
                         !empty($materiaMasDemandadaPorTrayecto[$acreditable][$pnf][$nombre])
                             ? $materiaMasDemandadaPorTrayecto[$acreditable][$pnf][$nombre]++
                             : $materiaMasDemandadaPorTrayecto[$acreditable][$pnf][$nombre] = 1;
                     }
                 }
             }
-
         }
 
         if (!$materias->isEmpty()) {
             foreach ($materiaMasDemandadaPorTrayecto as $nroTrayecto => $trayecto) {
-    
+
                 foreach ($trayecto as $pnf => $materia) {
-    
+
                     $materiaDemandada = ['materia' => null, 'cantidad' => 0];
-    
+
                     foreach ($materia as $acreditable => $cantidadEstudiantes) {
-    
+
                         if ($materiaDemandada['cantidad'] < $cantidadEstudiantes) {
                             $materiaDemandada['materia'] = $acreditable;
                             $materiaDemandada['cantidad'] = $cantidadEstudiantes;
                         }
                     }
-    
+
                     $listadoMateriasDemandadasPNF[$nroTrayecto][$pnf] = $materiaDemandada;
                 }
             }
@@ -147,6 +209,6 @@ class EstadisticasController extends Controller
             array_push($nombreMaterias, $nombre);
         }
 
-        return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto'));
+        return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto', 'materias'));
     }
 }

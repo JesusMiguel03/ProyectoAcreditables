@@ -12,13 +12,13 @@
 @stop
 
 @section('content')
+    {{-- Periodos --}}
     <div class="row">
         <section class="col-md-6 col-sm-12 mx-auto">
 
             <div class="form-group mb-3 card p-3">
                 <div class="row">
 
-                    {{-- Activo --}}
                     <main class="col-12">
                         <label for="periodo" class="control-label">Periodos</label>
                         <div class="input-group">
