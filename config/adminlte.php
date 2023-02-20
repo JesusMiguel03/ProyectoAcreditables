@@ -446,6 +446,13 @@ return [
             'icon'        => 'fas fa-wrench',
             'can'         => 'soporte',
         ],
+        [
+            'text'        => 'Base de datos',
+            'url'         => '/base-de-datos',
+            'active'      => ['base-de-datos*'],
+            'icon'        => 'fas fa-cogs',
+            'can'         => 'soporte',
+        ],
     ],
 
     /*

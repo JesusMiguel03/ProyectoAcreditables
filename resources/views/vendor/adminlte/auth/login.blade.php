@@ -71,21 +71,11 @@
         <x-modal.mensaje-obligatorio />
 
         <div class="row">
-            {{-- Recuérdame --}}
             <div class="col-6 text-center">
                 <a href="{{ $register_url }}" class="btn text-primary">
                     {{ __('Registrarme') }}
                 </a>
             </div>
-            {{-- <div class="col-7">
-                <div class="icheck-primary" title="{{ __('Recuérdame') }}">
-                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                    <label for="remember">
-                        {{ __('Recuérdame') }}
-                    </label>
-                </div>
-            </div> --}}
 
             <div class="col-6">
                 <button type=submit class="btn btn-block btn-primary">
@@ -97,17 +87,6 @@
     </form>
 @stop
 
-@section('auth_footer')
-    {{-- Register link --}}
-    {{-- @if ($register_url)
-        <p class="my-0">
-            <a href="{{ $register_url }}">
-                {{ __('Registrarme') }}
-            </a>
-        </p>
-    @endif --}}
-@stop
-
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
-@endsection
+@stop

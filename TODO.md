@@ -13,12 +13,10 @@
 
 -   Paginación.
     -   https://dev.to/dalelantowork/laravel-8-datatables-server-side-rendering-5-easy-steps-5464
--   QR.
 -   _MostrarMensajeAyuda_ Re-hacer.
 
 ## **Commit**
--   New statistic added (Pick subject to see data).
--   Period and subject statistics validation added.
+
 
 ## **Notas**
 

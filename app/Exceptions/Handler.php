@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -47,9 +48,9 @@ class Handler extends ExceptionHandler
     // Redirect to home when get error
     public function render($request, Throwable $e)
     {
-        if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
-            return redirect('/');
-        }
+        if ($e instanceof NotFoundHttpException) return redirect('/');
+
+        if ($e instanceof MethodNotAllowedHttpException) return redirect()->back();
 
         return parent::render($request, $e);
     }

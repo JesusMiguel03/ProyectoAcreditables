@@ -22,6 +22,7 @@ use App\Http\Controllers\Perfil\ContrasenaController;
 use App\Http\Controllers\Perfil\UsuarioController;
 use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\RegistrarUsuarioController;
+use App\Http\Controllers\servidor\BaseDeDatosController;
 use App\Http\Controllers\Soporte\SoporteController;
 use Illuminate\Support\Facades\Route;
 
@@ -191,4 +192,12 @@ Route::controller(EstadisticasController::class)->group(function () {
     Route::get('/estadisticas', 'index')->name('estadisticas.index');
     Route::get('/estadisticas/{periodo_id?}', 'estadisticas')->name('estadisticas.show');
     Route::get('/estadisticas/{periodo_id?}/{materia_id?}', 'materia')->name('estadisticas.materia');
+});
+
+// Base de datos
+Route::controller(BaseDeDatosController::class)->group(function () {
+    Route::get('/base-de-datos', 'index')->name('baseDatos');
+    Route::get('/base-de-datos/guardar', 'guardar')->name('guardar-base-de-datos');
+    Route::post('/base-de-datos/importar', 'importar')->name('importar-base-de-datos');
+    Route::get('/base-de-datos/descargar/{archivo}', 'descargar')->name('descargar-base-de-datos');
 });
