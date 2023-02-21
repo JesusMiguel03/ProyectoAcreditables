@@ -21,7 +21,7 @@ class CreateInformacionMateriaTable extends Migration
             $table->foreign('categoria_id')->references('id')->on('categorias')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('profesor_id')->references('id')->on('profesores')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('horario_id')->references('id')->on('horarios')->onUpdate('cascade')->onDelete('cascade');
-            $table->char('metodologia', config('variables.informacion_materia.metodologia'));
+            $table->string('metodologia', config('variables.informacion_materia.metodologia'));
             $table->timestamps();
             $table->softDeletes();
         });

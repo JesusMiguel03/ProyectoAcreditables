@@ -230,6 +230,16 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
+        @elseif ($message = session('finalizado'))
+            Swal.fire({
+                icon: 'info',
+                title: '¡Fallo al inscribirse!',
+                html: "{{ session('finalizado') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-info px-5'
+                },
+            })
         @elseif ($message = session('invalidado'))
             Swal.fire({
                 icon: 'info',

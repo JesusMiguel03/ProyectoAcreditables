@@ -76,8 +76,8 @@ return [
     ],
 
     'noticias' => [
-        'titulo' => 25,
-        'descripcion' => 60,
+        'titulo' => 30,
+        'descripcion' => 100,
         'imagen' => 80,
     ],
 

@@ -15,9 +15,9 @@ class CreateNoticiasTable extends Migration
     {
         Schema::create('noticias', function (Blueprint $table) {
             $table->id();
-            $table->char('titulo', config('variables.noticias.titulo'));
-            $table->char('desc_noticia', config('variables.noticias.descripcion'));
-            $table->char('imagen_noticia', config('variables.noticias.imagen'))->nullable();
+            $table->string('titulo', config('variables.noticias.titulo'));
+            $table->string('desc_noticia', config('variables.noticias.descripcion'));
+            $table->string('imagen_noticia', config('variables.noticias.imagen'))->nullable();
             $table->boolean('activo');
             $table->timestamps();
             $table->softDeletes();

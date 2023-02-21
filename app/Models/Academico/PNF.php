@@ -13,7 +13,7 @@ class PNF extends Model
 
     protected $table = 'pnfs';
 
-    protected $fillable = ['nom_pnf', 'cod_pnf'];
+    protected $fillable = ['nom_pnf', 'cod_pnf', 'trayectos'];
 
     public function estudiante()
     {

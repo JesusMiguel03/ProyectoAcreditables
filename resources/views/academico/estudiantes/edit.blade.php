@@ -21,27 +21,6 @@
 
             <main class="card-body">
 
-                <p>
-                    <strong>Nota:</strong>
-                    <span class="text-muted">
-                        No todos los pnf disponen de la misma duración, en base a ello debe tener cuidado cuando edite el
-                        perfil académico de un estudiante.
-                    </span>
-                </p>
-
-                <p>
-                    <strong>Duración de careras</strong>
-                    <ul class="mt-n3" style="list-style-type: none">
-                        <li>(4 años) Electricidad.</li>
-                        <li>(4 años) Electrónica.</li>
-                        <li>(4 años) Informática.</li>
-                        <li>(4 años) Instrumentación y Control.</li>
-                        <li>(5 años) Mantenimiento.</li>
-                        <li>(4 años) Sistemas de Calidad y Ambiente.</li>
-                        <li>(3 años) Telecomunicaciones.</li>
-                    </ul>
-                </p>
-
                 <x-formularios.editar-estudiante :usuario="$usuario" :trayectos="$trayectos" :pnfs="$pnfs" :pnfsNoDisponibles="$pnfsNoDisponibles" />
             </main>
         </section>
@@ -50,4 +29,23 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+@stop
+
+@section('js')
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    <script>
+        @if ($message = session('pnfLimite'))
+            Swal.fire({
+                icon: 'info',
+                title: '¡Hubo un problema!',
+                html: "{{ session('pnfLimite') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @endif
+    </script>
 @stop

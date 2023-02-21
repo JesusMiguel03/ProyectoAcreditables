@@ -15,8 +15,8 @@ class CreateConocimientosTable extends Migration
     {
         Schema::create('conocimientos', function (Blueprint $table) {
             $table->id();
-            $table->char('nom_conocimiento', config('variables.conocimiento.nombre'))->unique();
-            $table->char('desc_conocimiento', config('variables.conocimiento.descripcion'));
+            $table->string('nom_conocimiento', config('variables.conocimiento.nombre'))->unique();
+            $table->string('desc_conocimiento', config('variables.conocimiento.descripcion'));
             $table->timestamps();
             $table->softDeletes();
         });

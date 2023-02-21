@@ -22,7 +22,7 @@ class CreateEstudiantesMateriaTable extends Migration
             $table->foreign('estudiante_id')->references('id')->on('estudiantes')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('asistencia_id')->references('id')->on('asistencias')->onUpdate('cascade')->onDelete('cascade');
             $table->tinyInteger('nota');
-            $table->char('codigo', config('variables.estudiante_materia.codigo'))->unique();
+            $table->string('codigo', config('variables.estudiante_materia.codigo'))->unique();
             $table->boolean('validado');
             $table->timestamps();
             $table->softDeletes();

@@ -21,12 +21,12 @@ class CreateProfesoresTable extends Migration
             $table->foreign('departamento_id')->references('id')->on('pnfs')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('usuario_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('conocimiento_id')->references('id')->on('conocimientos')->onUpdate('cascade')->onDelete('cascade');
-            $table->char('telefono', config('variables.profesores.telefono'))->unique();
-            $table->char('casa', config('variables.profesores.casa'));
-            $table->char('calle', config('variables.profesores.calle'));
-            $table->char('urb', config('variables.profesores.urb'));
-            $table->char('ciudad', config('variables.profesores.ciudad'));
-            $table->char('estado', config('variables.profesores.estado'));
+            $table->string('telefono', config('variables.profesores.telefono'))->unique();
+            $table->string('casa', config('variables.profesores.casa'));
+            $table->string('calle', config('variables.profesores.calle'));
+            $table->string('urb', config('variables.profesores.urb'));
+            $table->string('ciudad', config('variables.profesores.ciudad'));
+            $table->string('estado', config('variables.profesores.estado'));
             $table->date('fecha_de_nacimiento');
             $table->date('fecha_ingreso_institucion');
             $table->boolean('activo');

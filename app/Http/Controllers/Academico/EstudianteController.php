@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Academico;
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Estudiante;
 use App\Models\Academico\Estudiante_materia;
+use App\Models\Academico\Periodo;
+use App\Models\Academico\Pnf;
 use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
@@ -22,6 +24,17 @@ class EstudianteController extends Controller
     {
         // Valida si tiene el permiso
         permiso('estudiante');
+
+        /**
+         *  ! REVISAR
+         */
+
+        $pnfTrayectos = Pnf::find($request['pnf'])->trayectos;
+        $pnfNombre = Pnf::find($request['pnf'])->nom_pnf;
+
+        if ($request['trayecto'] > Pnf::find($request['pnf'])->trayectos) {
+            return redirect()->back()->with('pnfLimite', "El PNF {$pnfNombre} cursa hasta trayecto {$pnfTrayectos}");
+        }
 
         Estudiante::updateOrCreate(
             ['usuario_id' => $request['usuario']],
@@ -47,14 +60,18 @@ class EstudianteController extends Controller
         if (empty($estudiante->materia->profesorEncargado())) {
             return redirect()->back();
         }
-        
+
         if (rol('Estudiante') && auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
-        // if (empty(auth()->user()->estudiante) || auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
             return redirect()->back();
         }
 
+        $inicio = \Carbon\Carbon::parse($estudiante->created_at)->startOfDay();
+        $fin = \Carbon\Carbon::parse($estudiante->created_at)->endOfDay();
+
+        $periodo = Periodo::whereBetween('created_at', [$inicio, $fin])->first();
+
         $materia = Materia::find($estudiante->materia_id);
-        $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia]);
+        $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia, 'periodo' => $periodo]);
 
         // En caso de que el coordinador desee revisar el comprobante
         if (rol('Coordinador')) {

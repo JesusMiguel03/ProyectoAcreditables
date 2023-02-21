@@ -5,8 +5,6 @@ use App\Http\Controllers\Academico\EstudianteController;
 use App\Http\Controllers\Academico\HorarioController;
 use App\Http\Controllers\Academico\PeriodoController;
 use App\Http\Controllers\Academico\PNFController;
-use App\Http\Controllers\Academico\RegistrarEstudianteController;
-use App\Http\Controllers\Academico\RegistrarProfesorController;
 use App\Http\Controllers\Academico\ProfesorController;
 use App\Http\Controllers\Academico\TrayectoController;
 use App\Http\Controllers\Estadisticas\EstadisticasController;
@@ -22,7 +20,7 @@ use App\Http\Controllers\Perfil\ContrasenaController;
 use App\Http\Controllers\Perfil\UsuarioController;
 use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\RegistrarUsuarioController;
-use App\Http\Controllers\servidor\BaseDeDatosController;
+use App\Http\Controllers\Soporte\BaseDeDatosController;
 use App\Http\Controllers\Soporte\SoporteController;
 use Illuminate\Support\Facades\Route;
 
@@ -83,10 +81,10 @@ Route::controller(HorarioController::class)->group(function () {
     Route::get('/horarios', 'index')->name('horarios.index');
     Route::post('/horarios/store', 'store')->name('horarios.store');
     Route::get('/horarios/{id}/edit', 'edit')->name('horarios.edit');
-    // Route::get('/horarios/{id}', 'show')->name('horarios.show');
     Route::put('/horarios/{id}/update', 'update')->name('horarios.update');
-    // Route::delete('/horarios/{id}/delete', 'delete')->name('horarios.destroy');
+    Route::delete('/horarios/{id}/delete', 'delete')->name('horarios.destroy');
     Route::get('/horarios/pdf', 'pdf')->name('horarios.pdf');
+    Route::post('/horarios/vaciar', 'vaciar')->name('horarios.vaciar');
 });
 
 // Materias
@@ -154,7 +152,7 @@ Route::controller(InscripcionController::class)->group(function () {
 
 // Estudiante
 Route::controller(EstudianteController::class)->group(function () {
-    Route::post('/estudiante', 'store')->name('estudiante');
+    // Route::post('/estudiante', 'store')->name('estudiante');
     Route::get('/estudiante/{id}/comprobante', 'comprobante')->name('comprobante');
 });
 

@@ -15,13 +15,14 @@ class CreatePnfsTable extends Migration
     {
         Schema::create('pnfs', function (Blueprint $table) {
             $table->id();
-            $table->char('nom_pnf', config('variables.pnfs.nombre'))->unique();
-            $table->char('cod_pnf', config('variables.pnfs.codigo'))->unique()->nullable();
+            $table->string('nom_pnf', config('variables.pnfs.nombre'))->unique();
+            $table->string('cod_pnf', config('variables.pnfs.codigo'))->unique()->nullable();
+            $table->integer('trayectos');
             $table->timestamps();
             $table->softDeletes();
         });
     }
-	
+
     /**
      * Reverse the migrations.
      *

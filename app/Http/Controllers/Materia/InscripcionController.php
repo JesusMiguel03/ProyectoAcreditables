@@ -26,14 +26,13 @@ class InscripcionController extends Controller
 
         // Busca la materia y todos los estudiantes
         $materia = Materia::find($id);
-        $acreditable = $materia->trayecto->id;
+
+        if ($materia->estado_materia === 'Finalizado') {
+            return redirect()->back()->with('finalizado', 'No puedes inscribirte en una acreditable que ya ha finalizado.');
+        }
 
         // Busca a todos los estudiantes que esten en el trayecto igual al número de la acreditable.
-
         $estudiantes = Estudiante::where('trayecto_id', '=', $materia->trayecto->id)->get();
-        // $estudiantes = Estudiante::whereHas('trayecto', function ($query) use ($acreditable) {
-        //     $query->where('trayecto_id', '=', $acreditable);
-        // })->get();
 
         $no_inscritos = [];
 

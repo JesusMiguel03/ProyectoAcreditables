@@ -25,7 +25,13 @@ class HorarioController extends Controller
         // Valida si tiene el permiso
         permiso('horarios');
 
-        $horarios = Horario::all();
+        $periodo = periodo('modelo');
+        $inicio = $periodo->inicio ?? null;
+        $fin = $periodo->fin ?? null;
+
+        // Solo trae las horas que se encuentre en el rango de inicio y fin del periodo actual
+        $horarios = Horario::creadoEntre([$inicio, $fin])->get();
+
         $materias = Materia::whereDoesntHave('horario')->get();
 
         return view('academico.horarios.index', compact('horarios', 'materias'));
@@ -43,7 +49,7 @@ class HorarioController extends Controller
             'espacio' => [
                 'required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.horarios.espacio'),
                 Rule::unique('horarios')->where(function ($query) use ($request) {
-                    return $query->where('espacio', $request['espacio'])->where('aula', $request['aula'])->where('campo', $request['campo']);
+                    return $query->where('espacio', $request['espacio'])->where('aula', $request['aula'])->where('campo', $request['campo'])->where('deleted_at');
                 })
             ],
             'aula' => ['nullable', 'numeric', 'max:' . config('variables.horarios.aula')],
@@ -113,7 +119,6 @@ class HorarioController extends Controller
                     'espacio' => $request['espacio'],
                     'aula' => $request['aula'],
                 ]);
-
             } else if ($request['actualizar'] === 'conHora') {
 
                 $horario->update([
@@ -136,7 +141,7 @@ class HorarioController extends Controller
 
         Horario::find($id)->delete();
 
-        return redirect()->back()->with('borrado', 'borrado');
+        return redirect(route('horarios.index'))->with('borrado', 'borrado');
     }
 
     public function pdf()
@@ -147,5 +152,16 @@ class HorarioController extends Controller
         $pdf = FacadePdf::loadView('academico.pdf.horario', ['horarios' => $horarios])->setPaper('a4', 'landscape');
 
         return $pdf->stream('Horario.pdf');
+    }
+
+    public function vaciar()
+    {
+        $horarios = Horario::all();
+
+        foreach ($horarios as $horario) {
+            $horario->delete();
+        }
+
+        return redirect()->back();
     }
 }

@@ -27,7 +27,7 @@
     </div>
 @else
     <section class="slide mb-4">
-        <article class="card card-noticia mt-3 shadow">
+        <article class="card card-noticia mt-3 shadow" style="height: 300px">
 
             <img src="{{ asset($imagen) }}"
                 class="card-img-top mx-auto rounded border border-outline-secondary" alt="Imagen de noticia" style="max-height: 144px">

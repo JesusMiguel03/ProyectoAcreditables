@@ -24,7 +24,7 @@
                     @csrf
                     {{ method_field('PUT') }}
 
-                    <x-formularios.pnfs :pnf="$pnf->nom_pnf" :codigo="$pnf->cod_pnf" />
+                    <x-formularios.pnfs :pnf="$pnf" />
                 </form>
             </main>
         </div>
@@ -35,6 +35,3 @@
     <link rel="stylesheet" href="{{ asset('css/required.css') }}">
 @stop
 
-@section('js')
-    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
-@stop

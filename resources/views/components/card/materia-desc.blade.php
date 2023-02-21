@@ -7,6 +7,7 @@
     $cuposActuales = $materia->cupos;
     $cuposDisponibles = $materia->cupos_disponibles;
     $descripcion = $materia->desc_materia;
+    $estado = $materia->estado_materia;
     
     // Relacion
     $materiaProfesor = $materia->profesorEncargado();
@@ -22,8 +23,9 @@
         $estudianteInscrito = $usuario->inscrito ?? null;
         $estudianteID = $usuario->id;
         $estudianteMateriaID = $usuario->inscrito->materia_id ?? null;
+        $materiaActual = $usuario->inscrito->materia->estado_materia ?? null;
     }
-
+    
     $descripcionLarga = Str::length($descripcion) > 100;
 @endphp
 
@@ -45,43 +47,63 @@
 
             @can('inscribir')
                 <footer class="text-center pt-5">
-                    @if ($estudianteMateriaID === $materiaID)
-                        <p class="btn btn-secondary" style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}">
-                            Se encuentra inscrito en esta acreditable
-                        </p>
-                    @else
-                        <form id="form" action="{{ route('inscripcion.store') }}" method="post">
-                            @csrf
+                    @if ($estado !== 'Finalizado')
+                        @if ($estudianteMateriaID === $materiaID)
+                            <p class="btn btn-secondary {{ $descripcionLarga ? 'mt-n2' : '' }}">
+                                Se encuentra inscrito en esta acreditable
+                            </p>
+                        @else
+                            @if ($materia->estado_materia === 'En progreso')
+                                <p class="py-2 rounded bg-secondary font-weight-bold {{ $descripcionLarga ? 'mt-n2' : '' }}">
+                                    Esta acreditable ya ha empezado, no puede inscribirse en ella.
+                                </p>
+                            @elseif ($materiaActual !== 'En progreso' && $materiaActual !== 'Finalizado')
+                                <form id="form" action="{{ route('inscripcion.store') }}" method="post">
+                                    @csrf
 
-                            @if ($estudianteInscrito)
-                                <section class="row" style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}">
-                                    <article class="col-6">
-                                        <a href="{{ route('materias.show', $estudianteMateriaID) }}"
-                                            class="btn btn-block btn-secondary">
-                                            Se encuentra inscrito
-                                        </a>
-                                    </article>
+                                    @if ($estudianteInscrito)
+                                        <section class="row {{ $descripcionLarga ? 'mt-n2' : '' }}">
+                                            <article class="col-6">
+                                                <a href="{{ route('materias.show', $estudianteMateriaID) }}"
+                                                    class="btn btn-block btn-secondary">
+                                                    Se encuentra inscrito
+                                                </a>
+                                            </article>
 
-                                    <article class="col-6">
-                                        <button id="cambiarAcreditable" data-id="{{ $estudianteID }}"
-                                            data-materia="{{ $materiaID }}" class="btn btn-block btn-outline-warning">
-                                            Cambiar de acreditable
+                                            <article class="col-6">
+                                                <button id="cambiarAcreditable" data-id="{{ $estudianteID }}"
+                                                    data-materia="{{ $materiaID }}"
+                                                    class="btn btn-block btn-outline-warning">
+                                                    Cambiar de acreditable
+                                                </button>
+                                            </article>
+                                        </section>
+                                    @else
+                                        <input type="number" name="estudiante_id" class="d-none"
+                                            value="{{ $estudianteID }}" hidden>
+                                        <input type="number" name="materia_id" class="d-none" value="{{ $materiaID }}"
+                                            hidden>
+
+                                        <button type="submit"
+                                            class="btn btn-{{ $cuposDisponibles === 0 ? 'secondary' : 'primary' }} {{ $descripcionLarga ? 'mt-n2' : '' }}"
+                                            {{ $cuposDisponibles === 0 ? 'disabled' : '' }}>
+                                            {{ $cuposDisponibles === 0 ? 'No hay cupos disponibles' : 'Inscribir' }}
                                         </button>
-                                    </article>
-                                </section>
+                                    @endif
+
+                                </form>
                             @else
-                                <input type="number" name="estudiante_id" class="d-none" value="{{ $estudianteID }}"
-                                    hidden>
-                                <input type="number" name="materia_id" class="d-none" value="{{ $materiaID }}" hidden>
-
-                                <button type="submit" style="{{ $descripcionLarga ? 'margin-top: -0.5rem' : '' }}"
-                                    class="btn btn-{{ $cuposDisponibles === 0 ? 'secondary' : 'primary' }}"
-                                    {{ $cuposDisponibles === 0 ? 'disabled' : '' }}>
-                                    {{ $cuposDisponibles === 0 ? 'No hay cupos disponibles' : 'Inscribir' }}
-                                </button>
+                                <p
+                                    class="py-2 rounded bg-secondary font-weight-bold {{ $descripcionLarga ? 'mt-n2' : '' }}">
+                                    La acreditable que se encuentra cursando ya ha empezado, no puede cambiarse de
+                                    acreditable.
+                                </p>
                             @endif
-
-                        </form>
+                        @endif
+                    @else
+                        <p class="py-2 rounded bg-secondary font-weight-bold {{ $descripcionLarga ? 'mt-n2' : '' }}">
+                            Esta acreditable ya ha finalizado.
+                        </p>
                     @endif
                 </footer>
             @endcan

@@ -4,7 +4,7 @@
 
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-    <li class="breadcrumb-item"><a href="">Respaldar o cargar base de datos</a></li>
+    <li class="breadcrumb-item"><a href="">Seguridad de base de datos</a></li>
 @stop
 
 @section('content_header')

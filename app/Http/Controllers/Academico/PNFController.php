@@ -35,7 +35,8 @@ class PNFController extends Controller
         // Valida los campos
         $validador = Validator::make($request->all(), [
             'nom_pnf' => ['required', 'string', 'regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $request['nom_pnf']],
-            'cod_pnf' => ['regex: ' . config('variables.regex.alfanumerico'), 'max:' . config('variables.pnfs.codigo'), 'unique:pnfs,cod_pnf,' . $request['cod_pnf']],
+            'cod_pnf' => ['sometimes', 'nullable', 'regex: ' . config('variables.regex.alfanumerico'), 'max:' . config('variables.pnfs.codigo'), 'unique:pnfs,cod_pnf,' . $request['cod_pnf']],
+            'trayectos' => ['required', 'integer'],
         ], [
             'nom_pnf.required' => 'El nombre es necesario.',
             'nom_pnf.string' => 'El nombre debe ser una oración.',
@@ -44,13 +45,16 @@ class PNFController extends Controller
             'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.',
             'cod_pnf.regex' => 'El código solo puede contener números y letras.',
             'cod_pnf.unique' => 'El código ' . $request['cod_pnf'] . ' ya ha sido registrado.',
+            'trayectos.required' => 'La cantidad de veces que ve acreditables es necesaria.',
+            'trayectos.integer' => 'La cantidad de veces que ve acreditables debe ser un número.'
         ]);
         validacion($validador, 'error');
 
         // Guarda el pnf
         PNF::create([
             'nom_pnf' => $request['nom_pnf'],
-            'cod_pnf' => $request['cod_pnf'] === null ? '?' : $request['cod_pnf']
+            'cod_pnf' => $request['cod_pnf'] === null ? '?' : $request['cod_pnf'],
+            'trayectos' => $request['trayectos']
         ]);
 
         return redirect('pnfs')->with('creado', 'creado');
@@ -78,7 +82,8 @@ class PNFController extends Controller
         // Valida los campos
         $validador = Validator::make($request->all(), [
             'nom_pnf' => ['required', 'string', 'regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $id],
-            'cod_pnf' => ['regex: ' . config('variables.regex.alfanumerico'), 'max:' . config('variables.pnfs.codigo'), 'unique:pnfs,cod_pnf,' . $id],
+            'cod_pnf' => ['sometimes', 'nullable', 'regex: ' . config('variables.regex.alfanumerico'), 'max:' . config('variables.pnfs.codigo'), 'unique:pnfs,cod_pnf,' . $request['cod_pnf']],
+            'trayectos' => ['required', 'integer'],
         ], [
             'nom_pnf.required' => 'El nombre es necesario.',
             'nom_pnf.string' => 'El nombre debe ser una oración.',
@@ -87,12 +92,15 @@ class PNFController extends Controller
             'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.',
             'cod_pnf.regex' => 'El código solo puede contener números y letras.',
             'cod_pnf.unique' => 'El código ' . $request['cod_pnf'] . ' ya ha sido registrado.',
+            'trayectos.required' => 'La cantidad de veces que ve acreditables es necesaria.',
+            'trayectos.integer' => 'La cantidad de veces que ve acreditables debe ser un número.'
         ]);
         validacion($validador, 'error');
 
         PNF::find($id)->update([
             'nom_pnf' => $request['nom_pnf'],
-            'cod_pnf' => $request['cod_pnf'] === null ? null : $request['cod_pnf']
+            'cod_pnf' => $request['cod_pnf'] === null ? '?' : $request['cod_pnf'],
+            'trayectos' => $request['trayectos']
         ]);
 
         return redirect('pnfs')->with('actualizado', 'actualizado');

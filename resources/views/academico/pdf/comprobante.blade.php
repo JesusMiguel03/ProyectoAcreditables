@@ -39,6 +39,12 @@
             $fecha = \Carbon\Carbon::parse($estudiante->created_at)
                 ->locale('es')
                 ->isoFormat('ll');
+
+                $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
+
+                $periodo = !empty($periodo)
+                    ? $conversor[$periodo->fase] . '-' . \Carbon\Carbon::parse($periodo->inicio)->format('Y')
+                    : null;
         @endphp
 
         {{-- Perfil estudiante --}}
@@ -111,7 +117,7 @@
                         <tr class="table-active">
                             <td class="celda-vacia-izq"></td>
                             <td class="celda__titulo"> Período académico </td>
-                            <td> {{ periodo() ?? 'No definido' }} </td>
+                            <td> {{ $periodo }} </td>
                             <td class="celda-vacia-der"></td>
                         </tr>
                     </tbody>

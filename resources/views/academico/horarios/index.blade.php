@@ -137,7 +137,7 @@
                         Para editar un horario existente haga clic en la etiqueta correspondiente.
                     </p>
                 </div>
-                <div class="col-11 mt-n3">
+                <div class="col-10 mt-n3">
                     <span class="pl-2 text-muted">Cada color representa un espacio</span>
                     <p class="badge badge-primary">aula A</p>
                     <p class="badge badge-success">aula B</p>
@@ -145,13 +145,24 @@
                     <p class="badge badge-dark">Laboratorios</p>
                     <p class="badge badge-secondary">Otros</p>
                 </div>
-                <div class="col-1">
-                    <a href="{{ route('horarios.pdf') }}" class="btn btn-primary float-right"
+            </div>
+
+            <section class="col-12">
+                <div class="row float-right">
+                    <a href="{{ route('horarios.pdf') }}" class="btn btn-primary"
                         {{ Popper::arrow()->pop('Descargar horario') }}>
                         <i class="fas fa-download" style="width: 2rem"></i>
                     </a>
+
+                    <form id="form-borrar" action="{{ route('horarios.vaciar') }}" method="POST">
+                        @csrf
+
+                        <button id="borrar" class="btn btn-danger ml-2" {{ Popper::arrow()->pop('Vaciar horario') }}>
+                            <i class="fas fa-trash" style="width: 2rem"></i>
+                        </button>
+                    </form>
                 </div>
-            </div>
+            </section>
         </article>
 
         <table class="table table-striped table-bordered">
@@ -266,6 +277,34 @@
     <script src="{{ asset('js/tablas.js') }}"></script>
     {{-- <script src="{{ asset('js/borrar.js') }}"></script> --}}
     {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
+
+    <script>
+        const form = document.getElementById('form-borrar')
+        const boton = document.getElementById('borrar')
+
+        boton.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            Swal.fire({
+                title: "¿Está seguro?",
+                html: 'Se borrarán todas las horas',
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Confirmar",
+                cancelButtonText: "Cancelar",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-danger px-5 mr-2",
+                    cancelButton: "btn btn-secondary px-5 ml-2",
+                },
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit()
+                }
+            })
+        })
+    </script>
 
     {{-- Horario dinamico --}}
     <script>

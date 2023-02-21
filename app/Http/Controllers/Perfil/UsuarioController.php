@@ -67,13 +67,20 @@ class UsuarioController extends Controller
 
         // Valida que se haya elegido un trayecto y pnf.
         $validador = Validator::make($request->all(), [
-            'trayecto' => ['required', 'not_in:0'],
+            'trayecto' => ['required', 'not_in:0', 'digits_between:1,' . Pnf::find($request['pnf'])->trayectos],
             'pnf' => ['required', 'not_in:0'],
         ], [
             'trayecto.not_in' => 'El trayecto seleccionado es inválido.',
             'pnf.not_in' => 'El PNF seleccionado es inválido.',
         ]);
         validacion($validador, 'error');
+
+        $pnfTrayectos = Pnf::find($request['pnf'])->trayectos;
+        $pnfNombre = Pnf::find($request['pnf'])->nom_pnf;
+
+        if ($request['trayecto'] > Pnf::find($request['pnf'])->trayectos) {
+            return redirect()->back()->with('pnfLimite', "El PNF {$pnfNombre} cursa hasta trayecto {$pnfTrayectos}");
+        }
 
         // Actualiza el perfil académico
         $usuario = User::find($id);

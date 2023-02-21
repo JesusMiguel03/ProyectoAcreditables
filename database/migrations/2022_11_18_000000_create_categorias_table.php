@@ -15,7 +15,7 @@ class CreateCategoriasTable extends Migration
     {
         Schema::create('categorias', function (Blueprint $table) {
             $table->id();
-            $table->char('nom_categoria', config('variables.categorias.nombre'))->unique();
+            $table->string('nom_categoria', config('variables.categorias.nombre'))->unique();
             $table->timestamps();
             $table->softDeletes();
         });

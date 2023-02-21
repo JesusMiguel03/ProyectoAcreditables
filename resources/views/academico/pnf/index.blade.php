@@ -53,6 +53,7 @@
                     <tr class="bg-secondary">
                         <th>Código</th>
                         <th>Nombre</th>
+                        <th>Trayectos</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -62,6 +63,7 @@
                         <tr>
                             <td>{{ $pnf->cod_pnf ?? 'No cursa acreditable' }}</td>
                             <td>{{ $pnf->nom_pnf }}</td>
+                            <td>{{ $pnf->trayectos === 0 ? '' : $pnf->trayectos }}</td>
                             <td>
                                 <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                     <a href="{{ route('pnfs.edit', $pnf->id) }}" class="btn btn-primary"

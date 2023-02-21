@@ -281,6 +281,16 @@
                     confirmButton: 'btn btn-info px-5'
                 },
             })
+        @elseif ($message = session('inactivo'))
+            Swal.fire({
+                icon: 'info',
+                title: '¡Acreditable Inactiva!',
+                html: "{{ session('inactivo') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-info px-5'
+                },
+            })
         @endif
     </script>
 @stop

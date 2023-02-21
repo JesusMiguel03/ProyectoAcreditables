@@ -6,12 +6,18 @@ use App\Models\Materia\Materia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Horario extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['materia_id', 'espacio', 'aula', 'dia', 'hora', 'campo'];
+
+    public function nombreMateria()
+    {
+        return $this->materia->nom_materia;
+    }
 
     public function materia()
     {
@@ -37,5 +43,13 @@ class Horario extends Model
         }
 
         return "{$dia} - {$hora} ({$ubicacion})";
+    }
+
+    public function scopeCreadoEntre($query, array $fechas)
+    {
+        $inicio = ($fechas[0] instanceof Carbon) ? $fechas[0] : Carbon::parse($fechas[0])->startOfDay();
+        $fin = ($fechas[1] instanceof Carbon) ? $fechas[1] : Carbon::parse($fechas[1])->endOfDay();
+
+        return $query->whereBetween('created_at', [$inicio, $fin]);
     }
 }

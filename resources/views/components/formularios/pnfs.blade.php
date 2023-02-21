@@ -1,6 +1,11 @@
 @php
     $pnf = atributo($attributes, 'pnf');
-    $codigo = atributo($attributes, 'codigo');
+
+    if ($pnf) {
+        $nombre = $pnf->nom_pnf;
+        $codigo = $pnf->cod_pnf;
+        $trayectos = $pnf->trayectos;
+    }
 @endphp
 
 {{-- Nombre --}}
@@ -9,7 +14,7 @@
 
     <div class="input-group">
         <input type="text" name="nom_pnf" id="nom_pnf" class="form-control @error('nom_pnf') is-invalid @enderror"
-            value="{{ $pnf ?? old('nom_pnf') }}" placeholder="{{ __('Nombre del PNF') }}"
+            value="{{ $nombre ?? old('nom_pnf') }}" placeholder="{{ __('Nombre del PNF') }}"
             maxlength="{{ config('variables.pnfs.nombre') }}" data-nombre="caracteres" autofocus required>
 
         <div class="input-group-append">
@@ -42,6 +47,29 @@
         </div>
 
         @error('cod_pnf')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+</div>
+
+{{-- Trayectos --}}
+<div class="form-group required mb-3">
+    <label for="trayectos" class="control-label">Trayectos</label>
+
+    <div class="input-group">
+        <input type="text" name="trayectos" id="trayectos" class="form-control @error('trayectos') is-invalid @enderror"
+            value="{{ $trayectos ?? old('trayectos') }}" placeholder="{{ __('Cuantas veces ve acreditable') }}" min="1"
+            max"5" required>
+
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-hashtag"></span>
+            </div>
+        </div>
+
+        @error('trayectos')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
             </span>

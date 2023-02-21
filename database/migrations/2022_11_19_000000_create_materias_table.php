@@ -19,12 +19,12 @@ class CreateMateriasTable extends Migration
             $table->unsignedBigInteger('trayecto_id')->nullable();
             $table->foreign('informacion_id')->references('id')->on('informacion_materia')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('trayecto_id')->references('id')->on('trayectos')->onUpdate('cascade')->onDelete('cascade');
-            $table->char('nom_materia', config('variables.materias.nombre'));
+            $table->string('nom_materia', config('variables.materias.nombre'));
             $table->tinyInteger('cupos');
             $table->tinyInteger('cupos_disponibles');
-            $table->char('desc_materia', config('variables.materias.descripcion'));
-            $table->char('estado_materia', config('variables.materias.estado'));
-            $table->char('imagen_materia', config('variables.materias.imagen'))->nullable();
+            $table->string('desc_materia', config('variables.materias.descripcion'));
+            $table->string('estado_materia', config('variables.materias.estado'));
+            $table->string('imagen_materia', config('variables.materias.imagen'))->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

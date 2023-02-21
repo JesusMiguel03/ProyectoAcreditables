@@ -72,6 +72,11 @@ class Estudiante_materia extends Model
         return $this->materia->info->profesor->id ?? null;
     }
 
+    public function inscritoNombreMateria()
+    {
+        return $this->materia->nom_materia ?? null;
+    }
+
     /**
      *  Relaciones
      */

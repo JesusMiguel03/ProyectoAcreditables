@@ -112,13 +112,15 @@ if (!function_exists('atributo')) {
  *  @return (string|null)
  */
 if (!function_exists('periodo')) {
-    function periodo()
+    function periodo($actual = '')
     {
         $periodo = Periodo::orderBy('fin', 'desc')->orderBy('fase', 'desc')->orderBy('inicio', 'desc')->first();
         $existe = !empty($periodo);
 
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
 
+        // dd($periodo);
+        if ($actual === 'modelo') return $periodo;
         return $existe ? $conversor[$periodo->fase] . '-' . Carbon::parse($periodo->inicio)->format('Y') : null;
     }
 }

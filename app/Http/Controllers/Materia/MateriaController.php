@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
+use Illuminate\Support\Facades\Auth;
 
 class MateriaController extends Controller
 {
@@ -24,9 +25,12 @@ class MateriaController extends Controller
 
     public function index()
     {
+        $usuario = Auth::user();
+        
         // Valida si tiene el permiso.
         permiso(['materias.principal', 'materias.estudiante']);
 
+        // Coordinador
         if (rol('Coordinador')) {
             $materias = Materia::all();
 
@@ -40,12 +44,14 @@ class MateriaController extends Controller
             return view('materias.acreditables.index', compact('materias', 'trayectos'));
         }
 
-        // Si es un profesor y tiene perfil.
+        // Profesor
         if (rol('Profesor')) {
-            if (auth()->user()->profesor) {
+
+            // Perfil de profesor
+            if ($usuario->profesor) {
                 $materiasImpartidasProfesor = [];
         
-                foreach (auth()->user()->profesor->imparteMateria as $materia) {
+                foreach ($usuario->profesor->imparteMateria as $materia) {
                     array_push($materiasImpartidasProfesor, $materia->id);
                 }
         
@@ -59,7 +65,6 @@ class MateriaController extends Controller
                     }
                 }
 
-        
                 return view('materias.acreditables.index', compact('materias'));
             }
 
@@ -68,26 +73,29 @@ class MateriaController extends Controller
             return view('materias.acreditables.index', compact('materias'));
         }
 
+        // Estudiante
         if (rol('Estudiante')) {
+
             // No tiene perfil academico
-            if (empty(auth()->user()->estudiante->pnf)) {
+            if (empty($usuario->estudiante->pnf) && empty($usuario->estudiante->trayecto)) {
                 return view('materias.acreditables.index');
             }
 
-            // Si está inscrito.
-            if (auth()->user()->estudiante->inscrito) {
-                $materias = Materia::find(auth()->user()->estudiante->inscrito->materia_id ?? null);
+            // Está inscrito.
+            if ($usuario->estudiante->inscrito) {
+                $materias = Materia::find($usuario->estudiante->inscrito->materia_id ?? null);
 
                 $materias->update([
                     'cupos_disponibles' => $materias->cupos - count($materias->estudiantes)
                 ]);
                 
                 return view('materias.acreditables.index', compact('materias'));
+
             } else {
 
                 // Materias disponibles
                 $materias = Materia::where([
-                    ['trayecto_id', '=', auth()->user()->estudiante->trayecto->id], ['estado_materia', '=', 'Activo']
+                    ['trayecto_id', '=', $usuario->estudiante->trayecto->id], ['estado_materia', '=', 'Activo']
                 ])->get();
 
                 foreach ($materias as $materia) {
@@ -161,8 +169,12 @@ class MateriaController extends Controller
         // Valida que exista
         existe($materia);
 
+        if (!rol('Coordinador') && $materia->estado_materia === 'Inactivo' || $materia->estado_materia === 'Descontinuado') {
+            return redirect()->back()->with('inactivo', 'La acreditable que desea buscar no se encuentra activa.');
+        }
+
         // Evita que el estudiante vea las materias que no coinciden con su trayecto
-        if (rol('Estudiante') && $materia->trayecto_id !== auth()->user()->estudiante->trayecto->id) {
+        if (rol('Estudiante') && $materia->trayecto_id !== Auth::user()->estudiante->trayecto->id) {
             return redirect()->back();
         }
         
