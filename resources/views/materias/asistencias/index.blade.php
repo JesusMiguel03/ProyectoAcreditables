@@ -51,7 +51,7 @@
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 @if (!empty($inscrito))
-                                    <a href="{{ route('asistencias.edit', $estudiante->esEstudiante->id) }}"
+                                    <a href="{{ route('asistencias.edit', $estudiante->id) }}"
                                         class="btn btn-primary" {{ Popper::arrow()->pop('Ver') }}>
                                         <i class="fas fa-eye"></i>
                                     </a>

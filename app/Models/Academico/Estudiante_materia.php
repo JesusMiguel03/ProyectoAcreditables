@@ -77,6 +77,23 @@ class Estudiante_materia extends Model
         return $this->materia->nom_materia ?? null;
     }
 
+    public function aprobo()
+    {
+        $nota = $this->nota;
+        $asistencias = 0;
+
+        $asistencia = $this->asistencia;
+
+        for ($i = 1; $i <= 12; $i++) {
+            $sem = 'sem' . $i;
+            $asistencia[$sem] === 1 ? $asistencias++ : '';
+        }
+
+        $asistencias = ($asistencias * 833) / 100;
+
+        return [$nota, round($asistencias, 0, PHP_ROUND_HALF_UP)];
+    }
+
     /**
      *  Relaciones
      */

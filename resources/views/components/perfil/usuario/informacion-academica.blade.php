@@ -2,7 +2,8 @@
     $usuario = Auth()->user()->estudiante;
     $acreditable = $usuario->nroAcreditable();
     $materia = $usuario->nombreMateria();
-    $nota = $usuario->inscrito->nota ?? null;
+    $nota = $usuario->inscrito->aprobo()[0] ?? null;
+    $asistencia = $usuario->inscrito->aprobo()[1] ?? null;
 @endphp
 
 <section class="card-body">
@@ -16,7 +17,15 @@
         <div class="col-md-7 col-sm-12">
             <div class="form-group mb-3">
                 <label>Acreditable [{{ $acreditable }}] ({{ $materia }})</label>
-                <input type="text" class="form-control" value="{{ $nota }}" readonly disabled>
+
+                <div class="form-row">
+                    <div class="col-6">
+                        <input type="text" class="form-control text-{{ $nota < 75 ? 'danger' : 'success' }}" value="Nota: {{ $nota }}/100" readonly disabled>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control text-{{ $asistencia < 75 ? 'danger' : 'success' }}" value="Asistencia: {{ $asistencia }}/100" readonly disabled>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

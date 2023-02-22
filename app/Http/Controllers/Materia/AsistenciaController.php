@@ -50,9 +50,11 @@ class AsistenciaController extends Controller
             $asistencias = 0;
 
             // Suma cada asistencia
+            // dump($estudiante->inscritoNombre());
             for ($i = 1; $i <= 12; $i++) {
                 $sem = 'sem' . $i;
-                $asistencia[$sem] === 1 ? $asistencias++ : '';
+
+                if (!empty($asistencia)) $asistencia[$sem] === 1 ? $asistencias++ : '';
             }
 
             // Guarda el total de asistencias

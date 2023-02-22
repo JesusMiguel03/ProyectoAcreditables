@@ -90,11 +90,16 @@
             <tbody>
                 @foreach ($profesores as $profesor)
                 @php
-                    $CI = $profesor->usuario->cedula;
+                    $CI = $profesor->profesorCI();
                     $nombre = $profesor->usuario->nombre;
                     $apellido = $profesor->usuario->apellido;
                     $conocimiento = $profesor->conocimiento->nom_conocimiento;
+
                     $tlf = $profesor->telefono;
+                    $codigoTlf = Str::substr($tlf, 0, 4);
+                    $numeroTlf = preg_replace('#(\d{3})(\d{2})(\d{2})#', '$1-$2-$3', Str::substr($tlf, 4));
+                    $formatoTlf = "{$codigoTlf} {$numeroTlf}";
+
                     $activo = $profesor->activo === 1 ? 'Activo' : 'Inactivo';
                 @endphp
                     <tr>
@@ -102,8 +107,8 @@
                         <td>{{ $nombre }}</td>
                         <td>{{ $apellido }}</td>
                         <td>{{ $conocimiento }}</td>
-                        <td>{{ $tlf }}</td>
-                        <td>{{ $activo }}</td>
+                        <td>{{ $formatoTlf }}</td>
+                        <td class="text-{{ $profesor->activo === 1 ? 'success' : 'danger' }}">{{ $activo }}</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 <a href="{{ route('profesores.edit', $profesor) }}" class="btn btn-primary"

@@ -63,7 +63,7 @@
         <div class="form-group col-8">
             <div class="input-group">
                 <input type="text" name="cedula" class="form-control @error('cedula') is-invalid @enderror"
-                    value="{{ old('cedula') }}" placeholder="{{ __('Cedula') }}" maxlength="{{ config('variables.usuarios.cedula')[1] }}" data-nombre="caracteres" required>
+                    value="{{ old('cedula') }}" placeholder="{{ __('Cédula') }}" maxlength="{{ config('variables.usuarios.cedula')[1] }}" data-nombre="caracteres" required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
