@@ -29,6 +29,7 @@
             <tbody>
                 @foreach ($estudiantes as $index => $estudiante)
                     @php
+                        $acreditable = $estudiante->inscritoAcreditable('nro');
                         $inscrito = $estudiante->materia->nom_materia ?? null;
                     @endphp
                     <tr>
@@ -46,7 +47,7 @@
                         <td>{{ $estudiante->inscritoSoloNombre() }}</td>
                         <td>{{ $estudiante->inscritoSoloApellido() }}</td>
                         <td class="{{ !empty($inscrito) ? '' : 'font-weight-bold' }}">
-                            {{ !empty($inscrito) ? $inscrito : 'No inscrito' }}
+                            {{ !empty($inscrito) ? "(#A{$acreditable}) {$inscrito}" : 'No inscrito' }}
                         </td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">

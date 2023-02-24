@@ -77,6 +77,14 @@ class Estudiante_materia extends Model
         return $this->materia->nom_materia ?? null;
     }
 
+    public function inscritoAcreditable($info)
+    {
+        if ($info === 'nro') $info = 'trayecto_id';
+        if ($info === 'nombre') $info = 'nom_materia';
+
+        return $this->materia->$info ?? null;
+    }
+
     public function aprobo()
     {
         $nota = $this->nota;
@@ -92,6 +100,38 @@ class Estudiante_materia extends Model
         $asistencias = ($asistencias * 833) / 100;
 
         return [$nota, round($asistencias, 0, PHP_ROUND_HALF_UP)];
+    }
+
+    public function estaAprobado()
+    {
+        $informacion = $this->aprobo();
+        $nota = $informacion[0];
+        $asistencia = $informacion[1];
+
+        return $nota >= 56 && $asistencia >= 75;
+    }
+
+    public function inscribirSiguienteAcreditable()
+    {
+        $periodo = Periodo::whereRaw('? between inicio and fin', Carbon::parse($this->created_at)->format('Y-m-d'))->first() ?? false;
+        
+        $periodoActualFecha = explode('-', periodo())[1];
+
+        return $periodo
+            ? $periodo->fase >= 1 && $periodoActualFecha >= Carbon::parse($periodo->inicio)->format('Y')
+            : false;
+    }
+
+    public function repiteAcreditable()
+    {
+        $periodo = Periodo::whereRaw('? between inicio and fin', Carbon::parse($this->created_at)->format('Y-m-d'))->first() ?? false;
+
+        return $periodo->formato() !== periodo();
+    }
+
+    public function periodoInscripcion()
+    {
+        return Periodo::whereRaw('? between inicio and fin', Carbon::parse($this->created_at)->format('Y-m-d'))->first() ?? null;
     }
 
     /**

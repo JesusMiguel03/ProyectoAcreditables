@@ -67,13 +67,38 @@ class InscripcionController extends Controller
 
         $estudiantes = $request['estudiantes'];
 
-        /**
-         * En caso de que el estudiante se registre solo se coloca al estudiante (usuario) conectado
-         * en caso contrario (coordinador inscribe) procede con el array
-         */
-        $estudiantes ?? $estudiantes = auth()->user()->estudiante;
+        // Si el coordinador los inscribe
+        if (is_array($estudiantes)) {
 
-        foreach ($estudiantes as $estudiante) {
+            foreach ($estudiantes as $estudiante) {
+                $asistencia = Asistencia::create([
+                    'sem1' => 0,
+                    'sem2' => 0,
+                    'sem3' => 0,
+                    'sem4' => 0,
+                    'sem5' => 0,
+                    'sem6' => 0,
+                    'sem7' => 0,
+                    'sem8' => 0,
+                    'sem9' => 0,
+                    'sem10' => 0,
+                    'sem11' => 0,
+                    'sem12' => 0,
+                ]);
+
+                Estudiante_materia::create([
+                    'estudiante_id' => $estudiante->id,
+                    'nota' => 0,
+                    'codigo' => Str::random(6),
+                    'validado' => rol('Coordinador') ? 1 : 0,
+                    'materia_id' => $id,
+                    'asistencia_id' => $asistencia->id,
+                ]);
+            }
+
+            // Si se inscribe el estudiante solo
+        } else {
+
             $asistencia = Asistencia::create([
                 'sem1' => 0,
                 'sem2' => 0,
@@ -89,17 +114,16 @@ class InscripcionController extends Controller
                 'sem12' => 0,
             ]);
 
-            Estudiante_materia::updateOrCreate(
-                ['estudiante_id' => is_array($estudiantes) ? $estudiante : $estudiantes->id],
-                [
-                    'nota' => 0,
-                    'codigo' => Str::random(6),
-                    'validado' => rol('Coordinador') ? 1 : 0,
-                    'materia_id' => $id,
-                    'asistencia_id' => $asistencia->id,
-                ]
-            );
+            Estudiante_materia::create([
+                'estudiante_id' => auth()->user()->estudiante->id,
+                'nota' => 0,
+                'codigo' => Str::random(6),
+                'validado' => rol('Coordinador') ? 1 : 0,
+                'materia_id' => $id,
+                'asistencia_id' => $asistencia->id,
+            ]);
         }
+
 
         // Cuenta la cantidad de inscritos y los resta de los cupos disponibles
         $cuposMenos = is_array($estudiantes) ? count($estudiantes) : 1;
@@ -120,7 +144,7 @@ class InscripcionController extends Controller
 
     public function cambiar($usuarioID, $materiaID)
     {
-        $usuario = Estudiante_materia::where('estudiante_id', '=', $usuarioID)->first();
+        $usuario = Estudiante_materia::where('estudiante_id', '=', $usuarioID)->get()->last();
 
         /**
          *  Añade un cupo disponible a la materia anterior y resta uno a la que se desea cambiar.

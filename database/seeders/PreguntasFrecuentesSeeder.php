@@ -32,7 +32,7 @@ class PreguntasFrecuentesSeeder extends Seeder
         ]);
         Pregunta_frecuente::create([
             'titulo' => 'Cómo puedo ver mi nota',
-            'explicacion' => 'En progreso...',
+            'explicacion' => 'Vaya a su perfil, al final, en el apartado de "Notas Académicas" podrá visualizar la nota y asistencia que tuvo en cada acreditable en la que haya participado',
         ]);
     }
 }

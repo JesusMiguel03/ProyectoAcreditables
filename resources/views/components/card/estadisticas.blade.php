@@ -6,7 +6,7 @@
     $icono = atributo($attributes, 'icono');
 
     if ($nombre === 'Estudiantes') {
-        $mensaje = "Registrados: $cantidad | Inscritos: $extra";
+        $mensaje = "Registrados T. ($cantidad) | Inscritos P. ($extra)";
     } elseif ($nombre === 'Profesores') {
         $mensaje = "Registrados: $cantidad";
     } else {

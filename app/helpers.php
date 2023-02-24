@@ -119,7 +119,6 @@ if (!function_exists('periodo')) {
 
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
 
-        // dd($periodo);
         if ($actual === 'modelo') return $periodo;
         return $existe ? $conversor[$periodo->fase] . '-' . Carbon::parse($periodo->inicio)->format('Y') : null;
     }
@@ -137,5 +136,13 @@ if (!function_exists('diaSemana')) {
     {
         $dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
         return $dias[$dia];
+    }
+}
+
+if (!function_exists('metodologia')) {
+    function metodologia($numero)
+    {
+        $metodologias = [0 => 'Teórico', 1 => 'Práctico', 2 => 'Teórico-práctico'];
+        return $metodologias[$numero];
     }
 }

@@ -17,16 +17,24 @@
         $profesorID = $materia->profesorEncargado()->id;
     }
     
-    $usuario = Auth::user()->estudiante ?? null;
+    $estudiante = Auth::user()->estudiante ?? null;
     
-    if ($usuario) {
-        $estudianteInscrito = $usuario->inscrito ?? null;
-        $estudianteID = $usuario->id;
-        $estudianteMateriaID = $usuario->inscrito->materia_id ?? null;
-        $materiaActual = $usuario->inscrito->materia->estado_materia ?? null;
+    if ($estudiante) {
+        $inscrito = $estudiante->inscrito->last();
+
+        $estudianteInscrito = $inscrito ?? null;
+        $estudianteID = $estudiante->id;
+        $estudianteMateriaID = $inscrito->materia_id ?? null;
+        $materiaActual = $inscrito->materia->estado_materia ?? null;
+
+        // $repiteAcreditable = $inscrito->repiteAcreditable() ?? null;
+
+        // dd($inscrito->periodoInscripcion()->formato() !== periodo() && $repiteAcreditable);
     }
     
     $descripcionLarga = Str::length($descripcion) > 100;
+
+    $estudianteAproboAcreditableAnterior = $inscrito->estaAprobado() ?? null;
 @endphp
 
 <section class="col-sm-12 col-md-9">
@@ -61,7 +69,7 @@
                                 <form id="form" action="{{ route('inscripcion.store') }}" method="post">
                                     @csrf
 
-                                    @if ($estudianteInscrito)
+                                    @if ($estudianteInscrito && !$estudianteAproboAcreditableAnterior)
                                         <section class="row {{ $descripcionLarga ? 'mt-n2' : '' }}">
                                             <article class="col-6">
                                                 <a href="{{ route('materias.show', $estudianteMateriaID) }}"

@@ -30,7 +30,8 @@ class HorarioController extends Controller
         $fin = $periodo->fin ?? null;
 
         // Solo trae las horas que se encuentre en el rango de inicio y fin del periodo actual
-        $horarios = Horario::creadoEntre([$inicio, $fin])->get();
+        // $horarios = Horario::creadoEntre([$inicio, $fin])->get();
+        $horarios = Horario::all();
 
         $materias = Materia::whereDoesntHave('horario')->get();
 

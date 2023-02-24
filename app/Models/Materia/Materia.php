@@ -43,6 +43,27 @@ class Materia extends Model
         return $this->info->profesor ?? null;
     }
 
+    public function nombreProfesorEncargado()
+    {
+        return !empty($this->info->profesor) ? $this->info->profesor->nombreProfesor() : null;
+    }
+
+    public function estudiantesPeriodoActual()
+    {
+        $periodo = explode('-', periodo())[1];
+        $estudiantes = $this->estudiantes;
+
+        $inscritos = [];
+
+        foreach ($estudiantes as $estudiante) {
+            $periodo === Carbon::parse($estudiante->created_at)->format('Y')
+                ? array_push($inscritos, $estudiante)
+                : '';
+        }
+
+        return $inscritos;
+    }
+
     /**
      *  Relaciones
      */

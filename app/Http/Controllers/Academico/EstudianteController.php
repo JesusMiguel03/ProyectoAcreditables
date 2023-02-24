@@ -9,6 +9,7 @@ use App\Models\Academico\Periodo;
 use App\Models\Academico\Pnf;
 use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class EstudianteController extends Controller
@@ -49,39 +50,28 @@ class EstudianteController extends Controller
 
     public function comprobante($id)
     {
+        // Si es profesor no puede ver el comprobante
+        if (rol('Profesor')) return redirect()->back();
+
         // Busca al estudiante y carga sus datos
-        $estudiante = Estudiante_materia::where('estudiante_id', '=', $id)->first();
+        $estudiante = Estudiante_materia::find($id);
 
-        // Si el estudiante no tiene comprobante, redirecciona
-        if (empty($estudiante)) {
-            return redirect()->back();
-        }
+        // Si el estudiante no tiene comprobante, redirecciona.
+        if (empty($estudiante)) return redirect()->back();
 
-        if (empty($estudiante->materia->profesorEncargado())) {
-            return redirect()->back();
-        }
+        // Si el estudiante intenta acceder al comprobante de otro.
+        if (rol('Estudiante') && auth()->user()->estudiante->id !== $estudiante->estudiante_id) return redirect()->back();
 
-        if (rol('Estudiante') && auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
-            return redirect()->back();
-        }
+        $inicio = Carbon::parse($estudiante->created_at)->format('Y-m-d');
 
-        $inicio = \Carbon\Carbon::parse($estudiante->created_at)->startOfDay();
-        $fin = \Carbon\Carbon::parse($estudiante->created_at)->endOfDay();
-
-        $periodo = Periodo::whereBetween('created_at', [$inicio, $fin])->first();
+        // Busca el periodo que dentro de su rango (fecha inicio y fin) se encuentre la fecha de inscripcion del estudiante.
+        $periodo = Periodo::whereRaw('? between inicio and fin', $inicio)->first();
 
         $materia = Materia::find($estudiante->materia_id);
         $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia, 'periodo' => $periodo]);
 
         // En caso de que el coordinador desee revisar el comprobante
-        if (rol('Coordinador')) {
-            return $pdf->stream('Comprobante de inscripción.pdf');
-        }
-
-        // Si es profesor no puede ver el comprobante
-        if (rol('Profesor')) {
-            return redirect()->back();
-        }
+        if (rol('Coordinador')) return $pdf->stream('Comprobante de inscripción.pdf');
 
         // Flujo normal, al estudiante se le descarga directamente el pdf
         return $pdf->download('Comprobante de inscripcion.pdf');

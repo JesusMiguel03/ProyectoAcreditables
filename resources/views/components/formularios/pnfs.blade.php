@@ -3,7 +3,7 @@
 
     if ($pnf) {
         $nombre = $pnf->nom_pnf;
-        $codigo = $pnf->cod_pnf;
+        $codigo = $pnf->cod_pnf === '?' ? '' : $pnf->cod_pnf;
         $trayectos = $pnf->trayectos;
     }
 @endphp

@@ -121,10 +121,24 @@ class EstadisticasController extends Controller
         $inicio = \Carbon\Carbon::parse($inicio)->startOfDay();
         $fin = \Carbon\Carbon::parse($fin)->endOfDay();
 
-        // Estadísticas de cantidad
-        $materias = Materia::creadoEntre([$inicio, $fin])->get();
-        $estudiantesRegistrados = Estudiante::creadoEntre([$inicio, $fin])->get();
-        $profesores = Profesor::creadoEntre([$inicio, $fin])->get();
+        // Materias totales
+        $materias = Materia::all();
+
+        // Materias creadas en el periodo seleccionado
+        // $materias = Materia::creadoEntre([$inicio, $fin])->get();
+
+        // Estudiantes totales
+        $estudiantesRegistrados = Estudiante::all();
+
+        // Estudiantes que ingresaron en el periodo seleccionado
+        // $estudiantesRegistrados = Estudiante::creadoEntre([$inicio, $fin])->get();
+
+        // Profesores totales
+        $profesores = Profesor::all();
+
+        // Profesores registrados en el periodo seleccionado
+        // $profesores = Profesor::creadoEntre([$inicio, $fin])->get();
+
         $inscritos = Estudiante_materia::creadoEntre([$inicio, $fin])->get();
 
         $pnfs = PNF::where('cod_pnf', '!=', null)->get();
@@ -147,13 +161,15 @@ class EstadisticasController extends Controller
         $estudiantesTrayecto = [];
         $numeroTrayecto = [];
 
+        $condicion = !$materias->isEmpty() && !$materias[0]->estudiantes[0]->creadoEntre([$inicio, $fin])->get()->isEmpty();
+
         foreach ($trayectos as $trayecto) {
             $acreditable = $trayecto->num_trayecto;
 
             array_push($estudiantesTrayecto, count($trayecto->creadoEntre([$inicio, $fin])->get()));
             array_push($numeroTrayecto, $acreditable);
 
-            if (!$materias->isEmpty()) {
+            if ($condicion) {
                 $materiaMasDemandadaPorTrayecto[$acreditable] = [];
                 $listadoMateriasDemandadasPNF[$acreditable] = [];
 
@@ -172,7 +188,7 @@ class EstadisticasController extends Controller
             }
         }
 
-        if (!$materias->isEmpty()) {
+        if ($condicion) {
             foreach ($materiaMasDemandadaPorTrayecto as $nroTrayecto => $trayecto) {
 
                 foreach ($trayecto as $pnf => $materia) {
@@ -199,14 +215,16 @@ class EstadisticasController extends Controller
         }
 
         foreach ($materias as $materia) {
-            $cantidad = count($materia->estudiantes);
-            $nombre = $materia->nom_materia;
-
-            $acreditable = $materia->infoAcreditable();
-            $estudiantes = $materia->estudiantes;
-
-            array_push($estudiantesMateria, $cantidad);
-            array_push($nombreMaterias, $nombre);
+            if ($condicion) {
+                $cantidad = count($materia->estudiantes);
+                $nombre = $materia->nom_materia;
+    
+                $acreditable = $materia->infoAcreditable();
+                $estudiantes = $materia->estudiantes;
+    
+                array_push($estudiantesMateria, $cantidad);
+                array_push($nombreMaterias, $nombre);
+            }
         }
 
         return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto', 'materias'));

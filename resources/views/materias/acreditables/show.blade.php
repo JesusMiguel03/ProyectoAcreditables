@@ -60,7 +60,7 @@
         $materiaProfID = $materia->info->profesor_id ?? false;
         $validacion = $profesorID && $materiaProfID;
         
-        $tipo = $materia->infoTipo() ?? null;
+        $tipo = metodologia($materia->infoTipo()) ?? null;
         $categoria = $materia->infoCategoria()->nom_categoria ?? null;
         $horario = !empty($materia->horario) ? $materia->horario->horarioEstructurado() : null;
         $acreditable = $materia->infoAcreditable() ?? null;

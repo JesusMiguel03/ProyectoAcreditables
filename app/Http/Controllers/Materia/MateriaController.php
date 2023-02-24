@@ -26,19 +26,21 @@ class MateriaController extends Controller
     public function index()
     {
         $usuario = Auth::user();
-        
+
         // Valida si tiene el permiso.
         permiso(['materias.principal', 'materias.estudiante']);
+
+        // Actualiza los cupos disponibles de todas las materias
+        $materias = Materia::all();
+        foreach ($materias as $materia) {
+            $materia->update([
+                'cupos_disponibles' => $materia->cupos - count($materia->estudiantesPeriodoActual())
+            ]);
+        }
 
         // Coordinador
         if (rol('Coordinador')) {
             $materias = Materia::all();
-
-            foreach ($materias as $materia) {
-                $materia->update([
-                    'cupos_disponibles' => $materia->cupos - count($materia->estudiantes)
-                ]);
-            }
             $trayectos = Trayecto::all();
 
             return view('materias.acreditables.index', compact('materias', 'trayectos'));
@@ -50,20 +52,12 @@ class MateriaController extends Controller
             // Perfil de profesor
             if ($usuario->profesor) {
                 $materiasImpartidasProfesor = [];
-        
+
                 foreach ($usuario->profesor->imparteMateria as $materia) {
                     array_push($materiasImpartidasProfesor, $materia->id);
                 }
-        
-                $materias = Materia::whereIn('informacion_id', $materiasImpartidasProfesor)->get();
 
-                if (!empty($materias)) {
-                    foreach ($materias as $materia) {
-                        $materia->update([
-                            'cupos_disponibles' => $materia->cupos - count($materia->estudiantes)
-                        ]);
-                    }
-                }
+                $materias = Materia::whereIn('informacion_id', $materiasImpartidasProfesor)->get();
 
                 return view('materias.acreditables.index', compact('materias'));
             }
@@ -76,41 +70,44 @@ class MateriaController extends Controller
         // Estudiante
         if (rol('Estudiante')) {
             $usuario = $usuario->estudiante;
+            $trayecto = $usuario->trayecto->id;
+            $perfilAcademico = empty($usuario->pnf) && empty($usuario->trayecto);
+            $estudianteInscrito = $usuario->inscrito->last();
+            $puedeCursarSiguienteAcreditable = $estudianteInscrito->estaAprobado() && $estudianteInscrito->inscribirSiguienteAcreditable();
+            $repiteAcreditable = !$estudianteInscrito->estaAprobado() && $estudianteInscrito->repiteAcreditable();
 
             // No tiene perfil academico
-            if (empty($usuario->pnf) && empty($usuario->trayecto)) {
-                return view('materias.acreditables.index');
-            }
+            if ($perfilAcademico) {
+                $mostrar = 'noPerfilAcademico';
 
-            // Está inscrito.
-            if ($usuario->inscrito) {
-                $materias = Materia::find($usuario->inscrito->materia_id ?? null);
+                return view('materias.acreditables.index', compact('mostrar'));
 
-                $materias->update([
-                    'cupos_disponibles' => $materias->cupos - count($materias->estudiantes)
-                ]);
-                
-                return view('materias.acreditables.index', compact('materias'));
+                // Si aprobó la acreditable o no esta inscrito
+            } elseif (!$estudianteInscrito || $repiteAcreditable || $puedeCursarSiguienteAcreditable) {
 
-            } else {
 
                 // Materias disponibles
                 $materias = Materia::where([
-                    ['trayecto_id', '=', $usuario->trayecto->id], ['estado_materia', '=', 'Activo']
+                    ['trayecto_id', '=', $trayecto], ['estado_materia', '=', 'Activo']
                 ])->get();
 
-                foreach ($materias as $materia) {
-                    $materia->update([
-                        'cupos_disponibles' => $materia->cupos - count($materia->estudiantes)
-                    ]);
-                }
-
                 $mostrarTabla = count($materias) >= config('variables.carrusel');
-                
-                return view('materias.acreditables.index', compact('materias', 'mostrarTabla'));
+
+                $mostrar = 'noInscrito';
+
+                return view('materias.acreditables.index', compact('materias', 'mostrarTabla', 'mostrar'));
+
+                // Esta inscrito
+            } elseif ($estudianteInscrito) {
+
+                $materias = Materia::find($estudianteInscrito->materia_id ?? null);
+
+                $mostrar = 'inscrito';
+
+                return view('materias.acreditables.index', compact('materias', 'mostrar'));
             }
         }
-        
+
         // Trae las materias activas y disponibles
         $materias = Materia::where([['estado_materia', '=', 'Activo'], ['cupos_disponibles', '>', 0]])->get();
 
@@ -166,7 +163,7 @@ class MateriaController extends Controller
 
         // Busca el id del curso
         $materia = Materia::find($id);
-        
+
         // Valida que exista
         existe($materia);
 
@@ -178,9 +175,13 @@ class MateriaController extends Controller
         if (rol('Estudiante') && $materia->trayecto_id !== Auth::user()->estudiante->trayecto->id) {
             return redirect()->back();
         }
-        
+
         // Trae a todos los estudiantes inscritos
-        $inscritos = Estudiante_materia::where('materia_id', '=', $id)->get();
+        $inscritos = $materia->estudiantesPeriodoActual();
+
+        $materia->update([
+            'cupos_disponibles' => $materia->cupos - count($materia->estudiantesPeriodoActual())
+        ]);
 
         // En caso de que no se complete la materia se colocan valores por defecto
         $validacion = [];

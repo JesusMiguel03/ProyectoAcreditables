@@ -31,9 +31,8 @@ class AsistenciaController extends Controller
                 $estudiantesProfesor = [];
 
                 foreach ($estudiantes as $estudiante) {
-                    if ($estudiante->tieneProfesor() === $profesor->id) {
-                        array_push($estudiantesProfesor,  $estudiante);
-                    }
+
+                    if ($estudiante->tieneProfesor() === $profesor->id) array_push($estudiantesProfesor,  $estudiante);
                 }
             }
 
@@ -43,14 +42,13 @@ class AsistenciaController extends Controller
         $asistenciaEstudiantes = [];
 
         foreach ($estudiantes as $estudiante) {
-            
+
             // Selecciona la asistencia
             $asistencia = $estudiante->esEstudiante->asistencia;
 
             $asistencias = 0;
 
             // Suma cada asistencia
-            // dump($estudiante->inscritoNombre());
             for ($i = 1; $i <= 12; $i++) {
                 $sem = 'sem' . $i;
 

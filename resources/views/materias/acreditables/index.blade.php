@@ -38,14 +38,15 @@
     @if (rol('Estudiante'))
 
         {{-- No tiene perfil academico --}}
-        @if (empty(Auth::user()->estudiante->pnf))
+        @if ($mostrar === 'noPerfilAcademico')
 
             <x-elementos.perfil-incompleto />
 
             {{-- Esta inscrito --}}
-        @elseif (Auth::user()->estudiante->inscrito)
+        @elseif ($mostrar === 'inscrito')
             <section id="slick" class="px-5">
                 <article class="slide mb-4">
+
 
                     <x-elementos.card-materia :materia="$materias" />
 
@@ -53,9 +54,9 @@
             </section>
 
             {{-- No esta inscrito --}}
-        @else
+        @elseif ($mostrar === 'noInscrito')
             <section id="slick" class="px-5">
-
+                
                 @foreach ($materias as $materia)
                     @if ($loop->index < config('variables.carrusel'))
                         <article class="slide mb-4">
@@ -68,7 +69,6 @@
         @endif
     @endif
 
-    {{-- Old !empty($materias) && $materias instanceof Illuminate\Support\Collection --}}
     @if (!rol('Estudiante') || !empty($mostrarTabla))
         <div class="card table-responsive-sm p-3 {{ rol('Estudiante') ? 'mt-5' : 'mt-1' }} mb-3 col-12">
 

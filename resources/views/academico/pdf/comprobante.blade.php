@@ -33,18 +33,17 @@
             $pnf = $estudiante->inscritoPNF()->nom_pnf ?? null;
             $trayecto = $estudiante->inscritoTrayecto()->num_trayecto ?? null;
             
-            $profesor = $materia->profesorEncargado()->nombreProfesor() ?? 'Sin asignar';
+            $nroAcreditable = $estudiante->inscritoAcreditable('nro') ?? null;
+            $profesor = $materia->nombreProfesorEncargado() ?? 'Sin asignar';
             
             $codigoEstudiante = $estudiante->codigo;
             $fecha = \Carbon\Carbon::parse($estudiante->created_at)
                 ->locale('es')
                 ->isoFormat('ll');
-
-                $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
-
-                $periodo = !empty($periodo)
-                    ? $conversor[$periodo->fase] . '-' . \Carbon\Carbon::parse($periodo->inicio)->format('Y')
-                    : null;
+            
+            $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
+            
+            $periodo = !empty($periodo) ? $conversor[$periodo->fase] . '-' . \Carbon\Carbon::parse($periodo->inicio)->format('Y') : 'Sin asignar';
         @endphp
 
         {{-- Perfil estudiante --}}
@@ -97,7 +96,7 @@
                         <tr class="fila table-active">
                             <td class="celda-vacia-izq"></td>
                             <td class="celda__titulo"> Acreditable </td>
-                            <td> {{ $materia->nom_materia }} </td>
+                            <td> {{ "[$materia->nom_materia] - Acreditable $nroAcreditable" }} </td>
                             <td class="celda-vacia-der"></td>
                         </tr>
                         <tr class="table-active">

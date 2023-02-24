@@ -79,12 +79,17 @@ class Estudiante extends Model
 
     public function inscrito()
     {
-        return $this->hasOne(Estudiante_materia::class, 'estudiante_id', 'id');
+        return $this->hasMany(Estudiante_materia::class, 'estudiante_id', 'id');
     }
 
     public function asistencia()
     {
         return $this->belongsTo(Asistencia::class, 'id');
+    }
+
+    public function acreditables()
+    {
+        return $this->belongsToMany(Materia::class, 'estudiantes_materias', 'id', 'materia_id');
     }
 
     public function scopeCreadoEntre($query, array $fechas)
