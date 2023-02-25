@@ -145,7 +145,7 @@
                                     <td>
                                         <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                             @can('materias.modificar')
-                                            {{-- Comprobante / PDF --}}
+                                                {{-- Comprobante / PDF --}}
                                                 <a href="{{ route('comprobante', $estudianteID) }}" class="btn btn-danger"
                                                     {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
                                                     <i class="fas fa-file-pdf"></i>
@@ -167,13 +167,14 @@
                                             <button id="{{ $inscritoID }}" class="btn btn-primary notas"
                                                 data-toggle="modal" data-target="#nota" data-CI="{{ $CI }}"
                                                 data-estudiante="{{ $estudiante->inscritoNombre() }}"
-                                                {{ Popper::arrow()->pop('Asignar nota') }} {{ !$validado ? 'disabled' : '' }}>
+                                                {{ Popper::arrow()->pop('Asignar nota') }}
+                                                {{ !$validado ? 'disabled' : '' }}>
                                                 <i class="fas fa-pen"></i>
                                             </button>
 
                                             {{-- Asistencia --}}
-                                            <a href="{{ route('asistencias.edit', $inscritoID) }}"
-                                                class="btn btn-primary" {{ Popper::arrow()->pop('Marcar asistencia') }}>
+                                            <a href="{{ route('asistencias.edit', $inscritoID) }}" class="btn btn-primary"
+                                                {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                 <i class="fas fa-calendar"></i>
                                             </a>
                                         </div>
@@ -191,12 +192,17 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+
+    {{-- Personalizado --}}
     <link rel="stylesheet" href="{{ asset('css/decoracion.css') }}">
     <link rel="stylesheet" href="{{ asset('css/cambiarAcreditable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mensaje.css') }}">
 @stop
 
 @section('js')
-    @include('popper::assets')
+    @if (!rol('Estudiante'))
+        @include('popper::assets')
+    @endif
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 

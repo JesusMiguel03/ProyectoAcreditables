@@ -139,6 +139,13 @@ if (!function_exists('diaSemana')) {
     }
 }
 
+/**
+ *  Devuelve el tipo de metodologia.
+ * 
+ *  @param int $numero
+ *  @return string
+ */
+
 if (!function_exists('metodologia')) {
     function metodologia($numero)
     {

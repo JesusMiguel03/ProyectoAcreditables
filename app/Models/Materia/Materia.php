@@ -24,7 +24,7 @@ class Materia extends Model
      */
 
     public function infoCategoria()
-    {   
+    {
         return $this->info->categoria ?? null;
     }
 
@@ -64,10 +64,16 @@ class Materia extends Model
         return $inscritos;
     }
 
+    public function actualizarCupos()
+    {
+        $this->update([
+            'cupos_disponibles' => $this->cupos - count($this->estudiantesPeriodoActual())
+        ]);
+    }
+
     /**
      *  Relaciones
      */
-
     public function info()
     {
         return $this->hasOne(Informacion_materia::class, 'id', 'informacion_id');

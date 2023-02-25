@@ -85,6 +85,15 @@ class Estudiante_materia extends Model
         return $this->materia->$info ?? null;
     }
 
+    public function aprobado()
+    {
+        $inscripcion = $this->aprobo();
+        $nota = $inscripcion[0];
+        $asistencia = $inscripcion[1];
+
+        return $nota > 55 && $asistencia > 74;
+    }
+
     public function aprobo()
     {
         $nota = $this->nota;

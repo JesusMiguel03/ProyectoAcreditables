@@ -1,22 +1,6 @@
 ## **Pendiente**
--   Acreditable reprobada (re-inscribir).
-
 -   Actualizar descripción fisica.
 -   Documentación.
-
-##  **Revisar**
--   Estado materia:
-    -   Activo -> se muestra.
-    -   Inactivo -> no se muestra, mensaje alert inactivo.
-    -   En progreso -> no se muestra / redirige.
-    -   Finalizado -> se muestra a los estudiantes de la materia solo.
-    -   Descontinuado -> no se muestra / redirige.
-
-## **¿Debe enlazarse con periodo?**
--   Áreas de conocimiento (Perfil de profesor).
--   Noticias.
--   Categorías (Información de materia).
--   Profesores.
 
 ## **Commit**
 
