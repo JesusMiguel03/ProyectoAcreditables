@@ -52,6 +52,9 @@ Componente web diseñado para la gestión administrativa de procesos dentro de l
 - Gráficos, estadísticas y reportes.
 - Listados de estudiantes y comprobantes de inscripción en formato PDF.
 
+**Template**
+- [Laravel-AdminLTE](https://github.com/jeroennoten/Laravel-AdminLTE).
+
 **Lenguajes**
 - HTML5.
 - CSS3.
@@ -59,11 +62,18 @@ Componente web diseñado para la gestión administrativa de procesos dentro de l
 - Php.
 
 **Plugins**
-- [jQuery](https://jquery.com/download/).
-- [SweetAlert2](https://sweetalert2.github.io).
-- [DataTables](https://datatables.net).
-- [Slick](http://kenwheeler.github.io/slick/).
-- [Spatie](https://spatie.be/docs/laravel-permission/v5/introduction).
+- [jQuery](https://jquery.com/download/) ~ Javascript shorthands and optimizations.
+- [SweetAlert2](https://sweetalert2.github.io) ~ Custom alerts.
+- [DataTables](https://datatables.net) ~ Custom tables.
+- [Slick](http://kenwheeler.github.io/slick/) ~ Carousel.
+- [Spatie](https://spatie.be/docs/laravel-permission/v5/introduction) ~ Roles and permissions.
+- [Laravel-Backup](https://spatie.be/docs/laravel-backup/v6/introduction) ~ Backup option.
+- [Tempus Dominus](https://getdatepicker.com/5-4/) ~ Date inputs (Requires Moment JS).
+- [Moment](https://momentjs.com/) ~ Time format.
+- [Select2](https://select2.org/) ~ Select multiple.
+- [ChartJS](https://www.chartjs.org/) ~ Graphics and statistics.
+- [icheck-bootstrap](https://bantikyan.github.io/icheck-bootstrap/) ~ Custom checkbox.
+- [DOMPDF](https://github.com/barryvdh/laravel-dompdf) ~ Export to PDF option.
 
 **Frameworks**
 - [Bootstrap (Frontend)](https://getbootstrap.com/docs/4.6/getting-started/introduction/).
