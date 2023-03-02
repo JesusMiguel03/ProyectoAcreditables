@@ -45,7 +45,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 @stop

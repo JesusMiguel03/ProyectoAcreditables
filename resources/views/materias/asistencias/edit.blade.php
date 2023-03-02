@@ -105,7 +105,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/asistenciaEstudiante.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/asistencia.css') }}">
 @stop
 
 @section('js')

@@ -19,8 +19,13 @@
     
     $estudiante = Auth::user()->estudiante ?? null;
     
+    $acreditableInscrita = false;
+    $estadoMateriaActual = false;
+    
     if ($estudiante) {
         $inscrito = $estudiante->inscrito->last();
+
+        $aprobado = $inscrito->aprobado;
     
         $estudianteInscrito = $inscrito ?? null;
         $estudianteID = $estudiante->id;
@@ -29,33 +34,30 @@
     
         $acreditableInscrita = $estudianteMateriaID === $materiaID;
     
-        $conversor = ['I' => 1, 'II' => 2, 'III' => 3];
-
-        $noEstaAprobado = !$inscrito->aprobado() && $inscrito->periodoInscripcion()->formato() !== periodo();
-        $estaAprobado = $inscrito->aprobado() && $conversor[explode('-', periodo())[0]] >= 1 && $materia->infoAcreditable() > $inscrito->inscritoAcreditable('nro');
+        // $conversor = ['I' => 1, 'II' => 2, 'III' => 3];
+    
+        // $noEstaAprobado = !$inscrito->aprobado() && $inscrito->periodoInscripcion()->formato() !== periodo();
+        // $estaAprobado = $inscrito->aprobado() && $conversor[explode('-', periodo())[0]] >= 1 && $materia->infoAcreditable() > $inscrito->inscritoAcreditable('nro');
     }
     
     $descripcionLarga = Str::length($descripcion) > 100;
-
-    if ($noEstaAprobado || $estaAprobado) {
-
-        if ($estadoMateria !== 'Finalizado' && $estadoMateria !== 'Inactivo') {
-            $mensaje = '';
-        
-            if (!$acreditableInscrita && $estadoMateriaActual === 'En progreso') {
-                $mensaje = 'La acreditable que se encuentra cursando ya ha empezado, no puede cambiarse de acreditable.';
-            }
-        
-            if (!$acreditableInscrita && $estadoMateria === 'En progreso') {
-                $mensaje = 'Esta acreditable se encuentra en curso, no puede inscribirse en ella.';
-            }
-        
-            if ($acreditableInscrita) {
-                $mensaje = 'Se encuentra inscrito en esta acreditable.';
-            }
-        } else {
-            $mensaje = 'Esta acreditable se encuentra finalizada.';
+    
+    if ($estadoMateria !== 'Finalizado' && $estadoMateria !== 'Inactivo') {
+        $mensaje = '';
+    
+        if (!$acreditableInscrita && $estadoMateriaActual === 'En progreso') {
+            $mensaje = 'La acreditable que se encuentra cursando ya ha empezado, no puede cambiarse de acreditable.';
         }
+    
+        if (!$acreditableInscrita && $estadoMateria === 'En progreso') {
+            $mensaje = 'Esta acreditable se encuentra en curso, no puede inscribirse en ella.';
+        }
+    
+        if ($acreditableInscrita) {
+            $mensaje = 'Se encuentra inscrito en esta acreditable.';
+        }
+    } else {
+        $mensaje = 'Esta acreditable se encuentra finalizada.';
     }
 @endphp
 
@@ -86,7 +88,7 @@
                         <form id="form" action="{{ route('inscripcion.store') }}" method="post">
                             @csrf
 
-                            @if (!$estudianteInscrito || $noEstaAprobado || $estaAprobado)
+                            @if ($aprobado !== null || !$estudianteInscrito)
                                 <input type="number" name="estudiante_id" class="d-none" value="{{ $estudianteID }}"
                                     hidden>
                                 <input type="number" name="materia_id" class="d-none" value="{{ $materiaID }}" hidden>

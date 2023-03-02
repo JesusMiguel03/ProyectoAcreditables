@@ -28,8 +28,7 @@
                     @csrf
                     {{ method_field('PUT') }}
 
-                    <x-formularios.registrar-profesor :profesor="$profesor" :departamentos="$departamentos"
-                        :conocimientos="$conocimientos" />
+                    <x-formularios.registrar-profesor :profesor="$profesor" :departamentos="$departamentos" :conocimientos="$conocimientos" />
 
                 </form>
             </main>
@@ -39,7 +38,7 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')

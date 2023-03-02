@@ -34,7 +34,7 @@ const configGraficoTrayecto = {
         },
     },
 };
-const chart3 = new Chart(
+const chartTrayecto = new Chart(
     document.getElementById("graficoTrayecto"),
     configGraficoTrayecto
 );

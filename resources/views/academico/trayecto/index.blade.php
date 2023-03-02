@@ -86,7 +86,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')
@@ -99,30 +99,6 @@
     <script src="{{ asset('js/borrar.js') }}"></script>
 
     {{-- Mensajes --}}
-    {{-- <script>
-        @if ($session = session('alerta'))
-            {
-                const [encabezado, contenido, icono] = [
-                    "{{ $session['encabezado'] }}",
-                    "{{ $session['contenido'] }}",
-                    "{{ $session['icono'] }}"
-                ]
-                // let encabezado = "{{ $session['encabezado'] }}"
-                // let contenido = "{{ $session['contenido'] }}"
-                // let icono = "{{ $session['icono'] }}"
-                console.log(encabezado, contenido, icono)
-                Swal.fire({
-                    icon: `${icono}`,
-                    title: `¡${encabezado}!`,
-                    html: `${contenido}`,
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: `btn btn-${icono} px-5`
-                    },
-                })
-            }
-        @endif
-    </script> --}}
     <script>
         @if ($message = session('creado'))
             Swal.fire({
@@ -184,6 +160,16 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif ($message = session('elementoBorrado'))
+            Swal.fire({
+                icon: 'error',
+                title: '¡Trayecto ya creado!',
+                html: "{{ session('elementoBorrado') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @endif

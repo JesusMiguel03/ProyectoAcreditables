@@ -32,6 +32,12 @@ class PNFController extends Controller
         // Valida si tiene el permiso
         permiso('academico');
 
+        $pnfBorrado = PNF::withTrashed()->where('nom_pnf', '=', $request['nom_pnf']) ?? null;
+
+        if ($pnfBorrado) {
+            return redirect()->back()->with('elementoBorrado', 'El PNF que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');
+        }
+
         // Valida los campos
         $validador = Validator::make($request->all(), [
             'nom_pnf' => ['required', 'string', 'regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.pnfs.nombre'), 'unique:pnfs,nom_pnf,' . $request['nom_pnf']],

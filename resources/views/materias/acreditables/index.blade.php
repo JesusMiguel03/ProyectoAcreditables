@@ -56,7 +56,7 @@
             {{-- No esta inscrito --}}
         @elseif ($mostrar === 'noInscrito')
             <section id="slick" class="px-5">
-                
+
                 @foreach ($materias as $materia)
                     @if ($loop->index < config('variables.carrusel'))
                         <article class="slide mb-4">
@@ -185,9 +185,9 @@
 
     {{-- Personalizados --}}
     @if (rol('Coordinador'))
-        <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
         <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/lapiz.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
         <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
     @endif
 @stop

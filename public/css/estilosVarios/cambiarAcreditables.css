@@ -1,0 +1,8 @@
+.sepador {
+    display: flex;
+    justify-content: space-between;
+}
+.boton {
+    width: 8rem;
+    margin: 0 5px;
+}

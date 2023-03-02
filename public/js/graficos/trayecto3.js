@@ -1,22 +1,25 @@
-const coloresMaterias = []
+const coloresTrayecto3 = [];
 
-camposGraficoMaterias.forEach(campo => coloresMaterias.push(color()))
+camposTrayecto3.forEach((campo) => coloresTrayecto3.push(color()));
 
-const dataGraficoMaterias = {
-    labels: camposGraficoMaterias,
+const dataGraficoTrayecto3 = {
+    labels: camposTrayecto3,
     datasets: [
         {
             label: "Estudiantes",
-            backgroundColor: coloresMaterias,
-            data: infoGraficoMaterias,
+            backgroundColor: coloresTrayecto3,
+            data: infoTrayecto3.map((campo) => {
+                return campo;
+            }),
         },
     ],
 };
 
-const configGraficoMaterias = {
+const configGraficoTrayecto3 = {
     type: "bar",
-    data: dataGraficoMaterias,
+    data: dataGraficoTrayecto3,
     options: {
+        indexAxis: "y",
         responsive: true,
         plugins: {
             legend: {
@@ -36,7 +39,7 @@ const configGraficoMaterias = {
             x: {
                 title: {
                     display: true,
-                    text: "Materias",
+                    text: "PNF y Acreditable",
                 },
             },
             y: {
@@ -48,7 +51,8 @@ const configGraficoMaterias = {
         },
     },
 };
-const chart1 = new Chart(
-    document.getElementById("graficoMaterias"),
-    configGraficoMaterias
+
+const chartTrayecto3 = new Chart(
+    document.getElementById("graficoTrayecto3"),
+    configGraficoTrayecto3
 );

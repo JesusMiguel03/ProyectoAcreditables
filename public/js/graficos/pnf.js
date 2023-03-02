@@ -1,7 +1,9 @@
 const coloresPNF = [];
-const coloresAnteriorPNF = []
+const coloresAnteriorPNF = [];
 
-camposGraficoPNF.forEach((campo) => {coloresPNF.push(color()), coloresAnteriorPNF.push(color())});
+camposGraficoPNF.forEach((campo) => {
+    coloresPNF.push(color()), coloresAnteriorPNF.push(color());
+});
 
 const dataGraficoPNF = {
     labels: camposGraficoPNF,
@@ -24,7 +26,7 @@ const dataGraficoPNF = {
         },
         {
             label: "",
-            backgroundColor: 'transparent',
+            backgroundColor: "transparent",
             data: infoGraficoPNF,
             type: "line",
             borderColor: "#000",
@@ -55,6 +57,7 @@ const configGraficoPNF = {
         },
     },
 };
+
 const chart2 = new Chart(
     document.getElementById("graficoPNF"),
     configGraficoPNF

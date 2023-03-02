@@ -12,59 +12,6 @@
 @stop
 
 @section('content')
-    <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="camponoticia" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <header class="modal-header bg-primary">
-                    <h5 class="modal-title" id="camponoticia">Importar archivo SQL</h5>
-                </header>
-
-                <form action="{{ route('importar-base-de-datos') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <main class="modal-body">
-                        <div class="label-group mb-3">
-
-                            <div class="form-group required mb-3">
-                                <label class="control-label" for="archivo">Archivo</label>
-
-                                <div class="input-group">
-                                    <input type="file" class="custom-file-input @error('archivo') is-invalid @enderror"
-                                        id="archivo" name="archivo" accept=".sql" required>
-
-                                    <label class="custom-file-label text-muted" for="archivo" id="campoArchivo">
-                                        Seleccione el respaldo
-                                    </label>
-                                </div>
-
-                                @error('archivo')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <section class="row">
-                            <div class="col-6">
-                                <button type="submit" class="btn btn-block btn-primary">
-                                    <i class="fas fa-upload mr-2"></i>
-                                    Cargar
-                                </button>
-                            </div>
-
-                            <div class="col-6">
-                                <button type="button" class="btn btn-block btn-secondary" data-dismiss="modal">
-                                    <i class="fas fa-arrow-left mr-2"></i>
-                                    Cancelar
-                                </button>
-                            </div>
-                        </section>
-                    </main>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <div class="col-12 card table-responsive-sm p-3 my-3">
 
         <div class="w-100 row mx-auto">
@@ -73,13 +20,6 @@
                     <i class="fas fa-save mr-2"></i>
                     {{ 'Copia de seguridad' }}
                 </a>
-            </div>
-
-            <div class="col-md-3 col-sm-12">
-                <button class="btn btn-block btn-info my-2" data-toggle="modal" data-target="#registrar">
-                    <i class="fas fa-upload mr-2"></i>
-                    {{ 'Importar respaldo' }}
-                </button>
             </div>
         </div>
 
@@ -119,8 +59,8 @@
     <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/etiquetaBuscar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/iconos/buscar.css') }}">
 @stop
 
 @section('js')

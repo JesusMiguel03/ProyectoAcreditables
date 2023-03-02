@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MateriaSeeder::class);
         $this->call(AreaConocimientoSeeder::class);
         $this->call(NoticiaSeeder::class);
+        $this->call(PeriodoSeeder::class);
         $this->call(UserSeeder::class);
     }
 }

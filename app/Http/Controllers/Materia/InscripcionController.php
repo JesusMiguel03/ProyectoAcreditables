@@ -87,6 +87,7 @@ class InscripcionController extends Controller
                 ]);
 
                 Estudiante_materia::create([
+                    'periodo_id' => periodo('modelo')->id,
                     'estudiante_id' => $estudiante->id,
                     'nota' => 0,
                     'codigo' => Str::random(6),
@@ -115,6 +116,7 @@ class InscripcionController extends Controller
             ]);
 
             Estudiante_materia::create([
+                'periodo_id' => periodo('modelo')->id,
                 'estudiante_id' => auth()->user()->estudiante->id,
                 'nota' => 0,
                 'codigo' => Str::random(6),

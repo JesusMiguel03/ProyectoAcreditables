@@ -33,7 +33,9 @@
         <main class="row p-3">
             @if ($listadoMateriasDemandadasPNF)
                 @foreach ($listadoMateriasDemandadasPNF as $index => $trayecto)
-                    <x-card.estadisticas-demandadas :trayecto="$trayecto" :nroTrayecto="$index" />
+                    @if (!empty($trayecto))
+                        <x-graficos.barras :trayecto="$index" />
+                    @endif
                 @endforeach
             @else
                 <p class="mx-auto mb-n1 text-muted">
@@ -51,7 +53,6 @@
 @stop
 
 @section('css')
-    {{-- <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 @stop
 
@@ -124,23 +125,71 @@
             return `rgb(${r}, ${g}, ${b}, 0.6)`
         }
 
-        // Grafico materias
+        // Gráfico materias
         const camposGraficoMaterias = {!! json_encode($nombreMaterias, JSON_HEX_TAG) !!}
         const infoGraficoMaterias = {!! json_encode($estudiantesMateria, JSON_HEX_TAG) !!}
 
-        // Grafico pnf
+        // Gráfico pnf
         const camposGraficoPNF = {!! json_encode($nombrePNF, JSON_HEX_TAG) !!}
         const infoGraficoPNF = {!! json_encode($estudiantesPNF, JSON_HEX_TAG) !!}
         const infoGraficoAnteriorPNF = {!! json_encode($estudiantesAnteriorPNF, JSON_HEX_TAG) !!}
 
-        // Grafico trayecto
+        // Gráfico trayecto
         const camposGraficoTrayecto = {!! json_encode($numeroTrayecto, JSON_HEX_TAG) !!}
         const infoGraficoTrayecto = {!! json_encode($estudiantesTrayecto, JSON_HEX_TAG) !!}
     </script>
 
-    <script src="{{ asset('js/graficoMaterias.js') }}"></script>
-    <script src="{{ asset('js/graficoPNF.js') }}"></script>
-    <script src="{{ asset('js/graficoTrayecto.js') }}"></script>
+    <script>
+        const trayecto1 = {!! json_encode($trayecto1, JSON_HEX_TAG) !!}
+        const trayecto2 = {!! json_encode($trayecto2, JSON_HEX_TAG) !!}
+        const trayecto3 = {!! json_encode($trayecto3, JSON_HEX_TAG) !!}
+        const trayecto4 = {!! json_encode($trayecto4, JSON_HEX_TAG) !!}
+        const trayecto5 = {!! json_encode($trayecto5, JSON_HEX_TAG) !!}
+
+        const camposTrayecto1 = []
+        const infoTrayecto1 = []
+        trayecto1.map(datos => {
+            camposTrayecto1.push(`${datos.pnf} (${datos.materia})`)
+            infoTrayecto1.push(datos.cantidad)
+        })
+
+        const camposTrayecto2 = []
+        const infoTrayecto2 = []
+        trayecto2.map(datos => {
+            camposTrayecto2.push(`${datos.pnf} (${datos.materia})`)
+            infoTrayecto2.push(datos.cantidad)
+        })
+
+        const camposTrayecto3 = []
+        const infoTrayecto3 = []
+        trayecto3.map(datos => {
+            camposTrayecto3.push(`${datos.pnf} (${datos.materia})`)
+            infoTrayecto3.push(datos.cantidad)
+        })
+
+        const camposTrayecto4 = []
+        const infoTrayecto4 = []
+        trayecto4.map(datos => {
+            camposTrayecto4.push(`${datos.pnf} (${datos.materia})`)
+            infoTrayecto4.push(datos.cantidad)
+        })
+
+        const camposTrayecto5 = []
+        const infoTrayecto5 = []
+        trayecto5.map(datos => {
+            camposTrayecto5.push(`${datos.pnf} (${datos.materia})`)
+            infoTrayecto5.push(datos.cantidad)
+        })
+    </script>
+
+    <script src="{{ asset('js/graficos/trayecto.js') }}"></script>
+    <script src="{{ asset('js/graficos/materias.js') }}"></script>
+    <script src="{{ asset('js/graficos/pnf.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto1.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto2.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto3.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto4.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto5.js') }}"></script>
 
     <script>
         @if ($message = session('sinDatos'))

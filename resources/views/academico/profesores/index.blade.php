@@ -89,19 +89,19 @@
             </thead>
             <tbody>
                 @foreach ($profesores as $profesor)
-                @php
-                    $CI = $profesor->profesorCI();
-                    $nombre = $profesor->usuario->nombre;
-                    $apellido = $profesor->usuario->apellido;
-                    $conocimiento = $profesor->conocimiento->nom_conocimiento;
-
-                    $tlf = $profesor->telefono;
-                    $codigoTlf = Str::substr($tlf, 0, 4);
-                    $numeroTlf = preg_replace('#(\d{3})(\d{2})(\d{2})#', '$1-$2-$3', Str::substr($tlf, 4));
-                    $formatoTlf = "{$codigoTlf} {$numeroTlf}";
-
-                    $activo = $profesor->activo === 1 ? 'Activo' : 'Inactivo';
-                @endphp
+                    @php
+                        $CI = $profesor->profesorCI();
+                        $nombre = $profesor->usuario->nombre;
+                        $apellido = $profesor->usuario->apellido;
+                        $conocimiento = $profesor->conocimiento->nom_conocimiento;
+                        
+                        $tlf = $profesor->telefono;
+                        $codigoTlf = Str::substr($tlf, 0, 4);
+                        $numeroTlf = preg_replace('#(\d{3})(\d{2})(\d{2})#', '$1-$2-$3', Str::substr($tlf, 4));
+                        $formatoTlf = "{$codigoTlf} {$numeroTlf}";
+                        
+                        $activo = $profesor->activo === 1 ? 'Activo' : 'Inactivo';
+                    @endphp
                     <tr>
                         <td>{{ $CI }}</td>
                         <td>{{ $nombre }}</td>
@@ -132,8 +132,8 @@
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/input.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/input.css') }}">
 @stop
 
 @section('js')

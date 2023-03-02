@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Academico\AreaConocimiento;
 use App\Models\Academico\Estudiante;
 use App\Models\Academico\Estudiante_materia;
+use App\Models\Academico\Periodo;
 use App\Models\Academico\PNF;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
@@ -156,12 +157,14 @@ class UserSeeder extends Seeder
                 ]);
 
                 Estudiante_materia::create([
+                    'periodo_id' => Periodo::find(1)->id,
                     'materia_id' => Materia::find(rand(1, 15))->id,
                     'estudiante_id' => $estudiante->id,
                     'asistencia_id' => $asistencia->id,
                     'nota' => 0,
                     'codigo' => Str::random(6),
-                    'validado' => 0
+                    'validado' => 0,
+                    'aprobado' => null
                 ]);
             } else {
                 Profesor::create([

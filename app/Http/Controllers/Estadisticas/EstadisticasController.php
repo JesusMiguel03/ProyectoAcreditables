@@ -193,23 +193,27 @@ class EstadisticasController extends Controller
 
                 foreach ($trayecto as $pnf => $materia) {
 
-                    $materiaDemandada = ['materia' => null, 'cantidad' => 0];
+                    $materiaDemandada = ['pnf' => null, 'materia' => null, 'cantidad' => 0];
 
                     foreach ($materia as $acreditable => $cantidadEstudiantes) {
 
                         if ($materiaDemandada['cantidad'] < $cantidadEstudiantes) {
+                            $materiaDemandada['pnf'] = $pnf;
                             $materiaDemandada['materia'] = $acreditable;
                             $materiaDemandada['cantidad'] = $cantidadEstudiantes;
                         }
                     }
 
-                    $listadoMateriasDemandadasPNF[$nroTrayecto][$pnf] = $materiaDemandada;
+                    // $listadoMateriasDemandadasPNF[$nroTrayecto][$pnf] = $materiaDemandada;
+                    array_push($listadoMateriasDemandadasPNF[$nroTrayecto], $materiaDemandada);
                 }
             }
         }
 
         foreach ($pnfs as $pnf) {
-            array_push($estudiantesAnteriorPNF, count($pnf->creadoEntre([$inicioAnterior, $finAnterior])->get()));
+            if (Periodo::find(2)) {
+                array_push($estudiantesAnteriorPNF, count($pnf->creadoEntre([$inicioAnterior, $finAnterior])->get()));
+            }
             array_push($estudiantesPNF, count($pnf->creadoEntre([$inicio, $fin])->get()));
             array_push($nombrePNF, $pnf->nom_pnf);
         }
@@ -226,7 +230,13 @@ class EstadisticasController extends Controller
                 array_push($nombreMaterias, $nombre);
             }
         }
+        
+        $trayecto1 = $listadoMateriasDemandadasPNF[1];
+        $trayecto2 = $listadoMateriasDemandadasPNF[2];
+        $trayecto3 = $listadoMateriasDemandadasPNF[3];
+        $trayecto4 = $listadoMateriasDemandadasPNF[4];
+        $trayecto5 = $listadoMateriasDemandadasPNF[5];
 
-        return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto', 'materias'));
+        return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto', 'materias', 'trayecto1', 'trayecto2', 'trayecto3', 'trayecto4', 'trayecto5'));
     }
 }

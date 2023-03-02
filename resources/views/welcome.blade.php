@@ -31,7 +31,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/carousel/carousel.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/noticia.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/noticia.css') }}">
 @stop
 
 @section('js')

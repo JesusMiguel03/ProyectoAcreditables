@@ -36,7 +36,7 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/avatarPerfil.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/avatar.css') }}">
 @stop
 
 @section('js')

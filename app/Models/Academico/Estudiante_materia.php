@@ -16,7 +16,7 @@ class Estudiante_materia extends Model
     protected $table = 'estudiantes_materias';
 
     protected $fillable = [
-        'estudiante_id', 'nota', 'codigo', 'validado', 'materia_id', 'asistencia_id'
+        'periodo_id', 'estudiante_id', 'nota', 'codigo', 'validado', 'materia_id', 'asistencia_id', 'aprobado'
     ];
 
     /**
@@ -159,6 +159,11 @@ class Estudiante_materia extends Model
     public function asistencia()
     {
         return $this->hasOne(Asistencia::class, 'id', 'asistencia_id');
+    }
+
+    public function periodo()
+    {
+        return $this->belongsTo(Periodo::class, 'periodo_id', 'id');
     }
 
     public function scopeCreadoEntre($query, array $fechas)

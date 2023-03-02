@@ -85,43 +85,4 @@ class BaseDeDatosController extends Controller
             return redirect()->back()->with('noExiste', 'El respaldo que intenta descargar no existe, pruebe creando una copia de seguridad u otro respaldo.');
         }
     }
-
-    public function importar(Request $request)
-    {
-        if (!$request->isMethod('POST')) {
-            return redirect('/');
-        }
-
-        try {
-
-            $validador = Validator::make($request->all(), [
-                'archivo' => ['required']
-            ], [
-                'archivo.required' => 'El archivo es requerido.',
-            ]);
-            validacion($validador, 'error');
-
-            if ($request->hasFile('archivo') && pathinfo($request['archivo']->getClientOriginalName(), PATHINFO_EXTENSION) === 'sql') {
-
-                $archivo = File::get($request['archivo']);
-                DB::unprepared($archivo);
-
-                return redirect('/login')->with('importado', 'La base de datos ha sido restaurada satisfactoriamente.');
-
-            } else {
-
-                $mensaje = 'No se encontró un archivo válido para importar.';
-
-                pathinfo($request['archivo']->getClientOriginalName(), PATHINFO_EXTENSION) !== 'sql'
-                    ? $mensaje = 'El archivo es inválido, debe ser un archivo o respaldo con extensión .sql válido'
-                    : $mensaje;
-
-                return redirect()->back()->with('noArchivo', $mensaje);
-            }
-
-        } catch (Exception $e) {
-
-            return redirect()->back()->with('noImportado', 'Hubo un problema al importar el respaldo, intente de nuevo y asegúrese que el archivo tenga extensión .sql');
-        }
-    }
 }

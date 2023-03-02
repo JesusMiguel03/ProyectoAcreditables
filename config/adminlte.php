@@ -394,7 +394,7 @@ return [
             'can'         => 'academico',
         ],
         [
-            'header' => 'DATOS ACADEMICOS',
+            'header' => 'DATOS ACADÉMICOS',
             'can'         => 'academico',
         ],
         [

@@ -38,9 +38,9 @@
 
     {{-- Personalizados --}}
     <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/input.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/input.css') }}">
 @stop
 
 @section('js')

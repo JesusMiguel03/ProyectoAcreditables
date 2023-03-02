@@ -83,8 +83,8 @@
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/lapiz.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
 @stop
 

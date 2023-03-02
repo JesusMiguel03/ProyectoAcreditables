@@ -20,7 +20,7 @@ if (boton !== null) {
         Swal.fire({
             icon: "question",
             title: "¿Desea cambiar de acreditable?",
-            html: "Tenga en cuenta que al cambiarse si su cupo es tomado por otro estudiante no podrá optar por volver a la acreditable anterior.",
+            html: "Tenga en cuenta que al cambiarse si su cupo es tomado por otro estudiante no podrá optar por volver a la acreditable anterior. Su asistencia sera reiniciada y si se cambia a finales del periodo quedará como reprobado.",
             showCancelButton: true,
             cancelButtonText: "Cancelar",
             confirmButtonText: "Confirmar",

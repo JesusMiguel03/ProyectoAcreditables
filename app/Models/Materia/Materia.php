@@ -50,7 +50,7 @@ class Materia extends Model
 
     public function estudiantesPeriodoActual()
     {
-        $periodo = explode('-', periodo())[1];
+        $periodo = explode('-', periodo())[1] ?? null;
         $estudiantes = $this->estudiantes;
 
         $inscritos = [];

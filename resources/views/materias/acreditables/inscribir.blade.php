@@ -72,8 +72,8 @@
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/input.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/input.css') }}">
 @stop
 
 @section('js')

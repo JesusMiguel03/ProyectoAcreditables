@@ -52,8 +52,8 @@
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 @if (!empty($inscrito))
-                                    <a href="{{ route('asistencias.edit', $estudiante->id) }}"
-                                        class="btn btn-primary" {{ Popper::arrow()->pop('Ver') }}>
+                                    <a href="{{ route('asistencias.edit', $estudiante->id) }}" class="btn btn-primary"
+                                        {{ Popper::arrow()->pop('Ver') }}>
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 @endif
@@ -71,7 +71,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')

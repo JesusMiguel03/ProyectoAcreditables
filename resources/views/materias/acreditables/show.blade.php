@@ -35,7 +35,7 @@
                                 <div class="input-group">
                                     <input type="text" name="nota" id="campoNotaEstudiante"
                                         class="form-control @error('nota') is-invalid @enderror" value="{{ old('nota') }}"
-                                        placeholder="{{ __('Nota: 1 - 100') }}" max="100" autofocus required>
+                                        placeholder="{{ __('Nota: 1 - 100') }}" max="100" required>
 
                                     @error('nota')
                                         <span class="invalid-feedback" role="alert">
@@ -84,7 +84,7 @@
 
         {{-- Listado de estudiantes --}}
         <section class="col-12 my-3">
-            @if ((rol('Coordinador') && !$inscritos->isEmpty()) || ($validacion && !$inscritos->isEmpty()))
+            @if ((rol('Coordinador') && !empty($inscritos)) || ($validacion && !empty($inscritos)))
                 <a href="{{ route('listadoEstudiantes', $materia->id) }}" class="btn btn-primary float-right"
                     {{ Popper::arrow()->pop('Descargar listado de estudiantes') }}>
                     <i class="fas fa-download" style="width: 2rem"></i>
@@ -104,7 +104,7 @@
                             <th>Estado</th>
 
                             @if (!rol('Estudiante'))
-                                <th>Código de Validación</th>
+                                <th>Validación</th>
                                 <th>Nota</th>
                                 <th>Acciones</th>
                             @endif
@@ -124,6 +124,7 @@
                                 $codigo = $estudiante->codigo;
                                 $nota = $estudiante->nota;
                                 $ruta = $validado ? 'invalidacion' : 'validacion';
+                                $aprobado = $estudiante->aprobado;
                             @endphp
 
                             <tr>
@@ -157,18 +158,18 @@
 
                                                     <button type="submit"
                                                         class="btn btn-{{ $validado ? 'secondary' : 'primary' }} rounded-0"
-                                                        {{ Popper::arrow()->pop('Validar inscripción') }}>
-                                                        <i class="fas {{ $validado ? 'fa-eraser' : 'fa-user-check' }}"></i>
+                                                        {{ $validado ? Popper::arrow()->pop('Invalidar inscripción') : Popper::arrow()->pop('Validar inscripción') }}>
+                                                        <i class="fas {{ $validado ? 'fa-x' : 'fa-check' }}"></i>
                                                     </button>
                                                 </form>
                                             @endcan
 
                                             {{-- Asignar nota --}}
-                                            <button id="{{ $inscritoID }}" class="btn btn-primary notas"
+                                            <button id="{{ $inscritoID }}"
+                                                class="btn btn-primary notas {{ !$validado ? 'disabled' : '' }}"
                                                 data-toggle="modal" data-target="#nota" data-CI="{{ $CI }}"
                                                 data-estudiante="{{ $estudiante->inscritoNombre() }}"
-                                                {{ Popper::arrow()->pop('Asignar nota') }}
-                                                {{ !$validado ? 'disabled' : '' }}>
+                                                {{ Popper::arrow()->pop('Asignar nota') }}>
                                                 <i class="fas fa-pen"></i>
                                             </button>
 
@@ -177,6 +178,28 @@
                                                 {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                 <i class="fas fa-calendar"></i>
                                             </a>
+
+                                            @if ($materia->estado_materia === 'Finalizado')
+                                                <form action="{{ route('estudiantes.aprobar', $inscritoID) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+
+                                                    <button type="submit"
+                                                        class="btn btn-{{ $aprobado !== 1 ? 'primary' : 'secondary' }} rounded-right {{ $aprobado === 1 ? 'disabled' : '' }}"
+                                                        {{ $aprobado === 1
+                                                            ? Popper::arrow()->pop('Estudiante aprobado')
+                                                            : Popper::arrow()->pop('Aprobación del estudiante') }}>
+                                                        <i class="fas fa-user-check"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button class="btn btn-secondary rounded-right disabled"
+                                                    {{ Popper::arrow()->pop('Acreditable no finalizada') }}>
+                                                    <i class="fas fa-user-check"></i>
+                                                </button>
+                                            @endif
+
                                         </div>
                                     </td>
                                 @endif
@@ -195,8 +218,9 @@
 
     {{-- Personalizado --}}
     <link rel="stylesheet" href="{{ asset('css/decoracion.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/cambiarAcreditable.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/mensaje.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/cambiarAcreditables.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/mensaje.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/iconos/x.css') }}">
 @stop
 
 @section('js')
@@ -294,6 +318,26 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-danger px-5'
+                },
+            })
+        @elseif ($message = session('noFinalizado'))
+            Swal.fire({
+                icon: 'info',
+                title: '¡Materia no finalizada!',
+                html: "{{ session('noFinalizado') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif ($message = session('aprobar'))
+            Swal.fire({
+                icon: "{{ $message['icono'] }}",
+                title: "{{ $message['titulo'] }}",
+                html: "{{ $message['html'] }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-{{ $message['color'] }} px-5"
                 },
             })
         @endif

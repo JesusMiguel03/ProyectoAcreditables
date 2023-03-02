@@ -32,6 +32,12 @@ class TrayectoController extends Controller
         // Valida si tiene el permiso
         permiso('academico');
 
+        $trayectoBorrado = Trayecto::withTrashed()->find($request['num_trayecto']) ?? null;
+
+        if ($trayectoBorrado) {
+            return redirect()->back()->with('elementoBorrado', 'El trayecto que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');
+        }
+
         // Valida los campos
         $validador = Validator::make($request->all(), [
             'num_trayecto' => ['required', 'integer', 'unique:trayectos,num_trayecto,' . $request['num_trayecto']],

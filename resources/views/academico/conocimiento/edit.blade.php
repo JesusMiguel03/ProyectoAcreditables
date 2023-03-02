@@ -33,9 +33,9 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/lapiz.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
 @stop
 
 @section('js')

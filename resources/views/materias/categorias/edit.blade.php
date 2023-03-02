@@ -32,7 +32,7 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')

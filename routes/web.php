@@ -61,9 +61,9 @@ Route::controller(ProfesorController::class)->group(function () {
 // Estudiantes [Solo para coordinador]
 Route::controller(UsuarioController::class)->group(function () {
     Route::get('/estudiantes', 'index')->name('estudiantes.index');
-    Route::get('/estudiantes/getEstudiantes', 'getEstudiantes')->name('estudiantes.search');
     Route::get('/estudiantes/{id}/edit', 'edit')->name('estudiantes.edit');
     Route::put('/estudiantes/{id}/update', 'update')->name('estudiantes.update');
+    Route::put('/estudiante/{id}/aprobar', 'aprobar')->name('estudiantes.aprobar');
 });
 
 // Categorias
@@ -196,6 +196,5 @@ Route::controller(EstadisticasController::class)->group(function () {
 Route::controller(BaseDeDatosController::class)->group(function () {
     Route::get('/base-de-datos', 'index')->name('baseDatos');
     Route::get('/base-de-datos/guardar', 'guardar')->name('guardar-base-de-datos');
-    Route::post('/base-de-datos/importar', 'importar')->name('importar-base-de-datos');
     Route::get('/base-de-datos/descargar/{archivo}', 'descargar')->name('descargar-base-de-datos');
 });

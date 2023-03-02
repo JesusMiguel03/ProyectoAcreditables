@@ -26,7 +26,7 @@ div.avatar {
     transition: 0.7s border-color;
 }
 
-div>img.avatar:hover,
+div > img.avatar:hover,
 div.avatar:focus,
 div.avatar:active {
     border-color: #007bff !important;
