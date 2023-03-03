@@ -60,7 +60,7 @@
         $materiaProfID = $materia->info->profesor_id ?? false;
         $validacion = $profesorID && $materiaProfID;
         
-        $tipo = metodologia($materia->infoTipo()) ?? null;
+        $tipo = $materia->infoTipo() ?? null;
         $categoria = $materia->infoCategoria()->nom_categoria ?? null;
         $horario = !empty($materia->horario) ? $materia->horario->horarioEstructurado() : null;
         $acreditable = $materia->infoAcreditable() ?? null;
@@ -75,7 +75,7 @@
         {{-- Tarjetas información materia --}}
         <section class="col-12 border-bottom">
             <div class="row">
-                <x-elementos.mini-card nombre=Tipo :contenido="$tipo ?? 'Sin asignar'" />
+                <x-elementos.mini-card nombre=Metodología :contenido="$tipo ?? 'Sin asignar'" />
                 <x-elementos.mini-card nombre='Categoría' :contenido="$categoria ?? 'Sin asignar'" />
                 <x-elementos.mini-card nombre='Horario' :contenido="$horario ?? 'Sin asignar'" />
                 <x-elementos.mini-card nombre='Acreditable' :contenido="$acreditable ?? 'Sin asignar'" />

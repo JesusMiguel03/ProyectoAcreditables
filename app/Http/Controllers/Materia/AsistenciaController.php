@@ -21,8 +21,13 @@ class AsistenciaController extends Controller
         // Valida si tiene el permiso.
         permiso('asistencias');
 
-        // Busca a todos los estudiantes inscritos.
-        $estudiantes = Estudiante_materia::all();
+        /**
+         *  Busca a todos los estudiante inscritos que:
+         * 
+         *  1. No hayan sido aprobados.
+         *  2. Fueron reprobados (en caso de haber un error en la asistencia).
+         */
+        $estudiantes = Estudiante_materia::where('aprobado', '!=', 1)->orWhere('aprobado', '=', null)->get();
 
         if (rol('Profesor')) {
             $profesor = auth()->user()->profesor;
@@ -31,8 +36,11 @@ class AsistenciaController extends Controller
                 $estudiantesProfesor = [];
 
                 foreach ($estudiantes as $estudiante) {
+                    $inscrito = $estudiante->inscrito;
 
-                    if ($estudiante->tieneProfesor() === $profesor->id) array_push($estudiantesProfesor,  $estudiante);
+                    if (count($inscrito) > 0 && $inscrito->tieneProfesor() === $profesor->id) {
+                        array_push($estudiantesProfesor,  $estudiante);
+                    }
                 }
             }
 
@@ -42,9 +50,12 @@ class AsistenciaController extends Controller
         $asistenciaEstudiantes = [];
 
         foreach ($estudiantes as $estudiante) {
+            $inscrito = $estudiante->inscrito;
+
+            // $asistencia = $estudiante->esEstudiante->asistencia;
 
             // Selecciona la asistencia
-            $asistencia = $estudiante->esEstudiante->asistencia;
+            $asistencia = $estudiante->asistencia;
 
             $asistencias = 0;
 
@@ -67,7 +78,7 @@ class AsistenciaController extends Controller
         // Valida si tiene el permiso
         permiso('asistencias');
 
-        $asistencia = Estudiante::find($id)->asistencia;
+        $asistencia = Estudiante_materia::find($id)->asistencia;
 
         // Si tiene asistencia esa semana, activa el checkbox
         for ($i = 1; $i <= 12; $i++) {

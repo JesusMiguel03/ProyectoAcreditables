@@ -138,18 +138,3 @@ if (!function_exists('diaSemana')) {
         return $dias[$dia];
     }
 }
-
-/**
- *  Devuelve el tipo de metodologia.
- * 
- *  @param int $numero
- *  @return string
- */
-
-if (!function_exists('metodologia')) {
-    function metodologia($numero)
-    {
-        $metodologias = [0 => 'Teórico', 1 => 'Práctico', 2 => 'Teórico-práctico'];
-        return $metodologias[$numero];
-    }
-}

@@ -12,7 +12,7 @@ class Horario extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['materia_id', 'espacio', 'aula', 'dia', 'hora', 'campo'];
+    protected $fillable = ['periodo_id', 'materia_id', 'espacio', 'aula', 'dia', 'hora', 'campo'];
 
     public function nombreMateria()
     {
@@ -22,6 +22,11 @@ class Horario extends Model
     public function materia()
     {
         return $this->hasOne(Materia::class, 'id', 'materia_id');
+    }
+
+    public function periodo()
+    {
+        return $this->belongsTo(Periodo::class, 'id', 'periodo_id');
     }
 
     public function horarioEstructurado()

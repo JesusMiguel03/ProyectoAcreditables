@@ -10,7 +10,6 @@ use App\Models\Academico\PNF;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
 use App\Models\Materia\Materia;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EstadisticasController extends Controller
@@ -40,12 +39,12 @@ class EstadisticasController extends Controller
         }
 
         $trayecto = $materiaActual->infoAcreditable();
-        
+
         // Formato de periodo a mostrar
         $inicioFormato = \Carbon\Carbon::parse($periodoActual->inicio)->format('d-m-Y');
         $finFormato = \Carbon\Carbon::parse($periodoActual->fin)->format('d-m-Y');
         $periodoFormateado = "Fase ({$periodoActual->fase}) - [{$inicioFormato} al {$finFormato}]";
-        
+
         $materias = Materia::creadoEntre([$inicioFormato, $finFormato])->get();
 
         $estudiantes = $materiaActual->estudiantes;
@@ -64,7 +63,10 @@ class EstadisticasController extends Controller
         foreach ($estudiantes as $estudianteM) {
 
             if (!$estudianteM->creadoEntre([$inicioFormato, $finFormato])->first()) {
-                return redirect()->back()->with('sinDatos', $materiaActual->nom_materia)->with('periodo', $conversor[$periodoActual->fase] . '-' . \Carbon\Carbon::parse($periodoActual->inicio)->format('Y'));
+                return redirect()
+                    ->back()
+                    ->with('sinDatos', $materiaActual->nom_materia)
+                    ->with('periodo', $conversor[$periodoActual->fase] . '-' . \Carbon\Carbon::parse($periodoActual->inicio)->format('Y'));
             }
 
             $asistencias = 0;
@@ -88,7 +90,7 @@ class EstadisticasController extends Controller
         }
 
         sort($datosEstudiantes);
-        
+
         return view('estadisticas.materia', compact('periodoFormateado', 'datosEstudiantes', 'pnfs', 'trayecto', 'profesor', 'totalEstudiantes', 'materiaActual', 'periodos', 'periodoActual', 'materias'));
     }
 
@@ -113,7 +115,11 @@ class EstadisticasController extends Controller
         $finFormato = \Carbon\Carbon::parse($fin)->format('d-m-Y');
         $periodoFormateado = "Fase ({$periodoActual->fase}) - [{$inicioFormato} al {$finFormato}]";
 
-        $periodoAnterior = Periodo::whereDate('inicio', '<=', $inicio)->whereDate('fin', '<=', $fin)->where('id', '!=', $id)->latest()->first();
+        $periodoAnterior = Periodo::whereDate('inicio', '<=', $inicio)
+            ->whereDate('fin', '<=', $fin)
+            ->where('id', '!=', $id)
+            ->latest()
+            ->first();
         $inicioAnterior = $periodoAnterior->inicio ?? null;
         $finAnterior = $periodoAnterior->fin ?? null;
 
@@ -124,20 +130,11 @@ class EstadisticasController extends Controller
         // Materias totales
         $materias = Materia::all();
 
-        // Materias creadas en el periodo seleccionado
-        // $materias = Materia::creadoEntre([$inicio, $fin])->get();
-
         // Estudiantes totales
         $estudiantesRegistrados = Estudiante::all();
 
-        // Estudiantes que ingresaron en el periodo seleccionado
-        // $estudiantesRegistrados = Estudiante::creadoEntre([$inicio, $fin])->get();
-
         // Profesores totales
         $profesores = Profesor::all();
-
-        // Profesores registrados en el periodo seleccionado
-        // $profesores = Profesor::creadoEntre([$inicio, $fin])->get();
 
         $inscritos = Estudiante_materia::creadoEntre([$inicio, $fin])->get();
 
@@ -204,7 +201,6 @@ class EstadisticasController extends Controller
                         }
                     }
 
-                    // $listadoMateriasDemandadasPNF[$nroTrayecto][$pnf] = $materiaDemandada;
                     array_push($listadoMateriasDemandadasPNF[$nroTrayecto], $materiaDemandada);
                 }
             }
@@ -222,15 +218,15 @@ class EstadisticasController extends Controller
             if ($condicion) {
                 $cantidad = count($materia->estudiantes);
                 $nombre = $materia->nom_materia;
-    
+
                 $acreditable = $materia->infoAcreditable();
                 $estudiantes = $materia->estudiantes;
-    
+
                 array_push($estudiantesMateria, $cantidad);
                 array_push($nombreMaterias, $nombre);
             }
         }
-        
+
         $trayecto1 = $listadoMateriasDemandadasPNF[1];
         $trayecto2 = $listadoMateriasDemandadasPNF[2];
         $trayecto3 = $listadoMateriasDemandadasPNF[3];

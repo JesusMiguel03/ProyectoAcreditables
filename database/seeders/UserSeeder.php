@@ -163,7 +163,7 @@ class UserSeeder extends Seeder
                     'asistencia_id' => $asistencia->id,
                     'nota' => 0,
                     'codigo' => Str::random(6),
-                    'validado' => 0,
+                    'validado' => 1,
                     'aprobado' => null
                 ]);
             } else {

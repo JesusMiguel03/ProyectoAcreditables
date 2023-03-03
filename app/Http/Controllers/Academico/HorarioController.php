@@ -29,8 +29,6 @@ class HorarioController extends Controller
         $inicio = $periodo->inicio ?? null;
         $fin = $periodo->fin ?? null;
 
-        // Solo trae las horas que se encuentre en el rango de inicio y fin del periodo actual
-        // $horarios = Horario::creadoEntre([$inicio, $fin])->get();
         $horarios = Horario::all();
 
         $materias = Materia::whereDoesntHave('horario')->get();
@@ -63,6 +61,7 @@ class HorarioController extends Controller
         validacion($validar, 'error');
 
         Horario::create([
+            'periodo_id' => periodo('modelo')->id ?? null,
             'materia_id' => $request['materia_id'],
             'espacio' => $request['espacio'],
             'aula' => $request['aula'],
@@ -149,7 +148,6 @@ class HorarioController extends Controller
     {
         $horarios = Horario::all();
 
-        // return view('academico.pdf.horario', ['horarios' => $horarios]);
         $pdf = FacadePdf::loadView('academico.pdf.horario', ['horarios' => $horarios])->setPaper('a4', 'landscape');
 
         return $pdf->stream('Horario.pdf');

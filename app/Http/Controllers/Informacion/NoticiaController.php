@@ -23,18 +23,6 @@ class NoticiaController extends Controller
         // Valida si tiene el permiso
         permiso('noticias');
 
-        /**
-         *  Si solo se quieren traer la noticias creadas entre la fecha de inicio y fin del periodo actual
-         *  descomente las 4 líneas de abajo y comente "$noticias = Noticia::all()"
-         * 
-         *  ! Actualmente maneja todos los modelos Noticia sin importar la fecha de creación.
-         */
-
-        // $periodo = periodo('modelo');
-        // $inicio = $periodo->inicio;
-        // $fin = $periodo->fin;
-        // $noticias = Noticia::creadoEntre([$inicio, $fin])->where('activo', '=', 1)->get();
-
         // Lista todas las noticias
         $noticias = Noticia::all();
 
