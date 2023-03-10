@@ -36,9 +36,6 @@ class InscripcionController extends Controller
 
         $no_inscritos = [];
 
-        /**
-         * * NOTA: Si el trayecto es borrado dará error al cargar los estudiantes.
-         */
         foreach ($estudiantes as $estudiante) {
             if (empty($estudiante->inscrito) && $estudiante->trayecto->num_trayecto === $materia->trayecto->num_trayecto) {
                 array_push($no_inscritos, $estudiante);
@@ -52,6 +49,10 @@ class InscripcionController extends Controller
     {
         // Valida si tiene el permiso
         permiso('materias.inscribir');
+
+        if (periodo('modelo')->finalizado()) {
+            return redirect()->back()->with('periodoFinalizado', 'No se puede inscribir debido a que el periodo se encuentra finalizado');
+        }
 
         // Si no hay estudiantes pero aún así se envía el formulario no hace nada.
         if ($request['vacio'] === '0') {

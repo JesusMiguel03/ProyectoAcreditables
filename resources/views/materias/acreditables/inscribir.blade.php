@@ -147,6 +147,16 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
+        @elseif ($message = session('periodoFinalizado'))
+            Swal.fire({
+                icon: "info",
+                title: "Actualice el periodo",
+                html: "{{ $message['periodoFinalizado'] }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-info px-5"
+                },
+            })
         @endif
     </script>
 @stop

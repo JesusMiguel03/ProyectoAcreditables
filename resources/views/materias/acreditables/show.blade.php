@@ -5,7 +5,7 @@
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
     <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
-    <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }}</a></li>
+    <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }} ({{ $materia->estado_materia }})</a></li>
 @stop
 
 @section('content_header')
@@ -338,6 +338,16 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: "btn btn-{{ $message['color'] }} px-5"
+                },
+            })
+        @elseif ($message = session('periodoFinalizado'))
+            Swal.fire({
+                icon: "info",
+                title: "Actualice el periodo",
+                html: "{{ $message['periodoFinalizado'] }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-info px-5"
                 },
             })
         @endif

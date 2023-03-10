@@ -32,7 +32,7 @@ class PNFController extends Controller
         // Valida si tiene el permiso
         permiso('academico');
 
-        $pnfBorrado = PNF::withTrashed()->where('nom_pnf', '=', $request['nom_pnf']) ?? null;
+        $pnfBorrado = PNF::withTrashed()->where('nom_pnf', '=', $request['nom_pnf'])->first() ?? null;
 
         if ($pnfBorrado) {
             return redirect()->back()->with('elementoBorrado', 'El PNF que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');
@@ -46,7 +46,7 @@ class PNFController extends Controller
         ], [
             'nom_pnf.required' => 'El nombre es necesario.',
             'nom_pnf.string' => 'El nombre debe ser una oración.',
-            'nom_pnf.unique' => 'El PNF ' . $request['nom_pnf'] . ' ya ha sido registrado.',
+            'nom_pnf.unique' => 'El PNF (' . $request['nom_pnf'] . ') ya ha sido registrado.',
             'nom_pnf.max' => 'El nombre no puede contener mas de :max caracteres.',
             'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.',
             'cod_pnf.regex' => 'El código solo puede contener números y letras.',
@@ -59,7 +59,7 @@ class PNFController extends Controller
         // Guarda el pnf
         PNF::create([
             'nom_pnf' => $request['nom_pnf'],
-            'cod_pnf' => $request['cod_pnf'] === null ? '?' : $request['cod_pnf'],
+            'cod_pnf' => $request['cod_pnf'] === null ? null : $request['cod_pnf'],
             'trayectos' => $request['trayectos']
         ]);
 

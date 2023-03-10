@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
-use App\Models\Academico\Estudiante;
 use App\Models\Academico\Estudiante_materia;
 use Illuminate\Http\Request;
 
@@ -30,15 +29,21 @@ class AsistenciaController extends Controller
         $estudiantes = Estudiante_materia::where('aprobado', '!=', 1)->orWhere('aprobado', '=', null)->get();
 
         if (rol('Profesor')) {
+            $estudiantesProfesor = [];
+
             $profesor = auth()->user()->profesor;
 
-            if ($profesor) {
-                $estudiantesProfesor = [];
+            $materiasImpartidas = $profesor->imparteMateria;
 
-                foreach ($estudiantes as $estudiante) {
-                    $inscrito = $estudiante->inscrito;
+            /**
+             *  Lista todos los estudiantes inscritos en las materias que imparta el profesor
+             * 
+             *  Si el estudiante se encuentra aprobado no se cargará su asistencia.
+             */
+            foreach ($materiasImpartidas as $infoMateria) {
+                foreach ($infoMateria->materia->estudiantes as $estudiante) {
 
-                    if (count($inscrito) > 0 && $inscrito->tieneProfesor() === $profesor->id) {
+                    if ($estudiante->aprobado !== 1) {
                         array_push($estudiantesProfesor,  $estudiante);
                     }
                 }
@@ -51,8 +56,6 @@ class AsistenciaController extends Controller
 
         foreach ($estudiantes as $estudiante) {
             $inscrito = $estudiante->inscrito;
-
-            // $asistencia = $estudiante->esEstudiante->asistencia;
 
             // Selecciona la asistencia
             $asistencia = $estudiante->asistencia;

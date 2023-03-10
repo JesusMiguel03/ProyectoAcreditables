@@ -3,6 +3,7 @@
 namespace App\Models\Academico;
 
 use App\Models\Materia\Informacion_materia;
+use App\Models\Materia\Materia;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -66,6 +67,12 @@ class Profesor extends Model
     public function departamento()
     {
         return $this->belongsTo(Pnf::class, 'departamento_id', 'id');
+    }
+
+    public function materias()
+    {
+        $materias = Informacion_materia::where('profesor_id', '=', $this->id)->get();
+        return $materias;
     }
 
     public function imparteMateria()

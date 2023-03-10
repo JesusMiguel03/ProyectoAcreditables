@@ -1,8 +1,15 @@
 <div class="col-md-4 col-sm-12 mb-2">
     <h5 class="text-center">
         Periodo
-        <span class="{{ !empty(periodo()) ? 'text-primary' : 'text-danger' }}">
-            {{ !empty(periodo()) ? periodo() : 'Sin asignar' }}
-        </span>
+        @if (!empty(periodo()))
+            <span class="text-primary">
+                {{ periodo() }}
+            </span>
+            <span class="{{ estadoPeriodo() === 'En curso' ? 'text-success' : 'text-danger' }}">
+                ({{ estadoPeriodo() }})
+            </span>
+        @else
+            <span class="text-danger">Sin Asignar</span>
+        @endif
     </h5>
 </div>

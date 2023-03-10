@@ -17,6 +17,14 @@ class Periodo extends Model
         'fase', 'inicio', 'fin'
     ];
 
+    public function finalizado()
+    {
+        $fechaHoy = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $finPeriodo = Carbon::parse($this->fin)->format('Y-m-d H:i:s');
+
+        return $fechaHoy === $finPeriodo;
+    }
+
     public function formato()
     {
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];

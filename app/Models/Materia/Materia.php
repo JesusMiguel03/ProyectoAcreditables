@@ -30,7 +30,11 @@ class Materia extends Model
 
     public function infoTipo()
     {
-        return $this->info->metodologia ?? null;
+        $metodologia = $this->info->metodologia ?? null;
+
+        $metodologias = [0 => 'Teórico', 1 => 'Práctico', 2 => 'Teórico-Práctico', null => 'Sin asignar'];
+
+        return $metodologias[$metodologia];
     }
 
     public function infoAcreditable()

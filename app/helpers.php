@@ -120,7 +120,31 @@ if (!function_exists('periodo')) {
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
 
         if ($actual === 'modelo') return $periodo;
-        return $existe ? $conversor[$periodo->fase] . '-' . Carbon::parse($periodo->inicio)->format('Y') : null;
+
+        return $existe
+            ? $conversor[$periodo->fase] . '-' . Carbon::parse($periodo->inicio)->format('Y')
+            : null;
+    }
+}
+
+/**
+ *  Devuelve el estado del periodo
+ * 
+ *  @return string
+ */
+if (!function_exists('estadoPeriodo')) {
+    function estadoPeriodo()
+    {
+        $periodo = periodo('modelo');
+
+        $fechaHoy = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $finPeriodo = Carbon::parse($periodo->fin)->format('Y-m-d H:i:s');
+
+        $periodoActivo = $fechaHoy === $finPeriodo
+            ? 'Finalizado'
+            : 'En curso';
+
+        return $periodoActivo;
     }
 }
 

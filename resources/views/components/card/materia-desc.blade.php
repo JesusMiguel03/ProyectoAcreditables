@@ -2,6 +2,8 @@
     // Modelo
     $materia = atributo($attributes, 'materia');
     
+    $periodoFinalizado = periodo('modelo')->finalizado();
+    
     // Campos
     $materiaID = $materia->id;
     $cuposActuales = $materia->cupos;
@@ -24,8 +26,8 @@
     
     if ($estudiante) {
         $inscrito = $estudiante->inscrito->last();
-
-        $aprobado = $inscrito->aprobado;
+    
+        $aprobado = $inscrito->aprobado ?? null;
     
         $estudianteInscrito = $inscrito ?? null;
         $estudianteID = $estudiante->id;
@@ -33,31 +35,30 @@
         $estadoMateriaActual = $inscrito->materia->estado_materia ?? null;
     
         $acreditableInscrita = $estudianteMateriaID === $materiaID;
-    
-        // $conversor = ['I' => 1, 'II' => 2, 'III' => 3];
-    
-        // $noEstaAprobado = !$inscrito->aprobado() && $inscrito->periodoInscripcion()->formato() !== periodo();
-        // $estaAprobado = $inscrito->aprobado() && $conversor[explode('-', periodo())[0]] >= 1 && $materia->infoAcreditable() > $inscrito->inscritoAcreditable('nro');
     }
     
     $descripcionLarga = Str::length($descripcion) > 100;
     
-    if ($estadoMateria !== 'Finalizado' && $estadoMateria !== 'Inactivo') {
-        $mensaje = '';
-    
-        if (!$acreditableInscrita && $estadoMateriaActual === 'En progreso') {
-            $mensaje = 'La acreditable que se encuentra cursando ya ha empezado, no puede cambiarse de acreditable.';
-        }
-    
-        if (!$acreditableInscrita && $estadoMateria === 'En progreso') {
-            $mensaje = 'Esta acreditable se encuentra en curso, no puede inscribirse en ella.';
-        }
-    
-        if ($acreditableInscrita) {
-            $mensaje = 'Se encuentra inscrito en esta acreditable.';
-        }
+    if ($periodoFinalizado) {
+        $mensaje = 'No puede inscribirse debido a que el periodo ha finalizado';
     } else {
-        $mensaje = 'Esta acreditable se encuentra finalizada.';
+        if ($estadoMateria !== 'Finalizado' && $estadoMateria !== 'Inactivo') {
+            $mensaje = '';
+    
+            if (!$acreditableInscrita && $estadoMateriaActual === 'En progreso') {
+                $mensaje = 'La acreditable que se encuentra cursando ya ha empezado, no puede cambiarse de acreditable.';
+            }
+    
+            if (!$acreditableInscrita && $estadoMateria === 'En progreso') {
+                $mensaje = 'Esta acreditable se encuentra en curso, no puede inscribirse en ella.';
+            }
+    
+            if ($acreditableInscrita) {
+                $mensaje = 'Se encuentra inscrito en esta acreditable.';
+            }
+        } else {
+            $mensaje = 'Esta acreditable se encuentra finalizada.';
+        }
     }
 @endphp
 

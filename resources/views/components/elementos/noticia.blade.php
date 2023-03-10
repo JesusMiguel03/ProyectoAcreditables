@@ -39,7 +39,7 @@
                     {{ $fecha }}
                 </p>
 
-                <p class="card-text text-justify">{{ $descripcion }}.</p>
+                <p class="card-text text-justify">{{ $descripcion }}</p>
             </main>
 
         </article>
