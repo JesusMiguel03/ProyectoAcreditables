@@ -400,7 +400,6 @@
             
             <label class="custom-file-label text-muted" for="imagen_materia" id="campoImagen">
                 {{ !empty($imagen) ? Str::substr($imagen, 18) : 'Seleccione una imagen' }}
-                <i class="fas fa-magnifying-glass"></i>
             </label>
 
         <small id="ayudaImagen" class="form-text text-muted">

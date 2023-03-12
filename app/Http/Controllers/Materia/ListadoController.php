@@ -18,11 +18,11 @@ class ListadoController extends Controller
     public function show($id)
     {
         // Valida si tiene el permiso
-        permiso('registrar.usuario');
+        permiso('listado.estudiantes');
 
         // Lista a todos los estudiantes
         $materia = Materia::find($id);
-        $estudiantes = $materia->estudiantes;
+        $estudiantes = $materia->estudiantesPeriodoActual();
 
         // Carga la vista con el listado
         $pdf = FacadePdf::loadView('academico.pdf.estudiantes', ['materia' => $materia, 'estudiantes' => $estudiantes]);

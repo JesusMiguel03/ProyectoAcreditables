@@ -140,7 +140,7 @@ if (!function_exists('estadoPeriodo')) {
         $fechaHoy = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
         $finPeriodo = Carbon::parse($periodo->fin)->format('Y-m-d H:i:s');
 
-        $periodoActivo = $fechaHoy === $finPeriodo
+        $periodoActivo = $fechaHoy >= $finPeriodo
             ? 'Finalizado'
             : 'En curso';
 

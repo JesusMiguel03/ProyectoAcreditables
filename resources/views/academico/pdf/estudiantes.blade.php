@@ -54,7 +54,7 @@
                     <th>PNF</th>
                     <th>Trayecto</th>
                     <th>Estado</th>
-                    <th>Cod. Validación</th>
+                    <th>Validación</th>
                 </tr>
             </thead>
 
@@ -72,7 +72,7 @@
                 @endphp
 
                     <tr class="table-active">
-                        <td>{{ $CI }}</td>
+                        <td style="width: 30%">{{ $CI }}</td>
                         <td>{{ $nombre }}</td>
                         <td>{{ $apellido }}</td>
                         <td>{{ $pnf }}</td>

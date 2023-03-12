@@ -186,7 +186,7 @@
     {{-- Personalizados --}}
     @if (rol('Coordinador'))
         <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/iconos/buscar.css') }}">
         <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
         <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
     @endif

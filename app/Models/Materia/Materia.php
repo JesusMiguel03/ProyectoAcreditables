@@ -22,7 +22,6 @@ class Materia extends Model
     /**
      *  Funciones personalizadas
      */
-
     public function infoCategoria()
     {
         return $this->info->categoria ?? null;
