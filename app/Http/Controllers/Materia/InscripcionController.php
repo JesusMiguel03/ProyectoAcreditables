@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Materia;
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Estudiante;
 use App\Models\Academico\Estudiante_materia;
+use App\Models\Informacion\Bitacora;
 use App\Models\Materia\Asistencia;
 use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
@@ -28,16 +29,15 @@ class InscripcionController extends Controller
         $materia = Materia::find($id);
 
         if ($materia->estado_materia === 'Finalizado') {
-            return redirect()->back()->with('finalizado', 'No puedes inscribirte en una acreditable que ya ha finalizado.');
+            return redirect()->back()->with('finalizado', 'No se puede inscribir en una acreditable que ya ha finalizado.');
         }
 
-        // Busca a todos los estudiantes que esten en el trayecto igual al número de la acreditable.
         $estudiantes = Estudiante::where('trayecto_id', '=', $materia->trayecto->id)->get();
 
         $no_inscritos = [];
 
-        foreach ($estudiantes as $estudiante) {
-            if (empty($estudiante->inscrito) && $estudiante->trayecto->num_trayecto === $materia->trayecto->num_trayecto) {
+        foreach ( $estudiantes as $estudiante ) {
+            if (!count($estudiante->inscrito) > 0) {
                 array_push($no_inscritos, $estudiante);
             }
         }
@@ -72,6 +72,7 @@ class InscripcionController extends Controller
         if (is_array($estudiantes)) {
 
             foreach ($estudiantes as $estudiante) {
+
                 $asistencia = Asistencia::create([
                     'sem1' => 0,
                     'sem2' => 0,
@@ -89,12 +90,20 @@ class InscripcionController extends Controller
 
                 Estudiante_materia::create([
                     'periodo_id' => periodo('modelo')->id,
-                    'estudiante_id' => $estudiante->id,
+                    'estudiante_id' => $estudiante,
                     'nota' => 0,
                     'codigo' => Str::random(6),
                     'validado' => rol('Coordinador') ? 1 : 0,
                     'materia_id' => $id,
                     'asistencia_id' => $asistencia->id,
+                ]);
+
+                $estudianteModelo = Estudiante::find($estudiante);
+
+                Bitacora::create([
+                    'usuario' => "Estudiante - ({$estudianteModelo->nombreEstudiante()})",
+                    'accion' => "Se ha inscrito en {$materia->nom_materia} exitosamente",
+                    'estado' => 'success'
                 ]);
             }
 
@@ -124,6 +133,12 @@ class InscripcionController extends Controller
                 'validado' => rol('Coordinador') ? 1 : 0,
                 'materia_id' => $id,
                 'asistencia_id' => $asistencia->id,
+            ]);
+
+            Bitacora::create([
+                'usuario' => 'Estudiante - (' .auth()->user()->nombre . ' ' . auth()->user()->apellido . ')',
+                'accion' => "Se ha inscrito en {$materia->nom_materia} exitosamente",
+                'estado' => 'success'
             ]);
         }
 
@@ -179,6 +194,12 @@ class InscripcionController extends Controller
             'sem12' => 0,
         ]);
 
+        Bitacora::create([
+            'usuario' => "Estudiante - ({$usuario->inscritoNombre()})",
+            'accion' => "Se ha cambiado de acreditable ({$materiaAnterior->nombre_materia}) a ({$materiaActual->nombre_materia}) exitosamente",
+            'estado' => 'success'
+        ]);
+
         return redirect()->back()->with('cambioExitoso', 'cambioExitoso');
     }
 
@@ -190,6 +211,12 @@ class InscripcionController extends Controller
         // Busca al estudiante y cambia la validación
         $estudiante = Estudiante_materia::find($id);
         $estudiante->update(['validado' => 1]);
+
+        Bitacora::create([
+            'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
+            'accion' => 'Ha sido validado exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect()->back()->with('validado', 'Se ha validado');
     }
@@ -203,6 +230,12 @@ class InscripcionController extends Controller
         $estudiante = Estudiante_materia::find($id);
         $estudiante->update(['validado' => 0]);
 
+        Bitacora::create([
+            'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
+            'accion' => 'Ha sido invalidado exitosamente',
+            'estado' => 'success'
+        ]);
+
         return redirect()->back()->with('invalidado', 'Se ha invalidado');
     }
 
@@ -211,6 +244,12 @@ class InscripcionController extends Controller
         $estudiante = Estudiante_materia::find($estudiante_id);
         $estudiante->update([
             'nota' => $request['nota']
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
+            'accion' => "Se ha asignado la nota ({$request['nota']}) exitosamente",
+            'estado' => 'success'
         ]);
 
         return redirect()->back()->with('notaActualizada', "({$estudiante->inscritoCI()}) {$estudiante->inscritoNombre()}");

@@ -96,7 +96,7 @@
 
     {{-- Personalizados --}}
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/iconos/buscar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
 @stop
@@ -110,7 +110,6 @@
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/previsualizacion.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
-    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 
     {{-- Mensajes --}}
     <script>

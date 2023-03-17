@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Informacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Informacion\Bitacora;
 use App\Models\Informacion\Pregunta_frecuente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -51,12 +52,18 @@ class PreguntaFrecuenteController extends Controller
             'explicacion.max' => 'La respuesta no debe ser mayor a :max caracteres.',
             'explicacion.unique' => "La respuesta ($descripcionCorta) ya ha sido registrada.",
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Pregunta frecuente');
 
         // Guarda la pregunta
         Pregunta_frecuente::create([
             'titulo' => $request['titulo'],
             'explicacion' => $request['explicacion']
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Pregunta - ({$request['titulo']})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('preguntas-frecuentes')->with('creado', 'creado');
@@ -99,12 +106,18 @@ class PreguntaFrecuenteController extends Controller
             'explicacion.max' => 'La respuesta no debe ser mayor a :max caracteres.',
             'explicacion.unique' => "La respuesta ($descripcionCorta) ya ha sido registrada.",
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Pregunta frecuente');
 
         // Actualiza la pregunta
         Pregunta_frecuente::find($id)->update([
             'titulo' => $request['titulo'],
             'explicacion' => $request['explicacion']
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Pregunta - ({$request['titulo']})",
+            'accion' => 'Se ha actualizado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('preguntas-frecuentes')->with('actualizado', 'actualizado');
@@ -115,7 +128,14 @@ class PreguntaFrecuenteController extends Controller
         // Valida si tiene el permiso
         permiso('preguntas.modificar');
 
-        Pregunta_frecuente::find($id)->delete();
+        $pregunta = Pregunta_frecuente::find($id);
+        $pregunta->delete();
+
+        Bitacora::create([
+            'usuario' => "Pregunta - ({$pregunta->titulo})",
+            'accion' => 'Ha sido borrada',
+            'estado' => 'warning'
+        ]);
 
         return redirect()->back()->with('borrado', 'borrado');
     }

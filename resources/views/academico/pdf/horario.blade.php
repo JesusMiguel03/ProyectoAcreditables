@@ -45,6 +45,17 @@
         <h3 class="titulo">Horario de Acreditable</h3>
     </section>
 
+    <section>
+        <p>Cada color representa un espacio</p>
+        <p>
+            <span class="badge badge-primary">Edificio A</span>
+            <span class="badge badge-success">Edificio B</span>
+            <span class="badge badge-info">Edificio C</span>
+            <span class="badge badge-dark">Laboratorios</span>
+            <span class="badge badge-secondary">Otros</span>
+        </p>
+    </section>
+
     <main style="width: 100px !important">
         @php
             $horas = [['7:30', '8:15'], ['8:15', '9:00'], ['9:00', '9:50'], ['9:50', '10:35'], ['10:35', '11:25'], ['11:25', '12:10'], ['12:10', '1:00']];

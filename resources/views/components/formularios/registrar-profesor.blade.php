@@ -20,8 +20,8 @@
     <div class="input-group">
 
         @if (Route::is('profesores.index'))
-            <select class="form-control @error('usuarios') is-invalid @enderror" name="usuarios" required>
-                <option value='0' readonly>Seleccione un usuario...</option>
+            <select name="usuarios" class="form-control @error('usuarios') is-invalid @enderror" required>
+                <option value='' readonly>Seleccione un usuario...</option>
 
                 @foreach ($usuarios as $usuario)
                     @if (empty($usuario->profesor))
@@ -61,7 +61,7 @@
 
     <div class="input-group">
         <select name="departamento" class="form-control" required>
-            <option value="0" readonly>Seleccione...</option>
+            <option value="" readonly>Seleccione...</option>
 
             @foreach ($departamentos as $departamento)
                 @if (!empty($profesor))
@@ -107,7 +107,7 @@
                     <select name="conocimiento" class="form-control @error('conocimiento') is-invalid @enderror"
                         required>
 
-                        <option value=0 readonly> Seleccione... </option>
+                        <option value="" readonly> Seleccione... </option>
 
                         @foreach ($conocimientos as $conocimiento)
                             @if (!empty($profesor))
@@ -144,10 +144,11 @@
         @if (Route::is('profesores.edit'))
             <div class="form-group required col-6">
                 <label for="activo" class="control-label">¿Se encuentra activo?</label>
+
                 <div class="input-group">
                     <select name="activo" class="form-control @error('activo') is-invalid @enderror" required>
 
-                        <option> Seleccione... </option>
+                        <option value=""> Seleccione... </option>
 
                         <option value=1 {{ $activo === 1 ? 'selected' : '' }}>
                             Activo
@@ -181,10 +182,10 @@
 
             {{-- Estado --}}
             <div class="input-group col-6">
-                <input type="text" name="estado" id="estado"
+                <input type="text" name="estado"
                     class="form-control @error('estado') is-invalid @enderror"
-                    value="{{ $profesor->estado ?? old('estado') }}" placeholder="{{ __('Estado') }}"
-                    maxlength="{{ config('variables.profesores.estado') }}" required>
+                    value="{{ $profesor->estado ?? old('estado') }}" placeholder="{{ __('Estado, ej: Aragua') }}"
+                    maxlength="{{ config('variables.profesores.estado') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -201,10 +202,10 @@
 
             {{-- Ciudad --}}
             <div class="input-group col-6">
-                <input type="text" name="ciudad" id="ciudad"
+                <input type="text" name="ciudad"
                     class="form-control @error('ciudad') is-invalid @enderror"
-                    value="{{ $profesor->ciudad ?? old('ciudad') }}" placeholder="{{ __('Ciudad') }}"
-                    maxlength="{{ config('variables.profesores.ciudad') }}" required>
+                    value="{{ $profesor->ciudad ?? old('ciudad') }}" placeholder="{{ __('Ciudad, ej: La Victoria') }}"
+                    maxlength="{{ config('variables.profesores.ciudad') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -223,9 +224,9 @@
         {{-- Urbanizacion --}}
         <div class="form-row">
             <div class="input-group col-4">
-                <input type="text" name="urb" id="urb"
+                <input type="text" name="urb"
                     class="form-control @error('urb') is-invalid @enderror" value="{{ $profesor->urb ?? old('urb') }}"
-                    placeholder="{{ __('Urbanización') }}" maxlength="{{ config('variables.profesores.urb') }}"
+                    placeholder="{{ __('Urbanización, ej: Carmelitas') }}" maxlength="{{ config('variables.profesores.urb') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números."
                     required>
 
                 <div class="input-group-append">
@@ -243,10 +244,10 @@
 
             {{-- Calle --}}
             <div class="input-group col-4">
-                <input type="text" name="calle" id="calle"
+                <input type="text" name="calle"
                     class="form-control @error('calle') is-invalid @enderror"
-                    value="{{ $profesor->calle ?? old('calle') }}" placeholder="{{ __('Calle') }}"
-                    maxlength="{{ config('variables.profesores.calle') }}" required>
+                    value="{{ $profesor->calle ?? old('calle') }}" placeholder="{{ __('Calle, ej: 12 de julio') }}"
+                    maxlength="{{ config('variables.profesores.calle') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -263,10 +264,10 @@
 
             {{-- Casa --}}
             <div class="input-group col-4">
-                <input type="text" name="casa" id="casa"
+                <input type="text" name="casa"
                     class="form-control @error('casa') is-invalid @enderror"
-                    value="{{ $profesor->casa ?? old('casa') }}" placeholder="{{ __('Casa') }}"
-                    maxlength="{{ config('variables.profesores.casa') }}" required>
+                    value="{{ $profesor->casa ?? old('casa') }}" placeholder="{{ __('Casa, ej: 5') }}"
+                    maxlength="{{ config('variables.profesores.casa') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -286,10 +287,11 @@
     {{-- Telefono --}}
     <div class="form-group required" style="margin-top: -10px">
         <label for="telefono" class="control-label">Número de contacto</label>
+        
         <div class="row">
             <div class="col-4">
                 <select name="codigo" class="form-control @error('codigo') is-invalid @enderror" required>
-                    <option value="0" readonly>Seleccione...</option>
+                    <option value="" readonly>Seleccione...</option>
 
                     <option value="0412" {{ $codigoTlf === '0412' ? 'selected' : '' }}>0412</option>
                     <option value="0414" {{ $codigoTlf === '0414' ? 'selected' : '' }}>0414</option>

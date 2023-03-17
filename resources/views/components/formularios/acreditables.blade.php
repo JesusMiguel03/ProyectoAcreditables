@@ -27,8 +27,9 @@
         <label for="nom_materia" class="control-label">Nombre</label>
         <div class="input-group">
             <input type="text" name="nom_materia" class="form-control @error('nom_materia') is-invalid @enderror"
-                value="{{ old('nom_materia') }}" placeholder="{{ __('Nombre de la materia') }}"
-                maxlength="{{ config('variables.materias.nombre') }}" data-nombre="caracteres" autofocus required>
+                value="{{ old('nom_materia') }}" placeholder="{{ __('Nombre de la materia, ej: Ping pong') }}"
+                maxlength="{{ config('variables.materias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+                title="Debe contener letras, espacios y/o números." autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -52,10 +53,9 @@
                 <label for="cupos" class="control-label">Cupos disponibles</label>
 
                 <div class="input-group">
-                    <input type="number" name="cupos" id="cupos"
-                        class="form-control @error('cupos') is-invalid @enderror" value="{{ old('cupos') }}"
-                        placeholder="{{ __('Cupos iniciales') }}" maxlength="{{ config('variables.materias.cupos') }}"
-                        data-nombre="cupos" required>
+                    <input type="number" name="cupos" class="form-control @error('cupos') is-invalid @enderror"
+                        value="{{ old('cupos') }}" placeholder="{{ __('Cupos iniciales, ej: 10') }}"
+                        max="{{ config('variables.materias.cupos') }}" title="Debe ser menor a 50" required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -74,9 +74,10 @@
             {{-- Numero --}}
             <div class="form-group required col-6">
                 <label for="trayecto" class="control-label">Acreditable Nro</label>
+
                 <div class="input-group">
-                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror">
-                        <option value="0" readonly>Seleccione...</option>
+                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" required>
+                        <option value="" readonly>Seleccione...</option>
 
                         @foreach ($trayectos as $trayecto)
                             <option value={{ $trayecto->id }}>
@@ -107,8 +108,8 @@
         <label for="desc_materia" class="control-label">Descripción</label>
         <div class="input-group">
             <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
-                value="{{ old('desc_materia') }}" placeholder="{{ __('Descripción') }}" spellcheck="false"
-                maxlength="{{ config('variables.materias.descripcion') }}" required></textarea>
+                value="{{ old('desc_materia') }}" placeholder="{{ __('Descripción, ej: Practica un juego recreativo de reflejos') }}" spellcheck="false"
+                maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required></textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -132,10 +133,10 @@
                 <label for="name" class="control-label">Nombre</label>
 
                 <div class="input-group">
-                    <input type="text" name="nom_materia" id="nom_materia"
+                    <input type="text" name="nom_materia" 
                         class="form-control @error('nom_materia') is-invalid @enderror" value="{{ $nombre }}"
-                        placeholder="{{ __('Nombre de la materia') }}"
-                        maxlength="{{ config('variables.materias.nombre') }}" data-nombre="caracteres" autofocus
+                        placeholder="{{ __('Nombre de la materia, ej: Ping pong') }}"
+                        maxlength="{{ config('variables.materias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." autofocus
                         required>
 
                     <div class="input-group-append">
@@ -157,10 +158,10 @@
                 <label for="cupos" class="control-label">Cupos</label>
 
                 <div class="input-group">
-                    <input type="number" name="cupos" id="cupos"
-                        class="form-control @error('cupos') is-invalid @enderror" id="cupos"
-                        value="{{ $cupos }}" placeholder="{{ __('Cupos disponibles') }}"
-                        maxlength="{{ config('variables.materias.cupos') }}" data-nombre="cupos" required>
+                    <input type="number" name="cupos" 
+                        class="form-control @error('cupos') is-invalid @enderror" 
+                        value="{{ $cupos }}" placeholder="{{ __('Cupos disponibles, ej: 10') }}"
+                        max="{{ config('variables.materias.cupos') }}" title="Debe contener letras, espacios y/o números." required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -184,8 +185,8 @@
         <label for="description" class="control-label">Descripción</label>
         <div class="input-group">
             <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
-                placeholder="{{ __('Descripción') }}" spellcheck="false"
-                maxlength="{{ config('variables.materias.descripcion') }}" required>{{ $descripcion }}</textarea>
+                placeholder="{{ __('Descripción, ej: ej: Practica un juego recreativo de reflejos') }}" spellcheck="false"
+                maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required>{{ $descripcion }}</textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -209,9 +210,9 @@
                 <label for="description" class="control-label">Estado</label>
                 <div class="input-group">
 
-                    <select id="estado_materia" class="form-control @error('estado_materia') is-invalid @enderror"
-                        name="estado_materia">
-                        <option value="0" readonly>Seleccione...</option>
+                    <select name="estado_materia" class="form-control @error('estado_materia') is-invalid @enderror"
+                        required>
+                        <option value="" readonly>Seleccione...</option>
 
                         <option value="Inactivo" {{ $estado === 'Inactivo' ? 'selected' : '' }}>
                             Inactivo
@@ -247,9 +248,10 @@
             {{-- Numero --}}
             <div class="col-6">
                 <label for="trayecto" class="control-label">Acreditable Nro</label>
+
                 <div class="input-group">
-                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror">
-                        <option value="0" readonly>Seleccione...</option>
+                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" required>
+                        <option value="" readonly>Seleccione...</option>
 
                         @foreach ($trayectos as $trayecto)
                             <option value={{ $trayecto->id }} {{ $nro === $trayecto->id ? 'selected' : '' }}>
@@ -286,10 +288,10 @@
                     @if ($categorias->isEmpty())
                         <x-elementos.vacio :modelo="'categorías'" />
                     @else
-                        <select id="categoria" class="form-control @error('categoria') is-invalid @enderror"
-                            name="categoria">
+                        <select name="categoria" class="form-control @error('categoria') is-invalid @enderror"
+                            required>
 
-                            <option value="0" readonly>
+                            <option value="" readonly>
                                 Seleccione...
                             </option>
 
@@ -321,10 +323,10 @@
                 <label for="metodologia">Metodología</label>
 
                 <div class="input-group">
-                    <select id="metodologia" class="form-control @error('metodologia') is-invalid @enderror"
-                        name="metodologia">
+                    <select name="metodologia" class="form-control @error('metodologia') is-invalid @enderror"
+                        required>
 
-                        <option value="0" readonly>Seleccione...</option>
+                        <option value="" readonly>Seleccione...</option>
 
                         <option value="Teórico" {{ $metodologia === 'Teórico' ? 'selected' : '' }}>
                             Teórico
@@ -361,9 +363,9 @@
             @if (empty($profesores))
                 <x-elementos.vacio :modelo="'profesores'" />
             @else
-                <select id="profesor" class="form-control @error('profesor') is-invalid @enderror" name="profesor">
+                <select name="profesor" class="form-control @error('profesor') is-invalid @enderror" required>
 
-                    <option value="0" readonly> Seleccione... </option>
+                    <option value="" readonly> Seleccione... </option>
 
                     @foreach ($profesores as $profesor)
                         <option value="{{ $profesor->id }}"
@@ -396,11 +398,11 @@
 
     <div class="input-group">
         <input type="file" class="custom-file-input @error('imagen_materia') is-invalid @enderror" id="imagen"
-            name="imagen_materia" accept="image/jpeg" >
-            
-            <label class="custom-file-label text-muted" for="imagen_materia" id="campoImagen">
-                {{ !empty($imagen) ? Str::substr($imagen, 18) : 'Seleccione una imagen' }}
-            </label>
+            name="imagen_materia" accept="image/jpeg">
+
+        <label class="custom-file-label text-muted" for="imagen_materia" id="campoImagen">
+            {{ !empty($imagen) ? Str::substr($imagen, 18) : 'Seleccione una imagen' }}
+        </label>
 
         <small id="ayudaImagen" class="form-text text-muted">
             La imagen debe pesar menos de 1 MB.

@@ -7,6 +7,7 @@ use App\Models\Academico\Pnf;
 use App\Models\Academico\Trayecto;
 use App\Models\Academico\Estudiante;
 use App\Models\Academico\Estudiante_materia;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -32,7 +33,7 @@ class UsuarioController extends Controller
         $usuarios = User::all();
         $estudiantes = [];
 
-        // Guarda solo a los estudiantes.
+        // Lista solo a los estudiantes.
         foreach ($usuarios as $usuario) {
             if ($usuario->getRoleNames()[0] === 'Estudiante') {
                 array_push($estudiantes, $usuario);
@@ -74,17 +75,31 @@ class UsuarioController extends Controller
             'trayecto.not_in' => 'El trayecto seleccionado es inválido.',
             'pnf.not_in' => 'El PNF seleccionado es inválido.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Perfil académico');
+
+        $usuario = User::find($id);
 
         $pnfTrayectos = Pnf::find($request['pnf'])->trayectos;
         $pnfNombre = Pnf::find($request['pnf'])->nom_pnf;
 
         if ($request['trayecto'] > Pnf::find($request['pnf'])->trayectos) {
+
+            Bitacora::create([
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Se intentó asignar un trayecto superior al registrado en el pnf {$pnfNombre}",
+                'estado' => 'danger'
+            ]);
+
             return redirect()->back()->with('pnfLimite', "El PNF {$pnfNombre} cursa hasta trayecto {$pnfTrayectos}");
         }
 
         // Actualiza el perfil académico
-        $usuario = User::find($id);
+        
+        Bitacora::create([
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => 'Se ha creado o editado el perfil académico exitosamente',
+            'estado' => 'success'
+        ]);
 
         Estudiante::updateOrCreate(
             ['usuario_id' => $usuario->id],
@@ -106,7 +121,10 @@ class UsuarioController extends Controller
         if ($estudiante->materia->estado_materia !== 'Finalizado') {
             return redirect()
                 ->back()
-                ->with('noFinalizado', "La aprobación del estudiante no puede ser realizada, en vista de que la acreditable aún no ha finalizado");
+                ->with(
+                    'noFinalizado',
+                    "La aprobación del estudiante no puede ser realizada, en vista de que la acreditable aún no ha finalizado"
+                );
         }
 
         $aprobado = $estudiante->aprobado();
@@ -121,15 +139,26 @@ class UsuarioController extends Controller
         if ($aprobado) {
             $estudiante->update(['aprobado' => 1]);
 
+            Bitacora::create([
+                'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
+                'accion' => 'Ha sido aprobado exitosamente',
+                'estado' => 'success'
+            ]);
+
             $alert['icono'] = 'success';
             $alert['titulo'] = 'Estudiante aprobado';
             $alert['html'] = 'El estudiante ha sido aprobado, podrá cursar su siguiente acreditable el siguiente año';
             $alert['color'] = 'success';
 
             return redirect()->back()->with('aprobar', $alert);
-
         } else {
             $estudiante->update(['aprobado' => 0]);
+
+            Bitacora::create([
+                'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
+                'accion' => 'Ha sido reprobado exitosamente',
+                'estado' => 'success'
+            ]);
 
             $alert['icono'] = 'error';
             $alert['titulo'] = 'Estudiante reprobado';

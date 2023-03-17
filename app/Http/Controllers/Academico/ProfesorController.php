@@ -6,6 +6,7 @@ use App\Models\Academico\AreaConocimiento;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\PNF;
 use App\Http\Controllers\Controller;
+use App\Models\Informacion\Bitacora;
 use App\Models\Materia\Informacion_materia;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -87,7 +88,7 @@ class ProfesorController extends Controller
             'estado.max' => 'El estado no debe contener más de :max caracteres',
         ]);
 
-        validacion($validar, 'error');
+        validacion($validar, 'error', 'Profesor');
 
         // Guarda un profesor
         Profesor::create([
@@ -104,6 +105,14 @@ class ProfesorController extends Controller
             'fecha_ingreso_institucion' => $request['fecha_ingreso_institucion'],
             'activo' => 1
         ])->save();
+
+        $usuario = User::find($request['usuarios']);
+
+        Bitacora::create([
+            'usuario' => "Perfil profesional - ({$usuario->nombre} {$usuario->apellido})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect('profesores')->with('creado', 'creado');
     }
@@ -185,10 +194,12 @@ class ProfesorController extends Controller
             'estado.regex' => 'El estado solo puede contener carácteres'
         ]);
 
-        validacion($validar, 'error');
+        validacion($validar, 'error', 'Profesor');
 
         // Busca y actualiza
-        Profesor::find($id)->update([
+        $profesor = Profesor::find($id);
+
+        $profesor->update([
             'telefono' => $request['codigo'] . $request['telefono'],
             'departamento_id' => $request['departamento'],
             'conocimiento_id' => $request['conocimiento'],
@@ -200,6 +211,12 @@ class ProfesorController extends Controller
             'fecha_de_nacimiento' => $request['fecha_de_nacimiento'],
             'fecha_ingreso_institucion' => $request['fecha_ingreso_institucion'],
             'activo' => $request['activo'],
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Perfil profesional - ({$profesor->nombreProfesor()})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('profesores')->with('actualizado', 'actualizado');

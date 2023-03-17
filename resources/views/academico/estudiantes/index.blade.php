@@ -102,7 +102,6 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 
     {{-- Mensajes --}}
     <script>
@@ -110,7 +109,7 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡Estudiante registrado!',
-                html: 'Un nuevo estudiante ha sido añadido.',
+                html: 'Un nuevo estudiante ha sido añadido, a continuación vaya a la acción editar para asignarle su perfil académico para cursar una acreditable.',
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-success px-5'

@@ -31,7 +31,7 @@
             <label for="email" class="control-label">Correo</label>
             <div class="input-group mb-3">
                 <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                    value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}" autofocus required>
+                    value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico, ej: micorreo@gmail.com') }}" autofocus required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">

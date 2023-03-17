@@ -10,29 +10,27 @@
 @section('content_header')
     <x-tipografia.titulo>Trayectos</x-tipografia.titulo>
 
-    @can('academico')
-        {{-- Modal para crear --}}
-        <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="campotrayecto" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <header class="modal-header bg-primary">
-                        <h5 class="modal-title" id="campotrayecto">Agregar trayecto</h5>
-                    </header>
+    {{-- Modal para crear --}}
+    <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="campotrayecto" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header bg-primary">
+                    <h5 class="modal-title" id="campotrayecto">Agregar trayecto</h5>
+                </header>
 
-                    <main class="modal-body">
-                        <form action="{{ route('trayectos.store') }}" method="post">
-                            @csrf
+                <main class="modal-body">
+                    <form action="{{ route('trayectos.store') }}" method="post">
+                        @csrf
 
-                            <x-formularios.trayectos />
+                        <x-formularios.trayectos />
 
-                        </form>
-                    </main>
-                </div>
+                    </form>
+                </main>
             </div>
         </div>
+    </div>
 
-        <x-formularios.borrar />
-    @endcan
+    <x-formularios.borrar />
 @stop
 
 @section('content')

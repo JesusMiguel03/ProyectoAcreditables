@@ -35,7 +35,7 @@
                                 <div class="input-group">
                                     <input type="text" name="nota" id="campoNotaEstudiante"
                                         class="form-control @error('nota') is-invalid @enderror" value="{{ old('nota') }}"
-                                        placeholder="{{ __('Nota: 1 - 100') }}" max="100" required>
+                                        placeholder="{{ __('Nota, en escala del 1 al 100') }}" max="100" required>
 
                                     @error('nota')
                                         <span class="invalid-feedback" role="alert">
@@ -60,7 +60,7 @@
         $materiaProfID = $materia->info->profesor_id ?? false;
         $validacion = $profesorID === $materiaProfID;
         
-        $tipo = $materia->infoTipo() ?? null;
+        $tipo = $materia->info->metodologia ?? null;
         $categoria = $materia->infoCategoria()->nom_categoria ?? null;
         $horario = !empty($materia->horario) ? $materia->horario->horarioEstructurado() : null;
         $acreditable = $materia->infoAcreditable() ?? null;
@@ -85,7 +85,7 @@
 
         {{-- Listado de estudiantes --}}
         <section class="col-12 my-3">
-            @if ($validacion && !empty($inscritos) || rol('Coordinador'))
+            @if (($validacion && !empty($inscritos)) || rol('Coordinador') && !empty($inscritos))
                 <a href="{{ route('listadoEstudiantes', $materia->id) }}" class="btn btn-primary float-right"
                     {{ Popper::arrow()->pop('Descargar listado de estudiantes') }}>
                     <i class="fas fa-download" style="width: 2rem"></i>
@@ -168,8 +168,8 @@
                                             {{-- Asignar nota --}}
                                             <button id="{{ $inscritoID }}"
                                                 class="btn btn-primary notas {{ $validado && $finalizada ? '' : 'disabled' }}"
-                                                data-toggle="modal" data-target="#nota" data-CI="{{ $CI }}"
-                                                data-estudiante="{{ $estudiante->inscritoNombre() }}"
+                                                @if ($validado && $finalizada) data-toggle="modal" data-target="#nota" data-CI="{{ $CI }}"
+                                                data-estudiante="{{ $estudiante->inscritoNombre() }}" @endif
                                                 {{ Popper::arrow()->pop('Asignar nota') }}>
                                                 <i class="fas fa-pen"></i>
                                             </button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academico;
 
 use App\Models\Academico\PNF;
 use App\Http\Controllers\Controller;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,19 +49,26 @@ class PNFController extends Controller
             'nom_pnf.string' => 'El nombre debe ser una oración.',
             'nom_pnf.unique' => 'El PNF (' . $request['nom_pnf'] . ') ya ha sido registrado.',
             'nom_pnf.max' => 'El nombre no puede contener mas de :max caracteres.',
+            'nom_pnf.regex' => 'El nombre solo puede contener letras.',
             'cod_pnf.max' => 'El código no puede contener mas de :max caracteres.',
             'cod_pnf.regex' => 'El código solo puede contener números y letras.',
             'cod_pnf.unique' => 'El código ' . $request['cod_pnf'] . ' ya ha sido registrado.',
             'trayectos.required' => 'La cantidad de veces que ve acreditables es necesaria.',
             'trayectos.integer' => 'La cantidad de veces que ve acreditables debe ser un número.'
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'PNF');
 
         // Guarda el pnf
         PNF::create([
             'nom_pnf' => $request['nom_pnf'],
             'cod_pnf' => $request['cod_pnf'] === null ? null : $request['cod_pnf'],
             'trayectos' => $request['trayectos']
+        ]);
+
+        Bitacora::create([
+            'usuario' => "PNF - ({$request['nom_pnf']})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('pnfs')->with('creado', 'creado');
@@ -101,12 +109,18 @@ class PNFController extends Controller
             'trayectos.required' => 'La cantidad de veces que ve acreditables es necesaria.',
             'trayectos.integer' => 'La cantidad de veces que ve acreditables debe ser un número.'
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'PNF');
 
         PNF::find($id)->update([
             'nom_pnf' => $request['nom_pnf'],
             'cod_pnf' => $request['cod_pnf'] === null ? '?' : $request['cod_pnf'],
             'trayectos' => $request['trayectos']
+        ]);
+
+        Bitacora::create([
+            'usuario' => "PNF - ({$request['nom_pnf']})",
+            'accion' => 'Se ha actualizado exitosamente',
+            'estado' => 'info'
         ]);
 
         return redirect('pnfs')->with('actualizado', 'actualizado');
@@ -117,7 +131,14 @@ class PNFController extends Controller
         // Valida si tiene el permiso
         permiso('academico');
 
-        PNF::find($id)->delete();
+        $pnf = PNF::find($id);
+        $pnf->delete();
+
+        Bitacora::create([
+            'usuario' => "PNF - ({$pnf->nom_pnf})",
+            'accion' => 'Ha sido borrado',
+            'estado' => 'warning'
+        ]);
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Informacion\Bitacora;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +39,7 @@ class RegistrarUsuarioController extends Controller
             'nombre.regex' => 'El nombre solo debe contener letras.',
             'apellido.regex' => 'El apellido solo debe contener letras.',
         ]);
-        validacion($validar, 'mostrarModalUsuario');
+        validacion($validar, 'mostrarModalUsuario', 'Registrar usuario');
 
         // Guarda al usuario con rol de profesor
         User::create([
@@ -49,6 +50,12 @@ class RegistrarUsuarioController extends Controller
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),
         ])->assignRole($rol);
+
+        Bitacora::create([
+            'usuario' => "Usuario - ({$request['nombre']} {$request['apellido']}) {$rol}",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect()->back()->with('usuarioRegistrado' . $rol, 'registrar');
     }

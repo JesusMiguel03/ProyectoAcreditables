@@ -1,4 +1,4 @@
-<form id="recuperar" action="{{ route('soporte.cambiarCedula') }}" method="post">
+<form action="{{ route('soporte.cambiarCedula') }}" method="post" class="recuperar">
     @csrf
     {{ method_field('PUT') }}
 
@@ -15,14 +15,22 @@
                     <label for="usuario">Correo del usuario a restaurar</label>
 
                     <main class="input-group">
-                        <input type="text" id="correo" name="usuario" class="form-control"
-                            placeholder="correo@gmail.com" required autofocus>
+                        <input type="text" name="correo" class="form-control @error('correo') is-invalid @enderror"
+                            value="{{ old('correo') }}" placeholder="correo@gmail.com"
+                            pattern="/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/"
+                            title="Debe ser un correo válido." required autofocus>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
+
+                        @error('correo')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </main>
                 </article>
 
@@ -30,14 +38,21 @@
                     <label for="usuario">Cédula</label>
 
                     <main class="input-group">
-                        <input type="number" id="correo" name="cedula" class="form-control" placeholder="15360120"
-                            min="1000000" max="100000000" required>
+                        <input type="text" name="cedula" class="form-control @error('cedula') is-invalid @enderror"
+                            value="{{ old('cedula') }}" placeholder="15360120" pattern="^\d{7,8}$"
+                            title="Debe contener entre 7 y 8 dígitos." required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-id-card"></span>
                             </div>
                         </div>
+
+                        @error('cedula')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </main>
                 </article>
             </section>

@@ -7,6 +7,7 @@ use App\Models\Academico\Estudiante;
 use App\Models\Academico\Estudiante_materia;
 use App\Models\Academico\Periodo;
 use App\Models\Academico\Pnf;
+use App\Models\Informacion\Bitacora;
 use App\Models\Materia\Materia;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -26,10 +27,6 @@ class EstudianteController extends Controller
         // Valida si tiene el permiso
         permiso('estudiante');
 
-        /**
-         *  ! REVISAR
-         */
-
         $pnfTrayectos = Pnf::find($request['pnf'])->trayectos;
         $pnfNombre = Pnf::find($request['pnf'])->nom_pnf;
 
@@ -44,6 +41,14 @@ class EstudianteController extends Controller
                 'pnf_id' => $request['pnf']
             ]
         );
+
+        $estudiante = Estudiante::find($request['usuario']);
+
+        Bitacora::create([
+            'usuario' => "Perfil académico - ({$estudiante->nombreEstudiante()})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect('perfil')->with('registrado', 'registrado');
     }

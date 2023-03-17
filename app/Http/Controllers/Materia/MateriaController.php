@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Materia;
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -39,6 +40,12 @@ class MateriaController extends Controller
                 $materia->actualizarCupos();
             });
 
+            Bitacora::create([
+                'usuario' => 'Materias',
+                'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
+                'estado' => 'success'
+            ]);
+
             return view('materias.acreditables.index', compact('materias', 'trayectos'));
         }
 
@@ -60,6 +67,12 @@ class MateriaController extends Controller
                 $materias->map(function ($materia) {
                     $materia->actualizarCupos();
                 });
+
+                Bitacora::create([
+                    'usuario' => "Materias impartidas por {$profesor->nombreProfesor()}",
+                    'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
+                    'estado' => 'success'
+                ]);
 
                 return view('materias.acreditables.index', compact('materias'));
             }
@@ -100,6 +113,12 @@ class MateriaController extends Controller
 
                 $mostrar = 'inscrito';
 
+                Bitacora::create([
+                    'usuario' => "Materia - ({$materias->nom_materia})",
+                    'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
+                    'estado' => 'success'
+                ]);
+
                 return view('materias.acreditables.index', compact('materias', 'mostrar'));
 
                 /**
@@ -126,6 +145,12 @@ class MateriaController extends Controller
                 $materias->map(function ($materia) {
                     $materia->actualizarCupos();
                 });
+
+                Bitacora::create([
+                    'usuario' => "Materias de trayecto {$trayecto}",
+                    'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
+                    'estado' => 'success'
+                ]);
 
                 $mostrarTabla = count($materias) >= config('variables.carrusel');
 
@@ -156,12 +181,18 @@ class MateriaController extends Controller
             'imagen_materia.max' => 'La imagen no debe pesar más de 1 MB.',
             'imagen_materia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Materia');
 
         $imagen = null;
 
         if ($request->hasFile('imagen_materia')) {
             $imagen = $request->file('imagen_materia')->storeAs('uploads', date('Y-m-d') . $request['nom_materia'] . '.jpg', 'public');
+
+            Bitacora::create([
+                'usuario' => "Materia - ({$request['nom_materia']})",
+                'accion' => 'Se ha guardado la imagen exitosamente',
+                'estado' => 'success'
+            ]);
         }
 
         Materia::create([
@@ -173,6 +204,12 @@ class MateriaController extends Controller
             'trayecto_id' => $request['trayecto'],
             'imagen_materia' => $imagen,
             'estado_materia' => 'Activo',
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Materia - ({$request['nom_materia']})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('materias')->with('creado', 'Curso creado exitosamente');
@@ -202,6 +239,12 @@ class MateriaController extends Controller
         $inscritos = $materia->estudiantesPeriodoActual();
 
         $materia->actualizarCupos();
+
+        Bitacora::create([
+            'usuario' => "Materia - ({$materia->nom_materia})",
+            'accion' => 'Se ha actualizado los cupos disponibles exitosamente',
+            'estado' => 'success'
+        ]);
 
         // En caso de que no se complete la materia se colocan valores por defecto
         $validacion = [];
@@ -255,7 +298,7 @@ class MateriaController extends Controller
             'imagen_materia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
             'estado_materia.digits_between' => 'El estado de la materia debe ser alguno de la lista.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Materia');
 
         // Busca la relacion curso - informacion
         $informacion = Informacion_materia::updateOrCreate(
@@ -268,6 +311,12 @@ class MateriaController extends Controller
             ],
         );
 
+        Bitacora::create([
+            'usuario' => "Materia - ({$request['nom_materia']})",
+            'accion' => 'Se ha actualizado la información extra exitosamente',
+            'estado' => 'success'
+        ]);
+
         // Busca la imagen, si hay la actualiza borrando la anterior
         $materia = Materia::find($id);
         $imagen = null;
@@ -276,12 +325,24 @@ class MateriaController extends Controller
             Storage::delete('public/' . $materia->imagen_materia);
 
             $imagen = $request->file('imagen_materia')->storeAs('uploads', date('Y-m-d') . $request['nom_materia'] . '.jpg', 'public');
+
+            Bitacora::create([
+                'usuario' => "Materia - ({$request['nom_materia']})",
+                'accion' => 'Se ha actualizado la imagen exitosamente',
+                'estado' => 'success'
+            ]);
         }
 
         // Actualiza los cupos disponibles
         if ($materia->cupos !== $request['cupos']) {
             $materia->cupos > $request['cupos'] ?
                 $materia->cupos_disponibles -= intval($materia->cupos) - $request['cupos'] : $materia->cupos_disponibles += $request['cupos'] - intval($materia->cupos);
+
+            Bitacora::create([
+                'usuario' => "Materia - ({$request['nom_materia']})",
+                'accion' => 'Se ha actualizado los cupos disponibles exitosamente',
+                'estado' => 'success'
+            ]);
         }
 
         // Actualiza los campos
@@ -295,6 +356,12 @@ class MateriaController extends Controller
             'informacion_id' => $informacion->id,
         ]);
 
+        Bitacora::create([
+            'usuario' => "Materia - ({$request['nom_materia']})",
+            'accion' => 'Se ha actualizado la acreditable exitosamente',
+            'estado' => 'success'
+        ]);
+
         return redirect('materias')->with('actualizado', 'Curso actualizado exitosamente');
     }
 
@@ -303,7 +370,14 @@ class MateriaController extends Controller
         // Valida si tiene el permiso
         permiso('materias.modificar');
 
-        Materia::find($id)->delete();
+        $materia = Materia::find($id);
+        $materia->delete();
+
+        Bitacora::create([
+            'usuario' => "Materia - ({$materia->nom_materia})",
+            'accion' => 'Ha sido borrada',
+            'estado' => 'warning'
+        ]);
 
         return redirect()->back()->with('borrado', 'borrado');
     }

@@ -1,3 +1,7 @@
+@php
+    $usuarioID = auth()->user()->id;
+@endphp
+
 <section class="card-body">
     <x-perfil.card-titulo titulo="Seguridad de la cuenta" />
 
@@ -8,7 +12,7 @@
         </x-perfil.card-mensaje>
 
         <div class="col-md-7 col-sm-12">
-            <form action="{{ route('actualizarContrasena', atributo($attributes, 'id')) }}" method="post">
+            <form action="{{ route('actualizarContrasena', $usuarioID) }}" method="post">
                 @csrf
                 {{ method_field('PUT') }}
 
@@ -16,7 +20,8 @@
                     <label for="current_password">Contraseña actual</label>
                     <div class="input-group">
                         <input type="password" name="current_password"
-                            class="form-control @error('current_password') is-invalid @enderror" required>
+                            class="form-control @error('current_password') is-invalid @enderror"
+                            pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -39,7 +44,8 @@
                             <div class="input-group">
 
                                 <input type="password" name="password"
-                                    class="form-control @error('password') is-invalid @enderror" required>
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -59,7 +65,8 @@
                             <label for="password_confirmation">Confirmar contraseña</label>
                             <div class="input-group">
                                 <input type="password" name="password_confirmation"
-                                    class="form-control @error('password_confirmation') is-invalid @enderror" required>
+                                    class="form-control @error('password_confirmation') is-invalid @enderror"
+                                    pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">

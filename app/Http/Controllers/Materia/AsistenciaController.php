@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Estudiante_materia;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 
 class AsistenciaController extends Controller
@@ -81,7 +82,9 @@ class AsistenciaController extends Controller
         // Valida si tiene el permiso
         permiso('asistencias');
 
-        $asistencia = Estudiante_materia::find($id)->asistencia;
+        $estudiante = Estudiante_materia::find($id);
+
+        $asistencia = $estudiante->asistencia;
 
         // Si tiene asistencia esa semana, activa el checkbox
         for ($i = 1; $i <= 12; $i++) {
@@ -89,6 +92,12 @@ class AsistenciaController extends Controller
             $asistencia[$campo] = $request[$campo] === 'on' ? 1 : 0;
         }
         $asistencia->save();
+
+        Bitacora::create([
+            'usuario' => "Asistencia - ({$estudiante->inscritoNombre()})",
+            'accion' => 'Se ha registrado la asistencia exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect()->back()->with('registrado', 'registrado');
     }

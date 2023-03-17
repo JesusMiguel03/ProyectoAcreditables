@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Perfil;
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Pnf;
 use App\Models\Academico\Trayecto;
+use App\Models\Informacion\Bitacora;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -39,6 +40,12 @@ class PerfilController extends Controller
         $avatar = 'avatar' . $request->avatarID;
         $usuario->avatar = $avatar;
         $usuario->save();
+
+        Bitacora::create([
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => 'Se ha cambiado de avatar exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect()->back()->with('avatar', 'avatar');
     }

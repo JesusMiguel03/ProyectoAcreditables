@@ -30,9 +30,6 @@
 @section('js')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
-    {{-- Personalizados --}}
-    <script src="{{ asset('js/validarCorreo.js') }}"></script>
-
     {{-- Mensajes --}}
     <script>
         @if ($message = session('contrasena'))

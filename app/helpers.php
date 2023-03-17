@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Academico\Periodo;
+use App\Models\Informacion\Bitacora;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -53,10 +54,23 @@ if (!function_exists('rolUsuarioConectado')) {
  */
 
 if (!function_exists('validacion')) {
-    function validacion($validador, $error)
+    function validacion($validador, $errorFormulario, $modelo)
     {
         if ($validador->fails()) {
-            return abort(redirect()->back()->with($error, $validador->errors()->getMessages())->withErrors($validador)->withInput());
+
+            $errores = '';
+
+            foreach ($validador->errors()->getMessages() as $error) {
+                $errores .= " {$error[0]}";
+            }
+
+            Bitacora::create([
+                'usuario' => "Error en formulario de {$modelo}",
+                'accion' => "{$errores}",
+                'estado' => 'danger'
+            ]);
+
+            return abort(redirect()->back()->with($errorFormulario, $validador->errors()->getMessages())->withErrors($validador)->withInput());
         }
     }
 }
@@ -112,14 +126,17 @@ if (!function_exists('atributo')) {
  *  @return (string|null)
  */
 if (!function_exists('periodo')) {
-    function periodo($actual = '')
+    function periodo($parametro = '')
     {
         $periodo = Periodo::orderBy('fin', 'desc')->orderBy('fase', 'desc')->orderBy('inicio', 'desc')->first();
         $existe = !empty($periodo);
 
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
 
-        if ($actual === 'modelo') return $periodo;
+
+        if ($parametro === 'modelo') return $periodo;
+
+        if ($parametro === 'anterior') return Periodo::orderBy('fin', 'desc')->orderBy('fase', 'desc')->orderBy('inicio', 'desc')->skip(1)->first();
 
         return $existe
             ? $conversor[$periodo->fase] . '-' . Carbon::parse($periodo->inicio)->format('Y')

@@ -31,6 +31,14 @@
 
     <section class="card">
         <main class="row p-3">
+            <p class="mx-auto mb-n1 text-muted">
+                <span class="font-weight-bold">Nota</span>: Solo se muestran los PNF que posean un código.
+            </p>
+        </main>
+    </section>
+
+    <section class="card">
+        <main class="row p-3">
             @if ($listadoMateriasDemandadasPNF)
                 @foreach ($listadoMateriasDemandadasPNF as $index => $trayecto)
                     @if (!empty($trayecto))

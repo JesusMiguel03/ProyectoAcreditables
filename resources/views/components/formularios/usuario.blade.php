@@ -2,9 +2,11 @@
 <div class="form-row" style="margin-bottom: -0.75rem">
     <div class="form-group {{ Route::is('register') ? 'col-12' : 'col-6' }} required">
         <label for="nombre" class="control-label">Nombre</label>
+
         <div class="input-group">
             <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
-                value="{{ old('nombre') }}" placeholder="{{ __('Nombre') }}" maxlength="{{ config('variables.usuarios.nombre') }}" data-nombre="caracteres" autofocus required>
+                value="{{ old('nombre') }}" placeholder="{{ __('Nombre, ej: José') }}" maxlength="{{ config('variables.usuarios.nombre') }}"
+                pattern="[A-zÀ-ÿ]+" title="Solo debe contener letras." autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -23,9 +25,10 @@
     {{-- Apellido --}}
     <div class="form-group {{ Route::is('register') ? 'col-12' : 'col-6' }} required">
         <label for="apellido" class="control-label">Apellido</label>
+
         <div class="input-group mb-3">
             <input type="text" name="apellido" class="form-control @error('apellido') is-invalid @enderror"
-                value="{{ old('apellido') }}" placeholder="{{ __('Apellido') }}" maxlength="{{ config('variables.usuarios.apellido') }}" data-nombre="caracteres" autofocus required>
+                value="{{ old('apellido') }}" placeholder="{{ __('Apellido, ej: Gómez') }}" maxlength="{{ config('variables.usuarios.apellido') }}" pattern="[A-zÀ-ÿ]+" title="Solo debe contener letras." autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -45,6 +48,7 @@
 {{-- Cedula --}}
 <div class="form-group required" style="margin-bottom:-1px">
     <label for="nacionalidad" class="control-label">Nacionalidad y cédula</label>
+
     <div class="form-row">
         <div class="form-group col-4">
             <select name="nacionalidad" id="nacionalidad"
@@ -62,8 +66,9 @@
 
         <div class="form-group col-8">
             <div class="input-group">
-                <input type="text" name="cedula" class="form-control @error('cedula') is-invalid @enderror"
-                    value="{{ old('cedula') }}" placeholder="{{ __('Cédula') }}" maxlength="{{ config('variables.usuarios.cedula')[1] }}" data-nombre="caracteres" required>
+                <input type="string" name="cedula" class="form-control @error('cedula') is-invalid @enderror"
+                    value="{{ old('cedula') }}" placeholder="{{ __('Cédula, ej: 1021536') }}" 
+                    pattern="^\d{7,8}$" title="Debe contener entre 7 y 8 dígitos." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -84,9 +89,10 @@
 {{-- Correo --}}
 <div class="form-group required mb-3">
     <label for="email" class="control-label">Correo electrónico</label>
+
     <div class="input-group">
         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-            value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico') }}" maxlength="{{ config('variables.usuarios.correo') }}" data-nombre="caracteres" required>
+            value="{{ old('email') }}" placeholder="{{ __('Correo Electrónico, ej: micorreo@gmail.com') }}" maxlength="{{ config('variables.usuarios.correo') }}" required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -106,9 +112,10 @@
 <div class="form-row">
     <div class="form-group {{ Route::is('register') ? 'col-12' : 'col-6' }} required">
         <label for="password" class="control-label">Contraseña</label>
+        
         <div class="input-group">
             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                placeholder="{{ __('Contraseña') }}" minlength="8" data-nombre="caracteres" required>
+                placeholder="{{ __('Contraseña') }}" pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -127,10 +134,11 @@
     {{-- Confirmar contraseña --}}
     <div class="form-group {{ Route::is('register') ? 'col-12' : 'col-6' }} required">
         <label for="password_confirmation" class="control-label">Confirmar contraseña</label>
+
         <div class="input-group">
             <input type="password" name="password_confirmation"
                 class="form-control @error('password_confirmation') is-invalid @enderror"
-                placeholder="{{ __('Confirmar contraseña') }}" minlength="8" data-nombre="caracteres" required>
+                placeholder="{{ __('Confirmar contraseña') }}" pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">

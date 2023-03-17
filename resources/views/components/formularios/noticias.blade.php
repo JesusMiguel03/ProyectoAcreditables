@@ -16,9 +16,9 @@
     <label for="titulo" class="control-label">Título</label>
 
     <div class="input-group">
-        <input type="text" name="titulo" id="titulo"
+        <input type="text" name="titulo"
             class="form-control @error('titulo') is-invalid @enderror" value="{{ $titulo ?? old('titulo') }}"
-            placeholder="{{ __('Nombre de la noticia') }}" maxlength="{{ config('variables.noticias.titulo') }}" data-nombre="caracteres" autofocus required>
+            placeholder="{{ __('Nombre de la noticia, ej: Nueva acreditable') }}" maxlength="{{ config('variables.noticias.titulo') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -40,7 +40,8 @@
 
     <div class="input-group">
         <textarea name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror descripcion" spellcheck="false" 
-            placeholder="{{ __('Descripción') }}" maxlength="{{ config('variables.noticias.descripcion') }}" required>{{ $descripcion ?? old('desc_noticia') }}</textarea>
+            placeholder="{{ __('Descripción, ej: Una nueva acreditable ha sido registrada') }}" maxlength="{{ config('variables.noticias.descripcion') }}" required
+            pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números.">{{ $descripcion ?? old('desc_noticia') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -61,8 +62,8 @@
     <label for="activo" class="control-label">¿Mostrar noticia?</label>
 
     <div class="input-group">
-        <select name="activo" class="form-control @error('activo') is-invalid @enderror">
-            <option readonly>Seleccione...</option>
+        <select name="activo" class="form-control @error('activo') is-invalid @enderror" required>
+            <option value="" readonly>Seleccione...</option>
             <option value="1" {{ $activo === 1 ? 'selected' : '' }}>Si</option>
             <option value="0" {{ $activo === 0 ? 'selected' : '' }}>No</option>
         </select>
@@ -86,7 +87,7 @@
     <label for="imagen_noticia">Imagen</label>
     <div class="input-group">
         <input type="file" class="custom-file-input @error('imagen_noticia') is-invalid @enderror" id="imagen"
-            name="imagen_noticia" accept="image/jpeg">
+            name="imagen_noticia" accept="image/jpeg" title="Debe ser en formato jpg/jpeg">
 
         <label class="custom-file-label text-muted" for="imagen_noticia" id="campoImagen">
             Seleccione una imagen

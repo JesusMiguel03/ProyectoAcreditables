@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academico;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Periodo;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -45,12 +46,18 @@ class PeriodoController extends Controller
             'fase.max' => 'El número debe estar entre 1 y 3.',
             'fase.unique' => "El periodo ($periodo) ya ha sido registrado."
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Periodo');
 
-        Periodo::create([
+        $periodo = Periodo::create([
             'fase' => $request['fase'],
             'inicio' => $request['inicio'],
             'fin' => $request['fin'],
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Periodo - ({$periodo->formato()})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect()->back()->with('creado', 'creado');
@@ -89,12 +96,19 @@ class PeriodoController extends Controller
             'fase.max' => 'El número debe estar entre 1 y 3.',
             'fase.unique' => "El periodo ($periodo) ya ha sido registrado."
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Periodo');
 
-        Periodo::find($id)->update([
+        $periodo = Periodo::find($id);
+        $periodo->update([
             'fase' => $request['fase'],
             'inicio' => $request['inicio'],
             'fin' => $request['fin'],
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Periodo - ({$periodo->formato()})",
+            'accion' => 'Se ha actualizado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('periodos')->with('actualizado', 'actualizado');

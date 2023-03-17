@@ -21,11 +21,13 @@
 
                     <main class="col-12">
                         <label for="periodo" class="control-label">Periodos</label>
+                        
                         <div class="input-group">
 
                             <select id="periodo" class="form-control @error('periodo') is-invalid @enderror"
-                                name="periodo">
-                                <option value="0" readonly>Seleccione...</option>
+                                name="periodo" required>
+
+                                <option value="" readonly>Seleccione...</option>
 
                                 @php
                                     $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];

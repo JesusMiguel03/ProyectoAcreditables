@@ -11,9 +11,10 @@
 <div class="form-group required mb-3">
     <label for="titulo" class="control-label">Pregunta</label>
     <div class="input-group">
-        <input type="text" name="titulo" id="titulo"
+        <input type="text" name="titulo" 
             class="form-control @error('titulo') is-invalid @enderror contador" value="{{ $titulo ?? old('titulo') }}"
-            placeholder="{{ __('Ej: Cómo consulto mi nota') }}" maxlength="{{ config('variables.preguntas.titulo') }}" data-nombre="caracteres" autofocus required>
+            placeholder="{{ __('Ej: Cómo consulto mi nota') }}" maxlength="{{ config('variables.preguntas.titulo') }}"
+            pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -34,7 +35,7 @@
     <label for="explicacion" class="control-label">Respuesta</label>
     <div class="input-group">
         <textarea name="explicacion" class="form-control @error('explicacion') is-invalid @enderror descripcion" spellcheck="false"
-            placeholder="{{ __('Ej: Vaya a su perfil, ubicado en el avatar al lado de su nombre') }}" maxlength="{{ config('variables.preguntas.explicacion') }}" required>{{ $descripcion ?? old('explicacion') }}</textarea>
+            placeholder="{{ __('Ej: Vaya a su perfil, ubicado en el avatar al lado de su nombre') }}" maxlength="{{ config('variables.preguntas.explicacion') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números" required>{{ $descripcion ?? old('explicacion') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">

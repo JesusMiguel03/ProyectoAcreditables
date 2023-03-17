@@ -333,13 +333,6 @@ return [
                 ],
             ],
         ],
-        [
-            'text'        => 'Gráficos y estadísticas',
-            'url'         => '/estadisticas',
-            'active'      => ['estadisticas*'],
-            'icon'        => 'fas fa-chart-bar',
-            'can'         => 'estadisticas'
-        ],
         ['hr'],
         ['header' => 'ACREDITABLES'],
         [
@@ -390,6 +383,13 @@ return [
             ],
         ],
         [
+            'text'        => 'Gráficos y estadísticas',
+            'url'         => '/estadisticas',
+            'active'      => ['estadisticas*'],
+            'icon'        => 'fas fa-chart-bar',
+            'can'         => 'estadisticas'
+        ],
+        [
             'hr',
             'can'         => 'academico',
         ],
@@ -429,7 +429,7 @@ return [
         ],
         ['hr', 'can' => 'soporte'],
         [
-            'header' => 'SOPORTE',
+            'header' => 'MANTENIMIENTO',
             'can'    => 'soporte'
         ],
         [
@@ -451,6 +451,13 @@ return [
             'url'         => '/base-de-datos',
             'active'      => ['base-de-datos*'],
             'icon'        => 'fas fa-cogs',
+            'can'         => 'soporte',
+        ],
+        [
+            'text'        => 'Bitácora',
+            'url'         => '/bitacora',
+            'active'      => ['bitacora'],
+            'icon'        => 'fas fa-info-circle',
             'can'         => 'soporte',
         ],
     ],

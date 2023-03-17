@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academico;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Horario;
+use App\Models\Informacion\Bitacora;
 use App\Models\Materia\Materia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -58,7 +59,10 @@ class HorarioController extends Controller
             'hora.date_format' => 'La hora no coincide con el formato 00:00 AM',
             'materia_id.not_in' => 'Debe escoger al menos 1 materia de la lista.',
         ]);
-        validacion($validar, 'error');
+        validacion($validar, 'error', 'Horario');
+
+        $materia = Materia::find($request['materia_id']);
+        $hora = Carbon::parse($request['hora'])->format('Y-m-d H:i:s');
 
         Horario::create([
             'periodo_id' => periodo('modelo')->id ?? null,
@@ -66,9 +70,16 @@ class HorarioController extends Controller
             'espacio' => $request['espacio'],
             'aula' => $request['aula'],
             'dia' => $request['dia'],
-            'hora' => Carbon::parse($request['hora'])->format('Y-m-d H:i:s'),
+            'hora' => $hora,
             'campo' => $request['campo']
         ]);
+
+        Bitacora::create([
+            'usuario' => "Horario {$materia->nom_materia} {$hora}",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
+        ]);
+        
         return redirect()->back()->with('creado', 'creado');
     }
 
@@ -113,12 +124,13 @@ class HorarioController extends Controller
                     'aula.numeric' => 'El aula debe ser un número.',
                     'aula.max' => 'El aula no debe ser mayor a :max.',
                 ]);
-                validacion($validar, 'error');
+                validacion($validar, 'error', 'Horario');
 
                 $horario->update([
                     'espacio' => $request['espacio'],
                     'aula' => $request['aula'],
                 ]);
+
             } else if ($request['actualizar'] === 'conHora') {
 
                 $horario->update([
@@ -127,6 +139,15 @@ class HorarioController extends Controller
                     'campo' => $request['campoActualizar'],
                 ]);
             }
+
+            $materia = Materia::find($horario->materia_id);
+
+            Bitacora::create([
+                'usuario' => "Horario - ({$materia->nom_materia})",
+                'accion' => 'Se ha actualizado exitosamente',
+                'estado' => 'success'
+            ]);
+
         } else {
             return redirect()->back();
         }
@@ -139,7 +160,16 @@ class HorarioController extends Controller
         // Valida si tiene el permiso
         permiso('horarios');
 
-        Horario::find($id)->delete();
+        $horario = Horario::find($id);
+        $materia = Materia::find($horario->materia_id);
+
+        $horario->delete();
+
+        Bitacora::create([
+            'usuario' => "Horario de {$materia->nom_materia}",
+            'accion' => 'Ha sido borrado',
+            'estado' => 'warning'
+        ]);
 
         return redirect(route('horarios.index'))->with('borrado', 'borrado');
     }
@@ -160,6 +190,12 @@ class HorarioController extends Controller
         foreach ($horarios as $horario) {
             $horario->delete();
         }
+
+        Bitacora::create([
+            'usuario' => "Horario general",
+            'accion' => 'Ha sido vaciado',
+            'estado' => 'warning'
+        ]);
 
         return redirect()->back();
     }

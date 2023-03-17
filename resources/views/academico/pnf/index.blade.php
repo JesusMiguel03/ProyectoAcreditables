@@ -37,6 +37,7 @@
 @section('content')
     <div class="col-12 mb-3">
         <div class="card table-responsive-sm p-3 mb-4">
+            <p class="text-muted text-center">Los PNF que no tengan código no serán mostrados en las estadísticas.</p>
 
             <div class="w-100 row mx-auto">
                 <div class="col-md-2 col">
@@ -102,7 +103,6 @@
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
-    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 
     {{-- Mensajes --}}
     <script>

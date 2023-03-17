@@ -19,9 +19,9 @@
 
             <x-perfil.usuario.avatar />
 
-            <x-perfil.usuario.informacion :nombre="auth()->user()->nombre" :apellido="auth()->user()->apellido" :correo="auth()->user()->email" />
+            <x-perfil.usuario.informacion />
 
-            <x-perfil.usuario.seguridad :id="auth()->user()->id" />
+            <x-perfil.usuario.seguridad />
 
             @can('inscribir')
                 <x-perfil.usuario.perfil-academico />

@@ -6,9 +6,10 @@
 <div class="form-group required mb-3">
     <label for="nom_categoria" class="control-label">Nombre</label>
     <div class="input-group">
-        <input type="text" name="nom_categoria" id="nom_categoria"
+        <input type="text" name="nom_categoria" 
             class="form-control @error('nom_categoria') is-invalid @enderror" value="{{ $nombre ?? old('nom_categoria') }}"
-            placeholder="{{ __('Nombre de la categoria') }}" maxlength="{{ config('variables.categorias.nombre') }}" data-nombre="caracteres"  autofocus required>
+            placeholder="{{ __('Nombre de la categoria, ej: Ciencias') }}" maxlength="{{ config('variables.categorias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números."
+            autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">

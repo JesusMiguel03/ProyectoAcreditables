@@ -44,9 +44,10 @@
 
     <div class="form-group required mb-3">
         <label for="trayecto" class="control-label">Trayecto</label>
+
         <div class="input-group">
             <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" required>
-                <option value="0" readonly>Seleccione...</option>
+                <option value="" readonly>Seleccione...</option>
 
                 @foreach ($trayectos as $trayecto)
                     <option value="{{ $trayecto->id }}"
@@ -72,9 +73,10 @@
 
     <div class="form-group required mb-3">
         <label for="pnf" class="control-label">PNF</label>
+        
         <div class="input-group">
             <select name="pnf" class="form-control @error('pnf') is-invalid @enderror" required>
-                <option value="0" readonly>Seleccione...</option>
+                <option value="" readonly>Seleccione...</option>
 
                 @foreach ($pnfs as $pnf)
                     @if (!in_array($pnf->nom_pnf, $pnfsNoDisponibles))

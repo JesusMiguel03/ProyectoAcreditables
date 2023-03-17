@@ -12,14 +12,14 @@
 <section class="form-group">
     <div class="form-row">
         {{-- Espacio --}}
-        <article class="form-group col-6">
+        <article class="form-group col-md-6 col-sm-12">
             <label for="espacio" class="control-label">Espacio</label>
 
             <div class="input-group">
                 <input type="text" name="espacio" id="espacio"
                     class="form-control @error('espacio') is-invalid @enderror" value="{{ $espacio ?? old('espacio') }}"
-                    placeholder="{{ __('Espacio a ocupar, Ej: Edificio B o B') }}"
-                    maxlength="{{ config('variables.horarios.espacio') }}" autofocus required>
+                    placeholder="{{ __('Espacio a ocupar, Ej: (Edificio B) o solo (B)') }}"
+                    maxlength="{{ config('variables.horarios.espacio') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." autofocus required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -36,13 +36,13 @@
         </article>
 
         {{-- Numero --}}
-        <article class="form-group col-6">
+        <article class="form-group col-md-6 col-sm-12">
             <label for="aula" class="control-label">Aula</label>
 
             <div class="input-group">
                 <input type="number" name="aula" id="aula"
                     class="form-control @error('aula') is-invalid @enderror contador" value="{{ $aula ?? old('aula') }}"
-                    placeholder="{{ __('Ej: 12') }}" maxlength="{{ config('variables.horarios.aula') }}">
+                    placeholder="{{ __('Número del aula, si es un edificio, ej: 12') }}" max="{{ config('variables.horarios.aula') }}" title="No debe ser mayor a {{ config('variables.horarios.aula') }}">
 
 
                 @error('aula')

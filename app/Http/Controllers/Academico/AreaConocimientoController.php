@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Academico;
 
 use App\Models\Academico\AreaConocimiento;
 use App\Http\Controllers\Controller;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,12 +46,18 @@ class AreaConocimientoController extends Controller
             'desc_conocimiento.string' => 'La descripción debe ser una oración.',
             'desc_conocimiento.max' => 'La descripción no debe tener más de :max caracteres.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Área de conocimiento');
 
         // Guarda el área de conocimiento
         AreaConocimiento::create([
             'nom_conocimiento' => $request['nom_conocimiento'],
             'desc_conocimiento' => $request['desc_conocimiento'],
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Área de conocimiento - ({$request['nom_conocimiento']})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('conocimientos')->with('creado', 'creado');
@@ -88,12 +95,18 @@ class AreaConocimientoController extends Controller
             'desc_conocimiento.string' => 'La descripción debe ser una oración.',
             'desc_conocimiento.max' => 'La descripción no debe tener más de :max caracteres.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Área de conocimiento');
 
         // Busca y actualiza
         AreaConocimiento::find($id)->update([
             'nom_conocimiento' => $request['nom_conocimiento'],
             'desc_conocimiento' => $request['desc_conocimiento']
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Área de conocimiento - ({$request['nom_conocimiento']})",
+            'accion' => 'Se ha actualizado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('conocimientos')->with('actualizado', 'actualizado');
@@ -104,7 +117,14 @@ class AreaConocimientoController extends Controller
         // Valida si tiene el permiso
         permiso('materias.modificar');
 
-        AreaConocimiento::find($id)->delete();
+        $area = AreaConocimiento::find($id);
+        $area->delete();
+
+        Bitacora::create([
+            'usuario' => "Área de conocimiento - ({$area->nom_conocimiento})",
+            'accion' => 'Ha sido borrada',
+            'estado' => 'warning'
+        ]);
 
         return redirect()->back()->with('borrado', 'borrado');
     }

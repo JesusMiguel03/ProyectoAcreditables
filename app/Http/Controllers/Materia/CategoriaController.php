@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,7 +33,7 @@ class CategoriaController extends Controller
         permiso('categorias');
 
         $validador = Validator::make($request->all(), [
-            'nom_categoria' => ['required', 'string', 'regex: /[a-zA-Z\s]+/', 'max:' . config('variables.categorias.nombre'), 'unique:categorias,nom_categoria,' . $request['nom_categoria']]
+            'nom_categoria' => ['required', 'string', 'regex: /[A-zÀ-ÿ0-9\s]+/', 'max:' . config('variables.categorias.nombre'), 'unique:categorias,nom_categoria,' . $request['nom_categoria']]
         ], [
             'nom_categoria.required' => 'La categoría es necesario.',
             'nom_categoria.string' => 'La categoría debe ser una oración.',
@@ -40,9 +41,15 @@ class CategoriaController extends Controller
             'nom_categoria.max' => 'La categoría debe contener mas de :max caracteres.',
             'nom_categoria.unique' => 'La categoría (' . $request['nom_categoria'] .  ') ya ha sido registrada.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Categoría');
 
         Categoria::create(['nom_categoria' => $request->get('nom_categoria')]);
+
+        Bitacora::create([
+            'usuario' => "Categoría - ({$request['nom_categoria']})",
+            'accion' => 'Se ha registrado una nueva categoria exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect('categorias')->with('creado', 'La categoria fue creada exitosamente');
     }
@@ -74,9 +81,15 @@ class CategoriaController extends Controller
             'nom_categoria.max' => 'La categoría debe contener mas de :max caracteres.',
             'nom_categoria.unique' => 'La categoría (' . $request['nom_categoria'] .  ') ya ha sido registrada.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Categoría');
 
         Categoria::find($id)->update(['nom_categoria' => $request->get('nom_categoria')]);
+
+        Bitacora::create([
+            'usuario' => "Categoría - ({$request['nom_categoria']})",
+            'accion' => 'Se ha modificado la categoria exitosamente',
+            'estado' => 'success'
+        ]);
 
         return redirect('categorias')->with('actualizado', 'actualizado');
     }

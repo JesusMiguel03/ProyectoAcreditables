@@ -40,8 +40,8 @@
                                         <input type="text" name="espacio" id="espacio"
                                             class="form-control @error('espacio') is-invalid @enderror"
                                             value="{{ $espacio ?? old('espacio') }}"
-                                            placeholder="{{ __('Espacio a ocupar, Ej: Edificio B o B') }}"
-                                            maxlength="{{ config('variables.horarios.espacio') }}" data-nombre="caracteres"
+                                            placeholder="{{ __('Espacio a ocupar, Ej: (Edificio B) o solo (B)') }}"
+                                            maxlength="{{ config('variables.horarios.espacio') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." 
                                             autofocus required>
 
                                         @error('espacio')
@@ -59,7 +59,7 @@
                                             <input type="number" name="aula" id="aula"
                                                 class="form-control @error('aula') is-invalid @enderror"
                                                 value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 7') }}"
-                                                maxlength="{{ config('variables.horarios.aula') }}" data-nombre="número">
+                                                max="{{ config('variables.horarios.aula') }}" title="No debe ser mayor a {{ config('variables.horarios.aula') }}">
 
 
                                             @error('aula')
@@ -77,7 +77,7 @@
                                     <select id="materia_id" class="form-control @error('materia_id') is-invalid @enderror"
                                         name="materia_id" required>
 
-                                        <option value="0" readonly>Seleccione...</option>
+                                        <option value="" readonly>Seleccione...</option>
 
                                         @foreach ($materias as $materia)
                                             <option value="{{ $materia->id }}">{{ $materia->nom_materia }}</option>
@@ -139,9 +139,9 @@
                 </div>
                 <div class="col-10 mt-n3">
                     <span class="pl-2 text-muted">Cada color representa un espacio</span>
-                    <p class="badge badge-primary">aula A</p>
-                    <p class="badge badge-success">aula B</p>
-                    <p class="badge badge-info">aula C</p>
+                    <p class="badge badge-primary">Edificio A</p>
+                    <p class="badge badge-success">Edificio B</p>
+                    <p class="badge badge-info">Edificio C</p>
                     <p class="badge badge-dark">Laboratorios</p>
                     <p class="badge badge-secondary">Otros</p>
                 </div>
@@ -275,8 +275,6 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    {{-- <script src="{{ asset('js/borrar.js') }}"></script> --}}
-    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
 
     <script>
         const form = document.getElementById('form-borrar')

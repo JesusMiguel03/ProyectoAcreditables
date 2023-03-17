@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Informacion;
 
 use App\Models\Informacion\Noticia;
 use App\Http\Controllers\Controller;
+use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -56,20 +57,35 @@ class NoticiaController extends Controller
             'imagen_noticia.max' => 'La imagen no debe pesar más de 1 MB.',
             'imagen_noticia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Noticia');
 
         $imagen = '';
 
         // Busca la imagen y la guarda
-        $request->hasFile('imagen_noticia') ?
-            $imagen = $request->file('imagen_noticia')->storeAs('uploads', \Carbon\Carbon::now()->timestamp . '-noticia.jpg', 'public') :
+        if ($request->hasFile('imagen_noticia')) {
+            $imagen = $request->file('imagen_noticia')->storeAs('uploads', \Carbon\Carbon::now()->timestamp . '-noticia.jpg', 'public');
+
+            Bitacora::create([
+                'usuario' => "Noticia - ({$request['titulo']})",
+                'accion' => 'Se ha guardado la imagen exitosamente',
+                'estado' => 'success'
+            ]);
+
+        } else {
             $imagen = null;
+        }
 
         Noticia::create([
             'titulo' => $request['titulo'],
             'desc_noticia' => $request['desc_noticia'],
             'imagen_noticia' => $imagen,
             'activo' => $request['activo'],
+        ]);
+
+        Bitacora::create([
+            'usuario' => "Noticia - ({$request['titulo']})",
+            'accion' => 'Se ha registrado exitosamente',
+            'estado' => 'success'
         ]);
 
         return redirect('noticias')->with('creado', 'creado');
@@ -115,7 +131,7 @@ class NoticiaController extends Controller
             'imagen_noticia.max' => 'La imagen no debe pesar más de 1 MB.',
             'imagen_noticia.mimes' => 'La imagen debe ser un archivo de tipo: :values.',
         ]);
-        validacion($validador, 'error');
+        validacion($validador, 'error', 'Noticia');
 
         $noticia = Noticia::find($id);
         $imagen = null;
@@ -125,6 +141,12 @@ class NoticiaController extends Controller
             Storage::delete('public/' . $noticia->imagen_noticia);
 
             $imagen = $request->file('imagen_noticia')->storeAs('uploads', \Carbon\Carbon::now()->timestamp . '-noticia.jpg', 'public');
+
+            Bitacora::create([
+                'usuario' => "Noticia - ({$request['titulo']})",
+                'accion' => 'Se ha actualizado la imagen exitosamente',
+                'estado' => 'success'
+            ]);
         }
 
         // Actualiza la noticia
@@ -135,6 +157,12 @@ class NoticiaController extends Controller
             'imagen_noticia' => $imagen ? $imagen : $noticia->imagen_noticia,
         ]);
 
+        Bitacora::create([
+            'usuario' => "Noticia - ({$request['titulo']})",
+            'accion' => 'Se ha actualizado exitosamente',
+            'estado' => 'success'
+        ]);
+
         return redirect('noticias')->with('actualizado', 'actualizado');
     }
 
@@ -143,7 +171,14 @@ class NoticiaController extends Controller
         // Valida si tiene el permiso
         permiso('noticias');
 
-        Noticia::find($id)->delete();
+        $noticia = Noticia::find($id);
+        $noticia->delete();
+
+        Bitacora::create([
+            'usuario' => "Noticia - ({$noticia->titulo})",
+            'accion' => 'Ha sido borrada',
+            'estado' => 'warning'
+        ]);
 
         return redirect()->back()->with('borrado', 'borrado');
     }

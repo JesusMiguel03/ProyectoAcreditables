@@ -1,3 +1,7 @@
+@php
+    $usuario = auth()->user();
+@endphp
+
 <section class="card-body">
     <x-perfil.card-titulo titulo="Información de perfil" />
 
@@ -18,7 +22,7 @@
                             <label>Nombre</label>
                             <div class="input-group">
                                 <input type="text" name="nombre" class="form-control"
-                                    value="{{ atributo($attributes, 'nombre') }}">
+                                    value="{{ $usuario->nombre }}">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -31,7 +35,7 @@
                             <label>Apellido</label>
                             <div class="input-group">
                                 <input type="text" name="apellido" class="form-control"
-                                    value="{{ atributo($attributes, 'apellido') }}">
+                                    value="{{ $usuario->apellido }}">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -46,7 +50,7 @@
                     <label>Correo</label>
                     <div class="input-group">
                         <input type="text" name="email" class="form-control"
-                            value="{{ atributo($attributes, 'correo') }}">
+                            value="{{ $usuario->email }}">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>

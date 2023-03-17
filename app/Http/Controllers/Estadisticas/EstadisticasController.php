@@ -207,7 +207,7 @@ class EstadisticasController extends Controller
         }
 
         foreach ($pnfs as $pnf) {
-            if (Periodo::find(2)) {
+            if (periodo('anterior')) {
                 array_push($estudiantesAnteriorPNF, count($pnf->creadoEntre([$inicioAnterior, $finAnterior])->get()));
             }
             array_push($estudiantesPNF, count($pnf->creadoEntre([$inicio, $fin])->get()));
@@ -227,11 +227,19 @@ class EstadisticasController extends Controller
             }
         }
 
-        $trayecto1 = $listadoMateriasDemandadasPNF[1];
-        $trayecto2 = $listadoMateriasDemandadasPNF[2];
-        $trayecto3 = $listadoMateriasDemandadasPNF[3];
-        $trayecto4 = $listadoMateriasDemandadasPNF[4];
-        $trayecto5 = $listadoMateriasDemandadasPNF[5];
+        $trayecto1 = '';
+        $trayecto2 = '';
+        $trayecto3 = '';
+        $trayecto4 = '';
+        $trayecto5 = '';
+
+        if ($listadoMateriasDemandadasPNF) {
+            $trayecto1 = $listadoMateriasDemandadasPNF[1];
+            $trayecto2 = $listadoMateriasDemandadasPNF[2];
+            $trayecto3 = $listadoMateriasDemandadasPNF[3];
+            $trayecto4 = $listadoMateriasDemandadasPNF[4];
+            $trayecto5 = $listadoMateriasDemandadasPNF[5];
+        }
 
         return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto', 'materias', 'trayecto1', 'trayecto2', 'trayecto3', 'trayecto4', 'trayecto5'));
     }

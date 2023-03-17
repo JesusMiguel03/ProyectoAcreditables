@@ -21,12 +21,12 @@
                 </div>
 
                 <section class="row">
-                    <article class="col-6">
+                    <article class="col-md-6 col-sm-12">
                         <canvas id="graficoPNF" data-tipo="bar"
                             style="min-height: 500px; height: 500px; max-height: 500px; max-width: 100%; display: block; width: 443px;"
                             width="443" height="500" class="chartjs-render-monitor"></canvas>
                     </article>
-                    <article class="col-6">
+                    <article class="col-md-6 col-sm-12">
                         <canvas id="graficoTrayecto" data-tipo="bar"
                             style="min-height: 500px; height: 500px; max-height: 500px; max-width: 100%; display: block; width: 443px;"
                             width="443" height="500" class="chartjs-render-monitor"></canvas>
