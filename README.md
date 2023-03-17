@@ -51,6 +51,7 @@ Componente web diseñado para la gestión administrativa de procesos dentro de l
 - Personalización de perfil, cambio de contraseña y nombre.
 - Gráficos, estadísticas y reportes.
 - Listados de estudiantes y comprobantes de inscripción en formato PDF.
+- Historial de acciones (Bitácora).
 
 **Template**
 - [Laravel-AdminLTE](https://github.com/jeroennoten/Laravel-AdminLTE).
