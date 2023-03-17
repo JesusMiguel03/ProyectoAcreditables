@@ -34,7 +34,3 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
 @stop
-
-@section('js')
-    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
-@stop

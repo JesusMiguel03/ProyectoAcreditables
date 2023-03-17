@@ -37,7 +37,3 @@
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
 @stop
-
-@section('js')
-    {{-- <script src="{{ asset('js/mensajeMostrarLimite.js') }}"></script> --}}
-@stop
