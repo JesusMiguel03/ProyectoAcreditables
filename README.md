@@ -34,7 +34,7 @@ php artisan serve
 <strong>Para recibir las actualizaciones:</strong>
 Dentro de la carpeta donde se encuentra el proyecto
 ```
-git pull
+git pull https://github.com/JesusMiguel03/ProyectoAcreditables main
 ```
 ```
 composer update
