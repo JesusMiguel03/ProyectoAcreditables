@@ -27,6 +27,7 @@ Para que las imágenes sean accesibles una vez guardadas:
 ```
 php artisan storage:link
 ```
+Para iniciar el servidor usando artisan, se puede usar alternativas (xampp, wampp, laragon, entre otros).
 ```
 php artisan serve
 ```
