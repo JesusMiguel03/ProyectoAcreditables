@@ -27,6 +27,7 @@ Para que las imágenes sean accesibles una vez guardadas:
 ```
 php artisan storage:link
 ```
+Para iniciar el servidor usando artisan, se puede usar alternativas (xampp, wampp, laragon, entre otros).
 ```
 php artisan serve
 ```
@@ -51,6 +52,7 @@ Componente web diseñado para la gestión administrativa de procesos dentro de l
 - Personalización de perfil, cambio de contraseña y nombre.
 - Gráficos, estadísticas y reportes.
 - Listados de estudiantes y comprobantes de inscripción en formato PDF.
+- Historial de acciones (Bitácora).
 
 **Template**
 - [Laravel-AdminLTE](https://github.com/jeroennoten/Laravel-AdminLTE).
