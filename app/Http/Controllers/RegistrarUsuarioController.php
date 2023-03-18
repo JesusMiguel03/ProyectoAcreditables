@@ -24,20 +24,35 @@ class RegistrarUsuarioController extends Controller
         // Valida si tiene el permiso
         permiso('registrar.usuario');
 
-        $regex = "/^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$/";
-
         // Valida los campos
         $validar = Validator::make($request->all(), [
-            'nombre' => ['required', 'string', "regex: $regex", 'max:' . config('variables.usuarios.nombre')],
-            'apellido' => ['required', 'string', "regex: $regex", 'max:' . config('variables.usuarios.apellido')],
+            'nombre' => ['required', 'string', 'regex: [A-zÀ-ÿ]+', 'max:' . config('variables.usuarios.nombre')],
+            'apellido' => ['required', 'string', 'regex: [A-zÀ-ÿ]+', 'max:' . config('variables.usuarios.apellido')],
             'nacionalidad' => ['required', 'string'],
             'cedula' => ['required', 'numeric', 'digits_between:' . config('variables.usuarios.cedula')[0] . ',' . config('variables.usuarios.cedula')[1], 'unique:users'],
             'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), 'unique:users'],
             'password' => ['required', new Password, 'confirmed'],
         ], [
+            'nombre.required' => 'El nombre es necesario.',
+            'nombre.string' => 'El nombre debe ser una oración.',
+            'nombre.regex' => 'El nombre solo puede contener letras.',
+            'nombre.max' => 'El nombre no debe tener más de :max caracteres.',
+            'apellido.required' => 'El apellido es necesario.',
+            'apellido.string' => 'El apellido debe ser una oración.',
+            'apellido.regex' => 'El apellido solo puede contener letras.',
+            'apellido.max' => 'El apellido no debe tener más de :max caracteres.',
+            'nacionalidad.required' => 'La nacionalidad es necesaria.',
+            'nacionalidad.string' => 'La nacionalidad debe ser una oración.',
+            'cedula.required' => 'La cédula es necesaria.',
+            'cedula.numeric' => 'La cédula debe ser un número.',
+            'cedula.unique' => 'La cédula debe ser única.',
             'cedula.digits_between' => 'La cedula debe estar entre los ' . config('variables.usuarios.cedula')[0] . ' y ' . config('variables.usuarios.cedula')[1] . ' dígitos.',
-            'nombre.regex' => 'El nombre solo debe contener letras.',
-            'apellido.regex' => 'El apellido solo debe contener letras.',
+            'email.required' => 'El correo es necesario.',
+            'email.email' => 'El correo no es válido.',
+            'email.max' => 'El correo no debe tener más de :max caracteres.',
+            'email.unique' => 'El correo debe ser único.',
+            'password.required' => 'La contraseña es necesaria.',
+            'password.confirmed' => 'La confirmación de contraseña no coincide.',
         ]);
         validacion($validar, 'mostrarModalUsuario', 'Registrar usuario');
 

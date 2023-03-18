@@ -49,6 +49,7 @@ class PeriodoController extends Controller
             'fin' => ['required', 'date', 'after_or_equal:' . $fechaFinMin, 'before_or_equal:' . $fechaFinMax],
         ], [
             'fase.required' => 'La fase es necesaria.',
+            'fase.numeric' => 'La fase debe ser un número.',
             'fase.max' => 'El número debe estar entre 1 y 3.',
             'fase.unique' => "El periodo ($periodo) ya ha sido registrado.",
             'inicio.required' => 'La fecha de inicio es necesaria.',
@@ -110,6 +111,7 @@ class PeriodoController extends Controller
             'fin' => ['required', 'date', 'after_or_equal:' . $fechaFinMin, 'before_or_equal:' . $fechaFinMax],
         ], [
             'fase.required' => 'La fase es necesaria.',
+            'fase.numeric' => 'La fase debe ser un número.',
             'fase.max' => 'El número debe estar entre 1 y 3.',
             'fase.unique' => "El periodo ($periodo) ya ha sido registrado.",
             'inicio.required' => 'La fecha de inicio es necesaria.',

@@ -56,7 +56,13 @@ class HorarioController extends Controller
             'materia_id' => ['required', 'not_in:0']
         ], [
             'espacio.unique' => "El espacio ($espacio) ya ha sido registrado",
+            'espacio.required' => 'El nombre del espacio es necesario.',
+            'espacio.string' => 'El nombre del espacio debe ser una oración.',
+            'espacio.regex' => 'El nombre del espacio solo debe contener letras.',
+            'espacio.max' => 'El nombre del espacio no debe tener más de :max carácteres.',
             'hora.date_format' => 'La hora no coincide con el formato 00:00 AM',
+            'aula.numeric' => 'El aula debe ser un número.',
+            'aula.max' => 'El aula no debe ser mayor a :max.',
             'materia_id.not_in' => 'Debe escoger al menos 1 materia de la lista.',
         ]);
         validacion($validar, 'error', 'Horario');
@@ -79,7 +85,7 @@ class HorarioController extends Controller
             'accion' => 'Se ha registrado exitosamente',
             'estado' => 'success'
         ]);
-        
+
         return redirect()->back()->with('creado', 'creado');
     }
 
@@ -130,7 +136,6 @@ class HorarioController extends Controller
                     'espacio' => $request['espacio'],
                     'aula' => $request['aula'],
                 ]);
-
             } else if ($request['actualizar'] === 'conHora') {
 
                 $horario->update([
@@ -147,7 +152,6 @@ class HorarioController extends Controller
                 'accion' => 'Se ha actualizado exitosamente',
                 'estado' => 'success'
             ]);
-
         } else {
             return redirect()->back();
         }

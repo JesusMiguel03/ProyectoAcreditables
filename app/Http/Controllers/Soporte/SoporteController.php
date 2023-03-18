@@ -171,6 +171,8 @@ class SoporteController extends Controller
             'correo.email' => 'Debe ser un correo válido.',
             'correo.max' => 'El correo no puede contener mas de :max caracteres.',
             'cedula.required' => 'La cédula es necesaria.',
+            'cedula.numeric' => 'La cédula debe ser un número.',
+            'cedula.unique' => 'La cédula debe ser única.',
             'cedula.digits_between' => 'La cedula debe estar entre los ' . config('variables.usuarios.cedula')[0] . ' y ' . config('variables.usuarios.cedula')[1] . ' dígitos.',
         ]);
         validacion($validador, 'error', 'Cambiar cédula');
