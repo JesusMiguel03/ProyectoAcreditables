@@ -1,5 +1,5 @@
 ## **Actualización**
-[16/03/2023] *Bitácora*
+[17/03/2023] *Periodo*
 
 ## **Pendiente**
 -   Documentación.
