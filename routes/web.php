@@ -135,13 +135,13 @@ Route::controller(InscripcionController::class)->group(function () {
 });
 
 // 1.2.3 Comprobante
-Route::get('/estudiante/{id}/comprobante', [EstudianteController::class, 'comprobante'])->name('comprobante');
+Route::get('/estudiante/{id}/comprobante/{nroComprobante?}', [EstudianteController::class, 'comprobante'])->name('comprobante');
 
 // 1.3. Horarios
 Route::controller(HorarioController::class)->group(function () {
     Route::get('/horarios', 'index')->name('horarios.index');
     Route::post('/horarios/store', 'store')->name('horarios.store');
-    Route::get('/horarios/{id}/edit', 'edit')->name('horarios.edit');
+    Route::post('/horarios/{id}/edit', 'edit')->name('horarios.edit');
     Route::put('/horarios/{id}/update', 'update')->name('horarios.update');
     Route::delete('/horarios/{id}/delete', 'delete')->name('horarios.destroy');
     Route::get('/horarios/pdf', 'pdf')->name('horarios.pdf');

@@ -52,7 +52,7 @@ class HorarioController extends Controller
                     return $query->where('espacio', $request['espacio'])->where('aula', $request['aula'])->where('campo', $request['campo'])->where('deleted_at');
                 })
             ],
-            'aula' => ['nullable', 'numeric', 'max:' . config('variables.horarios.aula')],
+            'aula' => ['nullable', 'numeric', 'min:1', 'max:' . config('variables.horarios.aula')],
             'materia_id' => ['required', 'not_in:0']
         ], [
             'espacio.unique' => "El espacio ($espacio) ya ha sido registrado",
@@ -62,6 +62,7 @@ class HorarioController extends Controller
             'espacio.max' => 'El nombre del espacio no debe tener más de :max carácteres.',
             'hora.date_format' => 'La hora no coincide con el formato 00:00 AM',
             'aula.numeric' => 'El aula debe ser un número.',
+            'aula.min' => 'El aula debe ser mayor a :min.',
             'aula.max' => 'El aula no debe ser mayor a :max.',
             'materia_id.not_in' => 'Debe escoger al menos 1 materia de la lista.',
         ]);

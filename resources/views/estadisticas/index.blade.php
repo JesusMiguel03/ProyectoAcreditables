@@ -21,7 +21,7 @@
 
                     <main class="col-12">
                         <label for="periodo" class="control-label">Periodos</label>
-                        
+
                         <div class="input-group">
 
                             <select id="periodo" class="form-control @error('periodo') is-invalid @enderror"
@@ -90,8 +90,8 @@
         })
     </script>
 
-    @if (session('noExiste'))
-        <script>
+    <script>
+        @if (session('noExiste'))
             Swal.fire({
                 icon: 'info',
                 title: '¡Ha ocurrido un error!',
@@ -101,6 +101,16 @@
                     confirmButton: 'btn btn-info px-5'
                 },
             })
-        </script>
-    @endif
+        @elseif (session('inscripcionActiva'))
+            Swal.fire({
+                icon: 'warning',
+                title: '¡Inscripciones Activas!',
+                html: "Las inscripciones aún se encuentran activas, por tal motivo no se pueden generar gráficos y/o mostrar estadísticas precisas. Estarán disponibles a partir del <strong>({{ session('inscripcionActiva') }})</strong>, <strong>45 días</strong> después de la fecha de inicio del periodo <strong>({{ session('fechaInicio') }})</strong>.",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-warning px-5'
+                },
+            })
+        @endif
+    </script>
 @stop

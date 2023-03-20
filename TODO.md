@@ -1,5 +1,11 @@
 ## **Actualización**
-[17/03/2023] *Error messages*
+[19/03/2023] *Validations*
+
+
+## **Changes**
+
 
 ## **Pendiente**
 -   Documentación.
+-   PDF notas cada acreditable.
+-   Componentizar pdfs.

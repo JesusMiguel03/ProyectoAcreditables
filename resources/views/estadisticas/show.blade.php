@@ -24,6 +24,15 @@
     <x-formularios.estadisticas :periodos="$periodos" :materias="$materias" :periodoActual="$periodoActual" :periodo="$periodoFormateado" />
 
     <section class="row">
+        <div class="col-4">
+            <a href="{{ route('estadisticas.pdf', $periodoActual) }}" class="btn btn-danger btn-block mr-2 my-2 py-3">
+                <i class="far fa-file-pdf"></i>
+                Descargar estadísticas
+            </a>
+        </div>
+    </section>
+
+    <section class="row">
         <x-card.estadisticas nombre="Materias" color="primary" :cantidad="count($materias)" icono="fa-th-large" />
         <x-card.estadisticas nombre="Estudiantes" color="info" :cantidad="count($estudiantesRegistrados)" :extra="count($inscritos)" icono="fa-users" />
         <x-card.estadisticas nombre="Profesores" color="secondary" :cantidad="count($profesores)" icono="fa-user-graduate" info=false />

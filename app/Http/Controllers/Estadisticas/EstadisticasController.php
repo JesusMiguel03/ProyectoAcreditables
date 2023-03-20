@@ -10,6 +10,7 @@ use App\Models\Academico\PNF;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
 use App\Models\Materia\Materia;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EstadisticasController extends Controller
@@ -102,11 +103,17 @@ class EstadisticasController extends Controller
             return redirect(route('estadisticas.index'))->with('noExiste', 'El periodo a buscar no existe');
         }
 
+        $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
+        $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
+
+        // if (Carbon::today()->format('Y-m-d') !== $tiempoExtraInscripcion) {
+        //     return redirect()->back()->with(['inscripcionActiva' => $tiempoExtraInscripcion, 'fechaInicio' => $fechaInicio]);
+        // }
+
         // Lista de periodos
         $periodos = Periodo::all();
 
         // Periodo buscado
-        $periodoActual = Periodo::find($id);
         $inicio = $periodoActual->inicio;
         $fin = $periodoActual->fin;
 
@@ -241,6 +248,6 @@ class EstadisticasController extends Controller
             $trayecto5 = $listadoMateriasDemandadasPNF[5];
         }
 
-        return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto', 'materias', 'trayecto1', 'trayecto2', 'trayecto3', 'trayecto4', 'trayecto5'));
+        return view('estadisticas.show', compact('periodoActual', 'periodoFormateado', 'listadoMateriasDemandadasPNF', 'inscritos', 'materias', 'estudiantesRegistrados', 'profesores', 'pnfs', 'trayectos', 'periodos', 'nombreMaterias', 'estudiantesMateria', 'estudiantesPNF', 'estudiantesAnteriorPNF', 'nombrePNF', 'estudiantesTrayecto', 'numeroTrayecto', 'trayecto1', 'trayecto2', 'trayecto3', 'trayecto4', 'trayecto5'));
     }
 }

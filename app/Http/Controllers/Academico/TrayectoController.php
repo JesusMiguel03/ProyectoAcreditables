@@ -41,11 +41,12 @@ class TrayectoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'num_trayecto' => ['required', 'max:10', 'integer', 'unique:trayectos,num_trayecto,' . $request['num_trayecto']],
+            'num_trayecto' => ['required', 'min:1', 'max:10', 'integer', 'unique:trayectos,num_trayecto,' . $request['num_trayecto']],
         ], [
             'num_trayecto.required' => 'El número es necesario.',
             'num_trayecto.unique' => 'El trayecto (' . $request['num_trayecto'] . ') ya ha sido registrado.',
             'num_trayecto.integer' => 'El número debe ser un número.',
+            'num_trayecto.min' => 'El número debe ser mayor a 1.',
             'num_trayecto.max' => 'El número debe ser menor a 10.',
         ]);
         validacion($validador, 'error', 'Trayecto');
@@ -83,11 +84,12 @@ class TrayectoController extends Controller
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'num_trayecto' => ['required', 'max:10', 'integer', 'unique:trayectos,num_trayecto,' . $id],
+            'num_trayecto' => ['required','min:1', 'max:10', 'integer', 'unique:trayectos,num_trayecto,' . $id],
         ], [
             'num_trayecto.required' => 'El número es necesario.',
             'num_trayecto.unique' => 'El trayecto (' . $request['num_trayecto'] . ') ya ha sido registrado.',
             'num_trayecto.integer' => 'El número debe ser un número.',
+            'num_trayecto.min' => 'El número debe ser mayor a 1.',
             'num_trayecto.max' => 'El número debe ser menor a 10.',
         ]);
         validacion($validador, 'error', 'Trayecto');

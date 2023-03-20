@@ -53,13 +53,21 @@ class EstudianteController extends Controller
         return redirect('perfil')->with('registrado', 'registrado');
     }
 
-    public function comprobante($id)
+    public function comprobante($id, $nroComprobante = '')
     {
         // Si es profesor no puede ver el comprobante
         if (rol('Profesor')) return redirect()->back();
 
         // Busca al estudiante y carga sus datos
-        $estudiante = Estudiante_materia::find($id);
+        $estudiante = Estudiante::find($id);
+
+        // Si intenta buscar un comprobante inferior a 1 redirige con mensaje de error.
+        if ($nroComprobante && $nroComprobante < 1) return redirect()->back()->with('comprobanteError', 'No existe el comprobante a buscar.');
+
+        // Si se busca por un ID se muestra el comprobante, caso contrario muestra el último.
+        !empty($nroComprobante)
+            ? $estudiante = $estudiante->inscripcion($nroComprobante)
+            : $estudiante = $estudiante->ultimaInscripcion;
 
         // Si el estudiante no tiene comprobante, redirecciona.
         if (empty($estudiante)) return redirect()->back();

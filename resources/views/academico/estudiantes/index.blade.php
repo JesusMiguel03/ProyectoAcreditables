@@ -10,27 +10,42 @@
 @section('content_header')
     <x-tipografia.titulo>Listado de estudiantes</x-tipografia.titulo>
 
-    @can('registrar')
-        {{-- Registrar usuario --}}
-        <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="camporegistrar" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
+    {{-- Registrar usuario --}}
+    <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="camporegistrar" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
 
-                    <header class="modal-header bg-primary">
-                        <h5 class="modal-title" id="camporegistrar">Registrar usuario como estudiante</h5>
-                    </header>
+                <header class="modal-header bg-primary">
+                    <h5 class="modal-title" id="camporegistrar">Registrar usuario como estudiante</h5>
+                </header>
 
-                    <main class="modal-body">
-                        <form action="{{ route('registrar.usuario', 'Estudiante') }}" method="post">
-                            @csrf
+                <main class="modal-body">
+                    <form action="{{ route('registrar.usuario', 'Estudiante') }}" method="post">
+                        @csrf
 
-                            <x-formularios.usuario />
-                        </form>
-                    </main>
-                </div>
+                        <x-formularios.usuario />
+                    </form>
+                </main>
             </div>
         </div>
-    @endcan
+    </div>
+
+    {{-- Comprobantes --}}
+    <div class="modal fade" id="comprobantes" tabindex="-1" role="dialog" aria-labelledby="campoComprobantes"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <header class="modal-header bg-primary">
+                    <h5 class="modal-title" id="campoComprobantes">Comprobantes del estudiante</h5>
+                </header>
+
+                <main class="modal-body">
+                    <section id="seccionComprobantes" class="row"></section>
+                </main>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
@@ -58,25 +73,46 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($estudiantes as $estudiante)
+                @foreach ($usuarios as $usuario)
+
+                @php
+                    $CI = $usuario->nacionalidad . '-' . number_format($usuario->cedula, 0, '', '.');
+                    $nombre = $usuario->nombre;
+                    $apellido = $usuario->apellido;
+                    $pnf = $usuario->estudiante->pnf->nom_pnf ?? 'Sin asignar';
+                    $trayecto = $usuario->estudiante->trayecto->num_trayecto ?? 'Sin asignar';
+                    $inscrito = $usuario->estudiante->inscrito ?? null;
+                    $estudianteID = $usuario->estudiante->id ?? null;
+                @endphp
                     <tr>
-                        <td>{{ $estudiante->nacionalidad . '-' . number_format($estudiante->cedula, 0, '', '.') }}</td>
-                        <td>{{ $estudiante->nombre }}</td>
-                        <td>{{ $estudiante->apellido }}</td>
-                        <td>{{ $estudiante->estudiante->pnf->nom_pnf ?? 'Sin asignar' }}</td>
-                        <td>{{ $estudiante->estudiante->trayecto->num_trayecto ?? 'Sin asignar' }}</td>
+                        <td>{{ $CI }}</td>
+                        <td>{{ $nombre }}</td>
+                        <td>{{ $apellido }}</td>
+                        <td>{{ $pnf }}</td>
+                        <td>{{ $trayecto }}</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <a href="{{ route('estudiantes.edit', $estudiante) }}" class="btn btn-primary"
+                                <a href="{{ route('estudiantes.edit', $usuario) }}" class="btn btn-primary"
                                     {{ Popper::arrow()->pop('Editar perfil') }}>
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                @if (!empty($estudiante->inscrito))
-                                    <a href="{{ route('comprobante', $estudiante->id) }}" class="btn btn-danger mr-2"
-                                        {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
-                                        <i class="fas fa-file-pdf" style="width: 15px"></i>
-                                    </a>
+                                @if (!empty($inscrito))
+                                    @if (count($inscrito) === 1)
+                                        <a href="{{ route('comprobante', $estudianteID) }}"
+                                            class="btn btn-danger mr-2"
+                                            {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
+                                            <i class="fas fa-file-pdf" style="width: 15px"></i>
+                                        </a>
+                                    @else
+                                        <button class="btn btn-danger mr-2" data-listarComprobantes="true"
+                                            data-estudiante="{{ $estudianteID }}"
+                                            data-comprobantes="{{ count($inscrito) }}"
+                                            data-toggle="modal" data-target="#comprobantes"
+                                            {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
+                                            <i class="fas fa-file-pdf" style="width: 15px"></i>
+                                        </button>
+                                    @endif
                                 @endif
                             </div>
                         </td>
@@ -102,6 +138,7 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ asset('js/listadoComprobantes.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>

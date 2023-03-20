@@ -27,13 +27,11 @@
                     <x-formularios.horarios :horario="$horario" />
                 </form>
 
-                <div class="my-2 border-bottom border-secondary"></div>
-
                 <form id="form" action="{{ route('horarios.destroy', $horario->id) }}" method="post">
                     @csrf
                     {{ method_field('DELETE') }}
 
-                    <button id="borrar" type="submit" class="btn btn-block btn-danger"
+                    <button id="borrar" type="submit" class="mt-2 btn btn-block btn-danger"
                         data-nombre="{{ $horario->nombreMateria() }}">
                         <i class="fas fa-trash mr-2"></i>
                         Borrar

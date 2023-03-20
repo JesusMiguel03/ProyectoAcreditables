@@ -21,7 +21,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            
+
             <tbody>
                 @foreach ($conocimientos as $nombre => $id)
                     <tr>
@@ -29,13 +29,10 @@
                         <td>Área de conocimiento</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'AreaConocimiento']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'AreaConocimiento']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -48,13 +45,10 @@
                         <td>PNF</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'PNF']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'PNF']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -67,13 +61,10 @@
                         <td>Trayecto</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'Trayecto']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'Trayecto']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -86,13 +77,10 @@
                         <td>Noticia</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'Noticia']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'Noticia']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -105,13 +93,10 @@
                         <td>Preguntas frecuentes</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'Pregunta']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'Pregunta']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -124,13 +109,10 @@
                         <td>Categorías</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'Categoria']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'Categoria']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -143,13 +125,10 @@
                         <td>Materias</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'Materia']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'Materia']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -162,13 +141,10 @@
                         <td>Horarios</td>
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
-                                <form action="{{ route('soporte.recuperar', [$id, 'Horario']) }}"
-                                    method="get">
+                                <form action="{{ route('soporte.recuperar', [$id, 'Horario']) }}" method="get">
                                     @csrf
 
-                                    <button class="btn btn-success">
-                                        <i class="fas fa-trash-restore"></i>
-                                    </button>
+                                    <x-elementos.boton-recuperar />
                                 </form>
                             </div>
                         </td>
@@ -185,6 +161,7 @@
 @stop
 
 @section('js')
+    @include('popper::assets')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
 

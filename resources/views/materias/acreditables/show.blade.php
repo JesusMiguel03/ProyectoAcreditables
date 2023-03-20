@@ -117,7 +117,6 @@
                             @php
                                 $estudianteID = $estudiante->esEstudiante->id;
                                 $inscritoID = $estudiante->id;
-                                $inscritoID = $estudiante->id;
                                 $CI = $estudiante->inscritoCI();
                                 $nombre = $estudiante->inscritoSoloNombre();
                                 $apellido = $estudiante->inscritoSoloApellido();

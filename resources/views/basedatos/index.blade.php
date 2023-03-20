@@ -42,7 +42,7 @@
                         <td>
                             <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                 <a href="{{ route('descargar-base-de-datos', $respaldo['nombre']) }}"
-                                    class="btn btn-success" {{ Popper::arrow()->pop('Descargar respaldo') }}>
+                                    class="btn btn-success descargar" {{ Popper::arrow()->pop('Descargar respaldo') }}>
                                     <i class="fas fa-download"></i>
                                 </a>
                             </div>
@@ -70,7 +70,7 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/mostrarNombreArchivo.js') }}"></script>
+    <script src="{{ asset('js/descargarAlerta.js') }}"></script>
 
     <script>
         @if ($message = session('success'))

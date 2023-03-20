@@ -4,7 +4,7 @@
     $color = atributo($attributes, 'color');
     $extra = atributo($attributes, 'extra');
     $icono = atributo($attributes, 'icono');
-
+    
     if ($nombre === 'Estudiantes') {
         $mensaje = "Registrados T. ($cantidad) | Inscritos P. ($extra)";
     } elseif ($nombre === 'Profesores') {

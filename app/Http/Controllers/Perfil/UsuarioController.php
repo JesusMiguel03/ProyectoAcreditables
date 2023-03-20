@@ -30,17 +30,17 @@ class UsuarioController extends Controller
         permiso('registrar.usuario');
 
         // Busca a todos los estudiantes.
-        $usuarios = User::all();
-        $estudiantes = [];
+        $usuariosRegistrados = User::all();
+        $usuarios = [];
 
         // Lista solo a los estudiantes.
-        foreach ($usuarios as $usuario) {
+        foreach ($usuariosRegistrados as $usuario) {
             if ($usuario->getRoleNames()[0] === 'Estudiante') {
-                array_push($estudiantes, $usuario);
+                array_push($usuarios, $usuario); 
             }
         }
 
-        return view('academico.estudiantes.index', compact('estudiantes'));
+        return view('academico.estudiantes.index', compact('usuarios'));
     }
 
     /**

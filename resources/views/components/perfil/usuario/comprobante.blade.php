@@ -1,5 +1,6 @@
 @php
     $estudiante = Auth::user()->estudiante ?? null;
+    $estudianteID = $estudiante->id ?? null;
     
     if ($estudiante) {
         $inscripcion = $estudiante->inscrito ?? null;
@@ -7,8 +8,8 @@
     
         foreach ($inscripcion as $i => $inscrito) {
             $informacion[$i] = [
+                'id' => $i,
                 'profesor' => $inscrito->materia->profesorEncargado() ?? null,
-                'comprobante' => $inscrito->id,
                 'acreditable' => $inscrito->inscritoAcreditable('nombre'),
                 'nroAcreditable' => $inscrito->inscritoAcreditable('nro'),
             ];
@@ -24,12 +25,12 @@
             @foreach ($informacion as $inscrito)
                 @php
                     $profesor = $inscrito['profesor'];
-                    $comprobanteID = $inscrito['comprobante'];
                     $acreditable = $inscrito['acreditable'];
                     $nroAcreditable = $inscrito['nroAcreditable'];
+                    $comprobanteID = $inscrito['id'] + 1;
                 @endphp
 
-                <a href="{{ route('comprobante', $comprobanteID) }}" class="col-12 px-3">
+                <a href="{{ route('comprobante', [$estudianteID, $comprobanteID]) }}" class="col-12 px-3" data-download="true">
                     <div class="info-box shadow">
                         <span class="info-box-icon bg-danger"><i class="far fa-file-pdf"></i></span>
                         <div class="info-box-content">

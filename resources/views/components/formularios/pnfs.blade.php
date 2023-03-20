@@ -60,7 +60,7 @@
 
     <div class="input-group">
         <input type="number" name="trayectos" class="form-control @error('trayectos') is-invalid @enderror"
-            value="{{ $trayectos ?? old('trayectos') }}" placeholder="{{ __('Cuantas veces ve acreditable, ej: 5') }}" min=1 max=10 required
+            value="{{ $trayectos ?? old('trayectos') }}" placeholder="{{ __('Cuantas veces ve acreditable, ej: 5') }}" min="1" max="10" required
             pattern="[0-9]" title="Debe ser menor a 10">
 
         <div class="input-group-append">

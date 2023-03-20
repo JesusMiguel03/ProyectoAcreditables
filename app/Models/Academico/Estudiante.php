@@ -59,6 +59,18 @@ class Estudiante extends Model
         return $this->pnf->nom_pnf ?? null;
     }
 
+    public function ultimaInscripcion()
+    {
+        return $this->hasOne(Estudiante_materia::class, 'estudiante_id', 'id')->latestOfMany();
+    }
+
+    public function inscripcion($n)
+    {
+        $comprobantes = $this->inscrito;
+
+        return $comprobantes[$n - 1];
+    }
+
     /**
      *  Relaciones
      */

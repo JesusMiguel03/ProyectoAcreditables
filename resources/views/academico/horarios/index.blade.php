@@ -34,7 +34,7 @@
                                 <input type="text" id="campo" name="campo" hidden>
 
                                 <article class="form-row">
-                                    <div class="form-group col-6">
+                                    <div class="form-group col-md-8 col-sm-12">
                                         <label class="control-label">Espacio</label>
 
                                         <input type="text" name="espacio" id="espacio"
@@ -51,14 +51,14 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group col-6">
+                                    <div class="form-group col-md-4 col-sm-12">
                                         <label for="aula">Número del aula</label>
 
                                         <div class="input-group">
 
                                             <input type="number" name="aula" id="aula"
                                                 class="form-control @error('aula') is-invalid @enderror"
-                                                value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 7') }}"
+                                                value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 7') }}" min="1"
                                                 max="{{ config('variables.horarios.aula') }}" title="No debe ser mayor a {{ config('variables.horarios.aula') }}">
 
 
@@ -100,7 +100,7 @@
         </div>
 
         <section>
-            <form id="form" action="" method="get">
+            <form id="form" action="" method="post">
                 @csrf
             </form>
 
@@ -366,6 +366,7 @@
         }
 
         materiasEnHorario.forEach(materia => {
+            // Enviar formulario
             materia.addEventListener('click', (e) => {
                 e.stopPropagation()
 
@@ -375,11 +376,13 @@
                 form.submit()
             })
 
+            // Drag n' drop
             materia.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('test', e.target.id)
                 e.dataTransfer.effectAllowed = 'move'
             })
 
+            // Actualizar datos
             materia.addEventListener('dragend', (e) => {
                 cargarInformacion(e.currentTarget.parentNode, 'actualizar')
 
@@ -406,6 +409,7 @@
             })
         })
 
+        // Agregar hora
         casillas.forEach(casilla => {
             casilla.addEventListener('click', (e) => {
                 cargarInformacion(e.currentTarget)

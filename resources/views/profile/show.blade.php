@@ -45,6 +45,7 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/seleccionarAvatar.js') }}"></script>
+    <script src="{{ asset('js/descargarComprobante.js') }}"></script>
 
     {{-- Mensajes --}}
     <script>
@@ -93,6 +94,16 @@
                 icon: 'error',
                 title: '¡Error al actualizar!',
                 html: 'El campo de <b>Nueva contraseña</b> y <b>Confirmar contraseña</b> no coinciden.',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-danger px-5'
+                },
+            })
+        @elseif ($message = session('comprobanteError'))
+            Swal.fire({
+                icon: 'error',
+                title: '¡Comprobante no encontrado!',
+                html: "{{ session('comprobanteError') }}",
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-danger px-5'
