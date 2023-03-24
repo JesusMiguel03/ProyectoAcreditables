@@ -67,10 +67,13 @@ class PeriodoController extends Controller
             'fin' => $request['fin'],
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Periodo - ({$periodo->formato()})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró el periodo ({$periodo->formato()}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('anterior')->id ?? null
         ]);
 
         return redirect()->back()->with('creado', 'creado');
@@ -131,10 +134,13 @@ class PeriodoController extends Controller
             'fin' => $request['fin'],
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Periodo - ({$periodo->formato()})",
-            'accion' => 'Se ha actualizado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó el periodo ({$periodo->formato()}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('periodos')->with('actualizado', 'actualizado');

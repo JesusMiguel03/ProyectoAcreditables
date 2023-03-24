@@ -30,6 +30,90 @@
 @section('js')
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const correo = document.getElementById('correoContrasena')
+        const boton = document.getElementById('botonCorreoContrasena')
+
+        boton.disabled = true
+
+        let validacionCorreo = false
+
+        let regexCorreo = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+
+        correo.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 40) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 40)
+            }
+
+            if (regexCorreo.test(e.currentTarget.value)) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionCorreo = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionCorreo = false
+            }
+
+            if (validacionCorreo) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        })
+    </script>
+
+    <script>
+        const correoCedula = document.getElementById('correoCedula')
+        const cedula = document.getElementById('cedula')
+        const botonCedula = document.getElementById('botonCorreoCedula')
+
+        botonCedula.disabled = true
+
+        let [validacionCorreoCedula, validacionCedula] = [false, false]
+
+        const validarFormulario = () => {
+            if (validacionCorreoCedula && validacionCedula) {
+                botonCedula.removeAttribute('disabled')
+            } else {
+                botonCedula.disabled = true
+            }
+        }
+
+        cedula.addEventListener('input', (e) => {
+            e.currentTarget.value = e.currentTarget.value.replace('e', '')
+
+            if (e.currentTarget.value.toString().length > 8) {
+                e.currentTarget.value = e.currentTarget.value.toString().slice(0, 8)
+            }
+            
+            if (e.currentTarget.value.toString().length > 6 && e.currentTarget.value.toString().length < 9) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionCedula = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionCedula = false
+            }
+
+            validarFormulario()
+        })
+
+        correoCedula.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 40) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 40)
+            }
+
+            if (regexCorreo.test(e.currentTarget.value)) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionCorreoCedula = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionCorreoCedula = false
+            }
+
+            validarFormulario()
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('contrasena'))

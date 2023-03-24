@@ -18,7 +18,6 @@ use App\Http\Controllers\Materia\AsistenciaController;
 use App\Http\Controllers\Materia\ListadoController;
 use App\Http\Controllers\Materia\MateriaController;
 use App\Http\Controllers\Perfil\ContrasenaController;
-use App\Http\Controllers\Perfil\UsuarioController;
 use App\Http\Controllers\Perfil\PerfilController;
 use App\Http\Controllers\RegistrarUsuarioController;
 use App\Http\Controllers\Soporte\BaseDeDatosController;
@@ -78,7 +77,7 @@ Route::controller(ProfesorController::class)->group(function () {
 });
 
 // 3.3 Estudiantes [Solo para coordinador]
-Route::controller(UsuarioController::class)->group(function () {
+Route::controller(EstudianteController::class)->group(function () {
     Route::get('/estudiantes', 'index')->name('estudiantes.index');
     Route::get('/estudiantes/{id}/edit', 'edit')->name('estudiantes.edit');
     Route::put('/estudiantes/{id}/update', 'update')->name('estudiantes.update');
@@ -118,6 +117,7 @@ Route::controller(MateriaController::class)->group(function () {
     Route::get('/materias/{id}/edit', 'edit')->name('materias.edit');
     Route::get('/materias/{id}', 'show')->name('materias.show');
     Route::put('/materias/{id}/update', 'update')->name('materias.update');
+    Route::post('/materias/pdf/{id?}/{periodo_id?}', 'pdf')->name('materias.pdf');
     Route::delete('/materias/{id}/delete', 'delete')->name('materias.destroy');
 });
 
@@ -231,7 +231,10 @@ Route::controller(BaseDeDatosController::class)->group(function () {
 });
 
 // Bitacora
-Route::get('/bitacora', [BitacoraController::class, 'index'])->name('bitacora');
+Route::controller(BitacoraController::class)->group(function () {
+    Route::get('/bitacora', 'index')->name('bitacora');
+    Route::post('/bitacora/{periodo_id?}', 'show')->name('bitacora.show');
+});
 
 
 /**
@@ -246,7 +249,9 @@ Route::controller(PerfilController::class)->group(function () {
     Route::get('/perfil', 'index')->name('perfil.index');
 
     // 2. Actualizar perfil
-    Route::put('/perfil/{id}/update', 'update')->name('perfil.avatar');
+    Route::put('/perfil/{id}/avatar', 'avatar')->name('perfil.avatar');
+
+    Route::put('/perfil/informacion', 'informacion')->name('perfil.informacion');
 });
 
 // 3. Actualizar contraseña

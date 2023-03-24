@@ -26,12 +26,12 @@ class RegistrarUsuarioController extends Controller
 
         // Valida los campos
         $validar = Validator::make($request->all(), [
-            'nombre' => ['required', 'string', 'regex: [A-zÀ-ÿ]+', 'max:' . config('variables.usuarios.nombre')],
-            'apellido' => ['required', 'string', 'regex: [A-zÀ-ÿ]+', 'max:' . config('variables.usuarios.apellido')],
+            'nombre' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.nombre')],
+            'apellido' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.apellido')],
             'nacionalidad' => ['required', 'string'],
             'cedula' => ['required', 'numeric', 'digits_between:' . config('variables.usuarios.cedula')[0] . ',' . config('variables.usuarios.cedula')[1], 'unique:users'],
             'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), 'unique:users'],
-            'password' => ['required', new Password, 'confirmed'],
+            'password' => ['required', new Password, 'max: 8', 'confirmed'],
         ], [
             'nombre.required' => 'El nombre es necesario.',
             'nombre.string' => 'El nombre debe ser una oración.',
@@ -67,9 +67,10 @@ class RegistrarUsuarioController extends Controller
         ])->assignRole($rol);
 
         Bitacora::create([
-            'usuario' => "Usuario - ({$request['nombre']} {$request['apellido']}) {$rol}",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$request['nombre']} {$request['apellido']}",
+            'accion' => "Se ha registrado como ({$rol}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('usuarioRegistrado' . $rol, 'registrar');

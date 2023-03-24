@@ -54,6 +54,8 @@ class SoporteController extends Controller
     {
         permiso('soporte');
 
+        $usuario = auth()->user();
+
         $modelos = ['AreaConocimiento', 'PNF', 'Trayecto', 'Noticia', 'Pregunta', 'Categoria', 'Materia', 'Horario'];
 
         if (in_array($modelo, $modelos)) {
@@ -110,9 +112,10 @@ class SoporteController extends Controller
             }
 
             Bitacora::create([
-                'usuario' => "({$modelo}) - ({$nombre})",
-                'accion' => 'Ha sido recuperado exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Recuperó el registro ({$modelo}) - ({$nombre}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
 
             return redirect()->back()->with('recuperado', 'recuperado');
@@ -137,6 +140,7 @@ class SoporteController extends Controller
 
         // Recupera al usuario que coincida con el correo
         $usuario = User::where('email', '=', $request['usuario'])->first();
+        $usuarioBitacora = auth()->user();
 
         // Si no se encuentra.
         if (empty($usuario)) {
@@ -150,9 +154,10 @@ class SoporteController extends Controller
         ])->save();
 
         Bitacora::create([
-            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-            'accion' => 'Se ha recuperado la contraseña exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuarioBitacora->nombre} {$usuarioBitacora->apellido}",
+            'accion' => "Recuperó la contraseña de ({$usuario->nombre} {$usuario->apellido}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('contrasena', $contrasena)->with('usuario', "$usuario->nombre $usuario->apellido");
@@ -178,6 +183,7 @@ class SoporteController extends Controller
         validacion($validador, 'error', 'Cambiar cédula');
 
         $usuario = User::where('email', '=', $request['usuario'])->first();
+        $usuarioBitacora = auth()->user();
 
         // Si no se encuentra.
         if (empty($usuario)) {
@@ -187,14 +193,15 @@ class SoporteController extends Controller
         $cedulaAnterior = number_format($usuario->cedula, 0, ',', '.');
         $formatoCI = number_format($request['cedula'], 0, ',', '.');
 
-        Bitacora::create([
-            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-            'accion' => "Se cambió la cédula de ({$cedulaAnterior}) a ({$formatoCI})",
-            'estado' => 'success'
-        ]);
-
         $usuario->update([
             'cedula' => $request['cedula']
+        ]);
+
+        Bitacora::create([
+            'usuario' => "{$usuarioBitacora->nombre} {$usuarioBitacora->apellido}",
+            'accion' => "Cambió la cédula ({$cedulaAnterior}) a ({$formatoCI}) de ({$usuario->nombre} {$usuario->apellido})  exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         $cedula = $usuario->nacionalidad . '-' . $formatoCI;

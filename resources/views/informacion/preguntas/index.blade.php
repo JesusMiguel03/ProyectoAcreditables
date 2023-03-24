@@ -134,6 +134,57 @@
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const pregunta = document.getElementById('pregunta')
+        const respuesta = document.getElementById('respuesta')
+        const boton = document.getElementById('formularioEnviar')
+
+        boton.disabled = true
+
+        let [validacionPregunta, validacionRespuesta] = [false, false]
+
+        const valiadarFormulario = () => {
+            if (validacionPregunta && validacionRespuesta) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        }
+
+        pregunta.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 30) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            }
+
+            if (e.currentTarget.value.length > 10 && e.currentTarget.value.length < 31) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionPregunta = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionPregunta = false
+            }
+
+            valiadarFormulario()
+        })
+
+        respuesta.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 255) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 255)
+            }
+
+            if (e.currentTarget.value.length > 20 && e.currentTarget.value.length < 255) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionRespuesta = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionRespuesta = false
+            }
+
+            valiadarFormulario()
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))

@@ -62,7 +62,35 @@
 <x-modal.mensaje-obligatorio />
 
 @if (Route::is('horarios.edit'))
-    <x-modal.footer-editar ruta="{{ route('horarios.index') }}" />
+    <div class="row">
+        <div class="col-6">
+            <a href="{{ route('horarios.index') }}" class="btn btn-block btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Volver') }}
+            </a>
+        </div>
+
+        <div class="col-6">
+            <button type="submit" id="formularioEnviar" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @else
-    <x-modal.footer-aceptar />
+    <div class="row">
+        <div class="col-6">
+            <button id="cancelar" type="button" class="btn btn-block btn-secondary" data-dismiss="modal">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Cancelar') }}
+            </button>
+        </div>
+
+        <div class="col-6">
+            <button id="formularioEnviar" type="submit" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @endif

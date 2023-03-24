@@ -37,3 +37,50 @@
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
 @stop
+
+@section('js')
+    <script>
+        const nombre = document.getElementById('nombre')
+        const descripcion = document.getElementById('descripcion')
+        const boton = document.getElementById('formularioEnviar')
+
+        let validarNombre = true
+        let validarDescripcion = true
+
+        const validarFormulario = () => {
+            if (validarNombre && validarDescripcion) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        }
+
+        nombre.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+
+            if (e.currentTarget.value.length > 4 && e.currentTarget.value.length < 51 && validacion.test(e.currentTarget.value)) {
+                validarNombre = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarNombre = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        descripcion.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){10})[^_]+$/g
+
+            if (e.currentTarget.value.length > 15 && e.currentTarget.value.length < 256 && validacion.test(e.currentTarget.value)) {
+                validarDescripcion = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarDescripcion = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+    </script>
+@stop

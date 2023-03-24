@@ -60,10 +60,13 @@ class PreguntaFrecuenteController extends Controller
             'explicacion' => $request['explicacion']
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Pregunta - ({$request['titulo']})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró la pregunta ({$request['titulo']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('preguntas-frecuentes')->with('creado', 'creado');
@@ -114,10 +117,13 @@ class PreguntaFrecuenteController extends Controller
             'explicacion' => $request['explicacion']
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Pregunta - ({$request['titulo']})",
-            'accion' => 'Se ha actualizado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó la pregunta ({$request['titulo']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('preguntas-frecuentes')->with('actualizado', 'actualizado');
@@ -131,10 +137,13 @@ class PreguntaFrecuenteController extends Controller
         $pregunta = Pregunta_frecuente::find($id);
         $pregunta->delete();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Pregunta - ({$pregunta->titulo})",
-            'accion' => 'Ha sido borrada',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró la pregunta ({$pregunta->titulo}) exitosamente",
+            'estado' => 'warning',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('borrado', 'borrado');

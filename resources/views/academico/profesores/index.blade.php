@@ -12,7 +12,7 @@
 
     @can('registrar')
         {{-- Perfil de profesor --}}
-        <div class="modal fade" id="profesor" tabindex="-1" role="dialog" aria-labelledby="campoprofesor" aria-hidden="true">
+        <div class="modal fade" id="modalProfesor" tabindex="-1" role="dialog" aria-labelledby="campoprofesor" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
 
@@ -32,7 +32,7 @@
         </div>
 
         {{-- Registrar usuario --}}
-        <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="camporegistrar"
+        <div class="modal fade" id="modalRegistrar" tabindex="-1" role="dialog" aria-labelledby="camporegistrar"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -59,7 +59,7 @@
 
         <div class="w-100 row mx-auto">
             <div class="col-md-2 col">
-                <button class="btn btn-block btn-primary my-2" data-toggle="modal" data-target="#registrar"
+                <button class="btn btn-block btn-primary my-2" data-toggle="modal" data-target="#modalRegistrar"
                     {{ Popper::arrow()->pop('Nuevo usuario') }}>
                     <i class="fas fa-plus mr-2"></i>
                     {{ 'Usuario' }}
@@ -67,7 +67,7 @@
             </div>
 
             <div class="col-md-2 col">
-                <button class="btn btn-block btn-primary my-2" data-toggle="modal" data-target="#profesor"
+                <button class="btn btn-block btn-primary my-2" data-toggle="modal" data-target="#modalProfesor"
                     {{ Popper::arrow()->pop('Registrar usuario como profesor') }}>
                     <i class="fas fa-plus mr-2"></i>
                     {{ 'Profesor' }}
@@ -160,6 +160,376 @@
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
 
+    {{-- Validaciones --}}
+    {{-- Registrar usuario --}}
+    <script>
+        const nombre = document.getElementById('nombre')
+        const apellido = document.getElementById('apellido')
+        const cedula = document.getElementById('cedula')
+        const contrasena = document.getElementById('contrasena')
+        const confirmarContrasena = document.getElementById('confirmarContrasena')
+        const correo = document.getElementById('correo')
+        const botonUsuario = document.getElementById('registrarUsuario')
+
+        botonUsuario.disabled = true
+
+        const validarCorreo = /^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        // Validaciones de cada campo
+        let [validacionNombre, validacionApellido, validacionCedula, validacionCorreo, validacionContrasena,
+            validacionConfirmarContrasena
+        ] = [
+            false, false, false, false, false, false
+        ]
+
+        // Validacion de todo el formulario
+        const formularioValidado = () => {
+            if (validacionNombre && validacionApellido && validacionCedula && validacionCorreo &&
+                validacionContrasena && validacionConfirmarContrasena) {
+                botonUsuario.removeAttribute('disabled')
+            } else {
+                botonUsuario.disabled = true
+            }
+        }
+
+        nombre.addEventListener('input', (e) => {
+            // Si el nombre tiene entre 4 y 20 caracteres es válido
+            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 21) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionNombre = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionNombre = false
+            }
+
+            formularioValidado()
+        })
+
+        apellido.addEventListener('input', (e) => {
+            // Si el apellido tiene entre 4 y 20 caracteres es válido
+            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 21) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionApellido = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionApellido = false
+            }
+
+            formularioValidado()
+        })
+
+        correo.addEventListener('input', (e) => {
+            let validacion = validarCorreo.test(e.currentTarget.value)
+
+            // Si el correo es mayor a 40 caracteres elimina a partir del 9
+            if (e.currentTarget.value.length > 40) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 40)
+            }
+
+            // Si el correo es válido
+            if (validacion) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionCorreo = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionCorreo = false
+            }
+
+            formularioValidado()
+        })
+
+        // Si la cédula es mayor a 8 dígitos elimina a apartir del 9
+        cedula.addEventListener('input', (e) => {
+            if (e.currentTarget.value.toString().length > 8) {
+                e.currentTarget.value = e.currentTarget.value.toString().slice(0, 8)
+            }
+
+            e.currentTarget.value = e.currentTarget.value.toString().replace('e', '')
+
+            // Si la cédula tiene entre 7 y 8 digitos
+            if (e.currentTarget.value.toString().length > 6 && e.currentTarget.value.toString().length < 9) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionCedula = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionCedula = false
+            }
+
+            formularioValidado()
+        })
+
+        contrasena.addEventListener('input', (e) => {
+            // Si la contraseña es mayor a 8 caracteres elimina a apartir del 9
+            if (e.currentTarget.value.length > 8) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+            }
+
+            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9) {
+                validacionContrasena = true
+            } else {
+                validacionContrasena = false
+            }
+
+            // Si es menor a 4 caracteres añade una clase como advertencia
+            e.currentTarget.value.length < 4 ?
+                e.currentTarget.classList.add('is-invalid') :
+                e.currentTarget.classList.remove('is-invalid')
+
+            /**
+             * Si el valor del campo contraseña y la confirmacion son diferentes
+             * añade una clase al campo confirmacion como advertencia
+             */
+            e.currentTarget.value !== confirmarContrasena.value ?
+                confirmarContrasena.classList.add('is-invalid') :
+                confirmarContrasena.classList.remove('is-invalid')
+
+            formularioValidado()
+        })
+
+        confirmarContrasena.addEventListener('input', (e) => {
+            // Si la confirmación de la nueva contraseña es mayor a 8 caracteres elimina a apartir del 9
+            if (e.currentTarget.value.length > 8) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+            }
+
+            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9) {
+                validacionConfirmarContrasena = true
+            } else {
+                validacionConfirmarContrasena = false
+            }
+
+            /**
+             * Si no se coloca una contraseña pero si la confirmacion
+             * añade una clase al campo confirmacion como advertencia
+             */
+            if (contrasena.value.length === 0) {
+                contrasena.classList.add('is-invalid')
+            }
+
+            /**
+             * Si:
+             * 1. Campo confirmar nueva contraseña y contraseña son diferentes
+             * añade una clase de advertencia al campo contraseña.
+             * 2. Además de, el campo contraseña tener más de 4 caracteres
+             */
+            e.currentTarget.value !== contrasena.value && contrasena.value.length > 4 ?
+                e.currentTarget.classList.add('is-invalid') :
+                e.currentTarget.classList.remove('is-invalid')
+
+            formularioValidado()
+        })
+    </script>
+
+    {{-- Registrar perfil profesor --}}
+    <script>
+        const usuario = document.getElementById('usuario')
+        const departamento = document.getElementById('departamento')
+        const conocimiento = document.getElementById('conocimiento')
+        const estado = document.getElementById('estado')
+        const ciudad = document.getElementById('ciudad')
+        const urb = document.getElementById('urb')
+        const calle = document.getElementById('calle')
+        const casa = document.getElementById('casa')
+        const codigo = document.getElementById('codigo')
+        const tlf = document.getElementById('tlf')
+        const nacimiento = document.getElementById('fecha_nacimiento')
+        const ingreso = document.getElementById('fecha_ingreso')
+        const botonProfesor = document.getElementById('formularioEnviar')
+
+        botonProfesor.disabled = true
+
+        let [
+            validarUsuario, validarDepartamento, validarConocimiento, validarEstado, validarCiudad, validarUrb, validarCalle, validarCasa, validarCodigo, validarTlf, validarNacimiento, validarIngreso
+        ] = [
+            usuario.options[usuario.selectedIndex].value > 0,
+            departamento.options[departamento.selectedIndex].value > 0,
+            conocimiento.options[conocimiento.selectedIndex].value > 0,
+            estado.value.length > 3 && estado.value.length < 17,
+            ciudad.value.length > 5 && ciudad.value.length < 31,
+            urb.value.length > 5 && urb.value.length < 21,
+            calle.value.length > 5 && calle.value.length < 21,
+            casa.value.length > 3 && casa.value.length < 11,
+            codigo.options[codigo.selectedIndex].value > 0,
+            tlf.value.length === 7,
+            nacimiento.value.length > 0,
+            ingreso.value.length > 0
+        ]
+
+        const validarFormulario = () => {
+            if (validarUsuario && validarDepartamento && validarConocimiento && validarEstado && validarCiudad &&
+                validarUrb && validarCalle && validarCasa && validarCodigo && validarTlf && validarNacimiento &&
+                validarIngreso) {
+                botonProfesor.removeAttribute('disabled')
+            } else {
+                botonProfesor.disabled = true
+            }
+        }
+
+        usuario.addEventListener('change', (e) => {
+            let usuarioSeleccionado = e.currentTarget.options[e.currentTarget.selectedIndex].value || 0
+
+            if (usuarioSeleccionado > 0) {
+                validarUsuario = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarUsuario = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        departamento.addEventListener('change', (e) => {
+            let departamentoSeleccionado = e.currentTarget.options[e.currentTarget.selectedIndex].value || 0
+
+            if (departamentoSeleccionado > 0) {
+                validarDepartamento = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarDepartamento = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        conocimiento.addEventListener('change', (e) => {
+            let conocimientoSeleccionado = e.currentTarget.options[e.currentTarget.selectedIndex].value || 0
+
+            if (conocimientoSeleccionado > 0) {
+                validarConocimiento = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarConocimiento = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        codigo.addEventListener('change', (e) => {
+            if (e.currentTarget.options[e.currentTarget.selectedIndex].value > 0) {
+                validarCodigo = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarCodigo = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        estado.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 16) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 16)
+            }
+
+            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 17) {
+                validarEstado = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarEstado = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        ciudad.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 30) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            }
+
+            if (e.currentTarget.value.length > 5 && e.currentTarget.value.length < 31) {
+                validarCiudad = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarCiudad = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        urb.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 20) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 20)
+            }
+
+            if (e.currentTarget.value.length > 5 && e.currentTarget.value.length < 21) {
+                validarUrb = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarUrb = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        calle.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 20) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 20)
+            }
+
+            if (e.currentTarget.value.length > 5 && e.currentTarget.value.length < 21) {
+                validarCalle = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarCalle = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        casa.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 10) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 10)
+            }
+
+            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 11) {
+                validarCasa = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarCasa = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        tlf.addEventListener('input', (e) => {
+            e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '')
+
+            if (e.currentTarget.value.length > 7) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 7)
+            }
+
+            if (e.currentTarget.value.length === 7) {
+                validarTlf = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarTlf = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        nacimiento.addEventListener('blur', (e) => {
+            validarNacimiento = true
+
+            validarFormulario()
+        })
+
+        ingreso.addEventListener('blur', (e) => {
+            validarIngreso = true
+
+            validarFormulario()
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))
@@ -182,7 +552,7 @@
                     confirmButton: 'btn btn-danger px-5'
                 },
             })
-            $('#profesor').modal('show')
+            $('#modalProfesor').modal('show')
         @elseif ($message = session('mostrarModalUsuario'))
             Swal.fire({
                 icon: 'error',
@@ -193,7 +563,7 @@
                     confirmButton: 'btn btn-danger px-5'
                 },
             })
-            $('#registrar').modal('show')
+            $('#modalRegistrar').modal('show')
         @elseif ($message = session('registrado'))
             Swal.fire({
                 icon: 'info',

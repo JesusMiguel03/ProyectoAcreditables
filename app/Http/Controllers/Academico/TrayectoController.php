@@ -54,10 +54,13 @@ class TrayectoController extends Controller
         // Guarda el trayecto
         Trayecto::create(['num_trayecto' => $request['num_trayecto']]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Trayecto - ({$request['num_trayecto']})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró el trayecto ({$request['num_trayecto']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('trayectos')->with('creado', 'creado');
@@ -96,10 +99,13 @@ class TrayectoController extends Controller
 
         Trayecto::find($id)->update(['num_trayecto' => $request['num_trayecto']]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Trayecto - ({$request['num_trayecto']})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó el trayecto ({$request['num_trayecto']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('trayectos')->with('actualizado', 'actualizado');
@@ -113,10 +119,13 @@ class TrayectoController extends Controller
         $trayecto = Trayecto::find($id);
         $trayecto->delete();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Trayecto - ({$trayecto->num_trayecto})",
-            'accion' => 'Ha sido borrado',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró el trayecto ({$trayecto->num_trayecto}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
         
         return redirect()->back()->with('borrado', 'borrado');

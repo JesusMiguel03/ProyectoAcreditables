@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
+use App\Models\Academico\Periodo;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
 use App\Models\Informacion\Bitacora;
@@ -13,6 +14,8 @@ use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MateriaController extends Controller
 {
@@ -41,9 +44,10 @@ class MateriaController extends Controller
             });
 
             Bitacora::create([
-                'usuario' => 'Materias',
-                'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Se actualizaron los cupos disponibles de todas las acreditables exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
 
             return view('materias.acreditables.index', compact('materias', 'trayectos'));
@@ -69,9 +73,10 @@ class MateriaController extends Controller
                 });
 
                 Bitacora::create([
-                    'usuario' => "Materias impartidas por {$profesor->nombreProfesor()}",
-                    'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
-                    'estado' => 'success'
+                    'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                    'accion' => "Se actualizaron los cupos disponibles de las acreditables impartidas por este profesor exitosamente",
+                    'estado' => 'success',
+                    'periodo_id' => periodo('modelo')->id ?? null
                 ]);
 
                 return view('materias.acreditables.index', compact('materias'));
@@ -114,9 +119,10 @@ class MateriaController extends Controller
                 $mostrar = 'inscrito';
 
                 Bitacora::create([
-                    'usuario' => "Materia - ({$materias->nom_materia})",
-                    'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
-                    'estado' => 'success'
+                    'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                    'accion' => "Se actualizaron los cupos disponibles de la acreditable ({$materias->nom_materia}) exitosamente",
+                    'estado' => 'success',
+                    'periodo_id' => periodo('modelo')->id ?? null
                 ]);
 
                 return view('materias.acreditables.index', compact('materias', 'mostrar'));
@@ -147,9 +153,10 @@ class MateriaController extends Controller
                 });
 
                 Bitacora::create([
-                    'usuario' => "Materias de trayecto {$trayecto}",
-                    'accion' => 'Los cupos disponibles han sido actualizados exitosamente',
-                    'estado' => 'success'
+                    'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                    'accion' => "Se actualizaron los cupos disponibles de todas las acreditables del trayecto ({$trayecto}) exitosamente",
+                    'estado' => 'success',
+                    'periodo_id' => periodo('modelo')->id ?? null
                 ]);
 
                 $mostrarTabla = count($materias) >= config('variables.carrusel');
@@ -165,6 +172,8 @@ class MateriaController extends Controller
     {
         // Valida si tiene el permiso
         permiso('materias.modificar');
+
+        $usuario = auth()->user();
 
         $validador = Validator::make($request->all(), [
             'nom_materia' => ['required', 'string', 'max:' . config('variables.materias.nombre')],
@@ -197,9 +206,10 @@ class MateriaController extends Controller
             $imagen = $request->file('imagen_materia')->storeAs('uploads', date('Y-m-d') . $request['nom_materia'] . '.jpg', 'public');
 
             Bitacora::create([
-                'usuario' => "Materia - ({$request['nom_materia']})",
-                'accion' => 'Se ha guardado la imagen exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Subió una imagen de acreditable ({$request['nom_materia']}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
         }
 
@@ -215,9 +225,10 @@ class MateriaController extends Controller
         ]);
 
         Bitacora::create([
-            'usuario' => "Materia - ({$request['nom_materia']})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró la acreditable ({$request['nom_materia']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('materias')->with('creado', 'Curso creado exitosamente');
@@ -230,14 +241,15 @@ class MateriaController extends Controller
 
         // Busca el id del curso
         $materia = Materia::find($id);
+        $periodos = Periodo::all();
 
         // Valida que exista
         existe($materia);
-
+        
         if (!rol('Coordinador') && $materia->estado_materia === 'Inactivo' || $materia->estado_materia === 'Descontinuado') {
             return redirect()->back()->with('inactivo', 'La acreditable que desea buscar no se encuentra activa.');
         }
-
+        
         // Evita que el estudiante vea las materias que no coinciden con su trayecto
         if (rol('Estudiante') && $materia->trayecto_id !== Auth::user()->estudiante->trayecto->id) {
             return redirect()->back();
@@ -248,10 +260,13 @@ class MateriaController extends Controller
 
         $materia->actualizarCupos();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Materia - ({$materia->nom_materia})",
-            'accion' => 'Se ha actualizado los cupos disponibles exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Se actualizaron los cupos disponibles de la acreditable ({$materia->nom_materia}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         // En caso de que no se complete la materia se colocan valores por defecto
@@ -263,7 +278,7 @@ class MateriaController extends Controller
             $validacion = ['Sin asignar'];
         }
 
-        return view('materias.acreditables.show', compact('materia', 'validacion', 'datos_materia', 'inscritos'));
+        return view('materias.acreditables.show', compact('materia', 'validacion', 'datos_materia', 'inscritos', 'periodos'));
     }
 
     public function edit($id)
@@ -288,6 +303,8 @@ class MateriaController extends Controller
     {
         // Valida si tiene el permiso
         permiso('materias.modificar');
+
+        $usuario = auth()->user();
 
         $validador = Validator::make($request->all(), [
             'nom_materia' => ['required', 'string', 'max:' . config('variables.materias.nombre')],
@@ -328,9 +345,10 @@ class MateriaController extends Controller
         );
 
         Bitacora::create([
-            'usuario' => "Materia - ({$request['nom_materia']})",
-            'accion' => 'Se ha actualizado la información extra exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró la información adicional de la acreditable ({$request['nom_materia']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         // Busca la imagen, si hay la actualiza borrando la anterior
@@ -343,9 +361,10 @@ class MateriaController extends Controller
             $imagen = $request->file('imagen_materia')->storeAs('uploads', date('Y-m-d') . $request['nom_materia'] . '.jpg', 'public');
 
             Bitacora::create([
-                'usuario' => "Materia - ({$request['nom_materia']})",
-                'accion' => 'Se ha actualizado la imagen exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Actualizó la imagen de la acreditable ({$request['nom_materia']}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
         }
 
@@ -355,9 +374,10 @@ class MateriaController extends Controller
                 $materia->cupos_disponibles -= intval($materia->cupos) - $request['cupos'] : $materia->cupos_disponibles += $request['cupos'] - intval($materia->cupos);
 
             Bitacora::create([
-                'usuario' => "Materia - ({$request['nom_materia']})",
-                'accion' => 'Se ha actualizado los cupos disponibles exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Se actualizaron los cupos y cupos disponibles de la acreditable ({$request['nom_materia']}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
         }
 
@@ -373,12 +393,36 @@ class MateriaController extends Controller
         ]);
 
         Bitacora::create([
-            'usuario' => "Materia - ({$request['nom_materia']})",
-            'accion' => 'Se ha actualizado la acreditable exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó la acreditable ({$request['nom_materia']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('materias')->with('actualizado', 'Curso actualizado exitosamente');
+    }
+
+    public function pdf($materiaID, $periodoID)
+    {
+        rol('Coordinador');
+
+        try {
+            $materia = Materia::findOrFail($materiaID);
+            $periodo = Periodo::findOrFail($periodoID);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->with('solicitudInvalida', 'La acreditable o periodo no son válidos');
+        }
+
+        $periodoID = $periodo->id;
+        $estudiantes = $materia->estudiantesPeriodo($periodoID);
+
+        if (count($estudiantes) < 1) {
+            return redirect()->back()->with('noEstudiantes', "No hubo estudiantes inscritos en la materia durante el periodo {$periodo->formato()}");
+        }
+
+        $pdf = FacadePdf::loadView('materias.acreditables.pdf', ['materia' => $materia, 'periodo' => $periodo, 'estudiantes' => $estudiantes]);
+
+        return $pdf->stream('Comprobante de inscripcion.pdf');
     }
 
     public function delete($id)
@@ -388,11 +432,14 @@ class MateriaController extends Controller
 
         $materia = Materia::find($id);
         $materia->delete();
+        
+        $usuario = auth()->user();
 
         Bitacora::create([
-            'usuario' => "Materia - ({$materia->nom_materia})",
-            'accion' => 'Ha sido borrada',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró la acreditable ({$materia->nom_materia}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('borrado', 'borrado');

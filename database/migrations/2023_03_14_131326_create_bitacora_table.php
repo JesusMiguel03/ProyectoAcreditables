@@ -16,8 +16,10 @@ class CreateBitacoraTable extends Migration
         Schema::create('bitacora', function (Blueprint $table) {
             $table->id();
             $table->string('usuario', 120);
-            $table->string('accion', 255);
+            $table->text('accion', 350);
             $table->string('estado', 40);
+            $table->unsignedBigInteger('periodo_id')->nullable();
+            $table->foreign('periodo_id')->references('id')->on('periodos')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -81,10 +81,13 @@ class HorarioController extends Controller
             'campo' => $request['campo']
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Horario {$materia->nom_materia} {$hora}",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró la hora ({$materia->nom_materia} {$hora}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('creado', 'creado');
@@ -148,10 +151,13 @@ class HorarioController extends Controller
 
             $materia = Materia::find($horario->materia_id);
 
+            $usuario = auth()->user();
+
             Bitacora::create([
-                'usuario' => "Horario - ({$materia->nom_materia})",
-                'accion' => 'Se ha actualizado exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Actualizó la hora de ({$materia->nom_materia}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
         } else {
             return redirect()->back();
@@ -170,10 +176,13 @@ class HorarioController extends Controller
 
         $horario->delete();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Horario de {$materia->nom_materia}",
-            'accion' => 'Ha sido borrado',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró la hora ({$materia->nom_materia}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect(route('horarios.index'))->with('borrado', 'borrado');
@@ -192,16 +201,23 @@ class HorarioController extends Controller
     {
         $horarios = Horario::all();
 
+        if ($horarios->isEmpty()) {
+            return redirect()->back()->with('vaciadoError', 'No hay horas registradas para vaciar el horario.');
+        }
+
         foreach ($horarios as $horario) {
             $horario->delete();
         }
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Horario general",
-            'accion' => 'Ha sido vaciado',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró el horario exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('vaciado', 'El horario ha sido vaciado exitosamente, se podrán registrar nuevamente las acreditables.');
     }
 }

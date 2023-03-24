@@ -24,15 +24,6 @@
     <x-formularios.estadisticas :periodos="$periodos" :materias="$materias" :periodoActual="$periodoActual" :periodo="$periodoFormateado" />
 
     <section class="row">
-        <div class="col-4">
-            <a href="{{ route('estadisticas.pdf', $periodoActual) }}" class="btn btn-danger btn-block mr-2 my-2 py-3">
-                <i class="far fa-file-pdf"></i>
-                Descargar estadísticas
-            </a>
-        </div>
-    </section>
-
-    <section class="row">
         <x-card.estadisticas nombre="Materias" color="primary" :cantidad="count($materias)" icono="fa-th-large" />
         <x-card.estadisticas nombre="Estudiantes" color="info" :cantidad="count($estudiantesRegistrados)" :extra="count($inscritos)" icono="fa-users" />
         <x-card.estadisticas nombre="Profesores" color="secondary" :cantidad="count($profesores)" icono="fa-user-graduate" info=false />
@@ -79,46 +70,85 @@
 
     {{-- Personalizados --}}
     <script>
-        const inputPeriodo = document.getElementById('periodo')
-        const btnPeriodo = document.getElementById('btnPeriodo')
+        const inputPeriodo = document.getElementById("periodo");
+        const btnPeriodo = document.getElementById("btnPeriodo");
 
-        const inputMateria = document.getElementById('materias')
-        const btnMateria = document.getElementById('btnMateria')
+        const inputMateria = document.getElementById("materias");
+        const btnMateria = document.getElementById("btnMateria");
 
+        // Añade el estado disabled cuando se selecciona la opcion 0 y un mensaje de error si no se selecciona el periodo
         const activarBotones = () => {
-            periodo == 0 ?
-                btnPeriodo.classList.add('disabled') :
-                btnPeriodo.classList.remove('disabled')
+            if (periodo == 0) {
+                btnPeriodo.classList.add("disabled");
+                btnMateria.classList.add("disabled");
+                inputPeriodo.classList.add("is-invalid");
 
-            materia == 0 ?
-                btnMateria.classList.add('disabled') :
-                btnMateria.classList.remove('disabled')
-        }
+                if (!document.getElementById("mensajePeriodo")) {
+                    let mensaje = document.createElement("span");
+                    let strong = document.createElement("strong");
+
+                    mensaje.classList.add("invalid-feedback");
+                    mensaje.setAttribute("role", "alert");
+                    mensaje.setAttribute("id", "mensajePeriodo");
+                    strong.innerText = "Seleccione un periodo de la lista";
+
+                    mensaje.append(strong);
+                    inputPeriodo.parentNode.append(mensaje);
+                }
+            } else {
+                btnPeriodo.classList.remove("disabled");
+                btnMateria.classList.remove("disabled");
+                inputPeriodo.classList.remove("is-invalid");
+            }
+
+            if (materia == 0) {
+                btnMateria.classList.add("disabled");
+                inputMateria.classList.add("is-invalid");
+
+                if (!document.getElementById("mensajeMateria")) {
+                    let mensaje = document.createElement("span");
+                    let strong = document.createElement("strong");
+
+                    mensaje.classList.add("invalid-feedback");
+                    mensaje.setAttribute("role", "alert");
+                    mensaje.setAttribute("id", "mensajeMateria");
+                    strong.innerText = "Seleccione una materia de la lista";
+
+                    mensaje.append(strong);
+                    inputMateria.parentNode.append(mensaje);
+                }
+            } else if (materia != 0 && periodo != 0) {
+                btnMateria.classList.remove("disabled");
+                inputMateria.classList.remove("is-invalid");
+            }
+        };
 
         let [periodo, materia] = [
             inputPeriodo.options[inputPeriodo.selectedIndex].value || 0,
-            inputMateria.options[inputMateria.selectedIndex].value || 0
-        ]
+            inputMateria.options[inputMateria.selectedIndex].value || 0,
+        ];
 
-        inputPeriodo.addEventListener('change', (e) => {
-            periodo = e.currentTarget.options[e.currentTarget.selectedIndex].value
+        // Actualiza el periodo en base al seleccionado
+        inputPeriodo.addEventListener("change", (e) => {
+            periodo = e.currentTarget.options[e.currentTarget.selectedIndex].value;
+            activarBotones();
+        });
 
-            activarBotones()
-        })
+        // Actualiza la materia en base a la seleccionada
+        inputMateria.addEventListener("change", (e) => {
+            materia = e.currentTarget.options[e.currentTarget.selectedIndex].value;
+            activarBotones();
+        });
 
-        inputMateria.addEventListener('change', (e) => {
-            materia = e.currentTarget.options[e.currentTarget.selectedIndex].value
+        // Cambia la ruta
+        btnPeriodo.addEventListener("click", (e) => {
+            e.currentTarget.href = `${"{{ route('estadisticas.show') }}"}/${periodo}`;
+        });
 
-            activarBotones()
-        })
-
-        btnPeriodo.addEventListener('click', (e) => {
-            e.currentTarget.href = `${"{{ route('estadisticas.show') }}"}/${periodo}`
-        })
-
-        btnMateria.addEventListener('click', (e) => {
-            e.currentTarget.href = `${"{{ route('estadisticas.materia') }}"}/${periodo}/${materia}`
-        })
+        // Cambia la ruta
+        btnMateria.addEventListener("click", (e) => {
+            e.currentTarget.href = `${"{{ route('estadisticas.materia') }}"}/${periodo}/${materia}`;
+        });
     </script>
 
     <script>
@@ -226,6 +256,16 @@
                 customClass: {
                     confirmButton: 'btn btn-success px-5'
                 }
+            })
+        @elseif (session('inscripcionActiva'))
+            Swal.fire({
+                icon: 'warning',
+                title: '¡Inscripciones Activas!',
+                html: "Las inscripciones aún se encuentran activas, por tal motivo no se pueden generar gráficos y/o mostrar estadísticas precisas. Estarán disponibles a partir del <strong>({{ session('inscripcionActiva') }})</strong>, <strong>45 días</strong> después de la fecha de inicio del periodo <strong>({{ session('fechaInicio') }})</strong>.",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-warning px-5'
+                },
             })
         @endif
     </script>

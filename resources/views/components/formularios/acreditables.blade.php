@@ -26,8 +26,9 @@
     <div class="form-group required mb-3">
         <label for="nom_materia" class="control-label">Nombre</label>
         <div class="input-group">
-            <input type="text" name="nom_materia" class="form-control @error('nom_materia') is-invalid @enderror"
-                value="{{ old('nom_materia') }}" placeholder="{{ __('Nombre de la materia, ej: Ping pong') }}"
+            <input type="text" id="nombre" name="nom_materia"
+                class="form-control @error('nom_materia') is-invalid @enderror" value="{{ old('nom_materia') }}"
+                placeholder="{{ __('Nombre de la materia, ej: Ping pong') }}"
                 maxlength="{{ config('variables.materias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+"
                 title="Debe contener letras, espacios y/o números." autofocus required>
 
@@ -53,9 +54,10 @@
                 <label for="cupos" class="control-label">Cupos disponibles</label>
 
                 <div class="input-group">
-                    <input type="number" name="cupos" class="form-control @error('cupos') is-invalid @enderror"
-                        value="{{ old('cupos') }}" placeholder="{{ __('Cupos iniciales, ej: 10') }}"
-                        max="{{ config('variables.materias.cupos') }}" title="Debe ser menor a 50" required>
+                    <input type="number" id="cupos" name="cupos"
+                        class="form-control @error('cupos') is-invalid @enderror" value="{{ old('cupos') }}"
+                        placeholder="{{ __('Cupos iniciales, ej: 10') }}" max="{{ config('variables.materias.cupos') }}"
+                        title="Debe ser menor a 50" required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -76,8 +78,9 @@
                 <label for="trayecto" class="control-label">Acreditable Nro</label>
 
                 <div class="input-group">
-                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" required>
-                        <option value="" readonly>Seleccione...</option>
+                    <select id="trayecto" name="trayecto" class="form-control @error('trayecto') is-invalid @enderror"
+                        required>
+                        <option value="0" readonly>Seleccione uno...</option>
 
                         @foreach ($trayectos as $trayecto)
                             <option value={{ $trayecto->id }}>
@@ -106,10 +109,13 @@
     {{-- Descripción --}}
     <div class="form-group required mb-3">
         <label for="desc_materia" class="control-label">Descripción</label>
+
         <div class="input-group">
-            <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
-                value="{{ old('desc_materia') }}" placeholder="{{ __('Descripción, ej: Practica un juego recreativo de reflejos') }}" spellcheck="false"
-                maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required></textarea>
+            <textarea id="descripcion" name="desc_materia"
+                class="form-control @error('desc_materia') is-invalid @enderror descripcion" value="{{ old('desc_materia') }}"
+                placeholder="{{ __('Descripción, ej: Practica un juego recreativo de reflejos') }}" spellcheck="false"
+                maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+                title="Debe contener letras, espacios y/o números." required></textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -133,11 +139,11 @@
                 <label for="name" class="control-label">Nombre</label>
 
                 <div class="input-group">
-                    <input type="text" name="nom_materia" 
+                    <input type="text" id="nombre" name="nom_materia"
                         class="form-control @error('nom_materia') is-invalid @enderror" value="{{ $nombre }}"
                         placeholder="{{ __('Nombre de la materia, ej: Ping pong') }}"
-                        maxlength="{{ config('variables.materias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." autofocus
-                        required>
+                        maxlength="{{ config('variables.materias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+                        title="Debe contener letras, espacios y/o números." autofocus required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -158,10 +164,11 @@
                 <label for="cupos" class="control-label">Cupos</label>
 
                 <div class="input-group">
-                    <input type="number" name="cupos" 
-                        class="form-control @error('cupos') is-invalid @enderror" 
-                        value="{{ $cupos }}" placeholder="{{ __('Cupos disponibles, ej: 10') }}"
-                        max="{{ config('variables.materias.cupos') }}" title="Debe contener letras, espacios y/o números." required>
+                    <input type="number" id="cupos" name="cupos"
+                        class="form-control @error('cupos') is-invalid @enderror" value="{{ $cupos }}"
+                        placeholder="{{ __('Cupos disponibles, ej: 10') }}"
+                        max="{{ config('variables.materias.cupos') }}"
+                        title="Debe contener letras, espacios y/o números." required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -183,10 +190,13 @@
     {{-- Descripcion --}}
     <div class="form-group required mb-3">
         <label for="description" class="control-label">Descripción</label>
+
         <div class="input-group">
-            <textarea name="desc_materia" class="form-control @error('desc_materia') is-invalid @enderror descripcion"
+            <textarea id="descripcion" name="desc_materia"
+                class="form-control @error('desc_materia') is-invalid @enderror descripcion"
                 placeholder="{{ __('Descripción, ej: ej: Practica un juego recreativo de reflejos') }}" spellcheck="false"
-                maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required>{{ $descripcion }}</textarea>
+                maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+                title="Debe contener letras, espacios y/o números." required>{{ $descripcion }}</textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -207,12 +217,12 @@
 
             {{-- Activo --}}
             <div class="col-6">
-                <label for="description" class="control-label">Estado</label>
-                <div class="input-group">
+                <label for="estado_materia" class="control-label">Estado</label>
 
-                    <select name="estado_materia" class="form-control @error('estado_materia') is-invalid @enderror"
-                        required>
-                        <option value="" readonly>Seleccione...</option>
+                <div class="input-group">
+                    <select id="estado" name="estado_materia"
+                        class="form-control @error('estado_materia') is-invalid @enderror" required>
+                        <option value="0" readonly>Seleccione uno...</option>
 
                         <option value="Inactivo" {{ $estado === 'Inactivo' ? 'selected' : '' }}>
                             Inactivo
@@ -250,8 +260,9 @@
                 <label for="trayecto" class="control-label">Acreditable Nro</label>
 
                 <div class="input-group">
-                    <select name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" required>
-                        <option value="" readonly>Seleccione...</option>
+                    <select id="trayecto" name="trayecto"
+                        class="form-control @error('trayecto') is-invalid @enderror" required>
+                        <option value="0" readonly>Seleccione uno...</option>
 
                         @foreach ($trayectos as $trayecto)
                             <option value={{ $trayecto->id }} {{ $nro === $trayecto->id ? 'selected' : '' }}>
@@ -288,11 +299,11 @@
                     @if ($categorias->isEmpty())
                         <x-elementos.vacio :modelo="'categorías'" />
                     @else
-                        <select name="categoria" class="form-control @error('categoria') is-invalid @enderror"
-                            required>
+                        <select id="categoria" name="categoria"
+                            class="form-control @error('categoria') is-invalid @enderror" required>
 
-                            <option value="" readonly>
-                                Seleccione...
+                            <option value="0" readonly>
+                                Seleccione uno...
                             </option>
 
                             @foreach ($categorias as $categoria)
@@ -323,10 +334,10 @@
                 <label for="metodologia">Metodología</label>
 
                 <div class="input-group">
-                    <select name="metodologia" class="form-control @error('metodologia') is-invalid @enderror"
-                        required>
+                    <select id="metodologia" name="metodologia"
+                        class="form-control @error('metodologia') is-invalid @enderror" required>
 
-                        <option value="" readonly>Seleccione...</option>
+                        <option value="0" readonly>Seleccione uno...</option>
 
                         <option value="Teórico" {{ $metodologia === 'Teórico' ? 'selected' : '' }}>
                             Teórico
@@ -363,9 +374,10 @@
             @if (empty($profesores))
                 <x-elementos.vacio :modelo="'profesores'" />
             @else
-                <select name="profesor" class="form-control @error('profesor') is-invalid @enderror" required>
+                <select id="profesor" name="profesor" class="form-control @error('profesor') is-invalid @enderror"
+                    required>
 
-                    <option value="" readonly> Seleccione... </option>
+                    <option value="0" readonly> Seleccione uno... </option>
 
                     @foreach ($profesores as $profesor)
                         <option value="{{ $profesor->id }}"
@@ -431,8 +443,37 @@
 
 
 <x-modal.mensaje-obligatorio />
+
 @if (Route::is('materias.edit'))
-    <x-modal.footer-editar ruta="{{ route('materias.index') }}" />
+    <div class="row">
+        <div class="col-6">
+            <a href="{{ route('materias.index') }}" class="btn btn-block btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Volver') }}
+            </a>
+        </div>
+
+        <div class="col-6">
+            <button type="submit" id="formularioEnviar" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @else
-    <x-modal.footer-aceptar />
+    <div class="row">
+        <div class="col-6">
+            <button id="cancelar" type="button" class="btn btn-block btn-secondary" data-dismiss="modal">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Cancelar') }}
+            </button>
+        </div>
+
+        <div class="col-6">
+            <button id="formularioEnviar" type="submit" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @endif

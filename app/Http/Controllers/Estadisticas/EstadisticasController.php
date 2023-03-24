@@ -31,13 +31,21 @@ class EstadisticasController extends Controller
 
     public function materia($periodo_id, $materia_id)
     {
+        
         $periodos = Periodo::all();
         $periodoActual = Periodo::find($periodo_id);
         $materiaActual = Materia::find($materia_id);
-
+        
         if (!$periodoActual || !$materiaActual) {
             return redirect()->back()->with('noEncontrado', 'error');
         }
+
+        // $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
+        // $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
+
+        // if (Carbon::today()->format('Y-m-d') !== $tiempoExtraInscripcion) {
+        //     return redirect()->back()->with(['inscripcionActiva' => $tiempoExtraInscripcion, 'fechaInicio' => $fechaInicio]);
+        // }
 
         $trayecto = $materiaActual->infoAcreditable();
 
@@ -103,8 +111,8 @@ class EstadisticasController extends Controller
             return redirect(route('estadisticas.index'))->with('noExiste', 'El periodo a buscar no existe');
         }
 
-        $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
-        $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
+        // $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
+        // $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
 
         // if (Carbon::today()->format('Y-m-d') !== $tiempoExtraInscripcion) {
         //     return redirect()->back()->with(['inscripcionActiva' => $tiempoExtraInscripcion, 'fechaInicio' => $fechaInicio]);

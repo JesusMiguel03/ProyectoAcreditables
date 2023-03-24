@@ -15,9 +15,9 @@
                     <label for="usuario">Correo del usuario a restaurar</label>
 
                     <main class="input-group">
-                        <input type="text" name="correo" class="form-control @error('correo') is-invalid @enderror"
+                        <input type="text" id="correoCedula" name="correo" class="form-control @error('correo') is-invalid @enderror"
                             value="{{ old('correo') }}" placeholder="correo@gmail.com"
-                            pattern="/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/"
+                            pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
                             title="Debe ser un correo válido." required autofocus>
 
                         <div class="input-group-append">
@@ -38,9 +38,8 @@
                     <label for="usuario">Cédula</label>
 
                     <main class="input-group">
-                        <input type="text" name="cedula" class="form-control @error('cedula') is-invalid @enderror"
-                            value="{{ old('cedula') }}" placeholder="15360120" pattern="^\d{7,8}$"
-                            title="Debe contener entre 7 y 8 dígitos." required>
+                        <input type="number" id="cedula" name="cedula" placeholder="{{ __('Cédula, ej: 1021536') }}" class="form-control @error('cedula') is-invalid @enderror"
+                            value="{{ old('cedula') }}" required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -58,7 +57,7 @@
             </section>
 
             <footer class="col-12">
-                <button class="p-n5 btn btn-primary btn-block">
+                <button id="botonCorreoCedula" class="p-n5 btn btn-primary btn-block">
                     Recuperar
                 </button>
             </footer>

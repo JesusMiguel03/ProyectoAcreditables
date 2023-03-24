@@ -34,3 +34,32 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
 @stop
+
+@section('js')
+    <script>
+        const trayecto = document.getElementById('trayecto')
+        const boton = document.getElementById('formularioEnviar')
+
+        let validacionTrayecto = trayecto.value > 0 && trayecto.value < 11
+
+        if (!validacionTrayecto) {
+            boton.disabled = true
+        }
+
+        trayecto.addEventListener('input', (e) => {
+            if (e.currentTarget.value > 0 && e.currentTarget.value < 11) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionTrayecto = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionTrayecto = false
+            }
+
+            if (validacionTrayecto) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        })
+    </script>
+@stop

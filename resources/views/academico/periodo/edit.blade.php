@@ -56,4 +56,23 @@
             $('#inicio').datetimepicker('maxDate', e.date);
         });
     </script>
+
+    {{-- Validaciones --}}
+    <script>
+        const fase = document.getElementById('fase')
+
+        fase.addEventListener('input', (e) => {
+            if (e.currentTarget.value > 3) {
+                e.currentTarget.value = 3
+
+                validacionFase = true
+            }
+
+            if (e.currentTarget.value < 0) {
+                e.currentTarget.value = 1
+
+                validacionFase = true
+            }
+        })
+    </script>
 @stop

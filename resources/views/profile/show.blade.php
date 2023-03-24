@@ -47,6 +47,73 @@
     <script src="{{ asset('js/seleccionarAvatar.js') }}"></script>
     <script src="{{ asset('js/descargarComprobante.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const cedula = document.getElementById('cedula');
+        const contrasena = document.getElementById('contrasena')
+        const nuevaContrasena = document.getElementById('nuevaContrasena')
+        const validarContrasena = document.getElementById('validarContrasena')
+
+        // Si la cédula es mayor a 8 dígitos elimina a apartir del 9
+        cedula.addEventListener('input', (e) => {
+            if (e.currentTarget.value.toString().length > 8) {
+                e.currentTarget.value = e.currentTarget.value.toString().slice(0, 8)
+            }
+        });
+
+        // Si la contraseña actual es mayor a 8 caracteres elimina a apartir del 9
+        contrasena.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 8) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+            }
+        })
+
+        nuevaContrasena.addEventListener('input', (e) => {
+            // Si la nueva contraseña es mayor a 8 caracteres elimina a apartir del 9
+            if (e.currentTarget.value.length > 8) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+            }
+
+            // Si es menor a 4 caracteres añade una clase como advertencia
+            e.currentTarget.value.length < 4 ?
+                e.currentTarget.classList.add('is-invalid') :
+                e.currentTarget.classList.remove('is-invalid')
+
+            /**
+             * Si el valor del campo nueva contraseña y la confirmacion son diferentes
+             * añade una clase al campo confirmacion como advertencia
+             */
+            e.currentTarget.value !== validarContrasena.value ?
+                validarContrasena.classList.add('is-invalid') :
+                validarContrasena.classList.remove('is-invalid')
+        })
+
+        validarContrasena.addEventListener('input', (e) => {
+            // Si la confirmación de la nueva contraseña es mayor a 8 caracteres elimina a apartir del 9
+            if (e.currentTarget.value.length > 8) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+            }
+
+            /**
+             * Si no se coloca una nueva contraseña pero si la confirmacion
+             * añade una clase al campo confirmacion como advertencia
+             */
+            if (nuevaContrasena.value.length === 0) {
+                nuevaContrasena.classList.add('is-invalid')
+            }
+
+            /**
+             * Si:
+             * 1. Campo confirmar nueva contraseña y nueva contraseña son diferentes
+             * añade una clase de advertencia al campo nueva contraseña.
+             * 2. Además de, el campo nueva contraseña tener más de 4 caracteres
+             */
+            e.currentTarget.value !== nuevaContrasena.value && nuevaContrasena.value.length > 4 ?
+                e.currentTarget.classList.add('is-invalid') :
+                e.currentTarget.classList.remove('is-invalid')
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('actualizado'))
@@ -69,7 +136,17 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('perfil-actualizado'))
+        @elseif ($message = session('perfilNoActualizado'))
+            Swal.fire({
+                icon: 'info',
+                title: '¡Perfil no actualizado!',
+                html: 'No se suministró nuevos datos para actualizar su perfil.',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif ($message = session('perfilActualizado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Perfil actualizado!',
@@ -104,6 +181,16 @@
                 icon: 'error',
                 title: '¡Comprobante no encontrado!',
                 html: "{{ session('comprobanteError') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-danger px-5'
+                },
+            })
+        @elseif ($message = session('errorActualizarPerfil'))
+            Swal.fire({
+                icon: 'error',
+                title: '¡Hubo un problema!',
+                html: 'Parece que uno de los campos no cumple los requisitos.',
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-danger px-5'

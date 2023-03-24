@@ -1,5 +1,6 @@
 @php
     $validacion = atributo($attributes, 'sinEstudiantes');
+    $id = atributo($attributes, 'id');
 @endphp
 
 <div class="row">
@@ -16,7 +17,7 @@
                 {{ __('Guardar') }}
             </p>
         @else
-            <button type="submit"
+            <button type="submit" id="{{ $id ?? 'formularioEnviar' }}"
                 class="btn btn-block btn-success">
                 <i class="fas fa-save mr-2"></i>
                 {{ __('Guardar') }}

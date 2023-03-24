@@ -49,7 +49,7 @@ class MateriaSeeder extends Seeder
             $metodologias = ['Teórico', 'Práctico', 'Teórico-práctico'];
 
             $info = Informacion_materia::create([
-                'metodologia' => array_rand($metodologias),
+                'metodologia' => $metodologias[array_rand($metodologias)],
                 'categoria_id' => Categoria::find(rand(1, 12))->id,
                 'profesor_id' => null,
                 'horario_id' => null

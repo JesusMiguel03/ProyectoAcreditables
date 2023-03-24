@@ -55,7 +55,7 @@ class ProfesorController extends Controller
 
         // Valida los campos
         $validar = Validator::make($request->all(), [
-            'usuarios' => ['required', 'not_in:0'],
+            'usuarios' => ['required', 'not_in:0', 'unique:profesores,usuario_id'],
             'departamento' => ['required', 'not_in:0'],
             'conocimiento' => ['required', 'not_in:0'],
             'casa' => ['required', 'string', 'max:' . config('variables.profesores.casa')],
@@ -71,6 +71,7 @@ class ProfesorController extends Controller
         ], [
             'usuarios.required' => 'El usuario es necesario.',
             'usuarios.not_in' => 'El usuario seleccionado es inválido.',
+            'usuarios.unique' => 'El usuario ya ha sido registrado.',
             'departamento.required' => 'El departamento es necesario.',
             'departamento.not_in' => 'El departamento seleccionado es inválido.',
             'codigo.required' => 'El código es necesario.',
@@ -99,11 +100,10 @@ class ProfesorController extends Controller
             'fecha_ingreso_institucion.required' => 'La fecha de ingreso es necesaria.',
             'fecha_ingreso_institucion.date' => 'La fecha de ingreso debe ser una fecha.',
         ]);
-
         validacion($validar, 'error', 'Profesor');
 
         // Guarda un profesor
-        Profesor::create([
+        $profesor = Profesor::create([
             'usuario_id' => $request['usuarios'],
             'conocimiento_id' => $request['conocimiento'],
             'departamento_id' => $request['departamento'],
@@ -116,14 +116,15 @@ class ProfesorController extends Controller
             'fecha_de_nacimiento' => $request['fecha_de_nacimiento'],
             'fecha_ingreso_institucion' => $request['fecha_ingreso_institucion'],
             'activo' => 1
-        ])->save();
+        ]);
 
-        $usuario = User::find($request['usuarios']);
+        $usuario = auth()->user();
 
         Bitacora::create([
-            'usuario' => "Perfil profesional - ({$usuario->nombre} {$usuario->apellido})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró el perfil profesional de  ({$profesor->nombreProfesor()}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('profesores')->with('creado', 'creado');
@@ -238,10 +239,13 @@ class ProfesorController extends Controller
             'activo' => $request['activo'],
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Perfil profesional - ({$profesor->nombreProfesor()})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó el perfil profesional de  ({$profesor->nombreProfesor()}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('profesores')->with('actualizado', 'actualizado');

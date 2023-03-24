@@ -41,8 +41,8 @@
                                             class="form-control @error('espacio') is-invalid @enderror"
                                             value="{{ $espacio ?? old('espacio') }}"
                                             placeholder="{{ __('Espacio a ocupar, Ej: (Edificio B) o solo (B)') }}"
-                                            maxlength="{{ config('variables.horarios.espacio') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." 
-                                            autofocus required>
+                                            maxlength="{{ config('variables.horarios.espacio') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+                                            title="Debe contener letras, espacios y/o números." autofocus required>
 
                                         @error('espacio')
                                             <span class="invalid-feedback" role="alert">
@@ -58,8 +58,9 @@
 
                                             <input type="number" name="aula" id="aula"
                                                 class="form-control @error('aula') is-invalid @enderror"
-                                                value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 7') }}" min="1"
-                                                max="{{ config('variables.horarios.aula') }}" title="No debe ser mayor a {{ config('variables.horarios.aula') }}">
+                                                value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 7') }}"
+                                                min="1" max="{{ config('variables.horarios.aula') }}"
+                                                title="No debe ser mayor a {{ config('variables.horarios.aula') }}">
 
 
                                             @error('aula')
@@ -92,7 +93,22 @@
                                 </article>
                             </section>
 
-                            <x-modal.footer-aceptar />
+                            <div class="row">
+                                <div class="col-6">
+                                    <button id="cancelar" type="button" class="btn btn-block btn-secondary"
+                                        data-dismiss="modal">
+                                        <i class="fas fa-arrow-left mr-2"></i>
+                                        {{ __('Cancelar') }}
+                                    </button>
+                                </div>
+
+                                <div class="col-6">
+                                    <button id="formularioEnviar" type="submit" class="btn btn-block btn-success">
+                                        <i class="fas fa-save mr-2"></i>
+                                        {{ __('Guardar') }}
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </main>
                 </div>
@@ -275,6 +291,86 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
+
+    {{-- Validaciones --}}
+    <script>
+        const espacio = document.getElementById('espacio')
+        const aula = document.getElementById('aula')
+        const materias = document.getElementById('materia_id')
+        const botonHora = document.getElementById('formularioEnviar')
+
+        const espacios = ['A', 'Edificio A', 'B', 'Edificio B', 'C', 'Edificio C']
+
+        botonHora.disabled = true
+
+        let [validacionEspacio, validacionAula, validacionMateria] = [false, true, false]
+
+        const validarFormulario = () => {
+            if (validacionEspacio && validacionAula && validacionMateria) {
+                botonHora.removeAttribute('disabled')
+            } else {
+                botonHora.disabled = true
+            }
+        }
+
+        espacio.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){1})[^_]+$/g
+
+            if (e.currentTarget.value.length > 30) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 30)
+            }
+
+            if (espacios.includes(espacio.value)) {
+                espacio.classList.add('is-invalid')
+                aula.classList.add('is-invalid')
+                validacionEspacio = false
+                validacionAula = false
+            } else {
+                espacio.classList.remove('is-invalid')
+                aula.classList.remove('is-invalid')
+                validacionEspacio = true
+                validacionAula = true
+            }
+
+            if (validacion.test(espacio.value)) {
+                espacio.classList.remove('is-invalid')
+                validacionEspacio = true
+            } else {
+                espacio.classList.add('is-invalid')
+                validacionEspacio = false
+            }
+
+            validarFormulario()
+        })
+
+        aula.addEventListener('input', (e) => {
+            if (e.currentTarget.value > 12) {
+                e.currentTarget.value = 12
+            }
+
+            if (e.currentTarget.value === 0 || e.currentTarget.value < 13) {
+                aula.classList.remove('is-invalid')
+                validacionAula = true
+            } else {
+                aula.classList.add('is-invalid')
+                validacionAula = false
+            }
+
+            validarFormulario()
+        })
+
+        materias.addEventListener('change', (e) => {
+            if (materias.options[materias.selectedIndex].value > 0) {
+                materias.classList.remove('is-invalid')
+                validacionMateria = true
+            } else {
+                materias.classList.add('is-invalid')
+                validacionMateria = false
+            }
+
+            validarFormulario()
+        })
+    </script>
 
     <script>
         const form = document.getElementById('form-borrar')
@@ -481,6 +577,26 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif (session('vaciado'))
+            Swal.fire({
+                icon: 'info',
+                title: '¡Horario vaciado!',
+                html: "{{ session('vaciado') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif (session('vaciadoError'))
+            Swal.fire({
+                icon: 'warning',
+                title: '¡Horario vacio',
+                html: "{{ session('vaciadoError') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-warning px-5'
                 },
             })
         @endif

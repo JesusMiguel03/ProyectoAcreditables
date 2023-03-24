@@ -93,6 +93,41 @@
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const nombre = document.getElementById('nombre')
+        const boton = document.getElementById('formularioEnviar')
+
+        boton.disabled = true
+
+        let validacionNombre = false
+
+        nombre.addEventListener('input', (e) => {
+            // Valida que tenga minimo 5 letras, pueden tener acentos y espacios, pero no pueden ser solo espacios
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g.test(nombre.value)
+
+            e.currentTarget.value = e.currentTarget.value.replace(/[^A-zÀ-ÿ0-9\s]|[_]+/g, '')
+
+            if (e.currentTarget.value.length > 50) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 50)
+            }
+
+            if (validacion && e.currentTarget.value.length > 5 && e.currentTarget.value.length < 51) {
+                validacionNombre = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validacionNombre = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            if (validacionNombre) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))

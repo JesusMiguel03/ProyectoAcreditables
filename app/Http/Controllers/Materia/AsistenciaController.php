@@ -93,13 +93,19 @@ class AsistenciaController extends Controller
         }
         $asistencia->save();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Asistencia - ({$estudiante->inscritoNombre()})",
-            'accion' => 'Se ha registrado la asistencia exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró su asistencia exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
-        return redirect()->back()->with('registrado', 'registrado');
+        $nombreEstudiante = $estudiante->inscritoNombre();
+        $asistencia = $estudiante->aprobo()[1];
+
+        return redirect(session('URLPrevioRedireccionAsistencias'))->with('asistencia', "La asistencia del estudiante ({$nombreEstudiante}) ha sido actualizada a [{$asistencia} % / 100 %].");
     }
 
     public function edit($id)

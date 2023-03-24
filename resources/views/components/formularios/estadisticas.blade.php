@@ -28,7 +28,7 @@
                         <label for="periodo" class="control-label">Periodos</label>
 
                         <div class="input-group">
-                            <select name="periodo" class="form-control @error('periodo') is-invalid @enderror" required>
+                            <select id="periodo" name="periodo" class="form-control @error('periodo') is-invalid @enderror" required>
                                 <option value="" readonly>Seleccione...</option>
 
                                 @foreach ($periodos as $periodo)
@@ -51,7 +51,7 @@
                         <label for="materias" class="control-label">Materias</label>
 
                         <div class="input-group">
-                            <select name="materias" class="form-control @error('materias') is-invalid @enderror"
+                            <select id="materias" name="materias" class="form-control @error('materias') is-invalid @enderror"
                                 required>
                                 <option value="" readonly>Seleccione...</option>
 
@@ -86,14 +86,14 @@
 
             <footer class="card-footer row">
                 <div class="col-md-6 col-sm-12">
-                    <a id="btnPeriodo" class="btn btn-block btn-success">
+                    <a href="" id="btnPeriodo" class="btn btn-block btn-success">
                         <i class="fas fa-search mr-2"></i>
                         {{ __('Periodo') }}
                     </a>
                 </div>
 
                 <div class="col-md-6 col-sm-12">
-                    <a id="btnMateria"
+                    <a href="" id="btnMateria"
                         class="btn btn-block btn-secondary {{ empty($materiaActual) ? 'disabled' : '' }}">
                         <i class="fas fa-search mr-2"></i>
                         {{ __('Materia') }}

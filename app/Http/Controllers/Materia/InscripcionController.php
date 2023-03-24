@@ -68,6 +68,8 @@ class InscripcionController extends Controller
 
         $estudiantes = $request['estudiantes'];
 
+        $usuario = auth()->user();
+
         // Si el coordinador los inscribe
         if (is_array($estudiantes)) {
 
@@ -101,9 +103,10 @@ class InscripcionController extends Controller
                 $estudianteModelo = Estudiante::find($estudiante);
 
                 Bitacora::create([
-                    'usuario' => "Estudiante - ({$estudianteModelo->nombreEstudiante()})",
-                    'accion' => "Se ha inscrito en {$materia->nom_materia} exitosamente",
-                    'estado' => 'success'
+                    'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                    'accion' => "Inscribió al estudiante ({$estudianteModelo->nombreEstudiante()}) en ({$materia->nom_materia}) exitosamente",
+                    'estado' => 'success',
+                    'periodo_id' => periodo('modelo')->id ?? null
                 ]);
             }
 
@@ -136,9 +139,10 @@ class InscripcionController extends Controller
             ]);
 
             Bitacora::create([
-                'usuario' => 'Estudiante - (' .auth()->user()->nombre . ' ' . auth()->user()->apellido . ')',
-                'accion' => "Se ha inscrito en {$materia->nom_materia} exitosamente",
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Se inscribió en ({$materia->nom_materia}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
         }
 
@@ -194,10 +198,13 @@ class InscripcionController extends Controller
             'sem12' => 0,
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Estudiante - ({$usuario->inscritoNombre()})",
-            'accion' => "Se ha cambiado de acreditable ({$materiaAnterior->nombre_materia}) a ({$materiaActual->nombre_materia}) exitosamente",
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Se cambió de acreditable ({$materiaAnterior->nombre_materia}) a ({$materiaActual->nombre_materia}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('cambioExitoso', 'cambioExitoso');
@@ -212,10 +219,13 @@ class InscripcionController extends Controller
         $estudiante = Estudiante_materia::find($id);
         $estudiante->update(['validado' => 1]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
-            'accion' => 'Ha sido validado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Validó la inscripción del estudiante ({$estudiante->inscritoNombre()}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('validado', 'Se ha validado');
@@ -230,10 +240,13 @@ class InscripcionController extends Controller
         $estudiante = Estudiante_materia::find($id);
         $estudiante->update(['validado' => 0]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
-            'accion' => 'Ha sido invalidado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Invalidó la inscripción del estudiante ({$estudiante->inscritoNombre()}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('invalidado', 'Se ha invalidado');
@@ -246,10 +259,13 @@ class InscripcionController extends Controller
             'nota' => $request['nota']
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Estudiante - ({$estudiante->inscritoNombre()})",
-            'accion' => "Se ha asignado la nota ({$request['nota']}) exitosamente",
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Asignó la nota del estudiante ({$estudiante->inscritoNombre()}) como ({$request['nota']} ptos) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('notaActualizada', "({$estudiante->inscritoCI()}) {$estudiante->inscritoNombre()}");

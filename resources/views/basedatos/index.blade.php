@@ -73,7 +73,7 @@
     <script src="{{ asset('js/descargarAlerta.js') }}"></script>
 
     <script>
-        @if ($message = session('success'))
+        @if (session('success'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Operación exitosa!',
@@ -83,7 +83,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('error'))
+        @elseif (session('error'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Parece que hubo un problema!',
@@ -93,7 +93,7 @@
                     confirmButton: 'btn btn-info px-5'
                 },
             })
-        @elseif ($message = session('noExiste'))
+        @elseif (session('noExiste'))
             Swal.fire({
                 icon: 'error',
                 title: '¡No se pudo descargar!',
@@ -103,7 +103,7 @@
                     confirmButton: 'btn btn-info px-5'
                 },
             })
-        @elseif ($message = session('importado'))
+        @elseif (session('importado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Base de datos restaurada!',
@@ -113,7 +113,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('noImportado'))
+        @elseif (session('noImportado'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Hubo un problema con la importación!',
@@ -123,7 +123,7 @@
                     confirmButton: 'btn btn-info px-5'
                 },
             })
-        @elseif ($message = session('noArchivo'))
+        @elseif (session('noArchivo'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Archivo no encontrado!',
@@ -131,6 +131,16 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif (session('descargado'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Archivo no encontrado!',
+                html: "{{ session('descargado') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @endif

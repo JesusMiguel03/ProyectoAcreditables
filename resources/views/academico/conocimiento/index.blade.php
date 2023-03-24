@@ -97,6 +97,55 @@
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const nombre = document.getElementById('nombre')
+        const descripcion = document.getElementById('descripcion')
+        const boton = document.getElementById('formularioEnviar')
+
+        let [validarNombre, validarDescripcion] = [false, false]
+
+        boton.disabled = true
+
+        const validarFormulario = () => {
+            if (validarNombre && validarDescripcion) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        }
+
+        nombre.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+
+            if (e.currentTarget.value.length > 4 && e.currentTarget.value.length < 51 && validacion.test(e
+                    .currentTarget.value)) {
+                validarNombre = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarNombre = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        descripcion.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+
+            if (e.currentTarget.value.length > 15 && e.currentTarget.value.length < 256 && validacion.test(e
+                    .currentTarget.value)) {
+                validarDescripcion = true
+                e.currentTarget.classList.remove('is-invalid')
+            } else {
+                validarDescripcion = false
+                e.currentTarget.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))

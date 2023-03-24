@@ -4,6 +4,7 @@ namespace App\Models\Materia;
 
 use App\Models\Academico\Estudiante_materia;
 use App\Models\Academico\Horario;
+use App\Models\Academico\Periodo;
 use App\Models\Academico\Profesor;
 use App\Models\Academico\Trayecto;
 use Carbon\Carbon;
@@ -49,6 +50,22 @@ class Materia extends Model
     public function nombreProfesorEncargado()
     {
         return !empty($this->info->profesor) ? $this->info->profesor->nombreProfesor() : null;
+    }
+
+    public function estudiantesPeriodo($id)
+    {
+        $periodo = Periodo::find($id);
+        $estudiantes = $this->estudiantes;
+
+        $estudiantesPeriodo = [];
+
+        foreach ($estudiantes as $estudiante) {
+            if ($estudiante->periodo_id === $periodo->id) {
+                array_push($estudiantesPeriodo, $estudiante);
+            }
+        }
+
+        return $estudiantesPeriodo;
     }
 
     public function estudiantesPeriodoActual()

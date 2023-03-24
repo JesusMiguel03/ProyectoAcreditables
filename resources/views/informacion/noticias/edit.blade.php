@@ -39,5 +39,64 @@
 @stop
 
 @section('js')
+    {{-- Personalizados --}}
     <script src="{{ asset('js/previsualizacion.js') }}"></script>
+
+    {{-- Validaciones --}}
+    <script>
+        const titulo = document.getElementById('titulo')
+        const descripcion = document.getElementById('descripcion')
+        const boton = document.getElementById('formularioEnviar')
+
+        let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+
+        let [validacionTitulo, validacionDescripcion] = [
+            validacion.test(titulo.value) && titulo.value.length > 5 && titulo.value.length < 30,
+            validacion.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length < 100
+        ]
+
+        if (!(validacionTitulo || validacionDescripcion)) {
+            boton.disabled = true
+        }
+
+        const validarFormulario = () => {
+            if (validacionTitulo && validacionDescripcion) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        }
+
+        titulo.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 30) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            }
+
+            if (validacion.test(titulo.value) && e.currentTarget.value.length > 5 && e.currentTarget.value.length < 30) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionTitulo = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionTitulo = false
+            }
+
+            validarFormulario()
+        })
+
+        descripcion.addEventListener('input', (e) => {
+            if (e.currentTarget.value.length > 100) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 100)
+            }
+
+            if (validacion.test(descripcion.value) && e.currentTarget.value.length > 15 && e.currentTarget.value.length < 100) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionDescripcion = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionDescripcion = false
+            }
+
+            validarFormulario()
+        })
+    </script>
 @stop

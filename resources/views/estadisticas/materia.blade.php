@@ -40,91 +40,85 @@
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
     <script>
-        const inputPeriodo = document.getElementById('periodo')
-        const btnPeriodo = document.getElementById('btnPeriodo')
+        const inputPeriodo = document.getElementById("periodo");
+        const btnPeriodo = document.getElementById("btnPeriodo");
 
-        const inputMateria = document.getElementById('materias')
-        const btnMateria = document.getElementById('btnMateria')
+        const inputMateria = document.getElementById("materias");
+        const btnMateria = document.getElementById("btnMateria");
 
+        // Añade el estado disabled cuando se selecciona la opcion 0 y un mensaje de error si no se selecciona el periodo
         const activarBotones = () => {
-
             if (periodo == 0) {
+                btnPeriodo.classList.add("disabled");
+                btnMateria.classList.add("disabled");
+                inputPeriodo.classList.add("is-invalid");
 
-                btnPeriodo.classList.add('disabled')
-                btnMateria.classList.add('disabled')
-                inputPeriodo.classList.add('is-invalid')
+                if (!document.getElementById("mensajePeriodo")) {
+                    let mensaje = document.createElement("span");
+                    let strong = document.createElement("strong");
 
-                if (!document.getElementById('mensajePeriodo')) {
+                    mensaje.classList.add("invalid-feedback");
+                    mensaje.setAttribute("role", "alert");
+                    mensaje.setAttribute("id", "mensajePeriodo");
+                    strong.innerText = "Seleccione un periodo de la lista";
 
-                    let mensaje = document.createElement('span')
-                    let strong = document.createElement('strong')
-
-                    mensaje.classList.add('invalid-feedback')
-                    mensaje.setAttribute('role', 'alert')
-                    mensaje.setAttribute('id', 'mensajePeriodo')
-                    strong.innerText = 'Seleccione un periodo de la lista'
-
-                    mensaje.append(strong)
-                    inputPeriodo.parentNode.append(mensaje)
+                    mensaje.append(strong);
+                    inputPeriodo.parentNode.append(mensaje);
                 }
-
             } else {
-
-                btnPeriodo.classList.remove('disabled')
-                btnMateria.classList.remove('disabled')
-                inputPeriodo.classList.remove('is-invalid')
+                btnPeriodo.classList.remove("disabled");
+                btnMateria.classList.remove("disabled");
+                inputPeriodo.classList.remove("is-invalid");
             }
 
             if (materia == 0) {
+                btnMateria.classList.add("disabled");
+                inputMateria.classList.add("is-invalid");
 
-                btnMateria.classList.add('disabled')
-                inputMateria.classList.add('is-invalid')
+                if (!document.getElementById("mensajeMateria")) {
+                    let mensaje = document.createElement("span");
+                    let strong = document.createElement("strong");
 
-                if (!document.getElementById('mensajeMateria')) {
+                    mensaje.classList.add("invalid-feedback");
+                    mensaje.setAttribute("role", "alert");
+                    mensaje.setAttribute("id", "mensajeMateria");
+                    strong.innerText = "Seleccione una materia de la lista";
 
-                    let mensaje = document.createElement('span')
-                    let strong = document.createElement('strong')
-
-                    mensaje.classList.add('invalid-feedback')
-                    mensaje.setAttribute('role', 'alert')
-                    mensaje.setAttribute('id', 'mensajeMateria')
-                    strong.innerText = 'Seleccione una materia de la lista'
-
-                    mensaje.append(strong)
-                    inputMateria.parentNode.append(mensaje)
+                    mensaje.append(strong);
+                    inputMateria.parentNode.append(mensaje);
                 }
-
             } else if (materia != 0 && periodo != 0) {
-
-                btnMateria.classList.remove('disabled')
-                inputMateria.classList.remove('is-invalid')
+                btnMateria.classList.remove("disabled");
+                inputMateria.classList.remove("is-invalid");
             }
-        }
+        };
 
         let [periodo, materia] = [
             inputPeriodo.options[inputPeriodo.selectedIndex].value || 0,
-            inputMateria.options[inputMateria.selectedIndex].value || 0
-        ]
+            inputMateria.options[inputMateria.selectedIndex].value || 0,
+        ];
 
-        inputPeriodo.addEventListener('change', (e) => {
-            periodo = e.currentTarget.options[e.currentTarget.selectedIndex].value
+        // Actualiza el periodo en base al seleccionado
+        inputPeriodo.addEventListener("change", (e) => {
+            periodo = e.currentTarget.options[e.currentTarget.selectedIndex].value;
+            activarBotones();
+        });
 
-            activarBotones()
-        })
+        // Actualiza la materia en base a la seleccionada
+        inputMateria.addEventListener("change", (e) => {
+            materia = e.currentTarget.options[e.currentTarget.selectedIndex].value;
+            activarBotones();
+        });
 
-        inputMateria.addEventListener('change', (e) => {
-            materia = e.currentTarget.options[e.currentTarget.selectedIndex].value
+        // Cambia la ruta
+        btnPeriodo.addEventListener("click", (e) => {
+            e.currentTarget.href = `${"{{ route('estadisticas.show') }}"}/${periodo}`;
+        });
 
-            activarBotones()
-        })
-
-        btnPeriodo.addEventListener('click', (e) => {
-            e.currentTarget.href = `${"{{ route('estadisticas.show') }}"}/${periodo}`
-        })
-
-        btnMateria.addEventListener('click', (e) => {
-            e.currentTarget.href = `${"{{ route('estadisticas.materia') }}"}/${periodo}/${materia}`
-        })
+        // Cambia la ruta
+        btnMateria.addEventListener("click", (e) => {
+            e.currentTarget.href = `${"{{ route('estadisticas.materia') }}"}/${periodo}/${materia}`;
+        });
     </script>
 
     <script>

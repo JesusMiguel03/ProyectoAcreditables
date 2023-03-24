@@ -96,6 +96,32 @@
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const trayecto = document.getElementById('trayecto')
+        const boton = document.getElementById('formularioEnviar')
+
+        boton.disabled = true
+
+        let validacionTrayecto = false
+
+        trayecto.addEventListener('input', (e) => {
+            if (e.currentTarget.value > 0 && e.currentTarget.value < 11) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionTrayecto = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionTrayecto = false
+            }
+
+            if (validacionTrayecto) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))

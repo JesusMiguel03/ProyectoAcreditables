@@ -33,8 +33,9 @@ class ContrasenaController extends Controller
 
             Bitacora::create([
                 'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-                'accion' => 'La contraseña no coincidió con los registros',
-                'estado' => 'danger'
+                'accion' => "Intentó actualizar su contraseña pero suministró una diferente a la registrada",
+                'estado' => 'danger',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
 
             return redirect()->back()->with('errorHash', 'error');
@@ -45,8 +46,9 @@ class ContrasenaController extends Controller
 
             Bitacora::create([
                 'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-                'accion' => 'La nueva contraseña y la confirmación no coincidieron',
-                'estado' => 'danger'
+                'accion' => "Intentó actualizar su contraseña pero la nueva contraseña y confirmación no coincidieron",
+                'estado' => 'danger',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
 
             return redirect()->back()->with('errorConfirmacion', 'error');
@@ -62,8 +64,9 @@ class ContrasenaController extends Controller
 
             Bitacora::create([
                 'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-                'accion' => 'Se ha cambiado de contraseña exitosamente',
-                'estado' => 'success'
+                'accion' => "Actualizó su contraseña exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
 
             return redirect()->back()->with('actualizado', 'actualizado');

@@ -4,7 +4,8 @@
 
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-    <li class="breadcrumb-item active"><a href="">Bitácora</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('bitacora') }}" class="link-muted">Bitácora</a></li>
+    <li class="breadcrumb-item active"><a href="">Periodo {{ $periodoSeleccionado->formato() }}</a></li>
 @stop
 
 @section('content_header')
@@ -14,10 +15,8 @@
 @section('content')
     <div class="col-12 card table-responsive-sm p-3 my-3">
 
-        <div class="col-6 mb-4">
-            <form id="form" action="" method="post">
-                @csrf
-
+        <div class="col-9 mb-4">
+            <form id="form" action="" method="get">
                 <div class="form-row">
                     <label for="periodo">Periodo</label>
                 </div>
@@ -28,13 +27,19 @@
                             <option value="0" readonly>Seleccione uno...</option>
 
                             @foreach ($periodos as $periodo)
-                                <option value="{{ $periodo->id }}">{{ $periodo->formato() }}</option>
+                                <option value="{{ $periodo->id }}"
+                                    {{ $periodoSeleccionado->id === $periodo->id ? 'selected' : '' }}>
+                                    {{ $periodo->formato() }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div class="col">
                         <button id="enviar" class="btn btn-block btn-primary" disabled>Buscar</button>
+                    </div>
+
+                    <div class="col">
+                        <a href="{{ route('bitacora') }}" class="btn btn-block btn-primary">Mostrar todos</a>
                     </div>
                 </div>
 
@@ -98,13 +103,14 @@
         const url = "{{ route('bitacora.show') }}"
 
         let periodo = inputPeriodos.options[inputPeriodos.selectedIndex].value || 0;
+        const periodoSeleccionado = inputPeriodos.options[inputPeriodos.selectedIndex].value
 
         // Cuando se selecciona un periodo x
         inputPeriodos.addEventListener('change', (e) => {
             periodo = e.currentTarget.options[inputPeriodos.selectedIndex].value;
 
             // Si es valido o mayor a 0 se puede buscar
-            periodo > 0 ?
+            periodo > 0 && periodo !== periodoSeleccionado ?
                 boton.removeAttribute('disabled') :
                 boton.disabled = true
         });
@@ -113,7 +119,7 @@
             e.preventDefault()
 
             // Si el periodo es mayor a 0 busca el historial por periodo
-            if (periodo > 0) {
+            if (periodo > 0 && periodo !== periodoSeleccionado) {
                 form.action = `${url}/${periodo}`
                 form.submit()
             }

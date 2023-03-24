@@ -1,6 +1,6 @@
 @php
     $noticia = atributo($attributes, 'noticia');
-
+    
     if (!empty($noticia)) {
         $titulo = $noticia->titulo;
         $descripcion = $noticia->desc_noticia;
@@ -16,9 +16,10 @@
     <label for="titulo" class="control-label">Título</label>
 
     <div class="input-group">
-        <input type="text" name="titulo"
-            class="form-control @error('titulo') is-invalid @enderror" value="{{ $titulo ?? old('titulo') }}"
-            placeholder="{{ __('Nombre de la noticia, ej: Nueva acreditable') }}" maxlength="{{ config('variables.noticias.titulo') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." autofocus required>
+        <input type="text" id="titulo" name="titulo" class="form-control @error('titulo') is-invalid @enderror"
+            value="{{ $titulo ?? old('titulo') }}" placeholder="{{ __('Nombre de la noticia, ej: Nueva acreditable') }}"
+            maxlength="{{ config('variables.noticias.titulo') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+            title="Debe contener letras, espacios y/o números." autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -39,9 +40,10 @@
     <label for="desc_noticia" class="control-label">Descripción</label>
 
     <div class="input-group">
-        <textarea name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror descripcion" spellcheck="false" 
-            placeholder="{{ __('Descripción, ej: Una nueva acreditable ha sido registrada') }}" maxlength="{{ config('variables.noticias.descripcion') }}" required
-            pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números.">{{ $descripcion ?? old('desc_noticia') }}</textarea>
+        <textarea id="descripcion" name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror descripcion"
+            spellcheck="false" placeholder="{{ __('Descripción, ej: Una nueva acreditable ha sido registrada') }}"
+            maxlength="{{ config('variables.noticias.descripcion') }}" required pattern="[A-zÀ-ÿ0-9\s]+"
+            title="Debe contener letras, espacios y/o números.">{{ $descripcion ?? old('desc_noticia') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -62,8 +64,8 @@
     <label for="activo" class="control-label">¿Mostrar noticia?</label>
 
     <div class="input-group">
-        <select name="activo" class="form-control @error('activo') is-invalid @enderror" required>
-            <option value="" readonly>Seleccione...</option>
+        <select id="mostrar" name="activo" class="form-control @error('activo') is-invalid @enderror" required>
+            <option disabled selected readonly>Seleccione...</option>
             <option value="1" {{ $activo === 1 ? 'selected' : '' }}>Si</option>
             <option value="0" {{ $activo === 0 ? 'selected' : '' }}>No</option>
         </select>
@@ -119,8 +121,38 @@
 @endif
 
 <x-modal.mensaje-obligatorio />
+
 @if (Route::is('noticias.edit'))
-    <x-modal.footer-editar ruta="{{ route('noticias.index') }}" />
+    <div class="row">
+        <div class="col-6">
+            <a href="{{ route('noticias.index') }}" class="btn btn-block btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Volver') }}
+            </a>
+        </div>
+
+        <div class="col-6">
+            <button type="submit" id="formularioEnviar" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @else
-    <x-modal.footer-aceptar />
+    <div class="row">
+        <div class="col-6">
+            <button id="cancelar" type="button" class="btn btn-block btn-secondary"
+                data-dismiss="modal">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Cancelar') }}
+            </button>
+        </div>
+
+        <div class="col-6">
+            <button id="formularioEnviar" type="submit" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @endif

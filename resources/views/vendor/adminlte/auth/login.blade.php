@@ -30,8 +30,10 @@
         <div class="form-group required">
             <label for="email" class="control-label">Correo</label>
             <div class="input-group mb-3">
-                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                    value="{{ old('email') }}" placeholder="{{ __('Ej: micorreo@gmail.com') }}" autofocus required>
+                <input type="email" id="correo" name="email" class="form-control @error('email') is-invalid @enderror"
+                    value="{{ old('email') }}" placeholder="{{ __('Ej: micorreo@gmail.com') }}"
+                    pattern="^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" maxlength="40" title="Debe ser un correo válido."
+                    autofocus required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -51,8 +53,9 @@
         <div class="form-group required">
             <label for="password" class="control-label">Contraseña</label>
             <div class="input-group mb-3">
-                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                    placeholder="{{ __('Contraseña') }}" required>
+                <input type="password" id="contrasena" name="password"
+                    class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Contraseña') }}"
+                    required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -78,7 +81,7 @@
             </div>
 
             <div class="col-6">
-                <button type=submit class="btn btn-block btn-primary">
+                <button id="boton" type=submit class="btn btn-block btn-primary" disabled>
                     {{ __('Iniciar Sesión') }}
                 </button>
             </div>
@@ -89,4 +92,59 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+@stop
+
+@section('js')
+    <script>
+        const boton = document.getElementById('boton')
+        const contrasena = document.getElementById('contrasena')
+        const correo = document.getElementById('correo')
+
+        // Expresión regular para validar el formato del correo electrónico
+        const validarCorreo = /^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+        correo.addEventListener('input', (e) => {
+            // Validacion de correo y contraseña
+            let validacionCorreo = validarCorreo.test(e.currentTarget.value)
+            let contrasenaValida = contrasena.value.length > 3 && contrasena.value.length < 9
+
+            // Si el correo es mayor a 40 caracteres, se recorta a 40 caracteres
+            if (e.currentTarget.value.length > 40) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 40)
+            }
+
+            // Si el correo es válido, se quita la clase 'is-invalid' para indicar que no hay errores
+            if (validacionCorreo) {
+                e.currentTarget.classList.remove('is-invalid')
+            }
+
+            // Si el correo y la contraseña son válidos, se habilita el botón
+            validacionCorreo && contrasenaValida
+                ? boton.removeAttribute('disabled')
+                : boton.disabled = true
+        })
+
+        // Evento que se dispara cuando el usuario escribe en el campo de la contraseña
+        contrasena.addEventListener('input', (e) => {
+            // Validacion de correo y contraseña
+            let validacionCorreo = validarCorreo.test(correo.value)
+            let contrasenaValida = e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9
+
+            // Si la contraseña es mayor a 8 caracteres, se recorta a 8 caracteres
+            if (e.currentTarget.value.length > 8) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+                contrasenaValida = e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9
+            }
+
+            // Si la contraseña es válida, se quita la clase 'is-invalid' para indicar que no hay errores
+            if (contrasenaValida) {
+                e.currentTarget.classList.remove('is-invalid')
+            }
+
+            // Si el correo y la contraseña son válidos, se habilita el botón
+            validacionCorreo && contrasenaValida
+                ? boton.removeAttribute('disabled')
+                : boton.disabled = true
+        })
+    </script>
 @stop

@@ -77,7 +77,6 @@ class BaseDeDatosController extends Controller
                 'Content-disposition' => "attachment; filename={$archivo_descargar}",
             ]);
         } else {
-
             return redirect()->back()->with('noExiste', 'El respaldo que intenta descargar no existe, pruebe creando una copia de seguridad u otro respaldo.');
         }
     }

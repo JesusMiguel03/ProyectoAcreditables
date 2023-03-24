@@ -55,16 +55,69 @@
         </div>
     @endif
 
+    @if (rol('Coordinador'))
+        <div class="modal fade" id="listadoNotas" tabindex="-1" role="dialog" aria-labelledby="campoPDF"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <header class="modal-header bg-primary">
+                        <h5 class="modal-title" id="campoPDF">Listado de estudiantes - Notas (PDF)</h5>
+                    </header>
+
+                    <main class="modal-body">
+                        <form id="formPDF" action="" method="post">
+                            @csrf
+
+                            <div class="form-row">
+                                <div class="col-md-8 col-sm-12 offset-md-2">
+                                    <div class="form-group required mb-3">
+                                        <label for="periodo">Periodos</label>
+
+                                        <div class="input-group">
+                                            <select name="periodo" id="periodo" class="form-control">
+                                                <option value="0" readonly>Seleccione uno...</option>
+
+                                                @foreach ($periodos as $periodo)
+                                                    <option value="{{ $periodo->id }}">{{ $periodo->formato() }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-calendar"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-8 col-sm-12 offset-md-2">
+                                    <button id="enviar" class="btn btn-block btn-secondary" disabled>Buscar</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </main>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @php
         $profesorID = auth()->user()->profesor->id ?? null;
         $materiaProfID = $materia->info->profesor_id ?? false;
         $validacion = $profesorID === $materiaProfID;
         
-        $tipo = $materia->info->metodologia ?? null;
-        $categoria = $materia->infoCategoria()->nom_categoria ?? null;
-        $horario = !empty($materia->horario) ? $materia->horario->horarioEstructurado() : null;
-        $acreditable = $materia->infoAcreditable() ?? null;
+        $tipo = $materia->info->metodologia ?? 'Sin asignar';
+        $categoria = $materia->infoCategoria()->nom_categoria ?? 'Sin asignar';
+        $horario = !empty($materia->horario) ? $materia->horario->horarioEstructurado() : 'Sin asignar';
+        $acreditable = $materia->infoAcreditable() ?? 'Sin asignar';
         $finalizada = $materia->estado_materia === 'Finalizado';
+        
+        $url = route('materias.edit', $materia->id);
+        $horarioUrl = route('horarios.index');
     @endphp
 
     <div class="row mt-2">
@@ -76,16 +129,23 @@
         {{-- Tarjetas información materia --}}
         <section class="col-12 border-bottom">
             <div class="row">
-                <x-elementos.mini-card nombre='Metodología' :contenido="$tipo ?? 'Sin asignar'" />
-                <x-elementos.mini-card nombre='Categoría' :contenido="$categoria ?? 'Sin asignar'" />
-                <x-elementos.mini-card nombre='Horario' :contenido="$horario ?? 'Sin asignar'" />
-                <x-elementos.mini-card nombre='Acreditable' :contenido="$acreditable ?? 'Sin asignar'" />
+                <x-elementos.mini-card nombre='Metodología' :contenido="$tipo" :url="$url" />
+                <x-elementos.mini-card nombre='Categoría' :contenido="$categoria" :url="$url" />
+                <x-elementos.mini-card nombre='Horario' :contenido="$horario" :url="$horarioUrl" />
+                <x-elementos.mini-card nombre='Acreditable' :contenido="$acreditable" :url="$url" />
             </div>
         </section>
 
         {{-- Listado de estudiantes --}}
         <section class="col-12 my-3">
-            @if (($validacion && !empty($inscritos)) || rol('Coordinador') && !empty($inscritos))
+
+            @if (($validacion && !empty($inscritos)) || (rol('Coordinador') && !empty($inscritos)))
+                {{-- PDF --}}
+                <button class="btn btn-danger float-right" {{ Popper::arrow()->pop('PDF Notas de la acreditable') }}
+                    data-toggle="modal" data-target="#listadoNotas">
+                    <i class="fas fa-file-pdf" style="width: 2rem"></i>
+                </button>
+
                 <a href="{{ route('listadoEstudiantes', $materia->id) }}" class="btn btn-primary float-right"
                     {{ Popper::arrow()->pop('Descargar listado de estudiantes') }}>
                     <i class="fas fa-download" style="width: 2rem"></i>
@@ -174,8 +234,8 @@
                                             </button>
 
                                             {{-- Asistencia --}}
-                                            <a href="{{ route('asistencias.edit', $inscritoID) }}" class="btn btn-primary"
-                                                {{ Popper::arrow()->pop('Marcar asistencia') }}>
+                                            <a href="{{ route('asistencias.edit', $inscritoID) }}"
+                                                class="btn btn-primary" {{ Popper::arrow()->pop('Marcar asistencia') }}>
                                                 <i class="fas fa-calendar"></i>
                                             </a>
 
@@ -228,18 +288,47 @@
 @section('js')
     @if (!rol('Estudiante'))
         @include('popper::assets')
+        <script src="{{ asset('js/asignarNota.js') }}"></script>
     @endif
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
+
     @if (rol('Estudiante'))
         <script src="{{ asset('js/cambiarAcreditable.js') }}"></script>
     @endif
 
-    @if (!rol('Estudiante'))
-        <script src="{{ asset('js/asignarNota.js') }}"></script>
+    @if (rol('Coordinador'))
+        <script>
+            const inputPeriodo = document.getElementById('periodo')
+            const boton = document.getElementById('enviar')
+            const formPDF = document.getElementById('formPDF')
+
+            // Busca el periodo seleccionado, si no hay alguno se coloca 0
+            let periodo = inputPeriodo.options[inputPeriodo.selectedIndex].value || 0
+
+            // Cada vez que se escoja un periodo
+            inputPeriodo.addEventListener('change', (e) => {
+                periodo = inputPeriodo.options[inputPeriodo.selectedIndex].value
+
+                // Si es 0 inhabilita el boton
+                periodo > 0 ?
+                    boton.removeAttribute('disabled') :
+                    boton.disabled = true
+            })
+
+            // Si es diferente de 0 entonces enviar el formulario
+            boton.addEventListener('click', (e) => {
+                e.preventDefault()
+
+                let url = "{{ route('materias.pdf') }}"
+
+                formPDF.action = `${url}/{{ $materia->id }}/${periodo}`
+                formPDF.submit()
+            })
+        </script>
     @endif
 
     {{-- Mensajes --}}
@@ -362,6 +451,37 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: "btn btn-info px-5"
+                },
+            })
+        @elseif ($message = session('solicitudInvalida'))
+            Swal.fire({
+                icon: "warning",
+                title: "No se pudo encontrar",
+                html: "{{ session('solicitudInvalida') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-warning px-5"
+                },
+            })
+            $('#listadoNotas').modal('show')
+        @elseif ($message = session('noEstudiantes'))
+            Swal.fire({
+                icon: "info",
+                title: "Estudiantes no encontrados",
+                html: "{{ session('noEstudiantes') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: "btn btn-info px-5"
+                },
+            })
+        @elseif (session('asistencia'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Asistencia actualizada!',
+                html: "{{ session('asistencia') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @endif

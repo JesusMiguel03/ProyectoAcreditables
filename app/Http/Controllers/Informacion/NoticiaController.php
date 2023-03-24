@@ -67,14 +67,17 @@ class NoticiaController extends Controller
 
         $imagen = '';
 
+        $usuario = auth()->user();
+
         // Busca la imagen y la guarda
         if ($request->hasFile('imagen_noticia')) {
             $imagen = $request->file('imagen_noticia')->storeAs('uploads', \Carbon\Carbon::now()->timestamp . '-noticia.jpg', 'public');
 
             Bitacora::create([
-                'usuario' => "Noticia - ({$request['titulo']})",
-                'accion' => 'Se ha guardado la imagen exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Subió una imagen de noticia ({$request['titulo']}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
 
         } else {
@@ -89,9 +92,10 @@ class NoticiaController extends Controller
         ]);
 
         Bitacora::create([
-            'usuario' => "Noticia - ({$request['titulo']})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró la noticia ({$request['titulo']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('noticias')->with('creado', 'creado');
@@ -148,6 +152,8 @@ class NoticiaController extends Controller
         $noticia = Noticia::find($id);
         $imagen = null;
 
+        $usuario = auth()->user();
+
         // Busca la imagen, la borra y sube la nueva
         if ($request->hasFile('imagen_noticia')) {
             Storage::delete('public/' . $noticia->imagen_noticia);
@@ -155,9 +161,10 @@ class NoticiaController extends Controller
             $imagen = $request->file('imagen_noticia')->storeAs('uploads', \Carbon\Carbon::now()->timestamp . '-noticia.jpg', 'public');
 
             Bitacora::create([
-                'usuario' => "Noticia - ({$request['titulo']})",
-                'accion' => 'Se ha actualizado la imagen exitosamente',
-                'estado' => 'success'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Actulizó la imagen de la noticia ({$request['titulo']}) exitosamente",
+                'estado' => 'success',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
         }
 
@@ -170,9 +177,10 @@ class NoticiaController extends Controller
         ]);
 
         Bitacora::create([
-            'usuario' => "Noticia - ({$request['titulo']})",
-            'accion' => 'Se ha actualizado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó la noticia ({$request['titulo']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('noticias')->with('actualizado', 'actualizado');
@@ -186,10 +194,13 @@ class NoticiaController extends Controller
         $noticia = Noticia::find($id);
         $noticia->delete();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Noticia - ({$noticia->titulo})",
-            'accion' => 'Ha sido borrada',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró la noticia ({$noticia->titulo}) exitosamente",
+            'estado' => 'warning',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('borrado', 'borrado');

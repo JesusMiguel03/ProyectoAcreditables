@@ -64,10 +64,13 @@ if (!function_exists('validacion')) {
                 $errores .= " {$error[0]}";
             }
 
+            $usuario = auth()->user();
+
             Bitacora::create([
-                'usuario' => "Error en formulario de {$modelo}",
-                'accion' => "{$errores}",
-                'estado' => 'danger'
+                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                'accion' => "Formulario {$modelo}, tuvo los siguientes errores: {$errores}",
+                'estado' => 'danger',
+                'periodo_id' => periodo('modelo')->id ?? null
             ]);
 
             return abort(redirect()->back()->with($errorFormulario, $validador->errors()->getMessages())->withErrors($validador)->withInput());
@@ -134,9 +137,13 @@ if (!function_exists('periodo')) {
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
 
 
-        if ($parametro === 'modelo') return $periodo;
+        if ($parametro === 'modelo') {
+            return $periodo;
+        }
 
-        if ($parametro === 'anterior') return Periodo::orderBy('fin', 'desc')->orderBy('fase', 'desc')->orderBy('inicio', 'desc')->skip(1)->first();
+        if ($parametro === 'anterior') {
+            return Periodo::orderBy('fin', 'desc')->orderBy('fase', 'desc')->orderBy('inicio', 'desc')->skip(1)->first();
+        }
 
         return $existe
             ? $conversor[$periodo->fase] . '-' . Carbon::parse($periodo->inicio)->format('Y')

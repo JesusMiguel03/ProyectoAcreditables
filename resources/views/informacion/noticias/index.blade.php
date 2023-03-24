@@ -111,6 +111,61 @@
     <script src="{{ asset('js/previsualizacion.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const titulo = document.getElementById('titulo')
+        const descripcion = document.getElementById('descripcion')
+        const boton = document.getElementById('formularioEnviar')
+
+        boton.disabled = true
+
+        let [validacionTitulo, validacionDescripcion] = [false, false]
+
+        const validarFormulario = () => {
+            if (validacionTitulo && validacionDescripcion) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        }
+
+        titulo.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+
+            if (e.currentTarget.value.length > 30) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 30)
+            }
+
+            if (validacion.test(titulo.value) && e.currentTarget.value.length > 5 && e.currentTarget.value.length < 30) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionTitulo = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionTitulo = false
+            }
+
+            validarFormulario()
+        })
+
+        descripcion.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+
+            if (e.currentTarget.value.length > 100) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 100)
+            }
+
+            if (validacion.test(descripcion.value) && e.currentTarget.value.length > 15 && e.currentTarget.value.length < 100) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionDescripcion = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionDescripcion = false
+            }
+
+            validarFormulario()
+        })
+    </script>
+
     {{-- Mensajes --}}
     <script>
         @if ($message = session('creado'))

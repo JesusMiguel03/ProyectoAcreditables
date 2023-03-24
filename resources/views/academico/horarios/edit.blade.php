@@ -54,6 +54,71 @@
     <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
 
+    {{-- Validaciones --}}
+    <script>
+        const espacio = document.getElementById('espacio')
+        const aula = document.getElementById('aula')
+        const enviarBoton = document.getElementById('formularioEnviar')
+
+        const espacios = ['A', 'Edificio A', 'B', 'Edificio B', 'C', 'Edificio C']
+
+        let [validacionEspacio, validacionAula] = [false, true]
+
+        const validarFormulario = () => {
+            if (validacionEspacio && validacionAula) {
+                enviarBoton.removeAttribute('disabled')
+            } else {
+                enviarBoton.disabled = true
+            }
+        }
+
+        espacio.addEventListener('input', (e) => {
+            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){1})[^_]+$/g
+
+            if (e.currentTarget.value.length > 30) {
+                e.currentTarget.value = e.currentTarget.value.slice(0, 30)
+            }
+
+            if (espacios.includes(espacio.value)) {
+                espacio.classList.add('is-invalid')
+                aula.classList.add('is-invalid')
+                validacionEspacio = false
+                validacionAula = false
+            } else {
+                espacio.classList.remove('is-invalid')
+                aula.classList.remove('is-invalid')
+                validacionEspacio = true
+                validacionAula = true
+            }
+
+            if (validacion.test(espacio.value)) {
+                espacio.classList.remove('is-invalid')
+                validacionEspacio = true
+            } else {
+                espacio.classList.add('is-invalid')
+                validacionEspacio = false
+            }
+
+            validarFormulario()
+        })
+
+        aula.addEventListener('input', (e) => {
+            if (e.currentTarget.value > 12) {
+                e.currentTarget.value = 12
+            }
+
+            if (e.currentTarget.value === 0 || e.currentTarget.value < 13) {
+                aula.classList.remove('is-invalid')
+                validacionAula = true
+            } else {
+                aula.classList.add('is-invalid')
+                validacionAula = false
+            }
+
+            validarFormulario()
+        })
+    </script>
+
     <script>
         $(function() {
             $('#hora').datetimepicker({

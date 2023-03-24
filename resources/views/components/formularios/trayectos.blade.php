@@ -6,9 +6,10 @@
     <label for="num_trayecto" class="control-label">Número</label>
 
     <div class="input-group">
-        <input type="number" name="num_trayecto" class="form-control @error('num_trayecto') is-invalid @enderror"
-            value="{{ $numero ?? old('num_trayecto') }}" placeholder="{{ __('Número del trayecto, ej: 1') }}" autofocus
-            required min="1" max="10" title="Debe ser menor a 10">
+        <input type="number" id="trayecto" name="num_trayecto"
+            class="form-control @error('num_trayecto') is-invalid @enderror" value="{{ $numero ?? old('num_trayecto') }}"
+            placeholder="{{ __('Número del trayecto, ej: 1') }}" autofocus required min="1" max="10"
+            title="Debe ser menor a 10">
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -25,8 +26,37 @@
 </div>
 
 <x-modal.mensaje-obligatorio />
+
 @if (Route::is('trayectos.edit'))
-    <x-modal.footer-editar ruta="{{ route('trayectos.index') }}" />
+    <div class="row">
+        <div class="col-6">
+            <a href="{{ route('trayectos.index') }}" class="btn btn-block btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Volver') }}
+            </a>
+        </div>
+
+        <div class="col-6">
+            <button type="submit" id="formularioEnviar" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @else
-    <x-modal.footer-aceptar />
+    <div class="row">
+        <div class="col-6">
+            <button id="cancelar" type="button" class="btn btn-block btn-secondary" data-dismiss="modal">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Cancelar') }}
+            </button>
+        </div>
+
+        <div class="col-6">
+            <button id="formularioEnviar" type="submit" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @endif

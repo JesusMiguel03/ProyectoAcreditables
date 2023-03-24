@@ -127,16 +127,6 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('registrado'))
-            Swal.fire({
-                icon: 'success',
-                title: '¡Asistencia actualizada!',
-                html: 'La asistencia del estudiante ha sido actualizada.',
-                buttonsStyling: false,
-                customClass: {
-                    confirmButton: 'btn btn-success px-5'
-                },
-            })
         @endif
     </script>
 @stop

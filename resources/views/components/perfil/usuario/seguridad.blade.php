@@ -19,9 +19,9 @@
                 <div class="form-group mb-3">
                     <label for="current_password">Contraseña actual</label>
                     <div class="input-group">
-                        <input type="password" name="current_password"
+                        <input type="password" id="contrasena" name="current_password"
                             class="form-control @error('current_password') is-invalid @enderror"
-                            pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
+                            pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo." required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -43,9 +43,9 @@
                             <label for="password">Contraseña nueva</label>
                             <div class="input-group">
 
-                                <input type="password" name="password"
+                                <input type="password" id="nuevaContrasena" name="password"
                                     class="form-control @error('password') is-invalid @enderror"
-                                    pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
+                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo." required>
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -64,9 +64,9 @@
                         <div class="col-6">
                             <label for="password_confirmation">Confirmar contraseña</label>
                             <div class="input-group">
-                                <input type="password" name="password_confirmation"
+                                <input type="password" id="validarContrasena" name="password_confirmation"
                                     class="form-control @error('password_confirmation') is-invalid @enderror"
-                                    pattern="^[a-zA-Z0-9]{8,}$" title="Debe tener 8 carácteres por lo menos." required>
+                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo." required>
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">

@@ -45,10 +45,13 @@ class CategoriaController extends Controller
 
         Categoria::create(['nom_categoria' => $request->get('nom_categoria')]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Categoría - ({$request['nom_categoria']})",
-            'accion' => 'Se ha registrado una nueva categoria exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró la categoría ({$request['nom_categoria']}) asistencia exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('categorias')->with('creado', 'La categoria fue creada exitosamente');
@@ -85,10 +88,13 @@ class CategoriaController extends Controller
 
         Categoria::find($id)->update(['nom_categoria' => $request->get('nom_categoria')]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Categoría - ({$request['nom_categoria']})",
-            'accion' => 'Se ha modificado la categoria exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó la categoría ({$request['nom_categoria']}) asistencia exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('categorias')->with('actualizado', 'actualizado');
@@ -99,7 +105,18 @@ class CategoriaController extends Controller
         // Valida si tiene el permiso
         permiso('categorias');
 
-        Categoria::find($id)->delete();
+        $categoria = Categoria::find($id);
+        $categoria->delete();
+
+        $usuario = auth()->user();
+
+        Bitacora::create([
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró la categoría ({$categoria->nom_categoria}) asistencia exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
+        ]);
+
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

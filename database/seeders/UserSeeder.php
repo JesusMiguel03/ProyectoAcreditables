@@ -156,9 +156,17 @@ class UserSeeder extends Seeder
                     'sem12' => 0,
                 ]);
 
+                $materias = Materia::where('trayecto_id', '=', $estudiante->trayecto_id)->get();
+
+                $materia = $materias->random();
+
+                if ($materia->cupos_disponibles === 0) {
+                    $materia = $materias->random();
+                }
+
                 Estudiante_materia::create([
                     'periodo_id' => Periodo::find(1)->id,
-                    'materia_id' => Materia::find(rand(1, 15))->id,
+                    'materia_id' => $materia->id,
                     'estudiante_id' => $estudiante->id,
                     'asistencia_id' => $asistencia->id,
                     'nota' => 0,
@@ -166,12 +174,15 @@ class UserSeeder extends Seeder
                     'validado' => 1,
                     'aprobado' => null
                 ]);
+
+                $materia = Materia::find($materia->id);
+                $materia->update(['cupos_disponibles' => $materia->cupos_disponibles - 1]);
             } else {
                 Profesor::create([
                     'usuario_id' => $usuario->id,
                     'conocimiento_id' => AreaConocimiento::find(rand(1, 10))->id,
                     'departamento_id' => PNF::find(rand(1, 11))->id,
-                    'telefono' => '0500' . rand(1000000, 2100000),
+                    'telefono' => '0500' . rand(1000000, 9999999),
                     'casa' => '1',
                     'calle' => '1',
                     'urb' => '1',

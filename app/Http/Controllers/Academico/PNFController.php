@@ -61,14 +61,17 @@ class PNFController extends Controller
         // Guarda el pnf
         PNF::create([
             'nom_pnf' => $request['nom_pnf'],
-            'cod_pnf' => $request['cod_pnf'] === null ? null : $request['cod_pnf'],
+            'cod_pnf' => $request['cod_pnf'] ?? null,
             'trayectos' => $request['trayectos']
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "PNF - ({$request['nom_pnf']})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró el PNF ({$request['nom_pnf']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('pnfs')->with('creado', 'creado');
@@ -113,14 +116,17 @@ class PNFController extends Controller
 
         PNF::find($id)->update([
             'nom_pnf' => $request['nom_pnf'],
-            'cod_pnf' => $request['cod_pnf'] === null ? '?' : $request['cod_pnf'],
+            'cod_pnf' => $request['cod_pnf'] ?? null,
             'trayectos' => $request['trayectos']
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "PNF - ({$request['nom_pnf']})",
-            'accion' => 'Se ha actualizado exitosamente',
-            'estado' => 'info'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó el PNF ({$request['nom_pnf']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('pnfs')->with('actualizado', 'actualizado');
@@ -134,11 +140,15 @@ class PNFController extends Controller
         $pnf = PNF::find($id);
         $pnf->delete();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "PNF - ({$pnf->nom_pnf})",
-            'accion' => 'Ha sido borrado',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró el PNF ({$pnf->nom_pnf}) exitosamente",
+            'estado' => 'warning',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
+
         return redirect()->back()->with('borrado', 'borrado');
     }
 }

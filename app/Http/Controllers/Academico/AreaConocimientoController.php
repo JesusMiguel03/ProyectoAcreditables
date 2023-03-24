@@ -54,10 +54,13 @@ class AreaConocimientoController extends Controller
             'desc_conocimiento' => $request['desc_conocimiento'],
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Área de conocimiento - ({$request['nom_conocimiento']})",
-            'accion' => 'Se ha registrado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Registró el área de conocimiento ({$request['nom_conocimiento']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('conocimientos')->with('creado', 'creado');
@@ -103,10 +106,13 @@ class AreaConocimientoController extends Controller
             'desc_conocimiento' => $request['desc_conocimiento']
         ]);
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Área de conocimiento - ({$request['nom_conocimiento']})",
-            'accion' => 'Se ha actualizado exitosamente',
-            'estado' => 'success'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Actualizó el área de conocimiento ({$request['nom_conocimiento']}) exitosamente",
+            'estado' => 'success',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect('conocimientos')->with('actualizado', 'actualizado');
@@ -120,10 +126,13 @@ class AreaConocimientoController extends Controller
         $area = AreaConocimiento::find($id);
         $area->delete();
 
+        $usuario = auth()->user();
+
         Bitacora::create([
-            'usuario' => "Área de conocimiento - ({$area->nom_conocimiento})",
-            'accion' => 'Ha sido borrada',
-            'estado' => 'warning'
+            'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+            'accion' => "Borró el área de conocimiento ({$area->nom_conocimiento}) exitosamente",
+            'estado' => 'warning',
+            'periodo_id' => periodo('modelo')->id ?? null
         ]);
 
         return redirect()->back()->with('borrado', 'borrado');

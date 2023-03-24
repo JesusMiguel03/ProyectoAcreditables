@@ -11,12 +11,12 @@
     <x-tipografia.titulo>Materias</x-tipografia.titulo>
 
     @can('materias.modificar')
-        <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="campoRegistrar" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
 
                     <header class="modal-header bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">Agregar materia</h5>
+                        <h5 class="modal-title" id="campoRegistrar">Agregar materia</h5>
                     </header>
 
                     <main class="modal-body">
@@ -111,7 +111,7 @@
                         <th>Categoría</th>
                         <th>Estado</th>
                         <th>Descripción</th>
-                        <th>Acreditable</th>
+                        <th {{ Popper::arrow()->pop('Número de la acreditable (trayecto)') }}>A</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -129,7 +129,7 @@
                         @endphp
 
                         <tr>
-                            <td> {{ $nombre }} </td>
+                            <td> {{ $nombre }} {{ $acreditable }} </td>
                             <td {{ Popper::arrow()->pop('Cupos disponibles') }}>{{ $cupos }} / {{ $cuposTotales }}
                             </td>
                             <td> {{ $categoria }} </td>
@@ -203,6 +203,93 @@
     @if (rol('Coordinador'))
         <script src="{{ asset('js/previsualizacion.js') }}"></script>
         <script src="{{ asset('js/borrar.js') }}"></script>
+
+        {{-- Validaciones --}}
+        <script>
+            const nombre = document.getElementById('nombre')
+            const cupos = document.getElementById('cupos')
+            const trayecto = document.getElementById('trayecto')
+            const descripcion = document.getElementById('descripcion')
+            const boton = document.getElementById('formularioEnviar')
+
+            boton.disabled = true
+
+            let [validacionNombre, validacionCupos, validacionTrayecto, validacionDescripcion] = [
+                false, false, false, false
+            ]
+
+            const enviarFormulario = () => {
+                if (validacionNombre && validacionCupos && validacionTrayecto && validacionDescripcion) {
+                    boton.removeAttribute('disabled')
+                } else {
+                    boton.disabled = true
+                }
+            }
+
+            nombre.addEventListener('input', (e) => {
+                let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+
+                if (nombre.value.length > 25) {
+                    nombre.value = nombre.value.slice(0, 25)
+                }
+
+                if (validacion.test(nombre.value) && nombre.value.length > 5 && nombre.value.length < 26) {
+                    nombre.classList.remove('is-invalid')
+                    validacionNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validacionNombre = false
+                }
+
+                enviarFormulario()
+            })
+
+            cupos.addEventListener('input', (e) => {
+                if (cupos.value > 50) {
+                    cupos.value = 50
+                }
+
+                if (cupos.value > 1 && cupos.value < 51) {
+                    cupos.classList.remove('is-invalid')
+                    validacionCupos = true
+                } else {
+                    cupos.classList.add('is-invalid')
+                    validacionCupos = false
+                }
+
+                enviarFormulario()
+            })
+
+            trayecto.addEventListener('change', (e) => {
+                if (trayecto.options[trayecto.selectedIndex].value > 0) {
+                    trayecto.classList.remove('is-invalid')
+                    validacionTrayecto = true
+                } else {
+                    trayecto.classList.add('is-invalid')
+                    validacionTrayecto = false
+                }
+
+                enviarFormulario()
+            })
+
+            descripcion.addEventListener('input', (e) => {
+                let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){7})[^_]+$/g
+
+                if (descripcion.value.length > 255) {
+                    descripcion.value = descripcion.value.slice(0, 255)
+                }
+
+                if (validacion.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length < 256) {
+                    descripcion.classList.remove('is-invalid')
+                    validacionDescripcion = true
+                } else {
+                    descripcion.classList.add('is-invalid')
+                    validacionDescripcion = false
+                }
+
+                enviarFormulario()
+            })
+        </script>
     @endif
 
     <script src="{{ asset('js/tablas.js') }}"></script>
@@ -239,7 +326,7 @@
                     confirmButton: 'btn btn-danger px-5'
                 },
             })
-            $('materias').modal('show')
+            $('#registrar').modal('show')
         @elseif ($message = session('inexistente'))
             Swal.fire({
                 icon: 'error',

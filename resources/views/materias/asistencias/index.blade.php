@@ -84,7 +84,7 @@
 
     {{-- Mensajes --}}
     <script>
-        @if ($message = session('registrado'))
+        @if (session('registrado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Asistencia registrada!',
@@ -94,7 +94,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('no puede participar'))
+        @elseif (session('no puede participar'))
             Swal.fire({
                 icon: 'warning',
                 title: '¡No puede cursar!',
@@ -106,6 +106,16 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-danger px-5'
+                },
+            })
+        @elseif (session('asistencia'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Asistencia actualizada!',
+                html: "{{ session('asistencia') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @endif

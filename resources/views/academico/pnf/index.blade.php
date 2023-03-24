@@ -37,7 +37,10 @@
 @section('content')
     <div class="col-12 mb-3">
         <div class="card table-responsive-sm p-3 mb-4">
-            <p class="text-muted text-center">Los PNF que no tengan código no serán mostrados en las estadísticas.</p>
+            <p>
+                <strong>Nota: </strong>
+                <span class="text-muted">Los PNF que no tengan código no serán mostrados en las estadísticas.</span>
+            </p>
 
             <div class="w-100 row mx-auto">
                 <div class="col-md-2 col">
@@ -61,10 +64,15 @@
 
                 <tbody>
                     @foreach ($pnfs as $pnf)
+                        @php
+                            $codigo = $pnf->cod_pnf ?? 'No cursa acreditable';
+                            $nombre = $pnf->nom_pnf;
+                            $trayectos = $pnf->trayectos === 0 ? '' : $pnf->trayectos;
+                        @endphp
                         <tr>
-                            <td>{{ $pnf->cod_pnf ?? 'No cursa acreditable' }}</td>
-                            <td>{{ $pnf->nom_pnf }}</td>
-                            <td>{{ $pnf->trayectos === 0 ? '' : $pnf->trayectos }}</td>
+                            <td>{{ $codigo }}</td>
+                            <td>{{ $nombre }}</td>
+                            <td>{{ $trayectos }}</td>
                             <td>
                                 <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                     <a href="{{ route('pnfs.edit', $pnf->id) }}" class="btn btn-primary"
@@ -74,7 +82,7 @@
 
                                     <button id="{{ $pnf->id }}" class="btn btn-danger borrar"
                                         {{ Popper::arrow()->pop('Borrar') }} data-type="PNF"
-                                        data-name="{{ $pnf->nom_pnf }}">
+                                        data-name="{{ $nombre }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -103,6 +111,82 @@
     {{-- Personalizados --}}
     <script src="{{ asset('js/tablas.js') }}"></script>
     <script src="{{ asset('js/borrar.js') }}"></script>
+
+    {{-- Validaciones --}}
+    <script>
+        const nombre = document.getElementById('nombre')
+        const codigo = document.getElementById('codigo')
+        const trayectos = document.getElementById('trayectos')
+        const boton = document.getElementById('formularioEnviar')
+
+        boton.disabled = true
+
+        let [validacionNombre, validacionCodigo, validacionTrayectos] = [false, true, false]
+
+        const validarFormulario = () => {
+            if (validacionNombre && validacionCodigo && validacionTrayectos) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        }
+
+        nombre.addEventListener('input', (e) => {
+            e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-ZÀ-ÿ\s]+$/, '')
+
+            if (e.currentTarget.value.length > 30) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            }
+
+            if (e.currentTarget.value.length > 5 && e.currentTarget.value.length < 31) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionNombre = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionNombre = false
+            }
+
+            validarFormulario()
+        })
+
+        codigo.addEventListener('input', (e) => {
+            e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9]+/, '')
+
+            if (e.currentTarget.value.length > 6) {
+                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            }
+
+            if (e.currentTarget.value.length === 0 || e.currentTarget.value.length > 3) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionCodigo = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionCodigo = false
+            }
+
+            validarFormulario()
+        })
+
+        trayectos.addEventListener('input', (e) => {
+            if (e.currentTarget.value > 10) {
+                e.currentTarget.value = 10
+            }
+
+            if (e.currentTarget.value < 1) {
+                e.currentTarget.value = 1
+            }
+
+            if (e.currentTarget.value > 0 && e.currentTarget.value < 11) {
+                e.currentTarget.classList.remove('is-invalid')
+                validacionTrayectos = true
+            } else {
+                e.currentTarget.classList.add('is-invalid')
+                validacionTrayectos = false
+            }
+
+            validarFormulario()
+        })
+    </script>
 
     {{-- Mensajes --}}
     <script>
