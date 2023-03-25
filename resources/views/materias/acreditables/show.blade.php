@@ -5,7 +5,7 @@
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
     <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
-    <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }} ({{ $materia->estado_materia }})</a></li>
+    <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }} {{ $materia->trayecto->num_trayecto }} ({{ $materia->estado_materia }})</a></li>
 @stop
 
 @section('content_header')
@@ -283,6 +283,7 @@
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/cambiarAcreditables.css') }}">
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/mensaje.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iconos/x.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
 @stop
 
 @section('js')

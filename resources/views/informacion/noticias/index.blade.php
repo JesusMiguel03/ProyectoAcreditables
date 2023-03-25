@@ -99,6 +99,7 @@
     <link rel="stylesheet" href="{{ asset('css/iconos/buscar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
 @stop
 
 @section('js')

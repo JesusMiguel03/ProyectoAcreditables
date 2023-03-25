@@ -53,7 +53,7 @@
                 <thead>
                     <tr class="bg-secondary">
                         <th>Pregunta</th>
-                        <th>Respuesta</th>
+                        <th style="width: 60%">Respuesta</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -123,6 +123,7 @@
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
 @stop
 
 @section('js')

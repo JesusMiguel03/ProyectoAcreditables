@@ -45,7 +45,8 @@
 
                                 <input type="password" id="nuevaContrasena" name="password"
                                     class="form-control @error('password') is-invalid @enderror"
-                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo." required>
+                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo."
+                                    required>
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -66,7 +67,8 @@
                             <div class="input-group">
                                 <input type="password" id="validarContrasena" name="password_confirmation"
                                     class="form-control @error('password_confirmation') is-invalid @enderror"
-                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo." required>
+                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo."
+                                    required>
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -84,7 +86,13 @@
                     </div>
                 </div>
 
-                <x-botones.actualizar />
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" id="actualizarSeguridad" class="btn btn-block btn-outline-primary">
+                            {{ __('Actualizar perfil ') }}
+                        </button>
+                    </div>
+                </div>
             </form>
         </div>
     </main>

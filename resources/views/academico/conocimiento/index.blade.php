@@ -86,6 +86,7 @@
     <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
     <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
     <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
 @stop
 
 @section('js')

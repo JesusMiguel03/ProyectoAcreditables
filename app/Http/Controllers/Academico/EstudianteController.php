@@ -39,9 +39,12 @@ class EstudianteController extends Controller
 
         // Lista solo a los estudiantes.
         foreach ($usuariosRegistrados as $usuario) {
-            if ($usuario->getRoleNames()[0] === 'Estudiante') {
+            if (count($usuario->getRoleNames()) > 0 && $usuario->getRoleNames()[0] === 'Estudiante') {
                 array_push($usuarios, $usuario);
             }
+            // if ($usuario->getRoleNames()[0] === 'Estudiante') {
+            //     array_push($usuarios, $usuario);
+            // }
         }
 
         return view('academico.estudiantes.index', compact('usuarios'));

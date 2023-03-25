@@ -11,43 +11,41 @@
 @section('adminlte_css')
     @stack('css')
     @yield('css')
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 @stop
 
 @section('classes_body'){{ ($auth_type ?? 'login') . '-page' }}@stop
 
 @section('body')
-    <div class="container-fluid bg-img">
-        <div class="col-sm-12 col-md-4 offset-md-8 {{ Route::is('login') ? 'login' : 'register' }}">
-            <div class="{{ $auth_type ?? 'login' }}-box">
+    <div class="{{ $auth_type ?? 'login' }}-box">
 
-                {{-- Logo --}}
-                <div class="{{ $auth_type ?? 'login' }}-logo overlay">
-                    <img src="{{ asset('vendor/img/logo.png') }}" alt="Logo de la UPTA" height="50">
-
-                    <h2>Coordinación de Acreditables</h2>
-                </div>
-
-                {{-- Card Box --}}
-                <div class="card">
-
-                    {{-- Card Header --}}
-                    @hasSection('auth_header')
-                        <div class="card-body login-card-body">
-                            <p class="login-box-msg">
-                                @yield('auth_header')
-                            </p>
-
-                            @yield('auth_body')
-
-                            @yield('auth_footer')
-                        </div>
-                    @endif
-
-                </div>
-
+        <div class="{{ $auth_type ?? 'login' }}-logo">
+            <div class="card rounded-circle mx-auto" style="height: 120px; width: 120px; text-align: center;">
+                <img src="{{ asset('vendor/img/logo.png') }}" alt="Logo de la UPTA" style="margin: auto;" height="90"
+                    width="70">
             </div>
+
+            <h2 class="text-white">Coordinación de Acreditables</h2>
         </div>
+
+        {{-- Card Box --}}
+        <div class="card">
+            {{-- Logo --}}
+
+            {{-- Card Header --}}
+            @hasSection('auth_header')
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">
+                        @yield('auth_header')
+                    </p>
+
+                    @yield('auth_body')
+
+                    @yield('auth_footer')
+                </div>
+            @endif
+
+        </div>
+
     </div>
 @stop
 

@@ -86,8 +86,6 @@
                 e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
             }
 
-            console.log(e.currentTarget.value.length)
-
             if (e.currentTarget.value.length === 0 || e.currentTarget.value.length > 3) {
                 e.currentTarget.classList.remove('is-invalid')
                 validacionCodigo = true

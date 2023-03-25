@@ -10,6 +10,13 @@
 @section('content_header')
     <x-tipografia.titulo>Materias</x-tipografia.titulo>
 
+    @if (!empty($materiaCursando))
+        <h5 class="text-center">Cursando (
+            <a href="{{ route('materias.show', $link) }}">{{ $materiaCursando }}</a>
+            )
+        </h5>
+    @endif
+
     @can('materias.modificar')
         <div class="modal fade" id="registrar" tabindex="-1" role="dialog" aria-labelledby="campoRegistrar" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -105,7 +112,7 @@
 
             <table id='tabla' class="table table-striped">
                 <thead>
-                    <tr class="bg-secondary">
+                    <tr class="bg-secondary w-100">
                         <th>Nombre</th>
                         <th>Cupos</th>
                         <th>Categoría</th>
@@ -182,6 +189,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/carousel/carousel.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
 
     {{-- Personalizados --}}
     @if (rol('Coordinador'))
@@ -279,7 +287,8 @@
                     descripcion.value = descripcion.value.slice(0, 255)
                 }
 
-                if (validacion.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length < 256) {
+                if (validacion.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length <
+                    256) {
                     descripcion.classList.remove('is-invalid')
                     validacionDescripcion = true
                 } else {
@@ -375,6 +384,16 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif ($message = session('perfilIncompleto'))
+            Swal.fire({
+                icon: 'warning',
+                title: '¡Perfil académico incompleto!',
+                html: "{{ session('perfilIncompleto') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-warning px-5'
                 },
             })
         @endif

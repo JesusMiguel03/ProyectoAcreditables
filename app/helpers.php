@@ -5,6 +5,7 @@ use App\Models\Informacion\Bitacora;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /**
  *  Valida si puede interactuar
@@ -66,12 +67,22 @@ if (!function_exists('validacion')) {
 
             $usuario = auth()->user();
 
-            Bitacora::create([
-                'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-                'accion' => "Formulario {$modelo}, tuvo los siguientes errores: {$errores}",
-                'estado' => 'danger',
-                'periodo_id' => periodo('modelo')->id ?? null
-            ]);
+            if (!empty($usuario)) {
+                Bitacora::create([
+                    'usuario' => "{$usuario->nombre} {$usuario->apellido}",
+                    'accion' => "Formulario {$modelo}, tuvo los siguientes errores: {$errores}",
+                    'estado' => 'danger',
+                    'periodo_id' => periodo('modelo')->id ?? null
+                ]);
+            } else {
+                Bitacora::create([
+                    'usuario' => "Un estudiante se intentó registrar",
+                    'accion' => "Formulario {$modelo}, tuvo los siguientes errores: {$errores}",
+                    'estado' => 'danger',
+                    'periodo_id' => periodo('modelo')->id ?? null
+                ]);
+            }
+
 
             return abort(redirect()->back()->with($errorFormulario, $validador->errors()->getMessages())->withErrors($validador)->withInput());
         }

@@ -19,8 +19,9 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Nombre</label>
+
                             <div class="input-group">
-                                <input type="text" name="nombre"
+                                <input type="text" id="nombre" name="nombre"
                                     class="form-control @error('nombre') is-invalid @enderror"
                                     value="{{ $usuario->nombre }}">
                                 <div class="input-group-append">
@@ -39,8 +40,9 @@
 
                         <div class="col-6">
                             <label>Apellido</label>
+
                             <div class="input-group">
-                                <input type="text" name="apellido"
+                                <input type="text" id="apellido" name="apellido"
                                     class="form-control @error('apellido') is-invalid @enderror"
                                     value="{{ $usuario->apellido }}">
 
@@ -65,11 +67,12 @@
                     <div class="form-row">
                         <div class="form-group col-4">
                             <label for="nacionalidad">Nacionalidad</label>
-                            <select name="nacionalidad"
+                            <select id="nacionalidad" name="nacionalidad"
                                 class="form-control @error('nacionalidad') is-invalid @enderror">
-                                <option value="V" {{ $usuario->nacionalidad === 'V' ? 'selected' : '' }}>V</option>
-                                <option value="E" {{ $usuario->nacionalidad === 'E' ? 'selected' : '' }}>E</option>
-                                <option value="P" {{ $usuario->nacionalidad === 'P' ? 'selected' : '' }}>P</option>
+                                <option value="0" readonly> Seleccione una...</option>
+                                <option value="1" {{ $usuario->nacionalidad === 'V' ? 'selected' : '' }}>V</option>
+                                <option value="2" {{ $usuario->nacionalidad === 'E' ? 'selected' : '' }}>E</option>
+                                <option value="3" {{ $usuario->nacionalidad === 'P' ? 'selected' : '' }}>P</option>
                             </select>
                         </div>
 
@@ -81,6 +84,7 @@
 
                         <div class="form-group col-8">
                             <label for="cedula">Cédula</label>
+
                             <div class="input-group">
                                 <input type="number" id="cedula" name="cedula"
                                     class="form-control @error('cedula') is-invalid @enderror"
@@ -105,9 +109,10 @@
 
                 <div class="form-group mb-3">
                     <label>Correo</label>
+
                     <div class="input-group">
-                        <input type="text" name="email" class="form-control @error('email') is-invalid @enderror"
-                            value="{{ $usuario->email }}">
+                        <input type="text" id="correo" name="email"
+                            class="form-control @error('email') is-invalid @enderror" value="{{ $usuario->email }}">
 
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -124,7 +129,13 @@
                     </div>
                 </div>
 
-                <x-botones.actualizar />
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" id="actualizarInformacion" class="btn btn-block btn-outline-primary">
+                            {{ __('Actualizar perfil ') }}
+                        </button>
+                    </div>
+                </div>
             </form>
         </div>
     </main>

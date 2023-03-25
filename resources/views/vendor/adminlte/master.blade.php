@@ -70,7 +70,13 @@
 
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data')>
+<body class="@yield('classes_body')" @yield('body_data')
+@if (Route::is('login') || Route::is('register'))
+    style="background-image: URL({{ asset('vendor/img/background.webp') }});
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;"
+@endif>
     {{-- Body Content --}}
     @yield('body')
 

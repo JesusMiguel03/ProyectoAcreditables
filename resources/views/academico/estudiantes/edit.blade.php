@@ -45,15 +45,13 @@
         const pnf = document.getElementById('pnf')
         const boton = document.getElementById('formularioEnviar')
 
-        const nacionalidades = ['V', 'E', 'P']
-
         // Validaciones de cada campo
         let [
             validacionNombre, validacionApellido, validarNacionalidad, validacionCedula, validacionTrayecto, validacionPnf
         ] = [
             nombre.value.length > 3 && nombre.value.length < 21,
             apellido.value.length > 3 && apellido.value.length < 21,
-            nacionalidades.includes(nacionalidad.options[nacionalidad.selectedIndex].value),
+            nacionalidad.options[nacionalidad.selectedIndex].value > 0,
             cedula.value.toString().length > 6 && cedula.value.toString().length < 9,
             trayecto.options[trayecto.selectedIndex].value > 0,
             pnf.options[pnf.selectedIndex].value > 0,
@@ -109,7 +107,7 @@
 
         nacionalidad.addEventListener('change', (e) => {
             // Valida que la nacionalidad sea V, E o P
-            if (nacionalidades.includes(nacionalidad.options[nacionalidad.selectedIndex].value)) {
+            if (nacionalidad.options[nacionalidad.selectedIndex].value > 0) {
                 validarNacionalidad = true
                 nacionalidad.classList.remove('is-invalid')
             } else {

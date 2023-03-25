@@ -24,11 +24,13 @@ class RegistrarUsuarioController extends Controller
         // Valida si tiene el permiso
         permiso('registrar.usuario');
 
+        $nacionalidades = [1 => 'V', 2 => 'E', 3 => 'P'];
+
         // Valida los campos
         $validar = Validator::make($request->all(), [
             'nombre' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.nombre')],
             'apellido' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.apellido')],
-            'nacionalidad' => ['required', 'string'],
+            'nacionalidad' => ['required', 'not_in:0'],
             'cedula' => ['required', 'numeric', 'digits_between:' . config('variables.usuarios.cedula')[0] . ',' . config('variables.usuarios.cedula')[1], 'unique:users'],
             'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), 'unique:users'],
             'password' => ['required', new Password, 'max: 8', 'confirmed'],
@@ -42,7 +44,7 @@ class RegistrarUsuarioController extends Controller
             'apellido.regex' => 'El apellido solo puede contener letras.',
             'apellido.max' => 'El apellido no debe tener más de :max caracteres.',
             'nacionalidad.required' => 'La nacionalidad es necesaria.',
-            'nacionalidad.string' => 'La nacionalidad debe ser una oración.',
+            'nacionalidad.not_in' => 'La nacionalidad debe ser una de la lista.',
             'cedula.required' => 'La cédula es necesaria.',
             'cedula.numeric' => 'La cédula debe ser un número.',
             'cedula.unique' => 'La cédula debe ser única.',
@@ -60,7 +62,7 @@ class RegistrarUsuarioController extends Controller
         User::create([
             'nombre' => $request->get('nombre'),
             'apellido' => $request->get('apellido'),
-            'nacionalidad' => $request->get('nacionalidad'),
+            'nacionalidad' => $nacionalidades[$request->get('nacionalidad')],
             'cedula' => $request->get('cedula'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),

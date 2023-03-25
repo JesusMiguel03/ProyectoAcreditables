@@ -88,8 +88,6 @@
             } else {
                 botonProfesor.disabled = true
             }
-
-            console.log(validarEstadoProfesor, validarDepartamento, validarConocimiento, validarEstado, validarCiudad, validarUrb, validarCalle, validarCasa, validarCodigo, validarTlf, validarNacimiento, validarIngreso)
         }
 
         estadoProfesor.addEventListener('change', (e) => {

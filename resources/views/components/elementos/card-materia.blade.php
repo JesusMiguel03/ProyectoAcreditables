@@ -40,7 +40,7 @@
         <main class="card-body">
             <div class="row px-2">
                 <h5 class="card-title mb-2 font-weight-bold">
-                    {{ $nombre }}
+                    {{ $nombre }} {{ $nro }}
                 </h5>
             </div>
 

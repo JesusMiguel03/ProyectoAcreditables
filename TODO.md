@@ -1,11 +1,67 @@
 ## **Actualización**
-[24/03/2023] *Macro Validations*
+[24/03/2023] *???*
 
-## **Trabajando en**
--   Tests.
+<!-- Validacion de correo -->
+const validarCorreo = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+
+correo.value = correo.value.replace(/[^@A-Za-z0-9._-]+/g, '')
+
+## **Validaciones del componente**
+-   Login:
+    ✔  Usuario no registrado.
+        ✔  Error de ingreso.
+    ✔  Usuario registrado.
+    ✔  Correo válido.
+
+-   Register:
+    ✔  Nombre válido.
+    ✔  Nombre no acepta espacios sin letras después.
+    ✔  Apellido válido.
+    ✔  Apellido no acepta espacios sin letras después.
+    ✔  Correo válido.
+    ✔  Correo único.
+    ✔  Cédula única.
+
+-   Materias:
+    ✔  Perfil académico incompleto.
+    ✔  Redirección si no tiene perfil académico.
+    ✔  Solo carga la materia inscrita.
+    ✔  Comprobante carga.
+    ✔  Si se busca un número mayor a la lista de inscripciones devuelve null.
+    ✔  Si se cambia de acreditable:
+        -   El comprobante se actualiza.
+        -   La información del perfil se actualiza.
+        -   La acreditable a mostrar se actualiza.
+
+-   Perfil:
+    -   Actualizar información:
+        ✔  Nombre validado.
+        ✔  Apellido validado.
+        ✔  Nacionalidad validada.
+        ✔  Cédula validada.
+        ✔  Correo validado.
+
+    -   Actualizar seguridad:
+        ✔  Contraseña actual validada.
+        ✔  Nueva contraseña validada.
+        ✔  Confirmar contraseña validada.
+    
+
+## **Pendiente**
+-   Materias/edit validaciones js.
+-   Materias acepta numeros negativos.
+-   Materias/edit, los select extra no deben ser obligatorios.
+
 ## **Changes**
-
-
+-   Login & register fixed.
+-   td width fixed (must check).
+-   Students@index (offset 0 error ?) fixed.
+-   FAQ@index table response width changed.
+-   Recover data@index CI form changed.
+-   Redirect if user hasn't academic profile.
+-   Login & register regex changed.
+-   Subject "number" added in title.
+-   Subject in progress in header added.
 
 ## **Prueba de caja blanca**
 # (*Proceso*: Inscripción de Estudiante)

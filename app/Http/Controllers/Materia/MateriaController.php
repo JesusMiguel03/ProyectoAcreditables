@@ -93,16 +93,19 @@ class MateriaController extends Controller
             $estudiante = $usuario->estudiante;
 
             // Datos académicos.
-            $trayecto = $estudiante->trayecto->id;
+            $trayecto = $estudiante->trayecto->id ?? null;
             $perfilAcademico = empty($estudiante->pnf) && empty($estudiante->trayecto);
 
             // Última inscripción del estudiante.
-            $estudianteInscrito = $estudiante->inscrito->last();
+            $estudianteInscrito = !empty($estudiante->inscrito) ? $estudiante->inscrito->last() : null;
+            $ultimaInscripcion = $estudianteInscrito;
 
             // Si ya se inscribió busca el periodo en que lo hizo.
             $periodoUltimaInscripcion = null;
 
-            if ($estudianteInscrito) $periodoUltimaInscripcion = $estudianteInscrito->periodoInscripcion()->formato();
+            if ($estudianteInscrito) {
+                $periodoUltimaInscripcion = $estudianteInscrito->periodoInscripcion()->formato();
+            }
 
             // No tiene perfil academico (Pnf y trayecto registrado).
             if ($perfilAcademico) {
@@ -144,6 +147,7 @@ class MateriaController extends Controller
                 $materias = Materia::where('trayecto_id', '=', $trayecto)
                     ->where(function ($query) {
                         $query->where('estado_materia', '=', 'Activo')
+                            ->orWhere('estado_materia', '=', 'En progreso')
                             ->orWhere('estado_materia', '=', 'Finalizado');
                     })->get();
 
@@ -163,7 +167,15 @@ class MateriaController extends Controller
 
                 $mostrar = 'noInscrito';
 
-                return view('materias.acreditables.index', compact('materias', 'mostrarTabla', 'mostrar'));
+                $materiaCursando = null;
+                $link = null;
+
+                if ($ultimaInscripcion) {
+                    $materiaCursando = $ultimaInscripcion->materia->nom_materia . ' ' . $ultimaInscripcion->materia->trayecto->num_trayecto;
+                    $link = $ultimaInscripcion->materia->id;
+                }
+
+                return view('materias.acreditables.index', compact('materias', 'mostrarTabla', 'mostrar', 'materiaCursando', 'link'));
             }
         }
     }
@@ -245,22 +257,31 @@ class MateriaController extends Controller
 
         // Valida que exista
         existe($materia);
-        
+
+        $usuario = auth()->user();
+        $estudiante = $usuario->estudiante;
+
         if (!rol('Coordinador') && $materia->estado_materia === 'Inactivo' || $materia->estado_materia === 'Descontinuado') {
             return redirect()->back()->with('inactivo', 'La acreditable que desea buscar no se encuentra activa.');
         }
-        
-        // Evita que el estudiante vea las materias que no coinciden con su trayecto
-        if (rol('Estudiante') && $materia->trayecto_id !== Auth::user()->estudiante->trayecto->id) {
-            return redirect()->back();
+
+        if (rol('Estudiante')) {
+            if (!($usuario->estudiante)) {
+                return redirect()->back()->with('perfilIncompleto', 'No puede cursar ninguna acreditable hasta que se registre su perfil académico. Comuníquese con el coodinador para actualizar su perfil.');
+            }
+
+            // Evita que el estudiante vea las materias que no coinciden con su trayecto
+            if ($materia->trayecto_id !== $usuario->estudiante->trayecto->id) {
+                return redirect()->back();
+            }
         }
+
+        $estudianteInscrito = !empty($estudiante->inscrito) ? $estudiante->inscrito->last() : null;
 
         // Trae a todos los estudiantes inscritos
         $inscritos = $materia->estudiantesPeriodoActual();
 
         $materia->actualizarCupos();
-
-        $usuario = auth()->user();
 
         Bitacora::create([
             'usuario' => "{$usuario->nombre} {$usuario->apellido}",
@@ -432,7 +453,7 @@ class MateriaController extends Controller
 
         $materia = Materia::find($id);
         $materia->delete();
-        
+
         $usuario = auth()->user();
 
         Bitacora::create([

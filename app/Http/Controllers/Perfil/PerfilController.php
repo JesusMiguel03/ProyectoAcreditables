@@ -61,6 +61,8 @@ class PerfilController extends Controller
 
         $usuario = Auth::user();
 
+        $nacionalidades = [1 => 'V', 2 => 'E', 3 => 'P'];
+
         $CImin = config('variables.usuarios.cedula')[0];
         $CImax = config('variables.usuarios.cedula')[1];
 
@@ -69,7 +71,7 @@ class PerfilController extends Controller
         $validar = Validator::make($request->all(), [
             'nombre' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.nombre')],
             'apellido' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.apellido')],
-            'nacionalidad' => ['required', 'string'],
+            'nacionalidad' => ['required', 'not_in:0'],
             'cedula' => ['required', 'numeric', 'digits_between:' . $CImin . ',' . $CImax, Rule::unique('users')->ignore($usuario->id)],
             'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), Rule::unique('users')->ignore($usuario->id)],
         ], [
@@ -104,7 +106,7 @@ class PerfilController extends Controller
         }
         if ($usuario->nacionalidad !== $request['nacionalidad']) {
             $cambios = true;
-            $usuario->update(['nacionalidad' => $request['nacionalidad']]);
+            $usuario->update(['nacionalidad' => $nacionalidades[$request['nacionalidad']]]);
         }
         if ($usuario->cedula !== intval($request['cedula'])) {
             $cambios = true;

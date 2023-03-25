@@ -101,21 +101,25 @@
         const correo = document.getElementById('correo')
 
         // Expresión regular para validar el formato del correo electrónico
-        const validarCorreo = /^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        const validarCorreo = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 
         correo.addEventListener('input', (e) => {
             // Validacion de correo y contraseña
-            let validacionCorreo = validarCorreo.test(e.currentTarget.value)
+            let validacionCorreo = validarCorreo.test(correo.value)
             let contrasenaValida = contrasena.value.length > 3 && contrasena.value.length < 9
 
             // Si el correo es mayor a 40 caracteres, se recorta a 40 caracteres
-            if (e.currentTarget.value.length > 40) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 40)
+            if (correo.value.length > 40) {
+                correo.value = correo.value.slice(0, 40)
             }
+
+            correo.value = correo.value.replace(/[^@A-Za-z0-9._-]+/g, '')
 
             // Si el correo es válido, se quita la clase 'is-invalid' para indicar que no hay errores
             if (validacionCorreo) {
-                e.currentTarget.classList.remove('is-invalid')
+                correo.classList.remove('is-invalid')
+            } else {
+                e.currentTarget.classList.add('is-invalid')
             }
 
             // Si el correo y la contraseña son válidos, se habilita el botón
@@ -128,17 +132,17 @@
         contrasena.addEventListener('input', (e) => {
             // Validacion de correo y contraseña
             let validacionCorreo = validarCorreo.test(correo.value)
-            let contrasenaValida = e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9
+            let contrasenaValida = contrasena.value.length > 3 && contrasena.value.length < 9
 
             // Si la contraseña es mayor a 8 caracteres, se recorta a 8 caracteres
-            if (e.currentTarget.value.length > 8) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
-                contrasenaValida = e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9
+            if (contrasena.value.length > 8) {
+                contrasena.value = contrasena.value.slice(0, 8)
+                contrasenaValida = contrasena.value.length > 3 && contrasena.value.length < 9
             }
 
             // Si la contraseña es válida, se quita la clase 'is-invalid' para indicar que no hay errores
             if (contrasenaValida) {
-                e.currentTarget.classList.remove('is-invalid')
+                contrasena.classList.remove('is-invalid')
             }
 
             // Si el correo y la contraseña son válidos, se habilita el botón

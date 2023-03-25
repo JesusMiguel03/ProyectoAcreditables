@@ -101,7 +101,6 @@
             nombre.value = nombre.value.replace(/[^a-zA-ZÀ-ÿ\s]+$/, '')
 
 
-
             if (nombre.value.length > 25) {
                 nombre.value = nombre.value.slice(0, 25)
             }

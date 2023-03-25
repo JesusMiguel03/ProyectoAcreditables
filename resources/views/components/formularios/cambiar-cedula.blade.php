@@ -6,17 +6,20 @@
         <x-perfil.card-titulo titulo="Cambiar cédula" />
 
         <main class="row">
-            <x-perfil.card-mensaje>
-                Para cambiar la cédula de un usuario, indique el correo correspondiente y la nueva cédula.
-            </x-perfil.card-mensaje>
+            <div class="col-12">
+                <p class="text-justify text-muted">
+                    Para cambiar la cédula de un usuario, indique el correo correspondiente y la nueva cédula.
+                </p>
+            </div>
 
-            <section class="col-md-7 col-sm-12">
+            <section class="col-12">
                 <article class="form-group mb-3">
                     <label for="usuario">Correo del usuario a restaurar</label>
 
                     <main class="input-group">
-                        <input type="text" id="correoCedula" name="correo" class="form-control @error('correo') is-invalid @enderror"
-                            value="{{ old('correo') }}" placeholder="correo@gmail.com"
+                        <input type="text" id="correoCedula" name="correo"
+                            class="form-control @error('correo') is-invalid @enderror" value="{{ old('correo') }}"
+                            placeholder="correo@gmail.com"
                             pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
                             title="Debe ser un correo válido." required autofocus>
 
@@ -38,8 +41,10 @@
                     <label for="usuario">Cédula</label>
 
                     <main class="input-group">
-                        <input type="number" id="cedula" name="cedula" placeholder="{{ __('Cédula, ej: 1021536') }}" class="form-control @error('cedula') is-invalid @enderror"
-                            value="{{ old('cedula') }}" required>
+                        <input type="number" id="cedula" name="cedula"
+                            placeholder="{{ __('Cédula, ej: 1021536') }}"
+                            class="form-control @error('cedula') is-invalid @enderror" value="{{ old('cedula') }}"
+                            required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">

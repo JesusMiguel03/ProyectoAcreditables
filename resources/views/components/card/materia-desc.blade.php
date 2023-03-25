@@ -10,6 +10,7 @@
     $cuposDisponibles = $materia->cupos_disponibles;
     $descripcion = $materia->desc_materia;
     $estadoMateria = $materia->estado_materia;
+    $acreditable = $materia->trayecto->id;
     
     // Relacion
     $materiaProfesor = $materia->profesorEncargado();
@@ -33,31 +34,54 @@
         $estudianteID = $estudiante->id;
         $estudianteMateriaID = $inscrito->materia_id ?? null;
         $estadoMateriaActual = $inscrito->materia->estado_materia ?? null;
-    
+
         $acreditableInscrita = $estudianteMateriaID === $materiaID;
+    
+        /**
+         * Si el número de la acreditable coincide con el trayecto del estudiante.
+         * Además de haber aprobado la acreditable anterior.
+         * Y su trayecto actual es mayor al número de la acreditable anterior.
+         *
+         * Se considera que puede cursar la siguiente acreditable.
+         */
+        $estudianteTrayecto = $estudiante->trayecto->id;
+        $trayectoCoincideConAcreditable = $materia->trayecto->id === $estudianteTrayecto;
+        $estudianteAprobado = $inscrito->aprobado ?? null;
+        $trayectoInscripcion = $inscrito->materia->trayecto->id ?? null;
+        $trayectoSuperiorAUltimaAcreditable = $trayectoInscripcion < $estudianteTrayecto ?? null;
+    
+        $siguienteAcreditable = $trayectoCoincideConAcreditable && $estudianteAprobado && $trayectoSuperiorAUltimaAcreditable;
     }
     
     $descripcionLarga = Str::length($descripcion) > 100;
     
-    if ($periodoFinalizado) {
-        $mensaje = 'No puede inscribirse debido a que el periodo ha finalizado';
+    $materiaAprobada = $inscrito->materia->id ?? null;
+    
+    $mostrarCambiarAcreditable = $estadoMateriaActual !== 'En progreso' || $cuposDisponibles > 0;
+
+    if ($materiaID === $materiaAprobada && $inscrito->aprobado) {
+        $mensaje = "Usted ha aprobado la materia con {$inscrito->nota} ptos.";
     } else {
-        if ($estadoMateria !== 'Finalizado' && $estadoMateria !== 'Inactivo') {
-            $mensaje = '';
-    
-            if (!$acreditableInscrita && $estadoMateriaActual === 'En progreso') {
-                $mensaje = 'La acreditable que se encuentra cursando ya ha empezado, no puede cambiarse de acreditable.';
-            }
-    
-            if (!$acreditableInscrita && $estadoMateria === 'En progreso') {
-                $mensaje = 'Esta acreditable se encuentra en curso, no puede inscribirse en ella.';
-            }
-    
-            if ($acreditableInscrita) {
-                $mensaje = 'Se encuentra inscrito en esta acreditable.';
-            }
+        if ($periodoFinalizado) {
+            $mensaje = 'No puede inscribirse debido a que el periodo ha finalizado';
         } else {
-            $mensaje = 'Esta acreditable se encuentra finalizada.';
+            if ($estadoMateria !== 'Finalizado' && $estadoMateria !== 'Inactivo') {
+                $mensaje = '';
+    
+                if (!$acreditableInscrita && $estadoMateriaActual === 'En progreso') {
+                    $mensaje = 'La acreditable que se encuentra cursando ya ha empezado, no puede cambiarse de acreditable.';
+                }
+    
+                if (!$acreditableInscrita && $estadoMateria === 'En progreso') {
+                    $mensaje = 'Esta acreditable se encuentra en curso, no puede inscribirse en ella.';
+                }
+    
+                if ($acreditableInscrita) {
+                    $mensaje = 'Se encuentra inscrito en esta acreditable.';
+                }
+            } else {
+                $mensaje = 'Esta acreditable se encuentra finalizada.';
+            }
         }
     }
 @endphp
@@ -89,7 +113,14 @@
                         <form id="form" action="{{ route('inscripcion.store') }}" method="post">
                             @csrf
 
-                            @if ($aprobado !== null || !$estudianteInscrito)
+                            {{-- 
+                                1.- Si el estudiante puede cursar la siguiente acreditable.
+                                2.- Reprobó la acreditable.
+                                3.- No está inscrito.
+
+                                Si alguna de esas 3 se cumple podrá inscribirse.
+                            --}}
+                            @if ($siguienteAcreditable || $aprobado === false || !$estudianteInscrito)
                                 <input type="number" name="estudiante_id" class="d-none" value="{{ $estudianteID }}"
                                     hidden>
                                 <input type="number" name="materia_id" class="d-none" value="{{ $materiaID }}" hidden>
@@ -101,19 +132,22 @@
                                 </button>
                             @elseif ($estudianteInscrito)
                                 <section class="row {{ $descripcionLarga ? 'mt-n2' : '' }}">
-                                    <article class="col-6">
+                                    <article class="col-{{ $mostrarCambiarAcreditable ? '6' : '12' }}">
                                         <a href="{{ route('materias.show', $estudianteMateriaID) }}"
                                             class="btn btn-block btn-secondary">
                                             Ver acreditable inscrita
                                         </a>
                                     </article>
 
-                                    <article class="col-6">
-                                        <button id="cambiarAcreditable" data-id="{{ $estudianteID }}"
-                                            data-materia="{{ $materiaID }}" class="btn btn-block btn-outline-warning">
-                                            Cambiar de acreditable
-                                        </button>
-                                    </article>
+                                    @if ($mostrarCambiarAcreditable)
+                                        <article class="col-6">
+                                            <button id="cambiarAcreditable" data-id="{{ $estudianteID }}"
+                                                data-materia="{{ $materiaID }}"
+                                                class="btn btn-block btn-outline-warning">
+                                                Cambiar de acreditable
+                                            </button>
+                                        </article>
+                                    @endif
                                 </section>
                             @endif
 

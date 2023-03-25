@@ -70,15 +70,15 @@ class Materia extends Model
 
     public function estudiantesPeriodoActual()
     {
-        $periodo = explode('-', periodo())[1] ?? null;
+        $periodo = periodo('modelo')->id ?? null;
         $estudiantes = $this->estudiantes;
 
         $inscritos = [];
 
         foreach ($estudiantes as $estudiante) {
-            $periodo === Carbon::parse($estudiante->created_at)->format('Y')
-                ? array_push($inscritos, $estudiante)
-                : '';
+            if ($estudiante->periodo_id === $periodo) {
+                array_push($inscritos, $estudiante);
+            }
         }
 
         return $inscritos;

@@ -68,7 +68,12 @@ class Estudiante extends Model
     {
         $comprobantes = $this->inscrito;
 
-        return $comprobantes[$n - 1];
+        if (count($comprobantes) >= $n - 1) {
+            return $comprobantes[$n - 1];
+        } else {
+            return null;
+        }
+
     }
 
     /**

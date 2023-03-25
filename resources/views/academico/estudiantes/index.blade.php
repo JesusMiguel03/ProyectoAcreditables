@@ -171,9 +171,6 @@
             } else {
                 botonUsuario.disabled = true
             }
-
-            console.log(validacionNombre, validacionApellido, validarNacionalidad, validacionCedula, validacionCorreo, validacionContrasena,
-            validacionConfirmarContrasena)
         }
 
         nombre.addEventListener('input', (e) => {
