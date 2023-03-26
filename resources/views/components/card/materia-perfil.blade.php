@@ -9,7 +9,7 @@
         $profesorAvatar = $profesor->avatar();
     }
 
-    $avatar = !empty($profesorAvatar) ? "vendor/img/avatares/avatar{$profesorAvatar}.webp": 'vendor/img/defecto/usuario.webp';
+    $avatar = !empty($profesorAvatar) ? "vendor/img/avatares/{$profesorAvatar}.webp": 'vendor/img/defecto/usuario.webp';
     
     if (rol('Estudiante')) {
         $altura = '7.133rem';

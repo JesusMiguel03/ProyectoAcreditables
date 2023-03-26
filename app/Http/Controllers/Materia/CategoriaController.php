@@ -32,6 +32,12 @@ class CategoriaController extends Controller
         // Valida si tiene el permiso
         permiso('categorias');
 
+        $categoriaBorrada = Categoria::withTrashed()->where('nom_categoria', '=', $request['nom_categoria'])->where('deleted_at', '!=', null)->first() ?? null;
+
+        if ($categoriaBorrada) {
+            return redirect()->back()->with('elementoBorrado', 'El PNF que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');
+        }
+
         $validador = Validator::make($request->all(), [
             'nom_categoria' => ['required', 'string', 'regex: /[A-zÀ-ÿ0-9\s]+/', 'max:' . config('variables.categorias.nombre'), 'unique:categorias,nom_categoria,' . $request['nom_categoria']]
         ], [

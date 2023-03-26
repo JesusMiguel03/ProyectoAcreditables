@@ -4,7 +4,13 @@
 
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
-    <li class="breadcrumb-item active"><a href="">Asistencias</a></li>
+
+    @if (Route::is('asistencias.show'))
+        <li class="breadcrumb-item"><a href="{{ route('asistencias.index') }}" class="link-muted">Asistencias</a></li>
+        <li class="breadcrumb-item active"><a href="">Periodo {{ $periodoSeleccionado->formato() }}</a></li>
+    @else
+        <li class="breadcrumb-item active"><a href="">Asistencias</a></li>
+    @endif
 @stop
 
 @section('content_header')
@@ -13,6 +19,43 @@
 
 @section('content')
     <div class="card col-12 table-responsive-sm p-3 mt-1 mb-3">
+
+        <div class="col-6 mb-4">
+            <form id="form" action="" method="get">
+                @csrf
+
+                <div class="form-row">
+                    <label for="periodo">Periodo</label>
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <select id="periodo" name="perido" class="form-control">
+                            <option value="0" readonly>Seleccione uno...</option>
+
+                            @if (Route::is('asistencias.show'))
+                                @foreach ($periodos as $periodo)
+                                    <option value="{{ $periodo->id }}"
+                                        {{ $periodoSeleccionado->id === $periodo->id ? 'selected' : '' }}>
+                                        {{ $periodo->formato() }}</option>
+                                @endforeach
+                            @else
+                                @foreach ($periodos as $periodo)
+                                    <option value="{{ $periodo->id }}">
+                                        {{ $periodo->formato() }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="col">
+                        <button id="enviar" class="btn btn-block btn-primary" disabled>Buscar</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
         <table id='tabla' class="table table-striped">
             <thead>
                 <tr class="bg-secondary">
@@ -81,6 +124,38 @@
 
     {{-- Personalizados --}}
     <script src="{{ asset('/js/tablas.js') }}"></script>
+
+    {{-- Validaciones --}}
+    <script>
+        const inputPeriodos = document.getElementById('periodo');
+        const boton = document.getElementById('enviar')
+        const form = document.getElementById('form')
+
+        const url = "{{ route('asistencias.show') }}"
+
+        let periodo = inputPeriodos.options[inputPeriodos.selectedIndex].value || 0;
+        let periodoSeleccionado = inputPeriodos.options[inputPeriodos.selectedIndex].value
+
+        // Cuando se selecciona un periodo x
+        inputPeriodos.addEventListener('change', (e) => {
+            periodo = e.currentTarget.options[inputPeriodos.selectedIndex].value;
+
+            // Si es valido o mayor a 0 se puede buscar
+            periodo > 0 && periodo !== periodoSeleccionado ?
+                boton.removeAttribute('disabled') :
+                boton.disabled = true
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+
+            // Si el periodo es mayor a 0 busca el historial por periodo
+            if (periodo > 0 && periodo !== periodoSeleccionado) {
+                form.action = `${url}/${periodo}`
+                form.submit()
+            }
+        })
+    </script>
 
     {{-- Mensajes --}}
     <script>

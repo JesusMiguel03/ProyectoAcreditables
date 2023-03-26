@@ -80,17 +80,17 @@
         }
 
         cedula.addEventListener('input', (e) => {
-            e.currentTarget.value = e.currentTarget.value.replace('e', '')
-
-            if (e.currentTarget.value.toString().length > 8) {
-                e.currentTarget.value = e.currentTarget.value.toString().slice(0, 8)
+            cedula.value = cedula.value.replace('e', '')
+            
+            if (cedula.value.toString().length > 8) {
+                cedula.value = cedula.value.toString().slice(0, 8)
             }
             
-            if (e.currentTarget.value.toString().length > 6 && e.currentTarget.value.toString().length < 9) {
-                e.currentTarget.classList.remove('is-invalid')
+            if (cedula.value.toString().length > 6 && cedula.value.toString().length < 9) {
+                cedula.classList.remove('is-invalid')
                 validacionCedula = true
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                cedula.classList.add('is-invalid')
                 validacionCedula = false
             }
 

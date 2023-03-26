@@ -83,7 +83,7 @@
             }
 
             if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
-                if (nombre.value.length > 3 && nombre.value.length < 21) {
+                if (nombre.value.length > 2 && nombre.value.length < 21) {
                     nombre.classList.remove('is-invalid')
                     validacionNombre = true
                 } else {
@@ -107,7 +107,7 @@
             }
 
             if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(apellido.value)) {
-                if (apellido.value.length > 3 && apellido.value.length < 21) {
+                if (apellido.value.length > 2 && apellido.value.length < 21) {
                     apellido.classList.remove('is-invalid')
                     validacionApellido = true
                 } else {
@@ -123,7 +123,7 @@
         })
 
         nacionalidad.addEventListener('change', (e) => {
-            if (nacionalidad.options[nacionalidad.selectedIndex].value > 0) {
+            if (nacionalidades.includes(nacionalidad.options[nacionalidad.selectedIndex].value)) {
                 validacionNacionalidad = true
                 nacionalidad.classList.remove('is-invalid')
             } else {
@@ -134,7 +134,6 @@
             formularioValidado()
         })
 
-        // Si la cédula es mayor a 8 dígitos elimina a apartir del 9
         cedula.addEventListener('input', (e) => {
             if (cedula.value.toString().length > 8) {
                 cedula.value = cedula.value.toString().slice(0, 8)

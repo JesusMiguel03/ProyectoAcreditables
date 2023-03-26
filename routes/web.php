@@ -153,6 +153,7 @@ Route::controller(AsistenciaController::class)->group(function () {
     Route::get('/asistencias', 'index')->name('asistencias.index');
     Route::get('/asistencias/{id}', 'edit')->name('asistencias.edit');
     Route::put('/asistencias/{id}/actualizar', 'update')->name('asistencias.update');
+    Route::get('/asistencias/periodo/{periodo_id?}', 'show')->name('asistencias.show');
 });
 
 // 2.Estadísticas

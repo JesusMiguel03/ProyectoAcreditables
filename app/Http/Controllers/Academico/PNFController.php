@@ -33,7 +33,7 @@ class PNFController extends Controller
         // Valida si tiene el permiso
         permiso('academico');
 
-        $pnfBorrado = PNF::withTrashed()->where('nom_pnf', '=', $request['nom_pnf'])->first() ?? null;
+        $pnfBorrado = PNF::withTrashed()->where('nom_pnf', '=', $request['nom_pnf'])->where('deleted_at', '!=', null)->first() ?? null;
 
         if ($pnfBorrado) {
             return redirect()->back()->with('elementoBorrado', 'El PNF que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');

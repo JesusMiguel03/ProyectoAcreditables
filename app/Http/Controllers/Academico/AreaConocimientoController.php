@@ -33,15 +33,22 @@ class AreaConocimientoController extends Controller
         // Valida si tiene el permiso
         permiso('materias.modificar');
 
+        $conocimientoBorrado = AreaConocimiento::withTrashed()->where('nom_conocimiento', '=', $request['nom_conocimiento'])->where('deleted_at', '!=', null)->first() ?? null;
+
+        if ($conocimientoBorrado) {
+            return redirect()->back()->with('elementoBorrado', 'El área de conocimiento que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');
+        }
+
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfanumespacio'), 'max:' . config('variables.conocimiento.nombre')],
+            'nom_conocimiento' => ['required', 'string', 'regex:' . config('variables.regex.alfanumespacio'), 'max:' . config('variables.conocimiento.nombre'), 'unique:conocimientos,nom_conocimiento'],
             'desc_conocimiento' => ['required', 'string', 'max:' . config('variables.conocimiento.descripcion')]
         ], [
             'nom_conocimiento.required' => 'El nombre es necesario.',
             'nom_conocimiento.string' => 'El nombre debe ser una oración.',
             'nom_conocimiento.regex' => 'El nombre  solo puede contener caracteres alfanuméricos.',
             'nom_conocimiento.max' => 'El nombre no debe tener más de :max caracteres.',
+            'nom_conocimiento.unique' => "El nombre ({$request['nom_conocimiento']}) ya ha sido registrado",
             'desc_conocimiento.required' => 'La descripción es necesario.',
             'desc_conocimiento.string' => 'La descripción debe ser una oración.',
             'desc_conocimiento.max' => 'La descripción no debe tener más de :max caracteres.',

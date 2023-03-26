@@ -110,19 +110,70 @@
     {{-- Validaciones --}}
     <script>
         const fase = document.getElementById('fase')
+        const inicio = document.getElementById('inputInicio')
+        const fin = document.getElementById('inputFin')
+        const boton = document.getElementById('formularioEnviar')
+
+        let [validacionFase, validacionInicio, validacionFin] = [
+            fase.value > 0 && fase.value < 4,
+            inicio.value.length !== 0,
+            fin.value.length !== 0
+        ]
+
+        const validarFormulario = () => {
+            if (validacionFase && validacionInicio && validacionFin) {
+                boton.removeAttribute('disabled')
+            } else {
+                boton.disabled = true
+            }
+        }
+
+        validarFormulario()
 
         fase.addEventListener('input', (e) => {
-            if (e.currentTarget.value > 3) {
-                e.currentTarget.value = 3
+            fase.value = fase.value.replace('e', '')
 
-                validacionFase = true
+            if (fase.value > 3) {
+                fase.value = 3
             }
 
-            if (e.currentTarget.value < 0) {
-                e.currentTarget.value = 1
-
-                validacionFase = true
+            if (fase.value < 1) {
+                fase.value = 1
             }
+
+            if (fase.value > 0 && fase.value < 4) {
+                validacionFase = true
+                fase.classList.remove('is-invalid')
+            } else {
+                validacionFase = false
+                fase.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        inicio.addEventListener('blur', (e) => {
+            if (inicio.value.length !== 0) {
+                validacionInicio = true
+                inicio.classList.remove('is-invalid')
+            } else {
+                validacionInicio = false
+                inicio.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        fin.addEventListener('blur', (e) => {
+            if (fin.value.length !== 0) {
+                validacionFin = true
+                fin.classList.remove('is-invalid')
+            } else {
+                validacionFin = false
+                fin.classList.add('is-invalid')
+            }
+
+            validarFormulario()
         })
     </script>
 

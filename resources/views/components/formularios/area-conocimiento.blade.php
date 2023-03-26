@@ -9,9 +9,9 @@
     <div class="input-group">
         <input type="text" id="nombre" name="nom_conocimiento"
             class="form-control @error('nom_conocimiento') is-invalid @enderror"
-            value="{{ $nombre ?? old('nom_conocimiento') }}"
-            placeholder="{{ __('Nombre del área, ej: Contaduría') }}" maxlength="{{ config('variables.conocimiento.nombre') }}" 
-            pattern="[A-zÀ-ÿ\s]+" title="Solo debe contener letras y/o espacios." autofocus required>
+            value="{{ $nombre ?? old('nom_conocimiento') }}" placeholder="{{ __('Nombre del área, ej: Contaduría') }}"
+            maxlength="{{ config('variables.conocimiento.nombre') }}" pattern="[A-zÀ-ÿ\s]+"
+            title="Solo debe contener letras y/o espacios." autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -31,8 +31,11 @@
 <div class="form-group required mb-3">
     <label for="desc_conocimiento" class="control-label">Descripción</label>
     <div class="input-group">
-        <textarea id="descripcion" name="desc_conocimiento" class="form-control @error('desc_conocimiento') is-invalid @enderror descripcion" spellcheck="false"
-            placeholder="{{ __('Descripción, ej: Manejo de cuentas contables') }}" maxlength="{{ config('variables.conocimiento.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números."  required>{{ $descripcion ?? old('desc_conocimiento') }}</textarea>
+        <textarea id="descripcion" name="desc_conocimiento"
+            class="form-control @error('desc_conocimiento') is-invalid @enderror descripcion" spellcheck="false"
+            placeholder="{{ __('Descripción, ej: Manejo de cuentas contables') }}"
+            maxlength="{{ config('variables.conocimiento.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+            title="Debe contener letras, espacios y/o números." required>{{ $descripcion ?? old('desc_conocimiento') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -52,7 +55,35 @@
 
 
 @if (Route::is('conocimientos.edit'))
-    <x-modal.footer-editar ruta="{{ route('conocimientos.index') }}" />
+    <div class="row">
+        <div class="col-6">
+            <a href="{{ route('conocimientos.index') }}" class="btn btn-block btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Volver') }}
+            </a>
+        </div>
+
+        <div class="col-6">
+            <button type="submit" id="formularioEnviar" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @else
-    <x-modal.footer-aceptar />
+    <div class="row">
+        <div class="col-6">
+            <button id="cancelar" type="button" class="btn btn-block btn-secondary" data-dismiss="modal">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Cancelar') }}
+            </button>
+        </div>
+
+        <div class="col-6">
+            <button id="formularioEnviar" type="submit" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @endif

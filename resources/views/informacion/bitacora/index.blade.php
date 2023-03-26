@@ -25,7 +25,7 @@
                 <div class="form-row">
                     <div class="col">
                         <select id="periodo" name="perido" class="form-control">
-                            <option value="0" readonly>Seleccione uno...</option>
+                            <option value="0" disabled readonly>Seleccione uno...</option>
 
                             @foreach ($periodos as $periodo)
                                 <option value="{{ $periodo->id }}">{{ $periodo->formato() }}</option>
@@ -98,13 +98,14 @@
         const url = "{{ route('bitacora.show') }}"
 
         let periodo = inputPeriodos.options[inputPeriodos.selectedIndex].value || 0;
+        let periodoSeleccionado = periodo
 
         // Cuando se selecciona un periodo x
         inputPeriodos.addEventListener('change', (e) => {
             periodo = e.currentTarget.options[inputPeriodos.selectedIndex].value;
 
             // Si es valido o mayor a 0 se puede buscar
-            periodo > 0 ?
+            periodo > 0 && periodo !== periodoSeleccionado ?
                 boton.removeAttribute('disabled') :
                 boton.disabled = true
         });
@@ -113,7 +114,7 @@
             e.preventDefault()
 
             // Si el periodo es mayor a 0 busca el historial por periodo
-            if (periodo > 0) {
+            if (periodo > 0 && periodo !== periodoSeleccionado) {
                 form.action = `${url}/${periodo}`
                 form.submit()
             }

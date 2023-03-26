@@ -57,9 +57,9 @@
             <select name="nacionalidad" id="nacionalidad"
                 class="form-control @error('nacionalidad') is-invalid @enderror" required>
                 <option value="0" readonly>Seleccione uno...</option>
-                <option value="1">V</option>
-                <option value="2">E</option>
-                <option value="3">P</option>
+                <option value="V">V</option>
+                <option value="E">E</option>
+                <option value="P">P</option>
             </select>
 
             @error('nacionalidad')

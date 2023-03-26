@@ -47,6 +47,10 @@
 
     {{-- Validaciones --}}
     <script>
+        const nombre = document.getElementById('nombre')
+        const apellido = document.getElementById('apellido')
+        const nacionalidad = document.getElementById('nacionalidad')
+        const cedula = document.getElementById('cedula')
         const departamento = document.getElementById('departamento')
         const conocimiento = document.getElementById('conocimiento')
         const estado = document.getElementById('estado')
@@ -61,11 +65,17 @@
         const estadoProfesor = document.getElementById('estadoProfesor')
         const botonProfesor = document.getElementById('formularioEnviar')
 
-        botonProfesor.disabled = true
+        const nacionalidades = ['V', 'E', 'P']
 
         let [
-            validarEstadoProfesor, validarDepartamento, validarConocimiento, validarEstado, validarCiudad, validarUrb, validarCalle, validarCasa, validarCodigo, validarTlf, validarNacimiento, validarIngreso
+            validacionNombre, validacionApellido, validacionNacionalidad, validacionCedula,
+            validarEstadoProfesor, validarDepartamento, validarConocimiento, validarEstado, validarCiudad, validarUrb,
+            validarCalle, validarCasa, validarCodigo, validarTlf, validarNacimiento, validarIngreso
         ] = [
+            nombre.value.length > 2 && nombre.value.length < 21,
+            apellido.value.length > 2 && apellido.value.length < 21,
+            nacionalidades.includes(nacionalidad.options[nacionalidad.selectedIndex].value),
+            cedula.value.toString().length > 6 && cedula.value.toString().length < 9,
             estadoProfesor.options[estadoProfesor.selectedIndex].value > 0,
             departamento.options[departamento.selectedIndex].value > 0,
             conocimiento.options[conocimiento.selectedIndex].value > 0,
@@ -76,12 +86,13 @@
             casa.value.length > 3 && casa.value.length < 11,
             codigo.options[codigo.selectedIndex].value > 0,
             tlf.value.length === 7,
-            nacimiento.value.length > 0,
-            ingreso.value.length > 0
+            nacimiento.value.length !== 0,
+            ingreso.value.length !== 0
         ]
 
         const validarFormulario = () => {
-            if (validarEstadoProfesor && validarDepartamento && validarConocimiento && validarEstado && validarCiudad &&
+            if (validacionNombre && validacionApellido && validacionNacionalidad && validacionCedula &&
+                validarEstadoProfesor && validarDepartamento && validarConocimiento && validarEstado && validarCiudad &&
                 validarUrb && validarCalle && validarCasa && validarCodigo && validarTlf && validarNacimiento &&
                 validarIngreso) {
                 botonProfesor.removeAttribute('disabled')
@@ -90,55 +101,130 @@
             }
         }
 
-        estadoProfesor.addEventListener('change', (e) => {
-            let estadoProfesorSeleccionado = e.currentTarget.options[e.currentTarget.selectedIndex].value || 0
+        validarFormulario()
 
-            if (estadoProfesorSeleccionado > 0) {
+        estadoProfesor.addEventListener('change', (e) => {
+            if (estadoProfesor.options[estadoProfesor.selectedIndex].value > 0) {
                 validarEstadoProfesor = true
-                e.currentTarget.classList.remove('is-invalid')
+                estadoProfesor.classList.remove('is-invalid')
             } else {
                 validarEstadoProfesor = false
-                e.currentTarget.classList.add('is-invalid')
+                estadoProfesor.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        nombre.addEventListener('input', (e) => {
+            nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            nombre.value = nombre.value.replace(/ {2,}/g, '')
+
+            if (nombre.value.length > 20) {
+                nombre.value = nombre.value.slice(0, 20)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                if (nombre.value.length > 2 && nombre.value.length < 21) {
+                    nombre.classList.remove('is-invalid')
+                    validacionNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validacionNombre = false
+                }
+            } else {
+                nombre.classList.add('is-invalid')
+                validacionNombre = false
+            }
+
+            validarFormulario()
+        })
+
+        apellido.addEventListener('input', (e) => {
+            apellido.value = apellido.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            apellido.value = apellido.value.replace(/ {2,}/g, '')
+
+            if (apellido.value.length > 20) {
+                apellido.value = apellido.value.slice(0, 20)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(apellido.value)) {
+                if (apellido.value.length > 2 && apellido.value.length < 21) {
+                    apellido.classList.remove('is-invalid')
+                    validacionApellido = true
+                } else {
+                    apellido.classList.add('is-invalid')
+                    validacionApellido = false
+                }
+            } else {
+                apellido.classList.add('is-invalid')
+                validacionApellido = false
+            }
+
+            validarFormulario()
+        })
+
+        nacionalidad.addEventListener('change', (e) => {
+            if (nacionalidades.includes(nacionalidad.options[nacionalidad.selectedIndex].value)) {
+                validacionNacionalidad = true
+                nacionalidad.classList.remove('is-invalid')
+            } else {
+                validacionNacionalidad = false
+                nacionalidad.classList.add('is-invalid')
+            }
+
+            validarFormulario()
+        })
+
+        cedula.addEventListener('input', (e) => {
+            if (cedula.value.toString().length > 8) {
+                cedula.value = cedula.value.toString().slice(0, 8)
+            }
+
+            cedula.value = cedula.value.toString().replace('e', '')
+
+            // Si la cédula tiene entre 7 y 8 digitos
+            if (cedula.value.toString().length > 6 && cedula.value.toString().length < 9) {
+                cedula.classList.remove('is-invalid')
+                validacionCedula = true
+            } else {
+                cedula.classList.add('is-invalid')
+                validacionCedula = false
             }
 
             validarFormulario()
         })
 
         departamento.addEventListener('change', (e) => {
-            let departamentoSeleccionado = e.currentTarget.options[e.currentTarget.selectedIndex].value || 0
-
-            if (departamentoSeleccionado > 0) {
+            if (departamento.options[departamento.selectedIndex].value > 0) {
                 validarDepartamento = true
-                e.currentTarget.classList.remove('is-invalid')
+                departamento.classList.remove('is-invalid')
             } else {
                 validarDepartamento = false
-                e.currentTarget.classList.add('is-invalid')
+                departamento.classList.add('is-invalid')
             }
 
             validarFormulario()
         })
 
         conocimiento.addEventListener('change', (e) => {
-            let conocimientoSeleccionado = e.currentTarget.options[e.currentTarget.selectedIndex].value || 0
-
-            if (conocimientoSeleccionado > 0) {
+            if (conocimiento.options[conocimiento.selectedIndex].value > 0) {
                 validarConocimiento = true
-                e.currentTarget.classList.remove('is-invalid')
+                conocimiento.classList.remove('is-invalid')
             } else {
                 validarConocimiento = false
-                e.currentTarget.classList.add('is-invalid')
+                conocimiento.classList.add('is-invalid')
             }
 
             validarFormulario()
         })
 
         codigo.addEventListener('change', (e) => {
-            if (e.currentTarget.options[e.currentTarget.selectedIndex].value > 0) {
+            if (codigo.options[codigo.selectedIndex].value > 0) {
                 validarCodigo = true
-                e.currentTarget.classList.remove('is-invalid')
+                codigo.classList.remove('is-invalid')
             } else {
                 validarCodigo = false
-                e.currentTarget.classList.add('is-invalid')
+                codigo.classList.add('is-invalid')
             }
 
             validarFormulario()
@@ -243,13 +329,25 @@
         })
 
         nacimiento.addEventListener('blur', (e) => {
-            validarNacimiento = true
+            if (nacimiento.value.length !== 0) {
+                validacionNacimiento = true
+                nacimiento.classList.remove('is-invalid')
+            } else {
+                validacionNacimiento = false
+                nacimiento.classList.add('is-invalid')
+            }
 
             validarFormulario()
         })
 
         ingreso.addEventListener('blur', (e) => {
-            validarIngreso = true
+            if (ingreso.value.length !== 0) {
+                validarIngreso = true
+                ingreso.classList.remove('is-invalid')
+            } else {
+                validarIngreso = false
+                ingreso.classList.add('is-invalid')
+            }
 
             validarFormulario()
         })

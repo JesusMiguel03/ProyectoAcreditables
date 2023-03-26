@@ -46,37 +46,45 @@
     <script>
         const titulo = document.getElementById('titulo')
         const descripcion = document.getElementById('descripcion')
+        const activo = document.getElementById('mostrar')
         const boton = document.getElementById('formularioEnviar')
 
-        let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+        const estados = ['0', '1']
 
-        let [validacionTitulo, validacionDescripcion] = [
-            validacion.test(titulo.value) && titulo.value.length > 5 && titulo.value.length < 30,
-            validacion.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length < 100
+        let [validacionTitulo, validacionDescripcion, validacionActivo] = [
+            titulo.value.length > 5 && titulo.value.length < 30,
+            descripcion.value.length > 15 && descripcion.value.length < 100,
+            estados.includes(activo.options[activo.selectedIndex].value)
         ]
 
-        if (!(validacionTitulo || validacionDescripcion)) {
-            boton.disabled = true
-        }
-
         const validarFormulario = () => {
-            if (validacionTitulo && validacionDescripcion) {
+            if (validacionTitulo && validacionDescripcion && validacionActivo) {
                 boton.removeAttribute('disabled')
             } else {
                 boton.disabled = true
             }
         }
 
+        validarFormulario()
+
         titulo.addEventListener('input', (e) => {
-            if (e.currentTarget.value.length > 30) {
-                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            titulo.value = titulo.value.replace(/[^A-zÀ-ÿ0-9¡?¿!\s]+/g, '')
+            titulo.value = titulo.value.replace(/ {2,}/g, '')
+
+            if (titulo.value.length > 30) {
+                titulo.value = titulo.value.slice(0, 30)
             }
 
-            if (validacion.test(titulo.value) && e.currentTarget.value.length > 5 && e.currentTarget.value.length < 30) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionTitulo = true
+            if (/^[\p{L}\p{N}\s¿?¡!]+(?:[\p{L}\p{N}\s¿?¡!]+)*$/u.test(titulo.value)) {
+                if (titulo.value.length > 5 && titulo.value.length < 30) {
+                    titulo.classList.remove('is-invalid')
+                    validacionTitulo = true
+                } else {
+                    titulo.classList.add('is-invalid')
+                    validacionTitulo = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                titulo.classList.add('is-invalid')
                 validacionTitulo = false
             }
 
@@ -84,16 +92,36 @@
         })
 
         descripcion.addEventListener('input', (e) => {
-            if (e.currentTarget.value.length > 100) {
-                e.currentTarget.value = e.currentTarget.value.length.slice(0, 100)
+            descripcion.value = descripcion.value.replace(/[^A-zÀ-ÿ0-9¡?¿!\s]+/g, '')
+            descripcion.value = descripcion.value.replace(/ {2,}/g, '')
+
+            if (descripcion.value.length > 100) {
+                descripcion.value = descripcion.value.slice(0, 100)
             }
 
-            if (validacion.test(descripcion.value) && e.currentTarget.value.length > 15 && e.currentTarget.value.length < 100) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionDescripcion = true
+            if (/^[\p{L}\p{N}\s¿?¡!]+(?:[\p{L}\p{N}\s¿?¡!]+)*$/u.test(descripcion.value)) {
+                if (descripcion.value.length > 15 && descripcion.value.length < 100) {
+                    descripcion.classList.remove('is-invalid')
+                    validacionDescripcion = true
+                } else {
+                    descripcion.classList.add('is-invalid')
+                    validacionDescripcion = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                descripcion.classList.add('is-invalid')
                 validacionDescripcion = false
+            }
+
+            validarFormulario()
+        })
+
+        activo.addEventListener('change', (e) => {
+            if (estados.includes(activo.options[activo.selectedIndex].value)) {
+                activo.classList.remove('is-invalid')
+                validacionActivo = true
+            } else {
+                activo.classList.add('is-invalid')
+                validacionActivo = false
             }
 
             validarFormulario()

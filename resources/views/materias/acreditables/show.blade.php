@@ -5,7 +5,9 @@
 @section('rutas')
     <li class="breadcrumb-item"><a href="{{ route('inicio.index') }}" class="link-muted">Inicio</a></li>
     <li class="breadcrumb-item"><a href="{{ route('materias.index') }}" class="link-muted">Materias</a></li>
-    <li class="breadcrumb-item active"><a href="">{{ $materia->nom_materia }} {{ $materia->trayecto->num_trayecto }} ({{ $materia->estado_materia }})</a></li>
+    <li class="breadcrumb-item active"><a href="">
+            {{ $materia->nom_materia }} {{ $materia->trayecto->num_trayecto }}({{ $materia->estado_materia }})
+        </a></li>
 @stop
 
 @section('content_header')
@@ -47,7 +49,22 @@
 
                             <x-modal.mensaje-obligatorio />
 
-                            <x-modal.footer-aceptar />
+                            <div class="row">
+                                <div class="col-6">
+                                    <button id="cancelar" type="button" class="btn btn-block btn-secondary"
+                                        data-dismiss="modal">
+                                        <i class="fas fa-arrow-left mr-2"></i>
+                                        {{ __('Cancelar') }}
+                                    </button>
+                                </div>
+
+                                <div class="col-6">
+                                    <button id="formularioNotas" type="submit" class="btn btn-block btn-success">
+                                        <i class="fas fa-save mr-2"></i>
+                                        {{ __('Guardar') }}
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </main>
                 </div>
@@ -97,7 +114,6 @@
                                 </div>
                             </div>
 
-
                         </form>
                     </main>
                 </div>
@@ -118,6 +134,11 @@
         
         $url = route('materias.edit', $materia->id);
         $horarioUrl = route('horarios.index');
+        
+        $profesorDictaAcreditable = null;
+        if (!empty($materia->profesorEncargado())) {
+            $profesorDictaAcreditable = $profesorID === $materia->profesorEncargado()->id;
+        }
     @endphp
 
     <div class="row mt-2">
@@ -140,11 +161,13 @@
         <section class="col-12 my-3">
 
             @if (($validacion && !empty($inscritos)) || (rol('Coordinador') && !empty($inscritos)))
-                {{-- PDF --}}
-                <button class="btn btn-danger float-right" {{ Popper::arrow()->pop('PDF Notas de la acreditable') }}
-                    data-toggle="modal" data-target="#listadoNotas">
-                    <i class="fas fa-file-pdf" style="width: 2rem"></i>
-                </button>
+                @if (rol('Coordinador'))
+                    {{-- PDF --}}
+                    <button class="btn btn-danger float-right" {{ Popper::arrow()->pop('PDF Notas de la acreditable') }}
+                        data-toggle="modal" data-target="#listadoNotas">
+                        <i class="fas fa-file-pdf" style="width: 2rem"></i>
+                    </button>
+                @endif
 
                 <a href="{{ route('listadoEstudiantes', $materia->id) }}" class="btn btn-primary float-right"
                     {{ Popper::arrow()->pop('Descargar listado de estudiantes') }}>
@@ -164,7 +187,14 @@
                             <th>Apellido</th>
                             <th>Estado</th>
 
-                            @if (!rol('Estudiante'))
+                            @if (rol('Profesor'))
+                                <th>Nota</th>
+                                @if ($profesorDictaAcreditable)
+                                    <th>Acciones</th>
+                                @endif
+                            @endif
+
+                            @if (rol('Coordinador'))
                                 <th>Validación</th>
                                 <th>Nota</th>
                                 <th>Acciones</th>
@@ -198,11 +228,16 @@
                                     {{ $validado ? 'Validado' : 'No validado' }}
                                 </td>
 
-                                @if (!rol('Estudiante'))
+                                @if (rol('Coordinador'))
                                     <td> {{ $codigo }} </td>
-                                    <td
-                                        class="font-weight-bold text-{{ $nota >= 56 ? 'success' : 'danger' }} notaAsignadaEstudiante">
-                                        {{ $nota }} </td>
+                                @endif
+
+                                <td
+                                    class="font-weight-bold text-{{ $nota >= 56 ? 'success' : 'danger' }} notaAsignadaEstudiante">
+                                    {{ $nota }}
+                                </td>
+
+                                @if (rol('Coordinador') || (rol('Profesor') && !empty($profesorDictaAcreditable)))
                                     <td>
                                         <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                             @can('materias.modificar')
@@ -225,13 +260,21 @@
                                             @endcan
 
                                             {{-- Asignar nota --}}
-                                            <button id="{{ $inscritoID }}"
-                                                class="btn btn-primary notas {{ $validado && $finalizada ? '' : 'disabled' }}"
-                                                @if ($validado && $finalizada) data-toggle="modal" data-target="#nota" data-CI="{{ $CI }}"
-                                                data-estudiante="{{ $estudiante->inscritoNombre() }}" @endif
-                                                {{ Popper::arrow()->pop('Asignar nota') }}>
-                                                <i class="fas fa-pen"></i>
-                                            </button>
+                                            @if ($materia->estado_materia === 'Finalizado')
+                                                <button id="{{ $inscritoID }}"
+                                                    class="btn btn-primary notas {{ $validado && $finalizada ? '' : 'disabled' }}"
+                                                    @if ($validado && $finalizada) data-toggle="modal" data-target="#nota" data-CI="{{ $CI }}"
+                                                data-estudiante="{{ $estudiante->inscritoNombre() }}" {{ Popper::arrow()->pop('Asignar nota') }}
+                                                @else
+                                                {{ Popper::arrow()->pop('Debe validar la inscripción') }} @endif>
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
+                                            @else
+                                                <button class="btn btn-primary disabled"
+                                                    {{ Popper::arrow()->pop('Acreditable no finalizada') }}>
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
+                                            @endif
 
                                             {{-- Asistencia --}}
                                             <a href="{{ route('asistencias.edit', $inscritoID) }}"
@@ -239,6 +282,7 @@
                                                 <i class="fas fa-calendar"></i>
                                             </a>
 
+                                            {{-- Boton de aprobar --}}
                                             @if (rol('Coordinador'))
                                                 @if ($materia->estado_materia === 'Finalizado')
                                                     <form action="{{ route('estudiantes.aprobar', $inscritoID) }}"
@@ -261,7 +305,6 @@
                                                     </button>
                                                 @endif
                                             @endif
-
                                         </div>
                                     </td>
                                 @endif
@@ -287,9 +330,35 @@
 @stop
 
 @section('js')
-    @if (!rol('Estudiante'))
+    @if (rol('Coordinador') || (rol('Profesor') && !empty($profesorDictaAcreditable)))
         @include('popper::assets')
-        <script src="{{ asset('js/asignarNota.js') }}"></script>
+
+        <script>
+            const botones = document.querySelectorAll(".notas")
+            const form = document.getElementById("asignarNota")
+            const estudianteSeleccionado = document.getElementById("estudianteSeleccionado")
+            const notasEstudiantes = document.querySelectorAll(".notaAsignadaEstudiante")
+            const botonEnviar = document.getElementById("formularioNotas")
+            const inputNota = document.getElementById("campoNotaEstudiante")
+
+            botones.forEach((boton, index) => {
+                boton.addEventListener("click", (e) => {
+                    let CI = e.currentTarget.getAttribute("data-CI")
+                    let estudiante = e.currentTarget.getAttribute("data-estudiante")
+                    let ID = e.currentTarget.id
+
+                    inputNota.value = notasEstudiantes[index].innerText
+
+                    estudianteSeleccionado.innerText = `CI: (${CI}) ${estudiante}`
+                    form.action = `/estudiantes/${ID}/nota`
+                })
+            })
+
+            botonEnviar.addEventListener("click", () => {
+                form.submit()
+            })
+        </script>
+        {{-- <script src="{{ asset('js/asignarNota.js') }}"></script> --}}
     @endif
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
@@ -366,12 +435,12 @@
             })
         @elseif ($message = session('invalidado'))
             Swal.fire({
-                icon: 'info',
+                icon: 'warning',
                 title: '¡Estudiante invalidado!',
                 html: 'El estudiante no podrá cursar esta acreditable.',
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-danger px-5'
+                    confirmButton: 'btn btn-warning px-5'
                 },
             })
         @elseif ($message = session('validado'))

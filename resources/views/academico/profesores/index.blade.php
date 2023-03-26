@@ -165,26 +165,32 @@
     <script>
         const nombre = document.getElementById('nombre')
         const apellido = document.getElementById('apellido')
+        const nacionalidad = document.getElementById('nacionalidad')
         const cedula = document.getElementById('cedula')
         const contrasena = document.getElementById('contrasena')
         const confirmarContrasena = document.getElementById('confirmarContrasena')
         const correo = document.getElementById('correo')
         const botonUsuario = document.getElementById('registrarUsuario')
 
-        botonUsuario.disabled = true
-
-        const validarCorreo = /^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        const validarCorreo =
+            /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 
         // Validaciones de cada campo
-        let [validacionNombre, validacionApellido, validacionCedula, validacionCorreo, validacionContrasena,
-            validacionConfirmarContrasena
+        let [
+            validacionNombre, validacionApellido, validacionNacionalidad, validacionCedula, validacionCorreo, validacionContrasena, validacionConfirmarContrasena
         ] = [
-            false, false, false, false, false, false
+            nombre.value.length > 2 && nombre.value.length < 21,
+            apellido.value.length > 2 && apellido.value.length < 21,
+            nacionalidad.options[nacionalidad.selectedIndex].value > 0,
+            cedula.value.toString().length > 6 && cedula.value.toString().length < 9,
+            validarCorreo.test(correo.value),
+            contrasena.value.length > 3 && contrasena.value.length < 9,
+            confirmarContrasena.value.length > 3 && confirmarContrasena.value.length < 9 && confirmarContrasena.value === contrasena.value
         ]
 
         // Validacion de todo el formulario
         const formularioValidado = () => {
-            if (validacionNombre && validacionApellido && validacionCedula && validacionCorreo &&
+            if (validacionNombre && validacionApellido && validacionNacionalidad && validacionCedula && validacionCorreo &&
                 validacionContrasena && validacionConfirmarContrasena) {
                 botonUsuario.removeAttribute('disabled')
             } else {
@@ -192,13 +198,26 @@
             }
         }
 
+        formularioValidado()
+
         nombre.addEventListener('input', (e) => {
-            // Si el nombre tiene entre 4 y 20 caracteres es válido
-            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 21) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionNombre = true
+            nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            nombre.value = nombre.value.replace(/ {2,}/g, '')
+
+            if (nombre.value.length > 20) {
+                nombre.value = nombre.value.slice(0, 20)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                if (nombre.value.length > 2 && nombre.value.length < 21) {
+                    nombre.classList.remove('is-invalid')
+                    validacionNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validacionNombre = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                nombre.classList.add('is-invalid')
                 validacionNombre = false
             }
 
@@ -206,52 +225,74 @@
         })
 
         apellido.addEventListener('input', (e) => {
-            // Si el apellido tiene entre 4 y 20 caracteres es válido
-            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 21) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionApellido = true
+            apellido.value = apellido.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            apellido.value = apellido.value.replace(/ {2,}/g, '')
+
+            if (apellido.value.length > 20) {
+                apellido.value = apellido.value.slice(0, 20)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(apellido.value)) {
+                if (apellido.value.length > 2 && apellido.value.length < 21) {
+                    apellido.classList.remove('is-invalid')
+                    validacionApellido = true
+                } else {
+                    apellido.classList.add('is-invalid')
+                    validacionApellido = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                apellido.classList.add('is-invalid')
                 validacionApellido = false
             }
 
             formularioValidado()
         })
 
-        correo.addEventListener('input', (e) => {
-            let validacion = validarCorreo.test(e.currentTarget.value)
-
-            // Si el correo es mayor a 40 caracteres elimina a partir del 9
-            if (e.currentTarget.value.length > 40) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 40)
+        nacionalidad.addEventListener('change', (e) => {
+            if (nacionalidad.options[nacionalidad.selectedIndex].value > 0) {
+                validacionNacionalidad = true
+                nacionalidad.classList.remove('is-invalid')
+            } else {
+                validacionNacionalidad = false
+                nacionalidad.classList.add('is-invalid')
             }
 
+            formularioValidado()
+        })
+
+        correo.addEventListener('input', (e) => {
+            // Si el correo es mayor a 40 caracteres elimina a partir del 9
+            if (correo.value.length > 40) {
+                correo.value = correo.value.slice(0, 40)
+            }
+
+            correo.value = correo.value.replace(/[^@A-Za-z0-9._-]+/g, '')
+
             // Si el correo es válido
-            if (validacion) {
-                e.currentTarget.classList.remove('is-invalid')
+            if (validarCorreo.test(correo.value)) {
+                correo.classList.remove('is-invalid')
                 validacionCorreo = true
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                correo.classList.add('is-invalid')
                 validacionCorreo = false
             }
 
             formularioValidado()
         })
 
-        // Si la cédula es mayor a 8 dígitos elimina a apartir del 9
         cedula.addEventListener('input', (e) => {
-            if (e.currentTarget.value.toString().length > 8) {
-                e.currentTarget.value = e.currentTarget.value.toString().slice(0, 8)
+            if (cedula.value.toString().length > 8) {
+                cedula.value = cedula.value.toString().slice(0, 8)
             }
 
-            e.currentTarget.value = e.currentTarget.value.toString().replace('e', '')
+            cedula.value = cedula.value.toString().replace('e', '')
 
             // Si la cédula tiene entre 7 y 8 digitos
-            if (e.currentTarget.value.toString().length > 6 && e.currentTarget.value.toString().length < 9) {
-                e.currentTarget.classList.remove('is-invalid')
+            if (cedula.value.toString().length > 6 && cedula.value.toString().length < 9) {
+                cedula.classList.remove('is-invalid')
                 validacionCedula = true
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                cedula.classList.add('is-invalid')
                 validacionCedula = false
             }
 
@@ -260,26 +301,26 @@
 
         contrasena.addEventListener('input', (e) => {
             // Si la contraseña es mayor a 8 caracteres elimina a apartir del 9
-            if (e.currentTarget.value.length > 8) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+            if (contrasena.value.length > 8) {
+                contrasena.value = contrasena.value.slice(0, 8)
             }
 
-            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9) {
+            if (contrasena.value.length > 3 && contrasena.value.length < 9) {
                 validacionContrasena = true
             } else {
                 validacionContrasena = false
             }
 
             // Si es menor a 4 caracteres añade una clase como advertencia
-            e.currentTarget.value.length < 4 ?
-                e.currentTarget.classList.add('is-invalid') :
-                e.currentTarget.classList.remove('is-invalid')
+            contrasena.value.length < 4 ?
+                contrasena.classList.add('is-invalid') :
+                contrasena.classList.remove('is-invalid')
 
             /**
              * Si el valor del campo contraseña y la confirmacion son diferentes
              * añade una clase al campo confirmacion como advertencia
              */
-            e.currentTarget.value !== confirmarContrasena.value ?
+            contrasena.value !== confirmarContrasena.value ?
                 confirmarContrasena.classList.add('is-invalid') :
                 confirmarContrasena.classList.remove('is-invalid')
 
@@ -288,11 +329,11 @@
 
         confirmarContrasena.addEventListener('input', (e) => {
             // Si la confirmación de la nueva contraseña es mayor a 8 caracteres elimina a apartir del 9
-            if (e.currentTarget.value.length > 8) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 8)
+            if (confirmarContrasena.value.length > 8) {
+                confirmarContrasena.value = confirmarContrasena.value.slice(0, 8)
             }
 
-            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 9) {
+            if (confirmarContrasena.value.length > 3 && confirmarContrasena.value.length < 9) {
                 validacionConfirmarContrasena = true
             } else {
                 validacionConfirmarContrasena = false
@@ -312,9 +353,9 @@
              * añade una clase de advertencia al campo contraseña.
              * 2. Además de, el campo contraseña tener más de 4 caracteres
              */
-            e.currentTarget.value !== contrasena.value && contrasena.value.length > 4 ?
-                e.currentTarget.classList.add('is-invalid') :
-                e.currentTarget.classList.remove('is-invalid')
+            confirmarContrasena.value !== contrasena.value && contrasena.value.length > 4 ?
+                confirmarContrasena.classList.add('is-invalid') :
+                confirmarContrasena.classList.remove('is-invalid')
 
             formularioValidado()
         })
@@ -351,8 +392,8 @@
             casa.value.length > 3 && casa.value.length < 11,
             codigo.options[codigo.selectedIndex].value > 0,
             tlf.value.length === 7,
-            nacimiento.value.length > 0,
-            ingreso.value.length > 0
+            nacimiento.value.length !== 0,
+            ingreso.value.length !== 0
         ]
 
         const validarFormulario = () => {
@@ -518,13 +559,25 @@
         })
 
         nacimiento.addEventListener('blur', (e) => {
-            validarNacimiento = true
+            if (nacimiento.value.length !== 0) {
+                validacionNacimiento = true
+                nacimiento.classList.remove('is-invalid')
+            } else {
+                validacionNacimiento = false
+                nacimiento.classList.add('is-invalid')
+            }
 
             validarFormulario()
         })
 
         ingreso.addEventListener('blur', (e) => {
-            validarIngreso = true
+            if (ingreso.value.length !== 0) {
+                validarIngreso = true
+                ingreso.classList.remove('is-invalid')
+            } else {
+                validarIngreso = false
+                ingreso.classList.add('is-invalid')
+            }
 
             validarFormulario()
         })

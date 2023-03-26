@@ -45,13 +45,9 @@
         const boton = document.getElementById('formularioEnviar')
 
         let [validacionPregunta, validacionRespuesta] = [
-            pregunta.value.length > 10 && pregunta.value.length < 31,
+            pregunta.value.length > 6 && pregunta.value.length < 31,
             respuesta.value.length > 20 && respuesta.value.length < 255
         ]
-
-        if (!(pregunta && respuesta)) {
-            boton.disabled = true
-        }
 
         const valiadarFormulario = () => {
             if (validacionPregunta && validacionRespuesta) {
@@ -61,16 +57,26 @@
             }
         }
 
+        valiadarFormulario()
+
         pregunta.addEventListener('input', (e) => {
-            if (e.currentTarget.value.length > 30) {
-                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            pregunta.value = pregunta.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            pregunta.value = pregunta.value.replace(/ {2,}/g, '')
+
+            if (pregunta.value.length > 30) {
+                pregunta.value = pregunta.value.slice(0, 30)
             }
 
-            if (e.currentTarget.value.length > 10 && e.currentTarget.value.length < 31) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionPregunta = true
+            if (/^[\p{L}\s]+(?:[\p{L}\s]+)*$/u.test(pregunta.value)) {
+                if (pregunta.value.length > 6 && pregunta.value.length < 31) {
+                    pregunta.classList.remove('is-invalid')
+                    validacionPregunta = true
+                } else {
+                    pregunta.classList.add('is-invalid')
+                    validacionPregunta = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                pregunta.classList.add('is-invalid')
                 validacionPregunta = false
             }
 
@@ -78,15 +84,24 @@
         })
 
         respuesta.addEventListener('input', (e) => {
-            if (e.currentTarget.value.length > 255) {
-                e.currentTarget.value = e.currentTarget.value.length.slice(0, 255)
+            respuesta.value = respuesta.value.replace(/[^A-zÀ-ÿ0-9(),."\s]+/g, '')
+            respuesta.value = respuesta.value.replace(/ {2,}/g, '')
+            respuesta.value = respuesta.value.replace('_', '')
+
+            if (respuesta.value.length > 255) {
+                respuesta.value = respuesta.value.slice(0, 255)
             }
 
-            if (e.currentTarget.value.length > 20 && e.currentTarget.value.length < 255) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionRespuesta = true
+            if (/^[\p{L}\s(),"\d,.]+(?:[\p{L}()\s",.\d]+)*$/u.test(respuesta.value)) {
+                if (respuesta.value.length > 20 && respuesta.value.length < 255) {
+                    respuesta.classList.remove('is-invalid')
+                    validacionRespuesta = true
+                } else {
+                    respuesta.classList.add('is-invalid')
+                    validacionRespuesta = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                respuesta.classList.add('is-invalid')
                 validacionRespuesta = false
             }
 

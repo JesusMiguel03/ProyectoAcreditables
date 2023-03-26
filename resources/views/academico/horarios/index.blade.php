@@ -302,8 +302,6 @@
 
         const espacios = ['A', 'Edificio A', 'B', 'Edificio B', 'C', 'Edificio C']
 
-        botonHora.disabled = true
-
         let [validacionEspacio, validacionAula, validacionMateria] = [false, true, false]
 
         const validarFormulario = () => {
@@ -314,45 +312,52 @@
             }
         }
 
+        validarFormulario()
+
         espacio.addEventListener('input', (e) => {
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){1})[^_]+$/g
+            espacio.value = espacio.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            espacio.value = espacio.value.replace(/ {2,}/g, '')
 
-            if (e.currentTarget.value.length > 30) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 30)
+            if (espacio.value.length > 30) {
+                espacio.value = espacio.value.slice(0, 30)
             }
 
-            if (espacios.includes(espacio.value)) {
-                espacio.classList.add('is-invalid')
-                aula.classList.add('is-invalid')
-                validacionEspacio = false
-                validacionAula = false
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(espacio.value)) {
+                if (espacios.includes(espacio.value) && aula.value === '') {
+                    aula.classList.add('is-invalid')
+                    validacionAula = false
+                } else {
+                    aula.classList.remove('is-invalid')
+                    validacionAula = true
+                }
+
+                if (espacio.value.length > 0 && espacio.value.length < 31) {
+                    espacio.classList.remove('is-invalid')
+                    validacionEspacio = true
+                } else {
+                    espacio.classList.add('is-invalid')
+                    validacionEspacio = false
+                }
             } else {
-                espacio.classList.remove('is-invalid')
-                aula.classList.remove('is-invalid')
-                validacionEspacio = true
-                validacionAula = true
-            }
-
-            if (validacion.test(espacio.value)) {
-                espacio.classList.remove('is-invalid')
-                validacionEspacio = true
-            } else {
                 espacio.classList.add('is-invalid')
                 validacionEspacio = false
             }
+
 
             validarFormulario()
         })
 
         aula.addEventListener('input', (e) => {
-            if (e.currentTarget.value > 12) {
-                e.currentTarget.value = 12
+            if (aula.value > 12) {
+                aula.value = 12
             }
 
-            if (e.currentTarget.value === 0 || e.currentTarget.value < 13) {
+            if (aula.value === 0 || aula.value < 13 && espacio.value.length > 1 || espacios.includes(espacio.value)) {
+                espacio.classList.remove('is-invalid')
                 aula.classList.remove('is-invalid')
                 validacionAula = true
             } else {
+                espacio.classList.add('is-invalid')
                 aula.classList.add('is-invalid')
                 validacionAula = false
             }
@@ -373,6 +378,7 @@
         })
     </script>
 
+    {{-- Advertencia de borrar --}}
     <script>
         const form = document.getElementById('form-borrar')
         const boton = document.getElementById('borrar')
@@ -516,7 +522,7 @@
 
     {{-- Mensajes --}}
     <script>
-        @if ($message = session('creado'))
+        @if (session('creado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Hora registrada!',
@@ -526,7 +532,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('error'))
+        @elseif (session('error'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Error al registrar!',
@@ -539,7 +545,7 @@
             $('#formulario').toggleClass('d-none')
             $('#opciones').toggleClass('d-none')
             $('#horario').modal('show')
-        @elseif ($message = session('actualizado'))
+        @elseif (session('actualizado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Datos actualizados!',
@@ -549,7 +555,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('borrado'))
+        @elseif (session('borrado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Hora borrada!',
@@ -559,7 +565,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('registrado'))
+        @elseif (session('registrado'))
             Swal.fire({
                 icon: 'info',
                 title: '¡Ya registrada!',
@@ -570,7 +576,7 @@
                 },
             })
             $('#registrar').modal('show')
-        @elseif ($message = session('no encontrado'))
+        @elseif (session('no encontrado'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Hora no encontrada!',
@@ -582,22 +588,22 @@
             })
         @elseif (session('vaciado'))
             Swal.fire({
-                icon: 'info',
+                icon: 'success',
                 title: '¡Horario vaciado!',
                 html: "{{ session('vaciado') }}",
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-info px-5'
+                    confirmButton: 'btn btn-success px-5'
                 },
             })
         @elseif (session('vaciadoError'))
             Swal.fire({
-                icon: 'warning',
+                icon: 'info',
                 title: '¡Horario vacio',
                 html: "{{ session('vaciadoError') }}",
                 buttonsStyling: false,
                 customClass: {
-                    confirmButton: 'btn btn-warning px-5'
+                    confirmButton: 'btn btn-info px-5'
                 },
             })
         @endif

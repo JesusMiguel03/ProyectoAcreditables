@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academico;
 use App\Models\Academico\Trayecto;
 use App\Http\Controllers\Controller;
 use App\Models\Informacion\Bitacora;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,15 +34,15 @@ class TrayectoController extends Controller
         // Valida si tiene el permiso
         permiso('academico');
 
-        $trayectoBorrado = Trayecto::withTrashed()->find($request['num_trayecto']) ?? null;
+        $trayecto = Trayecto::withTrashed()->where('num_trayecto', '=', $request['num_trayecto'])->where('deleted_at', '!=', null)->first() ?? null;
 
-        if ($trayectoBorrado) {
+        if ($trayecto) {
             return redirect()->back()->with('elementoBorrado', 'El trayecto que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');
         }
 
         // Valida los campos
         $validador = Validator::make($request->all(), [
-            'num_trayecto' => ['required', 'min:1', 'max:10', 'integer', 'unique:trayectos,num_trayecto,' . $request['num_trayecto']],
+            'num_trayecto' => ['required', 'min:1', 'max:10', 'integer', 'unique:trayectos,num_trayecto'],
         ], [
             'num_trayecto.required' => 'El número es necesario.',
             'num_trayecto.unique' => 'El trayecto (' . $request['num_trayecto'] . ') ya ha sido registrado.',

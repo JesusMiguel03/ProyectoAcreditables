@@ -98,39 +98,43 @@
         const nombre = document.getElementById('nombre')
         const boton = document.getElementById('formularioEnviar')
 
-        boton.disabled = true
+        let validacionNombre = nombre.value.length > 5 && nombre.value.length < 51
 
-        let validacionNombre = false
+        const validarFormulario = () => {
+            validacionNombre ? boton.removeAttribute('disabled') : boton.disabled = true
+        }
+
+        validarFormulario()
 
         nombre.addEventListener('input', (e) => {
-            // Valida que tenga minimo 5 letras, pueden tener acentos y espacios, pero no pueden ser solo espacios
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g.test(nombre.value)
+            nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            nombre.value = nombre.value.replace(/ {2,}/g, '')
+            nombre.value = nombre.value.replace('_', '')
 
-            e.currentTarget.value = e.currentTarget.value.replace(/[^A-zÀ-ÿ0-9\s]|[_]+/g, '')
-
-            if (e.currentTarget.value.length > 50) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 50)
+            if (nombre.value.length > 50) {
+                nombre.value = nombre.value.slice(0, 50)
             }
 
-            if (validacion && e.currentTarget.value.length > 5 && e.currentTarget.value.length < 51) {
-                validacionNombre = true
-                e.currentTarget.classList.remove('is-invalid')
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                if (nombre.value.length > 5 && nombre.value.length < 51) {
+                    nombre.classList.remove('is-invalid')
+                    validacionNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validacionNombre = false
+                }
             } else {
+                nombre.classList.add('is-invalid')
                 validacionNombre = false
-                e.currentTarget.classList.add('is-invalid')
             }
 
-            if (validacionNombre) {
-                boton.removeAttribute('disabled')
-            } else {
-                boton.disabled = true
-            }
+            validarFormulario()
         })
     </script>
 
     {{-- Mensajes --}}
     <script>
-        @if ($message = session('creado'))
+        @if (session('creado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Categoria registrada!',
@@ -140,7 +144,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('actualizado'))
+        @elseif (session('actualizado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡La categoria se ha actualizado!',
@@ -150,7 +154,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('error'))
+        @elseif (session('error'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Hubo un problema!',
@@ -161,7 +165,7 @@
                 },
             })
             $('#registrar').modal('show')
-        @elseif ($message = session('borrado'))
+        @elseif (session('borrado'))
             Swal.fire({
                 icon: 'success',
                 title: '¡Categoría borrada exitosamente!',
@@ -171,7 +175,7 @@
                     confirmButton: 'btn btn-success px-5'
                 },
             })
-        @elseif ($message = session('no encontrado'))
+        @elseif (session('no encontrado'))
             Swal.fire({
                 icon: 'error',
                 title: '¡Categoría no encontrada!',
@@ -179,6 +183,16 @@
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-info px-5'
+                },
+            })
+        @elseif (session('elementoBorrado'))
+            Swal.fire({
+                icon: 'error',
+                title: '¡Categoría no encontrada!',
+                html: "{{ session('elementoBorrado') }}",
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-danger px-5'
                 },
             })
         @endif

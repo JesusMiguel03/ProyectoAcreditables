@@ -265,6 +265,10 @@ class MateriaController extends Controller
             return redirect()->back()->with('inactivo', 'La acreditable que desea buscar no se encuentra activa.');
         }
 
+        // if (rol('Profesor') && $materia->profesor->id !== $usuario->profesor->id) {
+        //     return redirect()->back()->with('noDictaAcreditable', 'La acreditable que desea buscar no se imparte por usted.');
+        // }
+
         if (rol('Estudiante')) {
             if (!($usuario->estudiante)) {
                 return redirect()->back()->with('perfilIncompleto', 'No puede cursar ninguna acreditable hasta que se registre su perfil académico. Comuníquese con el coodinador para actualizar su perfil.');

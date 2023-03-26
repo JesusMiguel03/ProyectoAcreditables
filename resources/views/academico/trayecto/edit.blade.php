@@ -41,25 +41,37 @@
         const boton = document.getElementById('formularioEnviar')
 
         let validacionTrayecto = trayecto.value > 0 && trayecto.value < 11
-
-        if (!validacionTrayecto) {
-            boton.disabled = true
-        }
-
-        trayecto.addEventListener('input', (e) => {
-            if (e.currentTarget.value > 0 && e.currentTarget.value < 11) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionTrayecto = true
-            } else {
-                e.currentTarget.classList.add('is-invalid')
-                validacionTrayecto = false
-            }
-
+        
+        const validarFormulario = () => {
             if (validacionTrayecto) {
                 boton.removeAttribute('disabled')
             } else {
                 boton.disabled = true
             }
+        }
+
+        validarFormulario()
+
+        trayecto.addEventListener('input', (e) => {
+            trayecto.value = trayecto.value.replace('e', '')
+
+            if (trayecto.value < 1) {
+                trayecto.value = 1
+            }
+
+            if (trayecto.value > 10) {
+                trayecto.value = 10
+            }
+
+            if (trayecto.value > 0 && trayecto.value < 11) {
+                trayecto.classList.remove('is-invalid')
+                validacionTrayecto = true
+            } else {
+                trayecto.classList.add('is-invalid')
+                validacionTrayecto = false
+            }
+
+            validarFormulario()
         })
     </script>
 @stop

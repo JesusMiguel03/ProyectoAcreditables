@@ -16,7 +16,6 @@
 
 {{-- Usuario --}}
 <div class="form-group required mb-3">
-    <label for="usuarios" class="control-label">Usuario</label>
     <div class="input-group">
 
         @if (Route::is('profesores.index'))
@@ -36,27 +35,111 @@
 
             </select>
         @else
-            <input type="text" name="usuarios" id="usuarios"
-                class="form-control @error('usuarios') is-invalid @enderror"
-                value="{{ $profesor->nombreProfesor() . '- CI: ' . $profesor->profesorCI() }}" readonly disabled>
-        @endif
+            {{-- Nombre --}}
+            <div class="form-row" style="margin-bottom: -0.75rem">
+                <div class="form-group {{ Route::is('register') ? 'col-12' : 'col-6' }} required">
+                    <label for="nombre" class="control-label">Nombre</label>
 
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-user"></span>
+                    <div class="input-group">
+                        <input type="text" id="nombre" name="nombre"
+                            class="form-control @error('nombre') is-invalid @enderror"
+                            value="{{ old('nombre') ?? $profesor->nombreSoloProfesor() }}"
+                            placeholder="{{ __('Nombre, ej: José') }}" minlength="3"
+                            maxlength="{{ config('variables.usuarios.nombre') }}" pattern="[A-zÀ-ÿ\s]+"
+                            title="Solo debe contener letras." autofocus required>
+
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
+                            </div>
+                        </div>
+
+                        @error('nombre')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+
+                {{-- Apellido --}}
+                <div class="form-group {{ Route::is('register') ? 'col-12' : 'col-6' }} required">
+                    <label for="apellido" class="control-label">Apellido</label>
+
+                    <div class="input-group mb-3">
+                        <input type="text" id="apellido" name="apellido"
+                            class="form-control @error('apellido') is-invalid @enderror"
+                            value="{{ old('apellido') ?? $profesor->apellidoSoloProfesor() }}"
+                            placeholder="{{ __('Apellido, ej: Gómez') }}" minlength="3"
+                            maxlength="{{ config('variables.usuarios.apellido') }}" pattern="[A-zÀ-ÿ\s]+"
+                            title="Solo debe contener letras." autofocus required>
+
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user }}"></span>
+                            </div>
+                        </div>
+
+                        @error('apellido')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
             </div>
-        </div>
 
-        @error('usuarios')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
+            {{-- Cedula --}}
+            <div class="form-group required" style="margin-bottom:-1px">
+
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        <label for="nacionalidad" class="control-label">Nacionalidad</label>
+
+                        <select name="nacionalidad" id="nacionalidad"
+                            class="form-control @error('nacionalidad') is-invalid @enderror" required>
+                            <option value="0" readonly>Seleccione uno...</option>
+                            <option value="V" {{ $profesor->nacionalidadSoloProfesor() === 'V' ? 'selected' : '' }}>V</option>
+                            <option value="E" {{ $profesor->nacionalidadSoloProfesor() === 'E' ? 'selected' : '' }}>E</option>
+                            <option value="P" {{ $profesor->nacionalidadSoloProfesor() === 'P' ? 'selected' : ''  }}>P</option>
+                        </select>
+
+                        @error('nacionalidad')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-8">
+                        <label for="cedula" class="control-label">Cédula</label>
+                        
+                        <div class="input-group">
+                            <input type="number" id="cedula" name="cedula"
+                                class="form-control @error('cedula') is-invalid @enderror" value="{{ old('cedula') ?? $profesor->cedulaSoloProfesor() }}"
+                                placeholder="{{ __('Cédula, ej: 1021536') }}" required>
+
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-id-card"></span>
+                                </div>
+                            </div>
+
+                            @error('cedula')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 
 {{-- Departamento --}}
-<div class="form-group required mb-3">
+<div class="form-group required mt-n2 mb-3">
     <label for="departamento" class="control-label">Adjunto al departamento</label>
 
     <div class="input-group">
@@ -177,7 +260,7 @@
 </div>
 
 {{-- Residencia --}}
-<div class="form-group required mb-3" {{ $conocimientos->isEmpty() ? 'style="margin-top: -1rem"' : '' }}>
+<div class="form-group required mt-n2 mb-3" {{ $conocimientos->isEmpty() ? 'style="margin-top: -1rem"' : '' }}>
     <label class="control-label">Residencia</label>
 
     <div class="form-row mb-3">
@@ -271,9 +354,10 @@
         {{-- Casa --}}
         <div class="input-group col-4">
             <input id="casa" type="text" name="casa"
-                class="form-control @error('casa') is-invalid @enderror" value="{{ $profesor->casa ?? old('casa') }}"
-                placeholder="{{ __('Casa, ej: 5') }}" maxlength="{{ config('variables.profesores.casa') }}"
-                pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." required>
+                class="form-control @error('casa') is-invalid @enderror"
+                value="{{ $profesor->casa ?? old('casa') }}" placeholder="{{ __('Casa, ej: 5') }}"
+                maxlength="{{ config('variables.profesores.casa') }}" pattern="[A-zÀ-ÿ0-9\s]+"
+                title="Debe contener letras, espacios y/o números." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">

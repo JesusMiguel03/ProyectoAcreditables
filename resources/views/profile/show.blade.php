@@ -66,8 +66,8 @@
         let [
             validacionNombre, validacionApellido, validacionNacionalidad, validacionCedula, validacionCorreo
         ] = [
-            nombre.value.length > 3 && nombre.value.length < 21,
-            apellido.value.length > 3 && apellido.value.length < 21,
+            nombre.value.length > 2 && nombre.value.length < 21,
+            apellido.value.length > 2 && apellido.value.length < 21,
             nacionalidad.options[nacionalidad.selectedIndex].value > 0,
             cedula.value.toString().length > 6 && cedula.value.toString().length < 9,
             validarCorreo.test(correo.value)
@@ -98,7 +98,7 @@
             }
 
             if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
-                if (nombre.value.length > 3 && nombre.value.length < 21) {
+                if (nombre.value.length > 2 && nombre.value.length < 21) {
                     nombre.classList.remove('is-invalid')
                     validacionNombre = true
                 } else {
@@ -122,7 +122,7 @@
             }
 
             if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(apellido.value)) {
-                if (apellido.value.length > 3 && apellido.value.length < 21) {
+                if (apellido.value.length > 2 && apellido.value.length < 21) {
                     apellido.classList.remove('is-invalid')
                     validacionApellido = true
                 } else {

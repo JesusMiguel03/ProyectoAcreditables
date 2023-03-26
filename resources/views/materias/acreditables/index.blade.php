@@ -81,7 +81,7 @@
 
             @if (rol('Estudiante'))
                 <div class="w-100 row mx-auto my-2">
-                    <p class="px-5 text-muted">
+                    <p class="text-muted">
                         <strong>Nota:</strong>
                         El carrusel solo mostrará las primeras {{ config('variables.carrusel') }} acreditables activas para
                         no sobrecargar la vista del usuario, el resto de acreditables estarán disponibles en esta tabla.
@@ -91,7 +91,7 @@
 
             @if (rol('Profesor'))
                 <div class="w-100 row mx-auto my-2">
-                    <p class="px-5 text-muted">
+                    <p class="text-muted">
                         <strong>Nota:</strong>
                         Cuando sea asignado a una o varias acreditables se mostrarán en esta tabla.
                     </p>
@@ -235,15 +235,21 @@
             }
 
             nombre.addEventListener('input', (e) => {
-                let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+                nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+                nombre.value = nombre.value.replace(/ {2,}/g, '')
 
                 if (nombre.value.length > 25) {
                     nombre.value = nombre.value.slice(0, 25)
                 }
 
-                if (validacion.test(nombre.value) && nombre.value.length > 5 && nombre.value.length < 26) {
-                    nombre.classList.remove('is-invalid')
-                    validacionNombre = true
+                if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                    if (nombre.value.length > 5 && nombre.value.length < 26) {
+                        nombre.classList.remove('is-invalid')
+                        validacionNombre = true
+                    } else {
+                        nombre.classList.add('is-invalid')
+                        validacionNombre = false
+                    }
                 } else {
                     nombre.classList.add('is-invalid')
                     validacionNombre = false
@@ -257,7 +263,11 @@
                     cupos.value = 50
                 }
 
-                if (cupos.value > 1 && cupos.value < 51) {
+                if (cupos.value < 1) {
+                    cupos.value = 1
+                }
+
+                if (cupos.value > 0 && cupos.value < 51) {
                     cupos.classList.remove('is-invalid')
                     validacionCupos = true
                 } else {
@@ -281,16 +291,21 @@
             })
 
             descripcion.addEventListener('input', (e) => {
-                let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){7})[^_]+$/g
+                descripcion.value = descripcion.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+                descripcion.value = descripcion.value.replace(/ {2,}/g, '')
 
                 if (descripcion.value.length > 255) {
                     descripcion.value = descripcion.value.slice(0, 255)
                 }
 
-                if (validacion.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length <
-                    256) {
-                    descripcion.classList.remove('is-invalid')
-                    validacionDescripcion = true
+                if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(descripcion.value)) {
+                    if (descripcion.value.length > 15 && descripcion.value.length < 255) {
+                        descripcion.classList.remove('is-invalid')
+                        validacionDescripcion = true
+                    } else {
+                        descripcion.classList.add('is-invalid')
+                        validacionDescripcion = false
+                    }
                 } else {
                     descripcion.classList.add('is-invalid')
                     validacionDescripcion = false

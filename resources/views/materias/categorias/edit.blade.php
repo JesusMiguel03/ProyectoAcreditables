@@ -41,38 +41,37 @@
         const nombre = document.getElementById('nombre')
         const boton = document.getElementById('formularioEnviar')
 
-        let validacionNombre = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){3})[^_]+$/g.test(nombre.value) && nombre
-            .value.length > 5 && nombre.value.length < 51
+        let validacionNombre = nombre.value.length > 5 && nombre.value.length < 51
 
-        if (!validacionNombre) {
-            boton.disabled = true
+        const validarFormulario = () => {
+            validacionNombre ? boton.removeAttribute('disabled') : boton.disabled = true
         }
 
+        validarFormulario()
+
         nombre.addEventListener('input', (e) => {
-            // Valida que tenga minimo 5 letras, pueden tener acentos y espacios, pero no pueden ser solo espacios
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){3})[^_]+$/g.test(nombre.value)
+            nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            nombre.value = nombre.value.replace(/ {2,}/g, '')
+            nombre.value = nombre.value.replace('_', '')
 
-            e.currentTarget.value = e.currentTarget.value.replace(/[^A-zÀ-ÿ0-9\s]|[_]+/g, '')
-
-            // Si es mayor a 50 quita los caracteres extra
-            if (e.currentTarget.value.length > 50) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 50)
+            if (nombre.value.length > 50) {
+                nombre.value = nombre.value.slice(0, 50)
             }
 
-            // Debe ser mayor a 5 y menor a 51
-            if (validacion && e.currentTarget.value.length > 5 && e.currentTarget.value.length < 51) {
-                validacionNombre = true
-                e.currentTarget.classList.remove('is-invalid')
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                if (nombre.value.length > 5 && nombre.value.length < 51) {
+                    nombre.classList.remove('is-invalid')
+                    validacionNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validacionNombre = false
+                }
             } else {
+                nombre.classList.add('is-invalid')
                 validacionNombre = false
-                e.currentTarget.classList.add('is-invalid')
             }
 
-            if (validacionNombre) {
-                boton.removeAttribute('disabled')
-            } else {
-                boton.disabled = true
-            }
+            validarFormulario()
         })
     </script>
 @stop

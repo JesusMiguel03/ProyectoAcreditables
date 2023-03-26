@@ -45,23 +45,19 @@
         const pnf = document.getElementById('pnf')
         const boton = document.getElementById('formularioEnviar')
 
+        const nacionalidades = ['V', 'E', 'P']
+
         // Validaciones de cada campo
         let [
             validacionNombre, validacionApellido, validarNacionalidad, validacionCedula, validacionTrayecto, validacionPnf
         ] = [
-            nombre.value.length > 3 && nombre.value.length < 21,
-            apellido.value.length > 3 && apellido.value.length < 21,
-            nacionalidad.options[nacionalidad.selectedIndex].value > 0,
+            nombre.value.length > 2 && nombre.value.length < 21,
+            apellido.value.length > 2 && apellido.value.length < 21,
+            nacionalidades.includes(nacionalidad.options[nacionalidad.selectedIndex].value),
             cedula.value.toString().length > 6 && cedula.value.toString().length < 9,
             trayecto.options[trayecto.selectedIndex].value > 0,
             pnf.options[pnf.selectedIndex].value > 0,
         ]
-
-        // Si algún campo es inválido desactiva el botón
-        if (!(validacionNombre && validacionApellido && validarNacionalidad && validacionCedula && validacionTrayecto &&
-                validacionPnf)) {
-            boton.disabled = true
-        }
 
         // Validacion de todo el formulario
         const formularioValidado = () => {
@@ -73,16 +69,26 @@
             }
         }
 
-        nombre.addEventListener('input', (e) => {
-            // Evita cualquier caracter que no sea una letra o acento
-            e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-ZÀ-ÿ]+$/, '')
+        formularioValidado()
 
-            // Si el nombre tiene entre 4 y 20 caracteres es válido
-            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 21) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionNombre = true
+        nombre.addEventListener('input', (e) => {
+            nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            nombre.value = nombre.value.replace(/ {2,}/g, '')
+
+            if (nombre.value.length > 20) {
+                nombre.value = nombre.value.slice(0, 20)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                if (nombre.value.length > 2 && nombre.value.length < 21) {
+                    nombre.classList.remove('is-invalid')
+                    validacionNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validacionNombre = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                nombre.classList.add('is-invalid')
                 validacionNombre = false
             }
 
@@ -90,15 +96,23 @@
         })
 
         apellido.addEventListener('input', (e) => {
-            // Evita cualquier caracter que no sea una letra o acento
-            e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-ZÀ-ÿ]+$/, '')
+            apellido.value = apellido.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            apellido.value = apellido.value.replace(/ {2,}/g, '')
 
-            // Si el apellido tiene entre 4 y 20 caracteres es válido
-            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 21) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionApellido = true
+            if (apellido.value.length > 20) {
+                apellido.value = apellido.value.slice(0, 20)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(apellido.value)) {
+                if (apellido.value.length > 2 && apellido.value.length < 21) {
+                    apellido.classList.remove('is-invalid')
+                    validacionApellido = true
+                } else {
+                    apellido.classList.add('is-invalid')
+                    validacionApellido = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                apellido.classList.add('is-invalid')
                 validacionApellido = false
             }
 
@@ -106,33 +120,30 @@
         })
 
         nacionalidad.addEventListener('change', (e) => {
-            // Valida que la nacionalidad sea V, E o P
-            if (nacionalidad.options[nacionalidad.selectedIndex].value > 0) {
-                validarNacionalidad = true
+            if (nacionalidades.includes(nacionalidad.options[nacionalidad.selectedIndex].value)) {
+                validacionNacionalidad = true
                 nacionalidad.classList.remove('is-invalid')
             } else {
-                validarNacionalidad = false
+                validacionNacionalidad = false
                 nacionalidad.classList.add('is-invalid')
             }
 
             formularioValidado()
         })
 
-        // Si la cédula es mayor a 8 dígitos elimina a apartir del 9
         cedula.addEventListener('input', (e) => {
-            if (e.currentTarget.value.toString().length > 8) {
-                e.currentTarget.value = e.currentTarget.value.toString().slice(0, 8)
+            if (cedula.value.toString().length > 8) {
+                cedula.value = cedula.value.toString().slice(0, 8)
             }
 
-            // Si se intenta colocar la letra e la remueve
-            e.currentTarget.value = e.currentTarget.value.toString().replace('e', '')
+            cedula.value = cedula.value.toString().replace('e', '')
 
             // Si la cédula tiene entre 7 y 8 digitos
-            if (e.currentTarget.value.toString().length > 6 && e.currentTarget.value.toString().length < 9) {
-                e.currentTarget.classList.remove('is-invalid')
+            if (cedula.value.toString().length > 6 && cedula.value.toString().length < 9) {
+                cedula.classList.remove('is-invalid')
                 validacionCedula = true
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                cedula.classList.add('is-invalid')
                 validacionCedula = false
             }
 

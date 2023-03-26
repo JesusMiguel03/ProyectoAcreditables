@@ -24,8 +24,6 @@ class RegistrarUsuarioController extends Controller
         // Valida si tiene el permiso
         permiso('registrar.usuario');
 
-        $nacionalidades = [1 => 'V', 2 => 'E', 3 => 'P'];
-
         // Valida los campos
         $validar = Validator::make($request->all(), [
             'nombre' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.nombre')],
@@ -62,7 +60,7 @@ class RegistrarUsuarioController extends Controller
         User::create([
             'nombre' => $request->get('nombre'),
             'apellido' => $request->get('apellido'),
-            'nacionalidad' => $nacionalidades[$request->get('nacionalidad')],
+            'nacionalidad' => $request->get('nacionalidad'),
             'cedula' => $request->get('cedula'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password')),

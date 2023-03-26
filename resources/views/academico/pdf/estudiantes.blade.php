@@ -30,7 +30,7 @@
 
     <section class="sub__encabezado">
         <h3 class="titulo">Listado de estudiantes</h3>
-        <h4 class="subtitulo">Acreditable ({{ $materia->nom_materia }})</h4>
+        <h4 class="subtitulo">Acreditable ({{ $materia->nom_materia }} {{ $materia->trayecto->num_trayecto }})</h4>
     </section>
 
     <section>
@@ -72,7 +72,7 @@
                 @endphp
 
                     <tr class="table-active">
-                        <td style="width: 30%">{{ $CI }}</td>
+                        <td style="width: 20%">{{ $CI }}</td>
                         <td>{{ $nombre }}</td>
                         <td>{{ $apellido }}</td>
                         <td>{{ $pnf }}</td>

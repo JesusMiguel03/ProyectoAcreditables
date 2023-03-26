@@ -65,7 +65,7 @@
 
     <div class="input-group">
         <select id="mostrar" name="activo" class="form-control @error('activo') is-invalid @enderror" required>
-            <option disabled selected readonly>Seleccione...</option>
+            <option readonly>Seleccione...</option>
             <option value="1" {{ $activo === 1 ? 'selected' : '' }}>Si</option>
             <option value="0" {{ $activo === 0 ? 'selected' : '' }}>No</option>
         </select>

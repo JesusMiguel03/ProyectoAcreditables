@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Materia;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academico\Estudiante_materia;
+use App\Models\Academico\Periodo;
 use App\Models\Informacion\Bitacora;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,8 @@ class AsistenciaController extends Controller
     {
         // Valida si tiene el permiso.
         permiso('asistencias');
+
+        $periodos = Periodo::all();
 
         /**
          *  Busca a todos los estudiante inscritos que:
@@ -74,7 +77,7 @@ class AsistenciaController extends Controller
             array_push($asistenciaEstudiantes, $asistencias);
         }
 
-        return view('materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes'));
+        return view('materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes', 'periodos'));
     }
 
     public function update(Request $request, $id)
@@ -97,7 +100,7 @@ class AsistenciaController extends Controller
 
         Bitacora::create([
             'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-            'accion' => "Registró su asistencia exitosamente",
+            'accion' => "Registró la asistencia de ({$estudiante->inscritoNombre()}) exitosamente",
             'estado' => 'success',
             'periodo_id' => periodo('modelo')->id ?? null
         ]);
@@ -105,7 +108,11 @@ class AsistenciaController extends Controller
         $nombreEstudiante = $estudiante->inscritoNombre();
         $asistencia = $estudiante->aprobo()[1];
 
-        return redirect(session('URLPrevioRedireccionAsistencias'))->with('asistencia', "La asistencia del estudiante ({$nombreEstudiante}) ha sido actualizada a [{$asistencia} % / 100 %].");
+        // if (str_contains(session('URLPrevioRedireccionAsistencias'), 'periodo')) {
+        //     return redirect()->route('asistencias.index')->with('asistencia', "La asistencia del estudiante ({$nombreEstudiante}) ha sido actualizada a [{$asistencia} % / 100 %].");
+        // }
+
+        return redirect()->to(session('URLPrevioRedireccionAsistencias'))->with('asistencia', "La asistencia del estudiante ({$nombreEstudiante}) ha sido actualizada a [{$asistencia} % / 100 %].");
     }
 
     public function edit($id)
@@ -133,5 +140,66 @@ class AsistenciaController extends Controller
         }
 
         return view('materias.asistencias.edit', compact('estudiante', 'asistencias'));
+    }
+
+    public function show($id)
+    {
+        // Valida si tiene el permiso.
+        permiso('asistencias');
+
+        $periodos = Periodo::all();
+        $periodoSeleccionado = Periodo::find($id);
+
+        /**
+         *  Busca a todos los estudiante inscritos que:
+         * 
+         *  1. No hayan sido aprobados.
+         *  2. Fueron reprobados (en caso de haber un error en la asistencia).
+         */
+        $estudiantes = Estudiante_materia::where('aprobado', '!=', 1)->orWhere('aprobado', '=', null)->where('periodo_id', '=', $periodoSeleccionado->id)->get();
+
+        if (rol('Profesor')) {
+            $estudiantesProfesor = [];
+
+            $profesor = auth()->user()->profesor;
+
+            $materiasImpartidas = $profesor->imparteMateria;
+
+            /**
+             *  Lista todos los estudiantes inscritos en las materias que imparta el profesor
+             * 
+             *  Si el estudiante se encuentra aprobado no se cargará su asistencia.
+             */
+            foreach ($materiasImpartidas as $infoMateria) {
+                foreach ($infoMateria->materia->estudiantes as $estudiante) {
+                    array_push($estudiantesProfesor,  $estudiante);
+                }
+            }
+
+            $estudiantes = $estudiantesProfesor;
+        }
+
+        $asistenciaEstudiantes = [];
+
+        foreach ($estudiantes as $estudiante) {
+            $inscrito = $estudiante->inscrito;
+
+            // Selecciona la asistencia
+            $asistencia = $estudiante->asistencia;
+
+            $asistencias = 0;
+
+            // Suma cada asistencia
+            for ($i = 1; $i <= 12; $i++) {
+                $sem = 'sem' . $i;
+
+                if (!empty($asistencia)) $asistencia[$sem] === 1 ? $asistencias++ : '';
+            }
+
+            // Guarda el total de asistencias
+            array_push($asistenciaEstudiantes, $asistencias);
+        }
+
+        return view('materias.asistencias.index', compact('estudiantes', 'asistenciaEstudiantes', 'periodoSeleccionado', 'periodos'));
     }
 }

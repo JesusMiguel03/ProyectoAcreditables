@@ -34,6 +34,12 @@ class PreguntaFrecuenteController extends Controller
         // Valida si tiene el permiso
         permiso('preguntas.modificar');
 
+        $preguntaBorrada = Pregunta_frecuente::withTrashed()->where('titulo', '=', $request['titulo'])->where('deleted_at', '!=', null)->first() ?? null;
+
+        if ($preguntaBorrada) {
+            return redirect()->back()->with('elementoBorrado', 'La pregunta frecuente que intenta registrar se encuentra como elemento borrado, si lo requiere proceda a recuperarlo');
+        }
+
         $descripcionCorta = Str::length($request['explicacion']) > 40
             ? Str::limit($request['explicacion'], 40)
             : $request['explicacion'];

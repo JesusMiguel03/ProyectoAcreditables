@@ -76,17 +76,10 @@
             trayecto.options[trayecto.selectedIndex].value > 0,
             validarDescripcion.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length < 256,
             estados.includes(estado.options[estado.selectedIndex].value),
-            categoria.options[categoria.selectedIndex].value > 0,
-            metodologias.includes(metodologia.options[metodologia.selectedIndex].value),
-            profesor.options[profesor.selectedIndex].value > 0
+            categoria.options[categoria.selectedIndex].value > 0 || true,
+            metodologias.includes(metodologia.options[metodologia.selectedIndex].value) || true,
+            profesor.options[profesor.selectedIndex].value > 0  || true
         ]
-
-        if (!(validacionNombre && validacionCupos && validacionTrayecto && validacionDescripcion && validacionEstado &&
-                validacionCategoria && validacionMetodologia && validacionProfesor)) {
-            boton.disabled = true
-        } else {
-            boton.removeAttribute('disabled')
-        }
 
         const enviarFormulario = () => {
             if (validacionNombre && validacionCupos && validacionTrayecto && validacionDescripcion &&
@@ -97,9 +90,10 @@
             }
         }
 
+        enviarFormulario()
+
         nombre.addEventListener('input', (e) => {
             nombre.value = nombre.value.replace(/[^a-zA-ZÀ-ÿ\s]+$/, '')
-
 
             if (nombre.value.length > 25) {
                 nombre.value = nombre.value.slice(0, 25)
@@ -175,7 +169,7 @@
         })
 
         categoria.addEventListener('change', (e) => {
-            if (categoria.options[categoria.selectedIndex].value > 0) {
+            if (categoria.options[categoria.selectedIndex].value >= 0) {
                 categoria.classList.remove('is-invalid')
                 validacionCategoria = true
             } else {
@@ -199,7 +193,7 @@
         })
 
         profesor.addEventListener('change', (e) => {
-            if (profesor.options[profesor.selectedIndex].value > 0) {
+            if (profesor.options[profesor.selectedIndex].value >= 0) {
                 profesor.classList.remove('is-invalid')
                 validacionProfesor = true
             } else {

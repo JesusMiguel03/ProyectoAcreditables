@@ -39,6 +39,26 @@ class Profesor extends Model
         return $this->usuario->avatar ?? null;
     }
 
+    public function nombreSoloProfesor()
+    {
+        return $this->usuario->nombre;
+    }
+
+    public function apellidoSoloProfesor()
+    {
+        return $this->usuario->apellido;
+    }
+
+    public function cedulaSoloProfesor()
+    {
+        return $this->usuario->cedula;
+    }
+
+    public function nacionalidadSoloProfesor()
+    {
+        return $this->usuario->nacionalidad;
+    }
+
     public function nombreProfesor()
     {
         return $this->usuario->nombreCompleto();

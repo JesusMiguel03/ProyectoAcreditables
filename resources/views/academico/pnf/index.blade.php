@@ -120,9 +120,11 @@
         const trayectos = document.getElementById('trayectos')
         const boton = document.getElementById('formularioEnviar')
 
-        boton.disabled = true
-
-        let [validacionNombre, validacionCodigo, validacionTrayectos] = [false, true, false]
+        let [validacionNombre, validacionCodigo, validacionTrayectos] = [
+            nombre.value.length > 5 && nombre.value.length < 31,
+            codigo.value.length === 0 || codigo.value.length > 3,
+            trayectos.value > 0 && trayectos.value < 11
+        ]
 
         const validarFormulario = () => {
             if (validacionNombre && validacionCodigo && validacionTrayectos) {
@@ -132,18 +134,26 @@
             }
         }
 
-        nombre.addEventListener('input', (e) => {
-            e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-ZÀ-ÿ\s]+$/, '')
+        validarFormulario()
 
-            if (e.currentTarget.value.length > 30) {
-                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+        nombre.addEventListener('input', (e) => {
+            nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            nombre.value = nombre.value.replace(/ {2,}/g, '')
+
+            if (nombre.value.length > 20) {
+                nombre.value = nombre.value.slice(0, 20)
             }
 
-            if (e.currentTarget.value.length > 5 && e.currentTarget.value.length < 31) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionNombre = true
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                if (nombre.value.length > 5 && nombre.value.length < 31) {
+                    nombre.classList.remove('is-invalid')
+                    validacionNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validacionNombre = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                nombre.classList.add('is-invalid')
                 validacionNombre = false
             }
 
@@ -151,17 +161,17 @@
         })
 
         codigo.addEventListener('input', (e) => {
-            e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9]+/, '')
+            codigo.value = codigo.value.replace(/[^a-zA-Z0-9]+/, '')
 
-            if (e.currentTarget.value.length > 6) {
-                e.currentTarget.value = e.currentTarget.value.length.slice(0, 30)
+            if (codigo.value.length > 6) {
+                codigo.value = codigo.value.length.slice(0, 30)
             }
 
-            if (e.currentTarget.value.length === 0 || e.currentTarget.value.length > 3) {
-                e.currentTarget.classList.remove('is-invalid')
+            if (codigo.value.length === 0 || codigo.value.length > 3) {
+                codigo.classList.remove('is-invalid')
                 validacionCodigo = true
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                codigo.classList.add('is-invalid')
                 validacionCodigo = false
             }
 
@@ -169,19 +179,19 @@
         })
 
         trayectos.addEventListener('input', (e) => {
-            if (e.currentTarget.value > 10) {
-                e.currentTarget.value = 10
+            if (trayectos.value > 10) {
+                trayectos.value = 10
             }
 
-            if (e.currentTarget.value < 1) {
-                e.currentTarget.value = 1
+            if (trayectos.value < 1) {
+                trayectos.value = 1
             }
 
-            if (e.currentTarget.value > 0 && e.currentTarget.value < 11) {
-                e.currentTarget.classList.remove('is-invalid')
+            if (trayectos.value > 0 && trayectos.value < 11) {
+                trayectos.classList.remove('is-invalid')
                 validacionTrayectos = true
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                trayectos.classList.add('is-invalid')
                 validacionTrayectos = false
             }
 

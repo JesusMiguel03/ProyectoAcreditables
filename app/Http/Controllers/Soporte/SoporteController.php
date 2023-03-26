@@ -139,7 +139,7 @@ class SoporteController extends Controller
         validacion($validador, 'error', 'Recuperar contraseña');
 
         // Recupera al usuario que coincida con el correo
-        $usuario = User::where('email', '=', $request['usuario'])->first();
+        $usuario = User::where('email', '=', $request['correo1'])->first();
         $usuarioBitacora = auth()->user();
 
         // Si no se encuentra.
@@ -182,7 +182,7 @@ class SoporteController extends Controller
         ]);
         validacion($validador, 'error', 'Cambiar cédula');
 
-        $usuario = User::where('email', '=', $request['usuario'])->first();
+        $usuario = User::where('email', '=', $request['correo'])->first();
         $usuarioBitacora = auth()->user();
 
         // Si no se encuentra.

@@ -44,8 +44,12 @@
         const descripcion = document.getElementById('descripcion')
         const boton = document.getElementById('formularioEnviar')
 
-        let validarNombre = true
-        let validarDescripcion = true
+        let [validarNombre, validarDescripcion] = [
+            nombre.value.length > 4 && nombre.value.length < 51,
+            descripcion.value.length > 10 && descripcion.value.length < 256
+        ]
+
+        boton.disabled = true
 
         const validarFormulario = () => {
             if (validarNombre && validarDescripcion) {
@@ -56,28 +60,48 @@
         }
 
         nombre.addEventListener('input', (e) => {
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+            nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            nombre.value = nombre.value.replace(/ {2,}/g, '')
 
-            if (e.currentTarget.value.length > 4 && e.currentTarget.value.length < 51 && validacion.test(e.currentTarget.value)) {
-                validarNombre = true
-                e.currentTarget.classList.remove('is-invalid')
+            if (nombre.value.length > 51) {
+                nombre.value = nombre.value.slice(0, 51)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
+                if (nombre.value.length > 4 && nombre.value.length < 51) {
+                    nombre.classList.remove('is-invalid')
+                    validarNombre = true
+                } else {
+                    nombre.classList.add('is-invalid')
+                    validarNombre = false
+                }
             } else {
+                nombre.classList.add('is-invalid')
                 validarNombre = false
-                e.currentTarget.classList.add('is-invalid')
             }
 
             validarFormulario()
         })
 
         descripcion.addEventListener('input', (e) => {
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){10})[^_]+$/g
+            descripcion.value = descripcion.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            descripcion.value = descripcion.value.replace(/ {2,}/g, '')
 
-            if (e.currentTarget.value.length > 15 && e.currentTarget.value.length < 256 && validacion.test(e.currentTarget.value)) {
-                validarDescripcion = true
-                e.currentTarget.classList.remove('is-invalid')
+            if (descripcion.value.length > 256) {
+                descripcion.value = descripcion.value.slice(0, 256)
+            }
+
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(descripcion.value)) {
+                if (descripcion.value.length > 10 && descripcion.value.length < 256) {
+                    descripcion.classList.remove('is-invalid')
+                    validarDescripcion = true
+                } else {
+                    descripcion.classList.add('is-invalid')
+                    validarDescripcion = false
+                }
             } else {
+                descripcion.classList.add('is-invalid')
                 validarDescripcion = false
-                e.currentTarget.classList.add('is-invalid')
             }
 
             validarFormulario()

@@ -14,8 +14,8 @@
 
     <div class="input-group">
         <input type="number" id="fase" name="fase" class="form-control @error('fase') is-invalid @enderror"
-            value="{{ $fase ?? old('fase') }}" placeholder="{{ __('Ej: 1, 2 o 3') }}" min="1" max="3" autofocus
-            required>
+            value="{{ $fase ?? old('fase') }}" placeholder="{{ __('Ej: 1, 2 o 3') }}" min="1" max="3"
+            autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -37,8 +37,8 @@
 
     <div class="input-group date" id="inicio" data-target-input="nearest">
         <input type="text" id="inputInicio" name="inicio"
-            class="form-control datetimepicker-input @error('inicio') is-invalid @enderror" data-target="#inicio" data-toggle="datetimepicker"
-            value="{{ $inicio ?? old('inicio') }}" placeholder="{{ __('2015-01-01') }}"
+            class="form-control datetimepicker-input @error('inicio') is-invalid @enderror" data-target="#inicio"
+            data-toggle="datetimepicker" value="{{ $inicio ?? old('inicio') }}" placeholder="{{ __('2015-01-01') }}"
             required>
 
         <div class="input-group-append" data-target="#inicio" data-toggle="datetimepicker">
@@ -59,8 +59,8 @@
 
     <div class="input-group date" id="fin" data-target-input="nearest">
         <input type="text" id="inputFin" name="fin"
-            class="form-control datetimepicker-input @error('fin') is-invalid @enderror" data-target="#fin" data-toggle="datetimepicker"
-            value="{{ $fin ?? old('fin') }}" placeholder="{{ __('2015-04-09') }}" required>
+            class="form-control datetimepicker-input @error('fin') is-invalid @enderror" data-target="#fin"
+            data-toggle="datetimepicker" value="{{ $fin ?? old('fin') }}" placeholder="{{ __('2015-04-09') }}" required>
 
         <div class="input-group-append" data-target="#fin" data-toggle="datetimepicker">
             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -77,7 +77,35 @@
 <x-modal.mensaje-obligatorio />
 
 @if (Route::is('periodos.edit'))
-    <x-modal.footer-editar ruta="{{ route('periodos.index') }}" />
+    <div class="row">
+        <div class="col-6">
+            <a href="{{ route('periodos.index') }}" class="btn btn-block btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Volver') }}
+            </a>
+        </div>
+
+        <div class="col-6">
+            <button type="submit" id="formularioEnviar" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @else
-    <x-modal.footer-aceptar />
+    <div class="row">
+        <div class="col-6">
+            <button id="cancelar" type="button" class="btn btn-block btn-secondary" data-dismiss="modal">
+                <i class="fas fa-arrow-left mr-2"></i>
+                {{ __('Cancelar') }}
+            </button>
+        </div>
+
+        <div class="col-6">
+            <button id="formularioEnviar" type="submit" class="btn btn-block btn-success">
+                <i class="fas fa-save mr-2"></i>
+                {{ __('Guardar') }}
+            </button>
+        </div>
+    </div>
 @endif

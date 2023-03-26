@@ -171,8 +171,19 @@ class ProfesorController extends Controller
         $request->merge(['codigoTelefono' => $request->codigo . $request->telefono]);
         $codigoTelefono = $request->codigo . $request->telefono;
 
+        $CImin = config('variables.usuarios.cedula')[0];
+        $CImax = config('variables.usuarios.cedula')[1];
+
+        // Busca y actualiza
+        $profesor = Profesor::find($id);
+        $usuarioActualizar = User::where('id','=',$profesor->usuario_id)->first();
+
         // Valida los campos
         $validar = Validator::make($request->all(), [
+            'nombre' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.nombre')],
+            'apellido' => ['required', 'string', 'regex: /[A-zÀ-ÿ]+/', 'max:' . config('variables.usuarios.apellido')],
+            'nacionalidad' => ['required', 'not_in:0', 'string'],
+            'cedula' => ['required', 'numeric', 'digits_between:' . $CImin . ',' . $CImax, 'unique:users,cedula,' . $usuarioActualizar->id],
             'departamento' => ['required', 'not_in:0'],
             'conocimiento' => ['required', 'not_in:0'],
             'activo' => ['required', 'not_in:0'],
@@ -187,6 +198,20 @@ class ProfesorController extends Controller
             'fecha_de_nacimiento' => ['required', 'date'],
             'fecha_ingreso_institucion' => ['required', 'date'],
         ], [
+            'nombre.required' => 'El nombre es necesario.',
+            'nombre.string' => 'El nombre debe ser una oración.',
+            'nombre.regex' => 'El nombre solo puede contener letras.',
+            'nombre.max' => 'El nombre no debe tener más de :max caracteres.',
+            'apellido.required' => 'El apellido es necesario.',
+            'apellido.string' => 'El apellido debe ser una oración.',
+            'apellido.regex' => 'El apellido solo puede contener letras.',
+            'apellido.max' => 'El apellido no debe tener más de :max caracteres.',
+            'nacionalidad.required' => 'La nacionalidad es necesaria.',
+            'nacionalidad.not_in' => 'La nacionalidad debe ser una de la lista.',
+            'cedula.required' => 'La cédula es necesaria.',
+            'cedula.numeric' => 'La cédula debe ser un número.',
+            'cedula.unique' => 'La cédula debe ser única.',
+            'cedula.digits_between' => 'La cedula debe estar entre los ' . $CImin . ' y ' . $CImax . ' dígitos.',
             'activo.required' => 'El estado del profesor es necesario.',
             'activo.not_in' => 'El estado del profesor seleccionado es inválido.',
             'departamento.required' => 'El departamento es necesario.',
@@ -219,11 +244,14 @@ class ProfesorController extends Controller
             'fecha_ingreso_institucion.required' => 'La fecha de ingreso es necesaria.',
             'fecha_ingreso_institucion.date' => 'La fecha de ingreso debe ser una fecha.',
         ]);
-
         validacion($validar, 'error', 'Profesor');
 
-        // Busca y actualiza
-        $profesor = Profesor::find($id);
+        $usuarioActualizar->update([
+            'nombre' => $request->get('nombre'),
+            'apellido' => $request->get('apellido'),
+            'nacionalidad' => $request->get('nacionalidad'),
+            'cedula' => $request->get('cedula'),
+        ]);
 
         $profesor->update([
             'telefono' => $request['codigo'] . $request['telefono'],

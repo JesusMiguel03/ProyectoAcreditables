@@ -62,7 +62,10 @@
 
         const espacios = ['A', 'Edificio A', 'B', 'Edificio B', 'C', 'Edificio C']
 
-        let [validacionEspacio, validacionAula] = [false, true]
+        let [validacionEspacio, validacionAula] = [
+            espacio.value.length > 0 && espacio.value.length < 31,
+            aula.value === 0 || aula.value < 13 && espacio.value.length > 1 || espacios.includes(espacio.value)
+        ]
 
         const validarFormulario = () => {
             if (validacionEspacio && validacionAula) {
@@ -72,45 +75,53 @@
             }
         }
 
+        validarFormulario()
+
         espacio.addEventListener('input', (e) => {
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){1})[^_]+$/g
+            espacio.value = espacio.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
+            espacio.value = espacio.value.replace(/ {2,}/g, '')
 
-            if (e.currentTarget.value.length > 30) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 30)
+            if (espacio.value.length > 30) {
+                espacio.value = espacio.value.slice(0, 30)
             }
 
-            if (espacios.includes(espacio.value)) {
-                espacio.classList.add('is-invalid')
-                aula.classList.add('is-invalid')
-                validacionEspacio = false
-                validacionAula = false
+            if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(espacio.value)) {
+                if (espacios.includes(espacio.value) && aula.value === '') {
+                    aula.classList.add('is-invalid')
+                    validacionAula = false
+                } else {
+                    aula.classList.remove('is-invalid')
+                    validacionAula = true
+                }
+
+                if (espacio.value.length > 0 && espacio.value.length < 31) {
+                    espacio.classList.remove('is-invalid')
+                    validacionEspacio = true
+                } else {
+                    espacio.classList.add('is-invalid')
+                    validacionEspacio = false
+                }
             } else {
-                espacio.classList.remove('is-invalid')
-                aula.classList.remove('is-invalid')
-                validacionEspacio = true
-                validacionAula = true
-            }
-
-            if (validacion.test(espacio.value)) {
-                espacio.classList.remove('is-invalid')
-                validacionEspacio = true
-            } else {
                 espacio.classList.add('is-invalid')
                 validacionEspacio = false
             }
+
 
             validarFormulario()
         })
 
         aula.addEventListener('input', (e) => {
-            if (e.currentTarget.value > 12) {
-                e.currentTarget.value = 12
+            if (aula.value > 12) {
+                aula.value = 12
             }
 
-            if (e.currentTarget.value === 0 || e.currentTarget.value < 13) {
+            if (aula.value === 0 || aula.value < 13 && espacio.value.length > 1 || espacios.includes(espacio
+                .value)) {
+                espacio.classList.remove('is-invalid')
                 aula.classList.remove('is-invalid')
                 validacionAula = true
             } else {
+                espacio.classList.add('is-invalid')
                 aula.classList.add('is-invalid')
                 validacionAula = false
             }
@@ -127,6 +138,7 @@
         });
     </script>
 
+    {{-- Mensaje de borrar --}}
     <script>
         const form = document.getElementById('form')
         const boton = document.getElementById('borrar')

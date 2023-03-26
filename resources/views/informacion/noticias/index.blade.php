@@ -37,7 +37,7 @@
     <div class="card table-responsive-sm p-3 mt-1 mb-3 col-12">
 
         <div class="w-100 row mx-auto my-2">
-            <p class="px-5 text-muted">
+            <p class="text-muted">
                 <strong>Nota:</strong>
                 El carrusel solo mostrará las primeras {{ config('variables.carrusel') }} noticias activas para no
                 sobrecargar la vista del usuario, el resto de noticias estarán disponibles en la tabla pero no visibles.
@@ -116,32 +116,45 @@
     <script>
         const titulo = document.getElementById('titulo')
         const descripcion = document.getElementById('descripcion')
+        const activo = document.getElementById('mostrar')
         const boton = document.getElementById('formularioEnviar')
 
-        boton.disabled = true
+        const estados = ['0', '1']
 
-        let [validacionTitulo, validacionDescripcion] = [false, false]
+        let [validacionTitulo, validacionDescripcion, validacionActivo] = [
+            titulo.value.length > 5 && titulo.value.length < 30,
+            descripcion.value.length > 15 && descripcion.value.length < 100,
+            estados.includes(activo.options[activo.selectedIndex].value)
+        ]
 
         const validarFormulario = () => {
-            if (validacionTitulo && validacionDescripcion) {
+            if (validacionTitulo && validacionDescripcion && validacionActivo) {
                 boton.removeAttribute('disabled')
             } else {
                 boton.disabled = true
             }
         }
 
-        titulo.addEventListener('input', (e) => {
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+        validarFormulario()
 
-            if (e.currentTarget.value.length > 30) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 30)
+        titulo.addEventListener('input', (e) => {
+            titulo.value = titulo.value.replace(/[^A-zÀ-ÿ0-9¡?¿!\s]+/g, '')
+            titulo.value = titulo.value.replace(/ {2,}/g, '')
+
+            if (titulo.value.length > 30) {
+                titulo.value = titulo.value.slice(0, 30)
             }
 
-            if (validacion.test(titulo.value) && e.currentTarget.value.length > 5 && e.currentTarget.value.length < 30) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionTitulo = true
+            if (/^[\p{L}\p{N}\s¿?¡!]+(?:[\p{L}\p{N}\s¿?¡!]+)*$/u.test(titulo.value)) {
+                if (titulo.value.length > 5 && titulo.value.length < 30) {
+                    titulo.classList.remove('is-invalid')
+                    validacionTitulo = true
+                } else {
+                    titulo.classList.add('is-invalid')
+                    validacionTitulo = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                titulo.classList.add('is-invalid')
                 validacionTitulo = false
             }
 
@@ -149,18 +162,36 @@
         })
 
         descripcion.addEventListener('input', (e) => {
-            let validacion = /^(?=[^_]*(?:[A-Za-zÀ-ÿ][^_]*){5})[^_]+$/g
+            descripcion.value = descripcion.value.replace(/[^A-zÀ-ÿ0-9¡?¿!\s]+/g, '')
+            descripcion.value = descripcion.value.replace(/ {2,}/g, '')
 
-            if (e.currentTarget.value.length > 100) {
-                e.currentTarget.value = e.currentTarget.value.slice(0, 100)
+            if (descripcion.value.length > 100) {
+                descripcion.value = descripcion.value.slice(0, 100)
             }
 
-            if (validacion.test(descripcion.value) && e.currentTarget.value.length > 15 && e.currentTarget.value.length < 100) {
-                e.currentTarget.classList.remove('is-invalid')
-                validacionDescripcion = true
+            if (/^[\p{L}\p{N}\s¿?¡!]+(?:[\p{L}\p{N}\s¿?¡!]+)*$/u.test(descripcion.value)) {
+                if (descripcion.value.length > 15 && descripcion.value.length < 100) {
+                    descripcion.classList.remove('is-invalid')
+                    validacionDescripcion = true
+                } else {
+                    descripcion.classList.add('is-invalid')
+                    validacionDescripcion = false
+                }
             } else {
-                e.currentTarget.classList.add('is-invalid')
+                descripcion.classList.add('is-invalid')
                 validacionDescripcion = false
+            }
+
+            validarFormulario()
+        })
+
+        activo.addEventListener('change', (e) => {
+            if (estados.includes(activo.options[activo.selectedIndex].value)) {
+                activo.classList.remove('is-invalid')
+                validacionActivo = true
+            } else {
+                activo.classList.add('is-invalid')
+                validacionActivo = false
             }
 
             validarFormulario()

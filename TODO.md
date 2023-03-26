@@ -1,10 +1,7 @@
 ## **Actualización**
-[24/03/2023] *???*
+[25/03/2023] *Validations*
 
-<!-- Validacion de correo -->
-const validarCorreo = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-
-correo.value = correo.value.replace(/[^@A-Za-z0-9._-]+/g, '')
+## **Pendiente**
 
 ## **Validaciones del componente**
 -   Login:
@@ -32,6 +29,8 @@ correo.value = correo.value.replace(/[^@A-Za-z0-9._-]+/g, '')
         -   El comprobante se actualiza.
         -   La información del perfil se actualiza.
         -   La acreditable a mostrar se actualiza.
+    ✔  Listado de estudiantes pdf carga.
+    ✔  Solo muestra información de la materia al profesor si la dicta. 
 
 -   Perfil:
     -   Actualizar información:
@@ -45,23 +44,122 @@ correo.value = correo.value.replace(/[^@A-Za-z0-9._-]+/g, '')
         ✔  Contraseña actual validada.
         ✔  Nueva contraseña validada.
         ✔  Confirmar contraseña validada.
+
+-   Principal:
+    -   Periodo:
+        ✔  Fase validada.
+        ✔  Fecha inicio validada.
+        ✔  Fecha fin validada.
+
+    -   Registrar/:
+        -   Áreas de conocimiento:
+            ✔  Nombre validado.
+            ✔  Descripción validada.
+            ✔  Editar validado.
+            ✔  Borrar validado.
+
+        -   Profesores:
+            ✔  Registrar usuario validado.
+            ✔  Registrar profesor validado.
+            ✔  Actualizar profesor validado.
+            ✔  Ver perfil profesor validado.
+        
+        -   Estudiantes:
+            ✔  Registrar usuario validado.
+            ✔  Actualizar usuario validado.
+            ✔  Comprobantes validado.
+
+-   Acreditables:
+    -   Gestionar/:
+        -   Categorías:
+            ✔  Nombre validado.
+            ✔  Unico validado.
+            ✔  Editar validado.
+            ✔  Borrar validado
+            ✔  Borrado validado.
+
+        -   Materias:
+            ✔  Nombre validado.
+            ✔  Cupos validado.
+            ✔  Trayecto validado.
+            ✔  Descripción validada.
+            ✔  Inscribir validado.
+            ✔  Ver validado.
+            ✔  Listado validado.
+            ✔  Notas pdf validado.
+            ✔  Borrar validado.
+            ✔  Comprobante estudiante validado.
+            ✔  Invalidar / validar validado.
+            ✔  Asistencia validada.
+            ✔  Asignar nota validado.
+            ✔  Aprobación validada.
+            ✔  Editar validado.
+
+        -   Horarios:
+            ✔  Espacio validado.
+            ✔  Aula validada.
+            ✔  Materia validada.
+            ✔  Editar validado.
+            ✔  Borrar validado.
+            ✔  Horario validado.
+            ✔  Vaciar validado.
+            ✔  Alert vaciado validado.
+
+        -   Asistencias:
+            ✔  Periodo añadido.
+            ✔  Guardar asistencia validad.
+
+    -   Gráficos y estadísticas:
+        ✔  Gráficos por periodo validado.
+        ✔  Estadísticas por periodo y materia validado.
+
+-   Datos académicos:
+    -   PNF:
+        ✔  Nombre validado.   
+        ✔  Código validado.   
+        ✔  Trayectos validado.   
+        ✔  Editar validado.   
+        ✔  Borrar validado.
+        ✔  Duplicado validado.
+        ✔  Borrado validado.
+
+    -   Trayecto:
+        ✔  Número validado.
+        ✔  Duplicado validado.
+        ✔  Borrado validado.
+        ✔  Editar validado.
+        ✔  Borrar validado.
+
+-   Información
+    -   Noticias:
+        ✔  Titulo validado.
+        ✔  Descripción validado.
+        ✔  Estado validado.
+        ✔  Editar validado.
+        ✔  Duplicado validado.
+
+    -   Preguntas frecuentes:
+        ✔  Pregunta validado.
+        ✔  Respuesta validado.
+        ✔  Duplicado validado.
+        ✔  Borrar validado.
+
+-   Mantenimiento:
+    -   Recuperar datos:
+        ✔  Recuperar contraseña validado.
+        ✔  Cambiar cedula validado.
+
+    -   Base de datos:
+        ✔  Respaldo validado.
+        ✔  Alert del respaldo validado.
+        ✔  Descarga validada.
+        ✔  Alert de la descarga validada.
     
 
 ## **Pendiente**
--   Materias/edit validaciones js.
--   Materias acepta numeros negativos.
--   Materias/edit, los select extra no deben ser obligatorios.
 
 ## **Changes**
--   Login & register fixed.
--   td width fixed (must check).
--   Students@index (offset 0 error ?) fixed.
--   FAQ@index table response width changed.
--   Recover data@index CI form changed.
--   Redirect if user hasn't academic profile.
--   Login & register regex changed.
--   Subject "number" added in title.
--   Subject in progress in header added.
+
 
 ## **Prueba de caja blanca**
 # (*Proceso*: Inscripción de Estudiante)
