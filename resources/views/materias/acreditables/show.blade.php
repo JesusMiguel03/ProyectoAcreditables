@@ -187,6 +187,10 @@
                             <th>Apellido</th>
                             <th>Estado</th>
 
+                            @if (rol('Estudiante'))
+                                <th>Nota</th>
+                            @endif
+
                             @if (rol('Profesor'))
                                 <th>Nota</th>
                                 @if ($profesorDictaAcreditable)
