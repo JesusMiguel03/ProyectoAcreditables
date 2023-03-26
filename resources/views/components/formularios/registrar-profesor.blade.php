@@ -16,7 +16,11 @@
 
 {{-- Usuario --}}
 <div class="form-group required mb-3">
+    @if (Route::is('profesores.index'))
+        <label for="usuarios" class="control-label">Usuario</label>
+    @endif
     <div class="input-group">
+
 
         @if (Route::is('profesores.index'))
             <select id="usuario" name="usuarios" class="form-control @error('usuarios') is-invalid @enderror" required>
@@ -34,6 +38,18 @@
                 @endforeach
 
             </select>
+
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                </div>
+            </div>
+
+            @error('usuarios')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
         @else
             {{-- Nombre --}}
             <div class="form-row" style="margin-bottom: -0.75rem">
@@ -99,9 +115,15 @@
                         <select name="nacionalidad" id="nacionalidad"
                             class="form-control @error('nacionalidad') is-invalid @enderror" required>
                             <option value="0" readonly>Seleccione uno...</option>
-                            <option value="V" {{ $profesor->nacionalidadSoloProfesor() === 'V' ? 'selected' : '' }}>V</option>
-                            <option value="E" {{ $profesor->nacionalidadSoloProfesor() === 'E' ? 'selected' : '' }}>E</option>
-                            <option value="P" {{ $profesor->nacionalidadSoloProfesor() === 'P' ? 'selected' : ''  }}>P</option>
+                            <option value="V"
+                                {{ $profesor->nacionalidadSoloProfesor() === 'V' ? 'selected' : '' }}>V
+                            </option>
+                            <option value="E"
+                                {{ $profesor->nacionalidadSoloProfesor() === 'E' ? 'selected' : '' }}>E
+                            </option>
+                            <option value="P"
+                                {{ $profesor->nacionalidadSoloProfesor() === 'P' ? 'selected' : '' }}>P
+                            </option>
                         </select>
 
                         @error('nacionalidad')
@@ -113,10 +135,11 @@
 
                     <div class="form-group col-8">
                         <label for="cedula" class="control-label">Cédula</label>
-                        
+
                         <div class="input-group">
                             <input type="number" id="cedula" name="cedula"
-                                class="form-control @error('cedula') is-invalid @enderror" value="{{ old('cedula') ?? $profesor->cedulaSoloProfesor() }}"
+                                class="form-control @error('cedula') is-invalid @enderror"
+                                value="{{ old('cedula') ?? $profesor->cedulaSoloProfesor() }}"
                                 placeholder="{{ __('Cédula, ej: 1021536') }}" required>
 
                             <div class="input-group-append">
