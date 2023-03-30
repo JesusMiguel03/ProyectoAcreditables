@@ -89,6 +89,8 @@
             }
         }
 
+        formularioValidado()
+
         nombre.addEventListener('input', (e) => {
             nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
             nombre.value = nombre.value.replace(/ {2,}/g, '')

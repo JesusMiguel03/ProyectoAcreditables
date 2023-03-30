@@ -5,7 +5,6 @@ use App\Models\Informacion\Bitacora;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 /**
  *  Valida si puede interactuar

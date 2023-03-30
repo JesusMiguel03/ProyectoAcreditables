@@ -54,7 +54,7 @@
             <label for="password" class="control-label">Contraseña</label>
             <div class="input-group mb-3">
                 <input type="password" id="contrasena" name="password"
-                    class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Contraseña') }}"
+                    class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Contraseña') }}" title="Debe contener entre 4 y 8 caracteres."
                     required>
 
                 <div class="input-group-append">
@@ -84,6 +84,10 @@
                 <button id="boton" type=submit class="btn btn-block btn-primary" disabled>
                     {{ __('Iniciar Sesión') }}
                 </button>
+            </div>
+
+            <div class="col-12 mt-3 text-center">
+                <a href="{{ route('manual.usuario') }}">¿No entiendes como funciona? Haz clic aquí</a>
             </div>
         </div>
 

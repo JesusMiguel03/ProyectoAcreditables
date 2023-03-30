@@ -39,6 +39,8 @@
 @section('js')
     <script src="{{ asset('vendor/moment/moment.js') }}"></script>
     <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    
+    {{-- Datepicker --}}
     <script>
         $(function() {
             $('#inicio').datetimepicker({

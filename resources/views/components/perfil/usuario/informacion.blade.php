@@ -15,15 +15,18 @@
                 @csrf
                 {{ method_field('PUT') }}
 
+                {{-- Nombre y apellido --}}
                 <div class="input-group mb-3">
                     <div class="row">
+                        {{-- Nombre --}}
                         <div class="col-6">
                             <label>Nombre</label>
 
                             <div class="input-group">
                                 <input type="text" id="nombre" name="nombre"
                                     class="form-control @error('nombre') is-invalid @enderror"
-                                    value="{{ $usuario->nombre }}">
+                                    value="{{ $usuario->nombre }}" title="Debe estar entre 3 y 20 letras.">
+
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -38,13 +41,14 @@
 
                         </div>
 
+                        {{-- Apellido --}}
                         <div class="col-6">
                             <label>Apellido</label>
 
                             <div class="input-group">
                                 <input type="text" id="apellido" name="apellido"
                                     class="form-control @error('apellido') is-invalid @enderror"
-                                    value="{{ $usuario->apellido }}">
+                                    value="{{ $usuario->apellido }}" title="Debe estar entre 3 y 20 letras.">
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -63,12 +67,15 @@
                     </div>
                 </div>
 
+                {{-- Nacionalidad y cédula --}}
                 <div class="form-group mb-n2">
                     <div class="form-row">
                         <div class="form-group col-4">
                             <label for="nacionalidad">Nacionalidad</label>
+
                             <select id="nacionalidad" name="nacionalidad"
-                                class="form-control @error('nacionalidad') is-invalid @enderror">
+                                class="form-control @error('nacionalidad') is-invalid @enderror" title="Debe seleccionar una opción de la lista.">
+
                                 <option value="0" readonly> Seleccione una...</option>
                                 <option value="1" {{ $usuario->nacionalidad === 'V' ? 'selected' : '' }}>V</option>
                                 <option value="2" {{ $usuario->nacionalidad === 'E' ? 'selected' : '' }}>E</option>
@@ -88,7 +95,7 @@
                             <div class="input-group">
                                 <input type="number" id="cedula" name="cedula"
                                     class="form-control @error('cedula') is-invalid @enderror"
-                                    value="{{ $usuario->cedula }}">
+                                    value="{{ $usuario->cedula }}" title="Debe estar entre 7 y 8 dígitos.">
 
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -111,8 +118,8 @@
                     <label>Correo</label>
 
                     <div class="input-group">
-                        <input type="text" id="correo" name="email"
-                            class="form-control @error('email') is-invalid @enderror" value="{{ $usuario->email }}">
+                        <input type="email" id="correo" name="email"
+                            class="form-control @error('email') is-invalid @enderror" value="{{ $usuario->email }}" title="Debe ser un correo válido.">
 
                         <div class="input-group-append">
                             <div class="input-group-text">

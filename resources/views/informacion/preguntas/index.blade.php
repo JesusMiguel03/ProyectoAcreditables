@@ -165,7 +165,7 @@
             }
 
             if (/^[\p{L}\s]+(?:[\p{L}\s]+)*$/u.test(pregunta.value)) {
-                if (pregunta.value.length > 6 && pregunta.value.length < 31) {
+                if (pregunta.value.length > 5 && pregunta.value.length < 31) {
                     pregunta.classList.remove('is-invalid')
                     validacionPregunta = true
                 } else {
@@ -190,7 +190,7 @@
             }
 
             if (/^[\p{L}\s(),"\d,.]+(?:[\p{L}()\s",.\d]+)*$/u.test(respuesta.value)) {
-                if (respuesta.value.length > 20 && respuesta.value.length < 255) {
+                if (respuesta.value.length > 19 && respuesta.value.length < 256) {
                     respuesta.classList.remove('is-invalid')
                     validacionRespuesta = true
                 } else {

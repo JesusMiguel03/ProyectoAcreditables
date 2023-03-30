@@ -29,11 +29,14 @@
 
                             <section class="form-group required">
 
+                                {{-- Bloque del horario donde se guarda --}}
                                 <input type="number" id="dia" name="dia" hidden>
                                 <input type="text" id="hora" name="hora" hidden>
                                 <input type="text" id="campo" name="campo" hidden>
 
+                                {{-- Espacio y aula --}}
                                 <article class="form-row">
+                                    {{-- Espacio --}}
                                     <div class="form-group col-md-8 col-sm-12">
                                         <label class="control-label">Espacio</label>
 
@@ -42,7 +45,7 @@
                                             value="{{ $espacio ?? old('espacio') }}"
                                             placeholder="{{ __('Espacio a ocupar, Ej: (Edificio B) o solo (B)') }}"
                                             maxlength="{{ config('variables.horarios.espacio') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                                            title="Debe contener letras, espacios y/o números." autofocus required>
+                                            title="Debe contener entre 1 y 30 letras." autofocus required>
 
                                         @error('espacio')
                                             <span class="invalid-feedback" role="alert">
@@ -51,6 +54,7 @@
                                         @enderror
                                     </div>
 
+                                    {{-- Aula --}}
                                     <div class="form-group col-md-4 col-sm-12">
                                         <label for="aula">Número del aula</label>
 
@@ -60,7 +64,7 @@
                                                 class="form-control @error('aula') is-invalid @enderror"
                                                 value="{{ $aula ?? old('aula') }}" placeholder="{{ __('Ej: 7') }}"
                                                 min="1" max="{{ config('variables.horarios.aula') }}"
-                                                title="No debe ser mayor a {{ config('variables.horarios.aula') }}">
+                                                title="Debe estar entre 1 y {{ config('variables.horarios.aula') }}.">
 
 
                                             @error('aula')
@@ -76,7 +80,7 @@
                                     <label for="materia_id" class="control-label">Materia</label>
 
                                     <select id="materia_id" class="form-control @error('materia_id') is-invalid @enderror"
-                                        name="materia_id" required>
+                                        name="materia_id" title="Debe seleccionar una opción de la lista." required>
 
                                         <option value="" readonly>Seleccione...</option>
 

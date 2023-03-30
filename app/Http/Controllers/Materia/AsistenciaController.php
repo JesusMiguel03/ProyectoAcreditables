@@ -108,10 +108,6 @@ class AsistenciaController extends Controller
         $nombreEstudiante = $estudiante->inscritoNombre();
         $asistencia = $estudiante->aprobo()[1];
 
-        // if (str_contains(session('URLPrevioRedireccionAsistencias'), 'periodo')) {
-        //     return redirect()->route('asistencias.index')->with('asistencia', "La asistencia del estudiante ({$nombreEstudiante}) ha sido actualizada a [{$asistencia} % / 100 %].");
-        // }
-
         return redirect()->to(session('URLPrevioRedireccionAsistencias'))->with('asistencia', "La asistencia del estudiante ({$nombreEstudiante}) ha sido actualizada a [{$asistencia} % / 100 %].");
     }
 
@@ -136,7 +132,7 @@ class AsistenciaController extends Controller
         // Añade las asistencias
         for ($i = 1; $i <= 12; $i++) {
             $sem = 'sem' . $i;
-            $asistencia[$sem] === null ? $asistencias++ : '';
+            $asistencia[$sem] === 1 ? $asistencias++ : '';
         }
 
         return view('materias.asistencias.edit', compact('estudiante', 'asistencias'));
@@ -193,7 +189,9 @@ class AsistenciaController extends Controller
             for ($i = 1; $i <= 12; $i++) {
                 $sem = 'sem' . $i;
 
-                if (!empty($asistencia)) $asistencia[$sem] === 1 ? $asistencias++ : '';
+                if (!empty($asistencia)) {
+                    $asistencia[$sem] === 1 ? $asistencias++ : '';
+                }
             }
 
             // Guarda el total de asistencias

@@ -223,7 +223,10 @@
             boton.disabled = true
 
             let [validacionNombre, validacionCupos, validacionTrayecto, validacionDescripcion] = [
-                false, false, false, false
+                nombre.value.length > 4 && nombre.value.length < 26,
+                cupos.value > 0 && cupos.value < 51,
+                trayecto.options[trayecto.selectedIndex].value > 0,
+                descripcion.value.length > 14 && descripcion.value.length < 256
             ]
 
             const enviarFormulario = () => {
@@ -243,7 +246,7 @@
                 }
 
                 if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
-                    if (nombre.value.length > 5 && nombre.value.length < 26) {
+                    if (nombre.value.length > 4 && nombre.value.length < 26) {
                         nombre.classList.remove('is-invalid')
                         validacionNombre = true
                     } else {
@@ -294,12 +297,12 @@
                 descripcion.value = descripcion.value.replace(/[^A-zÀ-ÿ\s]+/g, '')
                 descripcion.value = descripcion.value.replace(/ {2,}/g, '')
 
-                if (descripcion.value.length > 255) {
-                    descripcion.value = descripcion.value.slice(0, 255)
+                if (descripcion.value.length > 256) {
+                    descripcion.value = descripcion.value.slice(0, 256)
                 }
 
                 if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(descripcion.value)) {
-                    if (descripcion.value.length > 15 && descripcion.value.length < 255) {
+                    if (descripcion.value.length > 14 && descripcion.value.length < 256) {
                         descripcion.classList.remove('is-invalid')
                         validacionDescripcion = true
                     } else {
@@ -363,6 +366,7 @@
             })
         @elseif ($message = session('registrado'))
             Swal.fire({
+                width: '40rem',
                 icon: 'success',
                 title: '¡Te has inscrito exitosamente!',
                 html: 'Ahora podrá cursar la materia inscrita, pero recuerda llevar su comprobante de inscripción a la Coordinación de Acreditables para ser validado.',

@@ -20,7 +20,7 @@
                     class="form-control @error('espacio') is-invalid @enderror" value="{{ $espacio ?? old('espacio') }}"
                     placeholder="{{ __('Espacio a ocupar, Ej: (Edificio B) o solo (B)') }}"
                     maxlength="{{ config('variables.horarios.espacio') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                    title="Debe contener letras, espacios y/o números." autofocus required>
+                    title="Debe contener entre 1 y 30 letras." autofocus required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -45,7 +45,7 @@
                     class="form-control @error('aula') is-invalid @enderror contador" value="{{ $aula ?? old('aula') }}"
                     placeholder="{{ __('Número del aula, si es un edificio, ej: 12') }}" min="1"
                     max="{{ config('variables.horarios.aula') }}"
-                    title="No debe ser mayor a {{ config('variables.horarios.aula') }}">
+                    title="Debe estar entre 1 y {{ config('variables.horarios.aula') }}.">
 
 
                 @error('aula')

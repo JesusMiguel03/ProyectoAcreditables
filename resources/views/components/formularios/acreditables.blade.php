@@ -25,12 +25,13 @@
     {{-- Nombre --}}
     <div class="form-group required mb-3">
         <label for="nom_materia" class="control-label">Nombre</label>
+
         <div class="input-group">
             <input type="text" id="nombre" name="nom_materia"
                 class="form-control @error('nom_materia') is-invalid @enderror" value="{{ old('nom_materia') }}"
                 placeholder="{{ __('Nombre de la materia, ej: Ping pong') }}"
                 maxlength="{{ config('variables.materias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." autofocus required>
+                title="Debe contener entre 5 y 25 letras." autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -46,6 +47,7 @@
         </div>
     </div>
 
+    {{-- Cupos y número --}}
     <div class="form-group" style="margin-bottom: -0.3rem">
         <div class="row">
 
@@ -57,7 +59,7 @@
                     <input type="number" id="cupos" name="cupos"
                         class="form-control @error('cupos') is-invalid @enderror" value="{{ old('cupos') }}"
                         placeholder="{{ __('Cupos iniciales, ej: 10') }}" max="{{ config('variables.materias.cupos') }}"
-                        title="Debe ser menor a 50" required>
+                        title="Debe estar entre 1 y 50." required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -78,7 +80,7 @@
                 <label for="trayecto" class="control-label">Acreditable Nro</label>
 
                 <div class="input-group">
-                    <select id="trayecto" name="trayecto" class="form-control @error('trayecto') is-invalid @enderror"
+                    <select id="trayecto" name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" title="Debe seleccionar una opción de la lista."
                         required>
                         <option value="0" readonly>Seleccione uno...</option>
 
@@ -115,7 +117,7 @@
                 class="form-control @error('desc_materia') is-invalid @enderror descripcion" value="{{ old('desc_materia') }}"
                 placeholder="{{ __('Descripción, ej: Practica un juego recreativo de reflejos') }}" spellcheck="false"
                 maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." required></textarea>
+                title="Debe contener entre 16 y 254 letras." required></textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -143,7 +145,7 @@
                         class="form-control @error('nom_materia') is-invalid @enderror" value="{{ $nombre }}"
                         placeholder="{{ __('Nombre de la materia, ej: Ping pong') }}"
                         maxlength="{{ config('variables.materias.nombre') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                        title="Debe contener letras, espacios y/o números." autofocus required>
+                        title="Debe contener entre 5 y 25 letras." autofocus required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -166,9 +168,9 @@
                 <div class="input-group">
                     <input type="number" id="cupos" name="cupos"
                         class="form-control @error('cupos') is-invalid @enderror" value="{{ $cupos }}"
-                        placeholder="{{ __('Cupos disponibles, ej: 10') }}"
+                        placeholder="{{ __('Cupos disponibles, ej: 10') }}" min="1"
                         max="{{ config('variables.materias.cupos') }}"
-                        title="Debe contener letras, espacios y/o números." required>
+                        title="Debe estar entre 1 y 50." required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -196,7 +198,7 @@
                 class="form-control @error('desc_materia') is-invalid @enderror descripcion"
                 placeholder="{{ __('Descripción, ej: ej: Practica un juego recreativo de reflejos') }}" spellcheck="false"
                 maxlength="{{ config('variables.materias.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." required>{{ $descripcion }}</textarea>
+                title="Debe contener entre 15 y 255 letras." required>{{ $descripcion }}</textarea>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -212,6 +214,7 @@
         </div>
     </div>
 
+    {{-- Estado materia y número acreditable --}}
     <div class="form-group mb-3">
         <div class="row">
 
@@ -221,7 +224,7 @@
 
                 <div class="input-group">
                     <select id="estado" name="estado_materia"
-                        class="form-control @error('estado_materia') is-invalid @enderror" required>
+                        class="form-control @error('estado_materia') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
                         <option value="0" readonly>Seleccione uno...</option>
 
                         <option value="Inactivo" {{ $estado === 'Inactivo' ? 'selected' : '' }}>
@@ -261,7 +264,7 @@
 
                 <div class="input-group">
                     <select id="trayecto" name="trayecto"
-                        class="form-control @error('trayecto') is-invalid @enderror" required>
+                        class="form-control @error('trayecto') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
                         <option value="0" readonly>Seleccione uno...</option>
 
                         @foreach ($trayectos as $trayecto)
@@ -288,6 +291,7 @@
         </div>
     </div>
 
+    {{-- Categoría y metodología --}}
     <div class="form-group">
         <div class="row">
 
@@ -300,7 +304,7 @@
                         <x-elementos.vacio :modelo="'categorías'" />
                     @else
                         <select id="categoria" name="categoria"
-                            class="form-control @error('categoria') is-invalid @enderror" required>
+                            class="form-control @error('categoria') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
 
                             <option value="0" readonly>
                                 Seleccione uno...
@@ -335,7 +339,7 @@
 
                 <div class="input-group">
                     <select id="metodologia" name="metodologia"
-                        class="form-control @error('metodologia') is-invalid @enderror" required>
+                        class="form-control @error('metodologia') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
 
                         <option value="0" readonly>Seleccione uno...</option>
 
@@ -374,7 +378,7 @@
             @if (empty($profesores))
                 <x-elementos.vacio :modelo="'profesores'" />
             @else
-                <select id="profesor" name="profesor" class="form-control @error('profesor') is-invalid @enderror"
+                <select id="profesor" name="profesor" class="form-control @error('profesor') is-invalid @enderror" title="Debe seleccionar una opción de la lista."
                     required>
 
                     <option value="0" readonly> Seleccione uno... </option>

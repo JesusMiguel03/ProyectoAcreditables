@@ -9,7 +9,7 @@
         <input type="number" id="trayecto" name="num_trayecto"
             class="form-control @error('num_trayecto') is-invalid @enderror" value="{{ $numero ?? old('num_trayecto') }}"
             placeholder="{{ __('Número del trayecto, ej: 1') }}" autofocus required min="1" max="10"
-            title="Debe ser menor a 10">
+            title="Debe estar entre 1 y 10 dígitos.">
 
         <div class="input-group-append">
             <div class="input-group-text">

@@ -11,7 +11,7 @@
             class="form-control @error('nom_conocimiento') is-invalid @enderror"
             value="{{ $nombre ?? old('nom_conocimiento') }}" placeholder="{{ __('Nombre del área, ej: Contaduría') }}"
             maxlength="{{ config('variables.conocimiento.nombre') }}" pattern="[A-zÀ-ÿ\s]+"
-            title="Solo debe contener letras y/o espacios." autofocus required>
+            title="Debe contener entre 5 y 50 letras." autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -35,7 +35,7 @@
             class="form-control @error('desc_conocimiento') is-invalid @enderror descripcion" spellcheck="false"
             placeholder="{{ __('Descripción, ej: Manejo de cuentas contables') }}"
             maxlength="{{ config('variables.conocimiento.descripcion') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-            title="Debe contener letras, espacios y/o números." required>{{ $descripcion ?? old('desc_conocimiento') }}</textarea>
+            title="Debe contener entre 11 y 255 letras y/o números." required>{{ $descripcion ?? old('desc_conocimiento') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">

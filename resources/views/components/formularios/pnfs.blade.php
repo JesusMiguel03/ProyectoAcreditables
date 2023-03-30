@@ -15,7 +15,7 @@
     <div class="input-group">
         <input type="text" id="nombre" name="nom_pnf" class="form-control @error('nom_pnf') is-invalid @enderror"
             value="{{ $nombre ?? old('nom_pnf') }}" placeholder="{{ __('Nombre del PNF, ej: Mecánica') }}"
-            maxlength="{{ config('variables.pnfs.nombre') }}" title="Debe contener solo letras." pattern="[A-zÀ-ÿ\s]+"
+            maxlength="{{ config('variables.pnfs.nombre') }}" title="Debe contener entre 5 y 30 letras." pattern="[A-zÀ-ÿ\s]+"
             autofocus required>
 
         <div class="input-group-append">
@@ -40,7 +40,7 @@
         <input type="text" id="codigo" name="cod_pnf" class="form-control @error('cod_pnf') is-invalid @enderror"
             value="{{ $codigo ?? old('cod_pnf') }}" placeholder="{{ __('Código del PNF, ej: PN002') }}"
             maxlength="{{ config('variables.pnfs.codigo') }}" pattern="^[a-zA-Z0-9]+"
-            title="Debe contener números y/o letras">
+            title="Debe tener más de 3 números y/o letras">
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -64,7 +64,7 @@
         <input type="number" id="trayectos" name="trayectos"
             class="form-control @error('trayectos') is-invalid @enderror" value="{{ $trayectos ?? old('trayectos') }}"
             placeholder="{{ __('Cuantas veces ve acreditable, ej: 5') }}" min="1" max="10" required
-            pattern="[0-9]" title="Debe ser menor a 10">
+            pattern="[0-9]" title="Debe estar entre 1 y 10 dígitos.">
 
         <div class="input-group-append">
             <div class="input-group-text">

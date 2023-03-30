@@ -345,6 +345,7 @@
     <script>
         @if ($message = session('usuarioRegistradoEstudiante'))
             Swal.fire({
+                width: '40rem',
                 icon: 'success',
                 title: '¡Estudiante registrado!',
                 html: 'Un nuevo estudiante ha sido añadido, a continuación vaya a la acción editar para asignarle su perfil académico para cursar una acreditable.',

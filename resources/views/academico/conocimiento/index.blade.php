@@ -109,8 +109,6 @@
             descripcion.value.length > 10 && descripcion.value.length < 256
         ]
 
-        boton.disabled = true
-
         const validarFormulario = () => {
             if (validarNombre && validarDescripcion) {
                 boton.removeAttribute('disabled')
@@ -118,6 +116,8 @@
                 boton.disabled = true
             }
         }
+
+        validarFormulario()
 
         nombre.addEventListener('input', (e) => {
             nombre.value = nombre.value.replace(/[^A-zÀ-ÿ\s]+/g, '')

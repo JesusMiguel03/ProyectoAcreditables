@@ -389,7 +389,7 @@
             ciudad.value.length > 5 && ciudad.value.length < 31,
             urb.value.length > 5 && urb.value.length < 21,
             calle.value.length > 5 && calle.value.length < 21,
-            casa.value.length > 3 && casa.value.length < 11,
+            casa.value.length > 0 && casa.value.length < 11,
             codigo.options[codigo.selectedIndex].value > 0,
             tlf.value.length === 7,
             nacimiento.value.length !== 0,
@@ -529,7 +529,7 @@
                 e.currentTarget.value = e.currentTarget.value.length.slice(0, 10)
             }
 
-            if (e.currentTarget.value.length > 3 && e.currentTarget.value.length < 11) {
+            if (e.currentTarget.value.length > 0 && e.currentTarget.value.length < 11) {
                 validarCasa = true
                 e.currentTarget.classList.remove('is-invalid')
             } else {
@@ -560,10 +560,10 @@
 
         nacimiento.addEventListener('blur', (e) => {
             if (nacimiento.value.length !== 0) {
-                validacionNacimiento = true
+                validarNacimiento = true
                 nacimiento.classList.remove('is-invalid')
             } else {
-                validacionNacimiento = false
+                validarNacimiento = false
                 nacimiento.classList.add('is-invalid')
             }
 

@@ -76,7 +76,7 @@
             }
 
             if (/^[\p{L}\p{N}\s¿?¡!]+(?:[\p{L}\p{N}\s¿?¡!]+)*$/u.test(titulo.value)) {
-                if (titulo.value.length > 5 && titulo.value.length < 30) {
+                if (titulo.value.length > 4 && titulo.value.length < 31) {
                     titulo.classList.remove('is-invalid')
                     validacionTitulo = true
                 } else {
@@ -100,7 +100,7 @@
             }
 
             if (/^[\p{L}\p{N}\s¿?¡!]+(?:[\p{L}\p{N}\s¿?¡!]+)*$/u.test(descripcion.value)) {
-                if (descripcion.value.length > 15 && descripcion.value.length < 100) {
+                if (descripcion.value.length > 14 && descripcion.value.length < 100) {
                     descripcion.classList.remove('is-invalid')
                     validacionDescripcion = true
                 } else {

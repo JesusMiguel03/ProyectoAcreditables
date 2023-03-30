@@ -145,7 +145,7 @@
             }
 
             if (/^\p{L}+(?:\s+\p{L}+)*$/u.test(nombre.value)) {
-                if (nombre.value.length > 5 && nombre.value.length < 31) {
+                if (nombre.value.length > 4 && nombre.value.length < 31) {
                     nombre.classList.remove('is-invalid')
                     validacionNombre = true
                 } else {

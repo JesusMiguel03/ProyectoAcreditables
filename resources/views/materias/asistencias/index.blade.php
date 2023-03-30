@@ -171,6 +171,7 @@
             })
         @elseif (session('no puede participar'))
             Swal.fire({
+                width: '40rem',
                 icon: 'warning',
                 title: '¡No puede cursar!',
                 @if (rol('Coordinador'))

@@ -124,6 +124,7 @@
     <script>
         @if ($message = session('sinDatos'))
             Swal.fire({
+                width: '40rem',
                 icon: 'info',
                 title: '¡No se encontraron datos!',
                 html: "La acreditable <b>{{ session('sinDatos') }}</b> no pertenece al periodo <b>{{ session('periodo') }}</b>, por favor intente con otra.",

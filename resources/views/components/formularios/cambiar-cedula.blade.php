@@ -13,6 +13,7 @@
             </div>
 
             <section class="col-12">
+                {{-- Correo --}}
                 <article class="form-group mb-3">
                     <label for="usuario">Correo del usuario a restaurar</label>
 
@@ -37,13 +38,14 @@
                     </main>
                 </article>
 
+                {{-- Cédula --}}
                 <article class="form-group mb-3">
                     <label for="usuario">Cédula</label>
 
                     <main class="input-group">
                         <input type="number" id="cedula" name="cedula"
                             placeholder="{{ __('Cédula, ej: 1021536') }}"
-                            class="form-control @error('cedula') is-invalid @enderror" value="{{ old('cedula') }}"
+                            class="form-control @error('cedula') is-invalid @enderror" value="{{ old('cedula') }}" title="Debe estar entre 7 y 8 dígitos."
                             required>
 
                         <div class="input-group-append">

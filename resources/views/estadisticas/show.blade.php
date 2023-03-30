@@ -249,6 +249,7 @@
             }
         @elseif ($message = session('noEncontrado'))
             Swal.fire({
+                width: '40rem',
                 icon: 'error',
                 title: '¡El periodo o acreditable no existen!',
                 html: 'La estadística que desea visualizar no puede ser cargada si no selecciona un periodo o acreditable.',
@@ -259,6 +260,7 @@
             })
         @elseif (session('inscripcionActiva'))
             Swal.fire({
+                width: '60rem',
                 icon: 'warning',
                 title: '¡Inscripciones Activas!',
                 html: "Las inscripciones aún se encuentran activas, por tal motivo no se pueden generar gráficos y/o mostrar estadísticas precisas. Estarán disponibles a partir del <strong>({{ session('inscripcionActiva') }})</strong>, <strong>45 días</strong> después de la fecha de inicio del periodo <strong>({{ session('fechaInicio') }})</strong>.",

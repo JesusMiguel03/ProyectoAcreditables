@@ -14,7 +14,7 @@
 
     <div class="input-group">
         <input type="number" id="fase" name="fase" class="form-control @error('fase') is-invalid @enderror"
-            value="{{ $fase ?? old('fase') }}" placeholder="{{ __('Ej: 1, 2 o 3') }}" min="1" max="3"
+            value="{{ $fase ?? old('fase') }}" placeholder="{{ __('Ej: 1, 2 o 3') }}" title="Debe estar entre 1 y 3." min="1" max="3"
             autofocus required>
 
         <div class="input-group-append">
@@ -38,7 +38,7 @@
     <div class="input-group date" id="inicio" data-target-input="nearest">
         <input type="text" id="inputInicio" name="inicio"
             class="form-control datetimepicker-input @error('inicio') is-invalid @enderror" data-target="#inicio"
-            data-toggle="datetimepicker" value="{{ $inicio ?? old('inicio') }}" placeholder="{{ __('2015-01-01') }}"
+            data-toggle="datetimepicker" value="{{ $inicio ?? old('inicio') }}" placeholder="{{ __('2015-01-01') }}" title="Debe ser una fecha con el formato yyyy/mm/dd."
             required>
 
         <div class="input-group-append" data-target="#inicio" data-toggle="datetimepicker">
@@ -60,7 +60,7 @@
     <div class="input-group date" id="fin" data-target-input="nearest">
         <input type="text" id="inputFin" name="fin"
             class="form-control datetimepicker-input @error('fin') is-invalid @enderror" data-target="#fin"
-            data-toggle="datetimepicker" value="{{ $fin ?? old('fin') }}" placeholder="{{ __('2015-04-09') }}" required>
+            data-toggle="datetimepicker" value="{{ $fin ?? old('fin') }}" placeholder="{{ __('2015-04-09') }}"  title="Debe tener 90 días más que la fecha de inicio." required>
 
         <div class="input-group-append" data-target="#fin" data-toggle="datetimepicker">
             <div class="input-group-text"><i class="fa fa-calendar"></i></div>

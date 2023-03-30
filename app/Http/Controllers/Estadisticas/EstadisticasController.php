@@ -31,27 +31,29 @@ class EstadisticasController extends Controller
 
     public function materia($periodo_id, $materia_id)
     {
-        
+        // Busca todos los periodos, el seleccionado y la materia.
         $periodos = Periodo::all();
         $periodoActual = Periodo::find($periodo_id);
         $materiaActual = Materia::find($materia_id);
         
+        // Si no se encuentra uno u otro regresa.
         if (!$periodoActual || !$materiaActual) {
             return redirect()->back()->with('noEncontrado', 'error');
         }
 
-        // $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
-        // $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
+        // Si no han pasado 45 días de la fecha de inicio regresa.
+        $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
+        $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
 
-        // if (Carbon::today()->format('Y-m-d') !== $tiempoExtraInscripcion) {
-        //     return redirect()->back()->with(['inscripcionActiva' => $tiempoExtraInscripcion, 'fechaInicio' => $fechaInicio]);
-        // }
+        if (Carbon::today()->format('Y-m-d') !== $tiempoExtraInscripcion) {
+            return redirect()->back()->with(['inscripcionActiva' => $tiempoExtraInscripcion, 'fechaInicio' => $fechaInicio]);
+        }
 
         $trayecto = $materiaActual->infoAcreditable();
 
         // Formato de periodo a mostrar
-        $inicioFormato = \Carbon\Carbon::parse($periodoActual->inicio)->format('d-m-Y');
-        $finFormato = \Carbon\Carbon::parse($periodoActual->fin)->format('d-m-Y');
+        $inicioFormato = Carbon::parse($periodoActual->inicio)->format('d-m-Y');
+        $finFormato = Carbon::parse($periodoActual->fin)->format('d-m-Y');
         $periodoFormateado = "Fase ({$periodoActual->fase}) - [{$inicioFormato} al {$finFormato}]";
 
         $materias = Materia::creadoEntre([$inicioFormato, $finFormato])->get();
@@ -69,13 +71,14 @@ class EstadisticasController extends Controller
 
         $conversor = [1 => 'I', 2 => 'II', 3 => 'III'];
 
+        // Selecciona a los estudiantes que cursando el periodo seleccionado.
         foreach ($estudiantes as $estudianteM) {
 
             if (!$estudianteM->creadoEntre([$inicioFormato, $finFormato])->first()) {
                 return redirect()
                     ->back()
                     ->with('sinDatos', $materiaActual->nom_materia)
-                    ->with('periodo', $conversor[$periodoActual->fase] . '-' . \Carbon\Carbon::parse($periodoActual->inicio)->format('Y'));
+                    ->with('periodo', $conversor[$periodoActual->fase] . '-' . Carbon::parse($periodoActual->inicio)->format('Y'));
             }
 
             $asistencias = 0;
@@ -105,18 +108,20 @@ class EstadisticasController extends Controller
 
     public function estadisticas($id)
     {
+        // Busca el periodo.
         try {
             $periodoActual = Periodo::findOrFail($id);
         } catch (ModelNotFoundException $e) {
             return redirect(route('estadisticas.index'))->with('noExiste', 'El periodo a buscar no existe');
         }
 
-        // $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
-        // $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
+        // Si no han pasado 45 días regresa.
+        $tiempoExtraInscripcion = Carbon::parse($periodoActual->inicio)->addDays(45)->format('Y-m-d');
+        $fechaInicio = Carbon::parse($periodoActual->inicio)->format('Y-m-d');
 
-        // if (Carbon::today()->format('Y-m-d') !== $tiempoExtraInscripcion) {
-        //     return redirect()->back()->with(['inscripcionActiva' => $tiempoExtraInscripcion, 'fechaInicio' => $fechaInicio]);
-        // }
+        if (Carbon::today()->format('Y-m-d') !== $tiempoExtraInscripcion) {
+            return redirect()->back()->with(['inscripcionActiva' => $tiempoExtraInscripcion, 'fechaInicio' => $fechaInicio]);
+        }
 
         // Lista de periodos
         $periodos = Periodo::all();
@@ -126,8 +131,8 @@ class EstadisticasController extends Controller
         $fin = $periodoActual->fin;
 
         // Formato de periodo a mostrar
-        $inicioFormato = \Carbon\Carbon::parse($inicio)->format('d-m-Y');
-        $finFormato = \Carbon\Carbon::parse($fin)->format('d-m-Y');
+        $inicioFormato = Carbon::parse($inicio)->format('d-m-Y');
+        $finFormato = Carbon::parse($fin)->format('d-m-Y');
         $periodoFormateado = "Fase ({$periodoActual->fase}) - [{$inicioFormato} al {$finFormato}]";
 
         $periodoAnterior = Periodo::whereDate('inicio', '<=', $inicio)
@@ -139,8 +144,8 @@ class EstadisticasController extends Controller
         $finAnterior = $periodoAnterior->fin ?? null;
 
         // Rango de fechas de registro en base al periodo
-        $inicio = \Carbon\Carbon::parse($inicio)->startOfDay();
-        $fin = \Carbon\Carbon::parse($fin)->endOfDay();
+        $inicio = Carbon::parse($inicio)->startOfDay();
+        $fin = Carbon::parse($fin)->endOfDay();
 
         // Materias totales
         $materias = Materia::all();
@@ -173,14 +178,17 @@ class EstadisticasController extends Controller
         $estudiantesTrayecto = [];
         $numeroTrayecto = [];
 
+        // Si hay materias y estudiantes.
         $condicion = !$materias->isEmpty() && !$materias[0]->estudiantes[0]->creadoEntre([$inicio, $fin])->get()->isEmpty();
 
+        // Itera cada trayecto para añadirlos a una lista.
         foreach ($trayectos as $trayecto) {
             $acreditable = $trayecto->num_trayecto;
 
             array_push($estudiantesTrayecto, count($trayecto->creadoEntre([$inicio, $fin])->get()));
             array_push($numeroTrayecto, $acreditable);
 
+            // Si hay materias en ese periodo y estudiantes
             if ($condicion) {
                 $materiaMasDemandadaPorTrayecto[$acreditable] = [];
                 $listadoMateriasDemandadasPNF[$acreditable] = [];
@@ -200,6 +208,7 @@ class EstadisticasController extends Controller
             }
         }
 
+        // Si la condición se cumple reorganiza la información guardada.
         if ($condicion) {
             foreach ($materiaMasDemandadaPorTrayecto as $nroTrayecto => $trayecto) {
 
@@ -221,6 +230,7 @@ class EstadisticasController extends Controller
             }
         }
 
+        // Busca los estudiantes de los pnfs del periodo seleccionado y el anterior.
         foreach ($pnfs as $pnf) {
             if (periodo('anterior')) {
                 array_push($estudiantesAnteriorPNF, count($pnf->creadoEntre([$inicioAnterior, $finAnterior])->get()));

@@ -19,7 +19,7 @@
         <input type="text" id="titulo" name="titulo" class="form-control @error('titulo') is-invalid @enderror"
             value="{{ $titulo ?? old('titulo') }}" placeholder="{{ __('Nombre de la noticia, ej: Nueva acreditable') }}"
             maxlength="{{ config('variables.noticias.titulo') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-            title="Debe contener letras, espacios y/o números." autofocus required>
+            title="Debe estar entre 5 y 30 letras." autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -43,7 +43,7 @@
         <textarea id="descripcion" name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror descripcion"
             spellcheck="false" placeholder="{{ __('Descripción, ej: Una nueva acreditable ha sido registrada') }}"
             maxlength="{{ config('variables.noticias.descripcion') }}" required pattern="[A-zÀ-ÿ0-9\s]+"
-            title="Debe contener letras, espacios y/o números.">{{ $descripcion ?? old('desc_noticia') }}</textarea>
+            title="Debe estar entre 15 y 100 letras.">{{ $descripcion ?? old('desc_noticia') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -64,7 +64,7 @@
     <label for="activo" class="control-label">¿Mostrar noticia?</label>
 
     <div class="input-group">
-        <select id="mostrar" name="activo" class="form-control @error('activo') is-invalid @enderror" required>
+        <select id="mostrar" name="activo" class="form-control @error('activo') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
             <option readonly>Seleccione...</option>
             <option value="1" {{ $activo === 1 ? 'selected' : '' }}>Si</option>
             <option value="0" {{ $activo === 0 ? 'selected' : '' }}>No</option>

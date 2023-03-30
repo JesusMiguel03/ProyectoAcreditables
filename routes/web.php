@@ -23,6 +23,7 @@ use App\Http\Controllers\RegistrarUsuarioController;
 use App\Http\Controllers\Soporte\BaseDeDatosController;
 use App\Http\Controllers\Soporte\SoporteController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -257,3 +258,14 @@ Route::controller(PerfilController::class)->group(function () {
 
 // 3. Actualizar contraseña
 Route::put('/perfil/{id}/actualizar-contrasena', [ContrasenaController::class, 'update'])->name('actualizarContrasena');
+
+
+/**
+ * Manual de usuario
+ */
+Route::get('/manual-usuario', function() {
+    $archivo = storage_path('app/public/Manual.pdf');
+    $contenido = File::get($archivo);
+
+    return response($contenido, 200)->header('Content-Type', 'application/pdf');
+})->name('manual.usuario');

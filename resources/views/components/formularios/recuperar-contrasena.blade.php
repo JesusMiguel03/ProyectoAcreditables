@@ -12,6 +12,7 @@
                 </p>
             </div>
 
+            {{-- Correo --}}
             <div class="col-12 mt-n1">
                 <div class="form-group mb-3">
                     <label for="correo1">Correo del usuario a restaurar</label>

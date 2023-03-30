@@ -105,11 +105,12 @@
         </div>
     </div>
 
+    {{-- Trayecto --}}
     <div class="form-group required mt-n2 mb-3">
         <label for="trayecto" class="control-label">Trayecto</label>
 
         <div class="input-group">
-            <select id="trayecto" name="trayecto" class="form-control @error('trayecto') is-invalid @enderror"
+            <select id="trayecto" name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" title="Debe seleccionar una opción de la lista."
                 required>
                 <option value="" readonly>Seleccione...</option>
 
@@ -134,12 +135,13 @@
         </div>
     </div>
 
+    {{-- PNF --}}
     <div class="form-group required mb-3">
         <label for="pnf" class="control-label">PNF</label>
 
         <div class="input-group">
-            <select id="pnf" name="pnf" class="form-control @error('pnf') is-invalid @enderror" required>
-                <option value="" readonly>Seleccione...</option>
+            <select id="pnf" name="pnf" class="form-control @error('pnf') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
+                <option value="0" readonly>Seleccione...</option>
 
                 @foreach ($pnfs as $pnf)
                     @if (!in_array($pnf->nom_pnf, $pnfsNoDisponibles))

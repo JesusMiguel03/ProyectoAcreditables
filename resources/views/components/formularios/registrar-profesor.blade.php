@@ -23,7 +23,7 @@
 
 
         @if (Route::is('profesores.index'))
-            <select id="usuario" name="usuarios" class="form-control @error('usuarios') is-invalid @enderror" required>
+            <select id="usuario" name="usuarios" class="form-control @error('usuarios') is-invalid @enderror" required title="Debe seleccionar una opción de la lista.">
                 <option value='0' readonly>Seleccione un usuario...</option>
 
                 @foreach ($usuarios as $usuario)
@@ -62,7 +62,7 @@
                             value="{{ old('nombre') ?? $profesor->nombreSoloProfesor() }}"
                             placeholder="{{ __('Nombre, ej: José') }}" minlength="3"
                             maxlength="{{ config('variables.usuarios.nombre') }}" pattern="[A-zÀ-ÿ\s]+"
-                            title="Solo debe contener letras." autofocus required>
+                            title="Debe contener entre 3 y 20 letras." autofocus required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -88,7 +88,7 @@
                             value="{{ old('apellido') ?? $profesor->apellidoSoloProfesor() }}"
                             placeholder="{{ __('Apellido, ej: Gómez') }}" minlength="3"
                             maxlength="{{ config('variables.usuarios.apellido') }}" pattern="[A-zÀ-ÿ\s]+"
-                            title="Solo debe contener letras." autofocus required>
+                            title="Debe contener entre 3 y 20 letras." autofocus required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -113,7 +113,7 @@
                         <label for="nacionalidad" class="control-label">Nacionalidad</label>
 
                         <select name="nacionalidad" id="nacionalidad"
-                            class="form-control @error('nacionalidad') is-invalid @enderror" required>
+                            class="form-control @error('nacionalidad') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
                             <option value="0" readonly>Seleccione uno...</option>
                             <option value="V"
                                 {{ $profesor->nacionalidadSoloProfesor() === 'V' ? 'selected' : '' }}>V
@@ -140,7 +140,7 @@
                             <input type="number" id="cedula" name="cedula"
                                 class="form-control @error('cedula') is-invalid @enderror"
                                 value="{{ old('cedula') ?? $profesor->cedulaSoloProfesor() }}"
-                                placeholder="{{ __('Cédula, ej: 1021536') }}" required>
+                                placeholder="{{ __('Cédula, ej: 1021536') }}" title="Debe contener entre 7 y 8 dígitos." required>
 
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -166,7 +166,7 @@
     <label for="departamento" class="control-label">Adjunto al departamento</label>
 
     <div class="input-group">
-        <select id="departamento" name="departamento" class="form-control" required>
+        <select id="departamento" name="departamento" class="form-control" title="Debe seleccionar una opción de la lista." required>
             <option value="0" readonly>Seleccione...</option>
 
             @foreach ($departamentos as $departamento)
@@ -198,6 +198,7 @@
     </div>
 </div>
 
+{{-- Área de conocimiento --}}
 <div class="form-group">
     <div class="row">
 
@@ -211,7 +212,7 @@
                     <x-elementos.vacio :modelo="'áreas de conocimiento'" />
                 @else
                     <select id="conocimiento" name="conocimiento"
-                        class="form-control @error('conocimiento') is-invalid @enderror" required>
+                        class="form-control @error('conocimiento') is-invalid @enderror" title="Debe seleccionar una opción de la lista" required>
 
                         <option value="" readonly> Seleccione... </option>
 
@@ -253,7 +254,7 @@
 
                 <div class="input-group">
                     <select id="estadoProfesor" name="activo"
-                        class="form-control @error('activo') is-invalid @enderror" required>
+                        class="form-control @error('activo') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
 
                         <option value=""> Seleccione... </option>
 
@@ -294,7 +295,7 @@
                 class="form-control @error('estado') is-invalid @enderror"
                 value="{{ $profesor->estado ?? old('estado') }}" placeholder="{{ __('Estado, ej: Aragua') }}"
                 maxlength="{{ config('variables.profesores.estado') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." required>
+                title="Debe contener entre 4 y 16 letras, espacios y/o números." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -315,7 +316,7 @@
                 class="form-control @error('ciudad') is-invalid @enderror"
                 value="{{ $profesor->ciudad ?? old('ciudad') }}" placeholder="{{ __('Ciudad, ej: La Victoria') }}"
                 maxlength="{{ config('variables.profesores.ciudad') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." required>
+                title="Debe contener entre 6 y 30 letras, espacios y/o números." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -338,7 +339,7 @@
                 class="form-control @error('urb') is-invalid @enderror" value="{{ $profesor->urb ?? old('urb') }}"
                 placeholder="{{ __('Urbanización, ej: Carmelitas') }}"
                 maxlength="{{ config('variables.profesores.urb') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." required>
+                title="Debe contener entre 6 y 20 letras, espacios y/o números." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -359,7 +360,7 @@
                 class="form-control @error('calle') is-invalid @enderror"
                 value="{{ $profesor->calle ?? old('calle') }}" placeholder="{{ __('Calle, ej: 12 de julio') }}"
                 maxlength="{{ config('variables.profesores.calle') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." required>
+                title="Debe contener entre 6 y 20 letras, espacios y/o números." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -380,7 +381,7 @@
                 class="form-control @error('casa') is-invalid @enderror"
                 value="{{ $profesor->casa ?? old('casa') }}" placeholder="{{ __('Casa, ej: 5') }}"
                 maxlength="{{ config('variables.profesores.casa') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-                title="Debe contener letras, espacios y/o números." required>
+                title="Debe contener entre 1 y 10 letras, espacios y/o números." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -403,7 +404,7 @@
 
     <div class="row">
         <div class="col-4">
-            <select id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror"
+            <select id="codigo" name="codigo" class="form-control @error('codigo') is-invalid @enderror" title="Debe seleccionar una opción de la lista."
                 required>
                 <option value="0" readonly>Seleccione...</option>
 
@@ -426,7 +427,7 @@
                 <input id="tlf" type="tel" name="telefono"
                     class="form-control @error('telefono') is-invalid @enderror @error('codigoTelefono') is-invalid @enderror"
                     value="{{ $tlf ?? old('telefono') }}" placeholder="{{ __('0193451') }}" pattern="[0-9]+"
-                    maxlength="{{ config('variables.profesores.telefono') - 4 }}" required>
+                    maxlength="{{ config('variables.profesores.telefono') - 4 }}" title="Debe contener 7 dígitos." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -464,7 +465,7 @@
                     class="form-control datetimepicker-input @error('fecha_de_nacimiento') is-invalid @enderror"
                     data-target="#fecha_nacimiento" data-toggle="datetimepicker"
                     value="{{ $profesor->fecha_de_nacimiento ?? old('fecha_de_nacimiento') }}"
-                    placeholder="{{ __('Ej: 1983-09-06') }}" required>
+                    placeholder="{{ __('Ej: 1983-09-06') }}" title="Debe ser una fecha con el formato yyyy/mm/dd." required>
 
                 <div class="input-group-append" data-target="#fecha_nacimiento" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -489,7 +490,7 @@
                     class="form-control datetimepicker-input @error('fecha_ingreso_institucion') is-invalid @enderror"
                     data-target="#fecha_ingreso" data-toggle="datetimepicker"
                     value="{{ $profesor->fecha_ingreso_institucion ?? old('fecha_ingreso_institucion') }}"
-                    placeholder="{{ __('Ej: 2013-03-19') }}" required>
+                    placeholder="{{ __('Ej: 2013-03-19') }}" title="Debe ser una fecha con el formato yyyy/mm/dd." required>
 
                 <div class="input-group-append" data-target="#fecha_ingreso" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>

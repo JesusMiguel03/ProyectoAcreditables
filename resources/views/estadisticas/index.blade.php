@@ -103,6 +103,7 @@
             })
         @elseif (session('inscripcionActiva'))
             Swal.fire({
+                width: '60rem',
                 icon: 'warning',
                 title: '¡Inscripciones Activas!',
                 html: "Las inscripciones aún se encuentran activas, por tal motivo no se pueden generar gráficos y/o mostrar estadísticas precisas. Estarán disponibles a partir del <strong>({{ session('inscripcionActiva') }})</strong>, <strong>45 días</strong> después de la fecha de inicio del periodo <strong>({{ session('fechaInicio') }})</strong>.",

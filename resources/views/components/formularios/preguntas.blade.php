@@ -15,7 +15,7 @@
         <input type="text" id="pregunta" name="titulo"
             class="form-control @error('titulo') is-invalid @enderror contador" value="{{ $titulo ?? old('titulo') }}"
             placeholder="{{ __('Ej: Cómo consulto mi nota') }}" maxlength="{{ config('variables.preguntas.titulo') }}"
-            pattern="[A-zÀ-ÿ0-9\s]+" title="Debe contener letras, espacios y/o números." autofocus required>
+            pattern="[A-zÀ-ÿ0-9\s]+" title="Debe estar entre 5 y 30 letras." autofocus required>
 
         <div class="input-group-append">
             <div class="input-group-text">
@@ -39,7 +39,7 @@
         <textarea id="respuesta" name="explicacion" class="form-control @error('explicacion') is-invalid @enderror descripcion"
             spellcheck="false" placeholder="{{ __('Ej: Vaya a su perfil, ubicado en el avatar al lado de su nombre') }}"
             maxlength="{{ config('variables.preguntas.explicacion') }}" pattern="[A-zÀ-ÿ0-9\s]+"
-            title="Debe contener letras, espacios y/o números" required>{{ $descripcion ?? old('explicacion') }}</textarea>
+            title="Debe estar entre 20 y 255 letras, números y carácteres especiales." required>{{ $descripcion ?? old('explicacion') }}</textarea>
 
         <div class="input-group-append">
             <div class="input-group-text">

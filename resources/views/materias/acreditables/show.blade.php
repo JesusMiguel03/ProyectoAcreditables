@@ -409,6 +409,7 @@
     <script>
         @if ($message = session('registrado'))
             Swal.fire({
+                width: '40rem',
                 icon: 'success',
                 title: '¡Inscripción exitosa!',
                 html: 'Ya se encuentra inscrito en la materia, a continuación lleve el comprobante ubicado en su pefil a la Coordinación de Acreditables para finalizar su inscripción. <br>[<strong>Nota</strong>] <span class="text-muted"><a href="{{ route('profile.show') }}">Haga clic aquí</a> o vaya a su perfil (avatar al lado de su nombre) para descargar el comprobante.<span>',
@@ -479,6 +480,7 @@
             })
         @elseif ($message = session('no puede participar'))
             Swal.fire({
+                width: '40rem',
                 icon: 'warning',
                 title: '¡No puede cursar!',
                 html: 'Este estudiante no se encuentra validado, en caso de que haya traído su comprobante por favor valídelo en la lista, hasta entonces no podrá tener asistencia o lo que es igual, no contará la acreditable.',

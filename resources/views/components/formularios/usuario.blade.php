@@ -7,7 +7,7 @@
             <input type="text" id="nombre" name="nombre" class="form-control @error('nombre') is-invalid @enderror"
                 value="{{ old('nombre') }}" placeholder="{{ __('Nombre, ej: José') }}" minlength="3"
                 maxlength="{{ config('variables.usuarios.nombre') }}" pattern="[A-zÀ-ÿ\s]+"
-                title="Solo debe contener letras." autofocus required>
+                title="Debe contener entre 3 y 20 letras." autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -31,7 +31,7 @@
             <input type="text" id="apellido" name="apellido" class="form-control @error('apellido') is-invalid @enderror"
                 value="{{ old('apellido') }}" placeholder="{{ __('Apellido, ej: Gómez') }}" minlength="3"
                 maxlength="{{ config('variables.usuarios.apellido') }}" pattern="[A-zÀ-ÿ\s]+"
-                title="Solo debe contener letras." autofocus required>
+                title="Debe contener entre 3 y 20 letras." autofocus required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -55,7 +55,7 @@
         <div class="form-group col-4">
             <label for="nacionalidad" class="control-label">Nacionalidad</label>
             <select name="nacionalidad" id="nacionalidad"
-                class="form-control @error('nacionalidad') is-invalid @enderror" required>
+                class="form-control @error('nacionalidad') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
                 <option value="0" readonly>Seleccione uno...</option>
                 <option value="V">V</option>
                 <option value="E">E</option>
@@ -73,7 +73,7 @@
             <label for="cedula" class="control-label">Cédula</label>
             <div class="input-group">
                 <input type="number" id="cedula" name="cedula" class="form-control @error('cedula') is-invalid @enderror"
-                    value="{{ old('cedula') }}" placeholder="{{ __('Cédula, ej: 1021536') }}" required>
+                    value="{{ old('cedula') }}" placeholder="{{ __('Cédula, ej: 1021536') }}" title="Debe tener entre 7 y 8 dígitos." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -122,7 +122,7 @@
         <div class="input-group">
             <input type="password" id="contrasena" name="password" class="form-control @error('password') is-invalid @enderror"
                 placeholder="{{ __('Contraseña') }}" pattern="^[a-zA-Z0-9]{,8}$"
-                title="Debe tener 8 carácteres máximo." required>
+                title="Debe tener entre 3 y 8 carácteres." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -146,7 +146,7 @@
             <input type="password" id="confirmarContrasena" name="password_confirmation"
                 class="form-control @error('password_confirmation') is-invalid @enderror"
                 placeholder="{{ __('Confirmar contraseña') }}" pattern="^[a-zA-Z0-9]{,8}$"
-                title="Debe tener 8 carácteres máximo." required>
+                title="Debe tener entre 3 y 8 carácteres." required>
 
             <div class="input-group-append">
                 <div class="input-group-text">

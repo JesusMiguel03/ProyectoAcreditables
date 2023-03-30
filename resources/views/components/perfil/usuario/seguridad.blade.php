@@ -21,7 +21,7 @@
                     <div class="input-group">
                         <input type="password" id="contrasena" name="current_password"
                             class="form-control @error('current_password') is-invalid @enderror"
-                            pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo." required>
+                            pattern="^[a-zA-Z0-9]{4,8}$" title="Debe estar entre 4 y 8 caracteres." required>
 
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -41,11 +41,11 @@
                     <div class="row">
                         <div class="col-6">
                             <label for="password">Contraseña nueva</label>
-                            <div class="input-group">
 
+                            <div class="input-group">
                                 <input type="password" id="nuevaContrasena" name="password"
                                     class="form-control @error('password') is-invalid @enderror"
-                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo."
+                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe estar entre 4 y 8 caracteres."
                                     required>
 
                                 <div class="input-group-append">
@@ -64,10 +64,11 @@
 
                         <div class="col-6">
                             <label for="password_confirmation">Confirmar contraseña</label>
+
                             <div class="input-group">
                                 <input type="password" id="validarContrasena" name="password_confirmation"
                                     class="form-control @error('password_confirmation') is-invalid @enderror"
-                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe tener entre 4 y 8 carácteres máximo."
+                                    pattern="^[a-zA-Z0-9]{4,8}$" title="Debe estar entre 4 y 8 caracteres."
                                     required>
 
                                 <div class="input-group-append">
