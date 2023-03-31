@@ -61,16 +61,12 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 @stop
 
 @section('js')
-    <script
-        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
-    </script>
-    <script src="{{ request()->secure() ? secure_asset('vendor/chartjs/chart.js') : asset('vendor/chartjs/chart.js') }}">
-    </script>
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('vendor/chartjs/chart.js') }}"></script>
 
     {{-- Personalizados --}}
     <script>
@@ -233,21 +229,14 @@
         })
     </script>
 
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/trayecto.js') : asset('js/graficos/trayecto.js') }}">
-    </script>
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/materias.js') : asset('js/graficos/materias.js') }}">
-    </script>
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/pnf.js') : asset('js/graficos/pnf.js') }}"></script>
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/trayecto1.js') : asset('js/graficos/trayecto1.js') }}">
-    </script>
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/trayecto2.js') : asset('js/graficos/trayecto2.js') }}">
-    </script>
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/trayecto3.js') : asset('js/graficos/trayecto3.js') }}">
-    </script>
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/trayecto4.js') : asset('js/graficos/trayecto4.js') }}">
-    </script>
-    <script src="{{ request()->secure() ? secure_asset('js/graficos/trayecto5.js') : asset('js/graficos/trayecto5.js') }}">
-    </script>
+    <script src="{{ asset('js/graficos/trayecto.js') }}"></script>
+    <script src="{{ asset('js/graficos/materias.js') }}"></script>
+    <script src="{{ asset('js/graficos/pnf.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto1.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto2.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto3.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto4.js') }}"></script>
+    <script src="{{ asset('js/graficos/trayecto5.js') }}"></script>
 
     <script>
         @if ($message = session('sinDatos'))

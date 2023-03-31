@@ -15,16 +15,17 @@
 @stop
 
 @section('content')
-    @php
-        $avatar = !empty($profesor->avatar()) ? "vendor/img/avatares/avatar{$profesor->avatar()}.webp" : 'vendor/img/defecto/usuario.webp';
-        $residencia = "Estado: {$profesor->estado} | Ciudad: {$profesor->ciudad} | Urbanización: {$profesor->urb} | Calle: {$profesor->calle} | Casa: {$profesor->casas}";
-    @endphp
+@php
+    $avatar = !empty($profesor->avatar()) ? "vendor/img/avatares/avatar{$profesor->avatar()}.webp": 'vendor/img/defecto/usuario.webp';
+    $residencia = "Estado: {$profesor->estado} | Ciudad: {$profesor->ciudad} | Urbanización: {$profesor->urb} | Calle: {$profesor->calle} | Casa: {$profesor->casas}"
+@endphp
     <div class="row">
         <div class="col-md-3 col-sm-12">
 
             {{-- Avatar, nombre, estado --}}
             <div class="card">
-                <header class="card-header {{ $profesor->activo === 1 ? 'bg-primary' : 'bg-secondary' }} text-center">
+                <header
+                    class="card-header {{ $profesor->activo === 1 ? 'bg-primary' : 'bg-secondary' }} text-center">
                     <h6>
                         Se encuentra {{ $profesor->activo === 1 ? 'Activo' : 'Inactivo' }}
                     </h6>
@@ -33,7 +34,7 @@
                 <main class="card-body box-profile" style="height: 11rem;">
                     <div class="text-center">
                         <img class="profile-user-img img-fluid img-circle"
-                            src="{{ request()->secure() ? secure_asset($avatar) : asset($avatar) }}"
+                            src="{{ asset($avatar) }}"
                             alt="Avatar del profesor">
                     </div>
 
@@ -71,7 +72,7 @@
                                 {{ $profesor->telefono }}
                             </p>
                             <p class="text-muted">
-                                {{ $residencia }}
+                                {{  $residencia }}
                             </p>
                         </div>
                     </div>

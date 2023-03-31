@@ -14,12 +14,6 @@
         $nro = $materia['trayecto_id'];
         $imagen = $materia['imagen_materia'];
     
-        if (request()->secure()) {
-            $imagen = secure_asset($imagen);
-        } else {
-            $imagen = asset($imagen);
-        }
-    
         // Relacion
         $info = $materia->info;
         $metodologia = !empty($info) ? $info->metodologia : '';
@@ -86,8 +80,8 @@
                 <label for="trayecto" class="control-label">Acreditable Nro</label>
 
                 <div class="input-group">
-                    <select id="trayecto" name="trayecto" class="form-control @error('trayecto') is-invalid @enderror"
-                        title="Debe seleccionar una opción de la lista." required>
+                    <select id="trayecto" name="trayecto" class="form-control @error('trayecto') is-invalid @enderror" title="Debe seleccionar una opción de la lista."
+                        required>
                         <option value="0" readonly>Seleccione uno...</option>
 
                         @foreach ($trayectos as $trayecto)
@@ -175,7 +169,8 @@
                     <input type="number" id="cupos" name="cupos"
                         class="form-control @error('cupos') is-invalid @enderror" value="{{ $cupos }}"
                         placeholder="{{ __('Cupos disponibles, ej: 10') }}" min="1"
-                        max="{{ config('variables.materias.cupos') }}" title="Debe estar entre 1 y 50." required>
+                        max="{{ config('variables.materias.cupos') }}"
+                        title="Debe estar entre 1 y 50." required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -229,8 +224,7 @@
 
                 <div class="input-group">
                     <select id="estado" name="estado_materia"
-                        class="form-control @error('estado_materia') is-invalid @enderror"
-                        title="Debe seleccionar una opción de la lista." required>
+                        class="form-control @error('estado_materia') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
                         <option value="0" readonly>Seleccione uno...</option>
 
                         <option value="Inactivo" {{ $estado === 'Inactivo' ? 'selected' : '' }}>
@@ -270,8 +264,7 @@
 
                 <div class="input-group">
                     <select id="trayecto" name="trayecto"
-                        class="form-control @error('trayecto') is-invalid @enderror"
-                        title="Debe seleccionar una opción de la lista." required>
+                        class="form-control @error('trayecto') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
                         <option value="0" readonly>Seleccione uno...</option>
 
                         @foreach ($trayectos as $trayecto)
@@ -311,8 +304,7 @@
                         <x-elementos.vacio :modelo="'categorías'" />
                     @else
                         <select id="categoria" name="categoria"
-                            class="form-control @error('categoria') is-invalid @enderror"
-                            title="Debe seleccionar una opción de la lista." required>
+                            class="form-control @error('categoria') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
 
                             <option value="0" readonly>
                                 Seleccione uno...
@@ -347,8 +339,7 @@
 
                 <div class="input-group">
                     <select id="metodologia" name="metodologia"
-                        class="form-control @error('metodologia') is-invalid @enderror"
-                        title="Debe seleccionar una opción de la lista." required>
+                        class="form-control @error('metodologia') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
 
                         <option value="0" readonly>Seleccione uno...</option>
 
@@ -387,8 +378,8 @@
             @if (empty($profesores))
                 <x-elementos.vacio :modelo="'profesores'" />
             @else
-                <select id="profesor" name="profesor" class="form-control @error('profesor') is-invalid @enderror"
-                    title="Debe seleccionar una opción de la lista." required>
+                <select id="profesor" name="profesor" class="form-control @error('profesor') is-invalid @enderror" title="Debe seleccionar una opción de la lista."
+                    required>
 
                     <option value="0" readonly> Seleccione uno... </option>
 
@@ -444,7 +435,9 @@
 {{-- Previsualizacion de imagen --}}
 @if (Route::is('materias.edit'))
     <div class="mb-3 text-center">
-        <img src="{{ $imagen }}" alt="{{ $imagen }}" id="previsualizar" class="rounded img-fluid">
+        <img src="{{ $imagen === null ? asset('vendor/img/defecto/materias.png') : asset('storage/' . $imagen) }}"
+            alt="{{ $imagen === null ? 'Imagen de materia por defecto' : 'Imagen de materia' }}" id="previsualizar"
+            class="rounded img-fluid">
     </div>
 @else
     <div class="card" style="max-width: 540px">

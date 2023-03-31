@@ -32,19 +32,15 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet" href="{{ request()->secure() ? secure_asset('css/buscar.css') : asset('css/buscar.css') }}">
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('css/iconos/lapiz.css') : asset('css/iconos/lapiz.css') }}">
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('css/descripcion.css') : asset('css/descripcion.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
 @stop
 
 @section('js')
     {{-- Personalizados --}}
-    <script src="{{ request()->secure() ? secure_asset('js/previsualizacion.js') : asset('js/previsualizacion.js') }}">
-    </script>
+    <script src="{{ asset('js/previsualizacion.js') }}"></script>
 
     {{-- Validaciones --}}
     <script>

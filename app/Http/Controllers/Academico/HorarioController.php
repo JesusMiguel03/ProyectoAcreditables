@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class HorarioController extends Controller
 {
@@ -192,7 +192,7 @@ class HorarioController extends Controller
     {
         $horarios = Horario::all();
 
-        $pdf = Pdf::loadView('academico.pdf.horario', ['horarios' => $horarios])->setPaper('a4', 'landscape');
+        $pdf = FacadePdf::loadView('academico.pdf.horario', ['horarios' => $horarios])->setPaper('a4', 'landscape');
 
         return $pdf->stream('Horario.pdf');
     }

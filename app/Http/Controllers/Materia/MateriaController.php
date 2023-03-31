@@ -14,7 +14,7 @@ use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MateriaController extends Controller
@@ -445,7 +445,7 @@ class MateriaController extends Controller
             return redirect()->back()->with('noEstudiantes', "No hubo estudiantes inscritos en la materia durante el periodo {$periodo->formato()}");
         }
 
-        $pdf = Pdf::loadView('materias.acreditables.pdf', ['materia' => $materia, 'periodo' => $periodo, 'estudiantes' => $estudiantes]);
+        $pdf = FacadePdf::loadView('materias.acreditables.pdf', ['materia' => $materia, 'periodo' => $periodo, 'estudiantes' => $estudiantes]);
 
         // Pie de página
         $canvas = $pdf->getCanvas();

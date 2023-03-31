@@ -16,8 +16,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         Factory::guessFactoryNamesUsing(function ($class) {
-            return 'Database\\Factories\\' . class_basename($class) . 'Factory';
-        });
+        return 'Database\\Factories\\' . class_basename($class) . 'Factory';
+    });
     }
 
     /**
@@ -27,8 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->environment('production')) {
-            \URL::forceScheme('https');
-        }
+        //
     }
 }

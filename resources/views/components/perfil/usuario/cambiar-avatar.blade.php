@@ -59,9 +59,8 @@
                                 <div class="col-4">
                                     <div class="border mx-auto my-2 rounded-circle avatar-contenedor"
                                         {{ Popper::arrow()->pop('Avatar ' . $avatar['nro']) }}>
-                                        <img src="{{ request()->secure() ? secure_asset($avatar['url']) : asset($avatar['url']) }}"
-                                            alt="Avatar {{ $avatar['nro'] }}" id="{{ $avatar['nro'] }}"
-                                            class="p-2 avatar">
+                                        <img src="{{ asset($avatar['url']) }}" alt="Avatar {{ $avatar['nro'] }}"
+                                            id="{{ $avatar['nro'] }}" class="p-2 avatar">
                                     </div>
                                 </div>
                             @endforeach

@@ -279,33 +279,23 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.css') : asset('vendor/DataTables/datatables.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') : asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('css/horarios.css') : asset('css/horarios.css') }}">
-    <link rel="stylesheet"
-        href="{{ request()->secure() ? secure_asset('css/anchoTabla.css') : asset('css/anchoTabla.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/horarios.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
-    <script
-        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
-    </script>
-    <script
-        src="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.js') : asset('vendor/DataTables/datatables.min.js') }}">
-    </script>
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
 
     {{-- Personalizados --}}
-    <script src="{{ request()->secure() ? secure_asset('js/tablas.js') : asset('js/tablas.js') }}"></script>
+    <script src="{{ asset('js/tablas.js') }}"></script>
 
     {{-- Validaciones --}}
     <script>
@@ -366,8 +356,7 @@
                 aula.value = 12
             }
 
-            if (aula.value === 0 || aula.value < 13 && espacio.value.length > 1 || espacios.includes(espacio
-                    .value)) {
+            if (aula.value === 0 || aula.value < 13 && espacio.value.length > 1 || espacios.includes(espacio.value)) {
                 espacio.classList.remove('is-invalid')
                 aula.classList.remove('is-invalid')
                 validacionAula = true

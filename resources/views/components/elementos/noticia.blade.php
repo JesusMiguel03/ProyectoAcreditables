@@ -29,9 +29,8 @@
     <section class="slide mb-4">
         <article class="card card-noticia mt-3 shadow" style="height: 300px">
 
-            <img src="{{ request()->secure() ? secure_asset($imagen) : asset($imagen) }}"
-                class="card-img-top mx-auto rounded border border-outline-secondary" alt="Imagen de noticia"
-                style="max-height: 144px">
+            <img src="{{ asset($imagen) }}"
+                class="card-img-top mx-auto rounded border border-outline-secondary" alt="Imagen de noticia" style="max-height: 144px">
 
             <h6 class="titulo-noticia py-2"> {{ $titulo }} </h6>
 

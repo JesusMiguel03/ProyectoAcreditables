@@ -13,21 +13,12 @@
     @php($logout_url = $logout_url ? url($logout_url) : '')
 @endif
 
-@php
-    $avatar = Auth::user()->avatar ?? null;
-    
-    if (request()->secure()) {
-        $avatar = !empty($avatar) ? secure_asset('vendor/img/avatares/' . $avatar . '.webp') : secure_asset('vendor/img/defecto/usuario.webp');
-    } else {
-        $avatar = !empty($avatar) ? asset('vendor/img/avatares/' . $avatar . '.webp') : asset('vendor/img/defecto/usuario.webp');
-    }
-@endphp
-
 <li class="nav-item dropdown user-menu d-flex align-items-center">
 
     {{-- User menu toggler --}}
     <a href="#" class="nav-link dropdown-toggle p-2" data-toggle="dropdown">
-        <img src="{{ $avatar }}" class="avatar-usuario user-image img-circle" alt="Imagen de usuario">
+        <img src="{{ !empty(Auth::user()->avatar) ? asset('vendor/img/avatares/' . Auth::user()->avatar . '.webp') : asset('vendor/img/defecto/usuario.webp') }}"
+            class="avatar-usuario user-image img-circle" alt="Imagen de usuario">
     </a>
 
     <div style="margin-top: -0.2rem">

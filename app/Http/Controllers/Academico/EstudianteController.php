@@ -13,7 +13,7 @@ use App\Models\Materia\Materia;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Support\Facades\Validator;
 
 class EstudianteController extends Controller
@@ -282,9 +282,9 @@ class EstudianteController extends Controller
 
         // Busca el periodo que dentro de su rango (fecha inicio y fin) se encuentre la fecha de inscripcion del estudiante.
         $periodo = Periodo::whereRaw('? between inicio and fin', $inicio)->first();
-        $materia = Materia::find($estudiante->materia_id);
 
-        $pdf = Pdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia, 'periodo' => $periodo]);
+        $materia = Materia::find($estudiante->materia_id);
+        $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia, 'periodo' => $periodo]);
 
         // Pie de página
         $canvas = $pdf->getCanvas();
@@ -294,7 +294,6 @@ class EstudianteController extends Controller
         $canvas->page_text($x, $y, "Av. Universidad (al lado del Comando FAN-peaje) y Av. Ricaurte, Urb. Industrial SOCIO (frente MAVIPLANCA).", 'times-roman', 8, array(0, 0, 0));
 
         $canvas->page_text($x + 20, $y + 10, "Telefax (0244) 3217054 / 3222822 / 3211478. Apartado 109. Código Postal 2121 Rif: G-20009565-2", 'times-roman', 8, array(0, 0, 0));
-
 
         // En caso de que el coordinador desee revisar el comprobante
         if (rol('Coordinador')) {
