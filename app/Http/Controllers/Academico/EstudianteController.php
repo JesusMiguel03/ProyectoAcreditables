@@ -55,12 +55,12 @@ class EstudianteController extends Controller
         // Valida si tiene el permiso
         permiso('registrar.usuario');
 
-        $pnf = Pnf::find($request['pnf']);
+        $pnf = PNF::find($request['pnf']);
 
         $pnfTrayectos = $pnf->trayectos;
         $pnfNombre = $pnf->nom_pnf;
 
-        if ($request['trayecto'] > Pnf::find($request['pnf'])->trayectos) {
+        if ($request['trayecto'] > PNF::find($request['pnf'])->trayectos) {
             return redirect()->back()->with('pnfLimite', "El PNF {$pnfNombre} cursa hasta trayecto {$pnfTrayectos}");
         }
 
@@ -182,7 +182,7 @@ class EstudianteController extends Controller
 
         // Busca al usurio, pnfs y trayectos.
         $usuario = User::find($id);
-        $pnfs = Pnf::all();
+        $pnfs = PNF::all();
         $trayectos = Trayecto::all();
 
         // PNF's no que no ven acreditables.

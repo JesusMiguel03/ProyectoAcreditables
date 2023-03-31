@@ -73,7 +73,6 @@ class Estudiante extends Model
         } else {
             return null;
         }
-
     }
 
     /**

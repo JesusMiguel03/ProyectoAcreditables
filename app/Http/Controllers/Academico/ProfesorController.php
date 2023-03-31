@@ -35,7 +35,7 @@ class ProfesorController extends Controller
         })->get();
 
         $conocimientos = AreaConocimiento::all();
-        $departamentos = Pnf::all();
+        $departamentos = PNF::all();
 
         return view('academico.profesores.index', compact('profesores', 'usuarios', 'conocimientos', 'departamentos'));
     }

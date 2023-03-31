@@ -28,7 +28,7 @@ class PerfilController extends Controller
 
         // Busca todos los trayectos y pnf's.
         $trayectos = Trayecto::all();
-        $pnfs = Pnf::all();
+        $pnfs = PNF::all();
 
         return view('profile.show', compact('trayectos', 'pnfs'));
     }

@@ -86,7 +86,7 @@ class Profesor extends Model
 
     public function departamento()
     {
-        return $this->belongsTo(Pnf::class, 'departamento_id', 'id');
+        return $this->belongsTo(PNF::class, 'departamento_id', 'id');
     }
 
     public function materias()
