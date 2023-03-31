@@ -1,0 +1,13 @@
+.seleccionable {
+  cursor: pointer;
+}
+
+.hora {
+  width: 80px;
+}
+
+th {
+  width: 160px;
+  height: 80px;
+  text-align: center;
+}

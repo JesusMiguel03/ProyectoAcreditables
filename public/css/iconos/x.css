@@ -1,0 +1,4 @@
+.fa-x::before {
+  padding: 0 0.15rem;
+  content: "\f00d";
+}
