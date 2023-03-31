@@ -45,6 +45,7 @@ class CreateNewUser implements CreatesNewUsers
             'email.email' => 'El correo no es válido.',
             'email.max' => 'El correo no debe tener más de :max caracteres.',
             'email.unique' => 'El correo debe ser único.',
+            'password.max' => 'La contraseña no debe tener más de :max caracteres.',
             'password.required' => 'La contraseña es necesaria.',
             'password.confirmed' => 'La confirmación de contraseña no coincide.',
         ]);
