@@ -31,7 +31,7 @@ class RegistrarUsuarioController extends Controller
             'nacionalidad' => ['required', 'not_in:0'],
             'cedula' => ['required', 'numeric', 'digits_between:' . config('variables.usuarios.cedula')[0] . ',' . config('variables.usuarios.cedula')[1], 'unique:users'],
             'email' => ['required', 'email', 'max:' . config('variables.usuarios.correo'), 'unique:users'],
-            'password' => ['required', new Password, 'max: 8', 'confirmed'],
+            'password' => ['required', 'string', 'min: 4', 'max: 8', 'confirmed'],
         ], [
             'nombre.required' => 'El nombre es necesario.',
             'nombre.string' => 'El nombre debe ser una oración.',
@@ -51,6 +51,9 @@ class RegistrarUsuarioController extends Controller
             'email.email' => 'El correo no es válido.',
             'email.max' => 'El correo no debe tener más de :max caracteres.',
             'email.unique' => 'El correo debe ser único.',
+            'password.string' => 'La contraseña debe ser una oración.',
+            'password.min' => 'La contraseña no debe tener menos de :min caracteres.',
+            'password.max' => 'La contraseña no debe tener más de :max caracteres.',
             'password.required' => 'La contraseña es necesaria.',
             'password.confirmed' => 'La confirmación de contraseña no coincide.',
         ]);
