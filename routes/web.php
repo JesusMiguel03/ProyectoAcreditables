@@ -264,7 +264,7 @@ Route::put('/perfil/{id}/actualizar-contrasena', [ContrasenaController::class, '
  * Manual de usuario
  */
 Route::get('/manual', function () {
-    $archivo = storage_path('app/public/General.pdf');
+    $archivo = storage_path('manuales/General.pdf');
     $contenido = File::get($archivo);
 
     return response($contenido, 200)->header('Content-Type', 'application/pdf');
@@ -273,11 +273,11 @@ Route::get('/manual', function () {
 Route::get('/manual-usuario', function () {
 
     if (rol('Coordinador')) {
-        $archivo = storage_path('app/public/Coordinador.pdf');
+        $archivo = storage_path('manuales/Coordinador.pdf');
     } elseif (rol('Profesor')) {
-        $archivo = storage_path('app/public/Profesor.pdf');
+        $archivo = storage_path('manuales/Profesor.pdf');
     } elseif (rol('Estudiante')) {
-        $archivo = storage_path('app/public/Estudiante.pdf');
+        $archivo = storage_path('manuales/Estudiante.pdf');
     } else {
         return redirect()->back();
     }
