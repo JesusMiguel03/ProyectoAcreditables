@@ -62,7 +62,12 @@
                     @foreach ($preguntas as $pregunta)
                         <tr>
                             <td>{{ $pregunta->titulo }}</td>
-                            <td>{{ $pregunta->explicacion }}</td>
+                            <td>
+                                {{ $pregunta->explicacion }}
+                                @if ($pregunta->titulo === 'Cómo funciona mi rol')
+                                    <a href="{{ route('manual.rol') }}">Manual de usuario</a>
+                                @endif
+                            </td>
                             <td>
                                 <div class="btn-group mx-1" role="group" aria-label="Acciones">
                                     <a href="{{ route('preguntas.edit', $pregunta->id) }}" class="btn btn-primary"
@@ -104,6 +109,8 @@
                                     {{ $pregunta->explicacion }}.
                                     @if ($pregunta->titulo === 'Cuáles son las opciones')
                                         <a href="{{ route('materias.index') }}">Ver acreditables</a>.
+                                    @elseif ($pregunta->titulo === 'Cómo funciona mi rol')
+                                        <a href="{{ route('manual.rol') }}">Manual de usuario</a>
                                     @endif
                                 </div>
                             @endforeach

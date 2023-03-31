@@ -14,7 +14,7 @@ use App\Models\Materia\Materia;
 use App\Models\Materia\Categoria;
 use App\Models\Materia\Informacion_materia;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MateriaController extends Controller
@@ -445,7 +445,16 @@ class MateriaController extends Controller
             return redirect()->back()->with('noEstudiantes', "No hubo estudiantes inscritos en la materia durante el periodo {$periodo->formato()}");
         }
 
-        $pdf = FacadePdf::loadView('materias.acreditables.pdf', ['materia' => $materia, 'periodo' => $periodo, 'estudiantes' => $estudiantes]);
+        $pdf = Pdf::loadView('materias.acreditables.pdf', ['materia' => $materia, 'periodo' => $periodo, 'estudiantes' => $estudiantes]);
+
+        // Pie de página
+        $canvas = $pdf->getCanvas();
+        $x = $canvas->get_width() / 6;
+        $y = $canvas->get_height() - 35;
+
+        $canvas->page_text($x, $y, "Av. Universidad (al lado del Comando FAN-peaje) y Av. Ricaurte, Urb. Industrial SOCIO (frente MAVIPLANCA).", 'times-roman', 8, array(0, 0, 0));
+
+        $canvas->page_text($x + 20, $y + 10, "Telefax (0244) 3217054 / 3222822 / 3211478. Apartado 109. Código Postal 2121 Rif: G-20009565-2", 'times-roman', 8, array(0, 0, 0));
 
         return $pdf->stream('Comprobante de inscripcion.pdf');
     }

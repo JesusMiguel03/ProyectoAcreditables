@@ -13,7 +13,7 @@ use App\Models\Materia\Materia;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Validator;
 
 class EstudianteController extends Controller
@@ -191,58 +191,6 @@ class EstudianteController extends Controller
         return view('academico.estudiantes.edit', compact('usuario', 'pnfs', 'trayectos', 'pnfsNoDisponibles'));
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     // Valida si tiene el permiso.
-    //     permiso('registrar.usuario');
-
-    //     // Valida que se haya elegido un trayecto y pnf.
-    //     $validador = Validator::make($request->all(), [
-    //         'trayecto' => ['required', 'not_in:0', 'digits_between:1,' . Pnf::find($request['pnf'])->trayectos],
-    //         'pnf' => ['required', 'not_in:0'],
-    //     ], [
-    //         'trayecto.not_in' => 'El trayecto seleccionado es inválido.',
-    //         'pnf.not_in' => 'El PNF seleccionado es inválido.',
-    //     ]);
-    //     validacion($validador, 'error', 'Perfil académico');
-
-    //     $usuario = auth()->user();
-    //     $estudiante = User::find($id);
-
-    //     $pnfTrayectos = Pnf::find($request['pnf'])->trayectos;
-    //     $pnfNombre = Pnf::find($request['pnf'])->nom_pnf;
-
-    //     if ($request['trayecto'] > Pnf::find($request['pnf'])->trayectos) {
-
-    //         Bitacora::create([
-    //             'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-    //             'accion' => "Intentó asignar un trayecto superior al registrado en el PNF ({$pnfNombre})",
-    //             'estado' => 'danger',
-    //             'periodo_id' => periodo('modelo')->id ?? null
-    //         ]);
-
-    //         return redirect()->back()->with('pnfLimite', "El PNF {$pnfNombre} cursa hasta trayecto {$pnfTrayectos}");
-    //     }
-
-    //     // Actualiza el perfil académico
-    //     Bitacora::create([
-    //         'usuario' => "{$usuario->nombre} {$usuario->apellido}",
-    //         'accion' => "Actualizó el perfil académico de ({$estudiante->nombre} {$estudiante->apellido}) exitosamente",
-    //         'estado' => 'success',
-    //         'periodo_id' => periodo('modelo')->id ?? null
-    //     ]);
-
-    //     Estudiante::updateOrCreate(
-    //         ['usuario_id' => $estudiante->id],
-    //         [
-    //             'trayecto_id' => $request['trayecto'],
-    //             'pnf_id' => $request['pnf']
-    //         ]
-    //     );
-
-    //     return redirect('estudiantes')->with('academico', 'academico');
-    // }
-
     public function aprobar($id)
     {
         if (rol('Estudiante')) {
@@ -303,13 +251,17 @@ class EstudianteController extends Controller
     public function comprobante($id, $nroComprobante = '')
     {
         // Si es profesor no puede ver el comprobante
-        if (rol('Profesor')) return redirect()->back();
+        if (rol('Profesor')) {
+            return redirect()->back();
+        }
 
         // Busca al estudiante y carga sus datos
         $estudiante = Estudiante::find($id);
 
         // Si intenta buscar un comprobante inferior a 1 redirige con mensaje de error.
-        if ($nroComprobante && $nroComprobante < 1) return redirect()->back()->with('comprobanteError', 'No existe el comprobante a buscar.');
+        if ($nroComprobante && $nroComprobante < 1) {
+            return redirect()->back()->with('comprobanteError', 'No existe el comprobante a buscar.');
+        }
 
         // Si se busca por un ID se muestra el comprobante, caso contrario muestra el último.
         !empty($nroComprobante)
@@ -317,21 +269,37 @@ class EstudianteController extends Controller
             : $estudiante = $estudiante->ultimaInscripcion;
 
         // Si el estudiante no tiene comprobante, redirecciona.
-        if (empty($estudiante)) return redirect()->back();
+        if (empty($estudiante)) {
+            return redirect()->back();
+        }
 
         // Si el estudiante intenta acceder al comprobante de otro.
-        if (rol('Estudiante') && auth()->user()->estudiante->id !== $estudiante->estudiante_id) return redirect()->back();
+        if (rol('Estudiante') && auth()->user()->estudiante->id !== $estudiante->estudiante_id) {
+            return redirect()->back();
+        }
 
         $inicio = Carbon::parse($estudiante->created_at)->format('Y-m-d');
 
         // Busca el periodo que dentro de su rango (fecha inicio y fin) se encuentre la fecha de inscripcion del estudiante.
         $periodo = Periodo::whereRaw('? between inicio and fin', $inicio)->first();
-
         $materia = Materia::find($estudiante->materia_id);
-        $pdf = FacadePdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia, 'periodo' => $periodo]);
+
+        $pdf = Pdf::loadView('academico.pdf.comprobante', ['estudiante' => $estudiante, 'materia' => $materia, 'periodo' => $periodo]);
+
+        // Pie de página
+        $canvas = $pdf->getCanvas();
+        $x = $canvas->get_width() / 6;
+        $y = $canvas->get_height() - 35;
+
+        $canvas->page_text($x, $y, "Av. Universidad (al lado del Comando FAN-peaje) y Av. Ricaurte, Urb. Industrial SOCIO (frente MAVIPLANCA).", 'times-roman', 8, array(0, 0, 0));
+
+        $canvas->page_text($x + 20, $y + 10, "Telefax (0244) 3217054 / 3222822 / 3211478. Apartado 109. Código Postal 2121 Rif: G-20009565-2", 'times-roman', 8, array(0, 0, 0));
+
 
         // En caso de que el coordinador desee revisar el comprobante
-        if (rol('Coordinador')) return $pdf->stream('Comprobante de inscripción.pdf');
+        if (rol('Coordinador')) {
+            return $pdf->stream('Comprobante de inscripción.pdf');
+        }
 
         // Flujo normal, al estudiante se le descarga directamente el pdf
         return $pdf->download('Comprobante de inscripcion.pdf');

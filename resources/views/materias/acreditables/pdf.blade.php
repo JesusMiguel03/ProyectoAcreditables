@@ -45,7 +45,7 @@
             <thead>
                 <tr style="font-size: 0.9rem;" class="table-primary text-center">
                     <th>Cédula</th>
-                    <th>Nombre y apellido</th>
+                    <th>Nombre</th>
                     <th>PNF</th>
                     <th>Trayecto</th>
                     <th>Estado</th>

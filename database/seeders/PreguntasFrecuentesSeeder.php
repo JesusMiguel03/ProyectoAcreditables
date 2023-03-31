@@ -34,5 +34,9 @@ class PreguntasFrecuentesSeeder extends Seeder
             'titulo' => 'Cómo puedo ver mi nota',
             'explicacion' => 'Vaya a su perfil, al final, en el apartado de "Notas Académicas" podrá visualizar la nota y asistencia que tuvo en cada acreditable en la que haya participado',
         ]);
+        Pregunta_frecuente::create([
+            'titulo' => 'Cómo funciona mi rol',
+            'explicacion' => 'Cada rol cuenta con permisos diferentes y en algunos casos pueden llegar a coincidir, a continuación se muestra más detalladamente la interacción de cada usuario con el componente',
+        ]);
     }
 }
