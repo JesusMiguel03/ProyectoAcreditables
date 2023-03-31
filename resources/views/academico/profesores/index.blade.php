@@ -129,19 +129,31 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/input.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.css') : asset('vendor/DataTables/datatables.min.css') }}" />
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') : asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/input.css') : asset('css/estilosVarios/input.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('vendor/moment/moment.js') }}"></script>
-    <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.js') : asset('vendor/DataTables/datatables.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
+    <script src="{{ request()->secure() ? secure_asset('vendor/moment/moment.js') : asset('vendor/moment/moment.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') : asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
+    </script>
     <script>
         $(function() {
             $('#fecha_nacimiento').datetimepicker({
@@ -158,7 +170,7 @@
     </script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/tablas.js') : asset('js/tablas.js') }}"></script>
 
     {{-- Validaciones --}}
     {{-- Registrar usuario --}}
@@ -177,7 +189,8 @@
 
         // Validaciones de cada campo
         let [
-            validacionNombre, validacionApellido, validacionNacionalidad, validacionCedula, validacionCorreo, validacionContrasena, validacionConfirmarContrasena
+            validacionNombre, validacionApellido, validacionNacionalidad, validacionCedula, validacionCorreo,
+            validacionContrasena, validacionConfirmarContrasena
         ] = [
             nombre.value.length > 2 && nombre.value.length < 21,
             apellido.value.length > 2 && apellido.value.length < 21,
@@ -185,12 +198,14 @@
             cedula.value.toString().length > 6 && cedula.value.toString().length < 9,
             validarCorreo.test(correo.value),
             contrasena.value.length > 3 && contrasena.value.length < 9,
-            confirmarContrasena.value.length > 3 && confirmarContrasena.value.length < 9 && confirmarContrasena.value === contrasena.value
+            confirmarContrasena.value.length > 3 && confirmarContrasena.value.length < 9 && confirmarContrasena.value ===
+            contrasena.value
         ]
 
         // Validacion de todo el formulario
         const formularioValidado = () => {
-            if (validacionNombre && validacionApellido && validacionNacionalidad && validacionCedula && validacionCorreo &&
+            if (validacionNombre && validacionApellido && validacionNacionalidad && validacionCedula &&
+                validacionCorreo &&
                 validacionContrasena && validacionConfirmarContrasena) {
                 botonUsuario.removeAttribute('disabled')
             } else {
@@ -380,7 +395,8 @@
         botonProfesor.disabled = true
 
         let [
-            validarUsuario, validarDepartamento, validarConocimiento, validarEstado, validarCiudad, validarUrb, validarCalle, validarCasa, validarCodigo, validarTlf, validarNacimiento, validarIngreso
+            validarUsuario, validarDepartamento, validarConocimiento, validarEstado, validarCiudad, validarUrb,
+            validarCalle, validarCasa, validarCodigo, validarTlf, validarNacimiento, validarIngreso
         ] = [
             usuario.options[usuario.selectedIndex].value > 0,
             departamento.options[departamento.selectedIndex].value > 0,

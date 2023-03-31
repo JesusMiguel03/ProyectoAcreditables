@@ -9,14 +9,18 @@
 
     <title>Acreditable - {{ $materia->nom_materia }} {{ $materia->trayecto->num_trayecto }}</title>
 
-    <link rel="stylesheet" href="{{ asset('vendor/fonts/fonts.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/comprobante.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/fonts/fonts.css') : asset('vendor/fonts/fonts.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/comprobante.css') : asset('css/comprobante.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/adminlte/dist/css/adminlte.min.css') : asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
 </head>
 
 <body>
     <header class="encabezado">
-        <img src="{{ asset('vendor/img/logo.png') }}" class="logo">
+        <img src="{{ request()->secure() ? secure_asset('vendor/img/logo.png') : asset('vendor/img/logo.png') }}"
+            class="logo">
 
         <p class="membrete"> República Bolivariana de Venezuela </p>
         <p class="membrete"> Ministerio del Poder Popular para la Educación Universitaria </p>
@@ -57,18 +61,17 @@
 
             <tbody>
                 @foreach ($estudiantes as $estudiante)
-
-                @php
-                    $CI = $estudiante->inscritoCI() ?? null;
-                    $nombre = $estudiante->inscritoSoloNombre() ?? null;
-                    $apellido = $estudiante->inscritoSoloApellido() ?? null;
-                    $pnf = $estudiante->inscritoPNF()->nom_pnf ?? null;
-                    $trayecto = $estudiante->inscritoTrayecto()->num_trayecto ?? null;
-                    $estaValidado = $estudiante->validado ?? null;
-                    $codigo = $estudiante->codigo ?? null;
-                    $nota = $estudiante->nota ?? null;
-                    $asistencia = $estudiante->aprobo()[1] ?? null;
-                @endphp
+                    @php
+                        $CI = $estudiante->inscritoCI() ?? null;
+                        $nombre = $estudiante->inscritoSoloNombre() ?? null;
+                        $apellido = $estudiante->inscritoSoloApellido() ?? null;
+                        $pnf = $estudiante->inscritoPNF()->nom_pnf ?? null;
+                        $trayecto = $estudiante->inscritoTrayecto()->num_trayecto ?? null;
+                        $estaValidado = $estudiante->validado ?? null;
+                        $codigo = $estudiante->codigo ?? null;
+                        $nota = $estudiante->nota ?? null;
+                        $asistencia = $estudiante->aprobo()[1] ?? null;
+                    @endphp
 
                     <tr style="font-size: 0.9rem;" class="table-active text-center">
                         <td style="width: 40%; font-size: 0.8rem">{{ $CI }}</td>
@@ -95,4 +98,5 @@
         </section>
     </footer>
 </body>
+
 </html>

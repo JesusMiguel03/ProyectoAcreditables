@@ -34,20 +34,27 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/buscar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/input.css') }}">
+    <link rel="stylesheet" href="{{ request()->secure() ? secure_asset('css/buscar.css') : asset('css/buscar.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/descripcion.css') : asset('css/descripcion.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/input.css') : asset('css/estilosVarios/input.css') }}">
 @stop
 
 @section('js')
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('js/previsualizacion.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/previsualizacion.js') : asset('js/previsualizacion.js') }}">
+    </script>
 
     {{-- Validaciones --}}
     <script>
@@ -78,7 +85,7 @@
             estados.includes(estado.options[estado.selectedIndex].value),
             categoria.options[categoria.selectedIndex].value > 0 || true,
             metodologias.includes(metodologia.options[metodologia.selectedIndex].value) || true,
-            profesor.options[profesor.selectedIndex].value > 0  || true
+            profesor.options[profesor.selectedIndex].value > 0 || true
         ]
 
         const enviarFormulario = () => {
@@ -99,7 +106,8 @@
                 nombre.value = nombre.value.slice(0, 25)
             }
 
-            if (/^(?=\S)(?:(?!\s{2})[a-zA-ZÀ-ÿ\s]){3,}$/g.test(nombre.value) && nombre.value.length > 4 && nombre.value.length < 26) {
+            if (/^(?=\S)(?:(?!\s{2})[a-zA-ZÀ-ÿ\s]){3,}$/g.test(nombre.value) && nombre.value.length > 4 && nombre
+                .value.length < 26) {
                 nombre.classList.remove('is-invalid')
                 validacionNombre = true
             } else {
@@ -145,7 +153,8 @@
                 descripcion.value = descripcion.value.slice(0, 255)
             }
 
-            if (/^(?=\S)(?:(?!\s{2})[a-zA-ZÀ-ÿ\s]){10,}$/g.test(descripcion.value) && descripcion.value.length > 15 && descripcion.value.length < 256) {
+            if (/^(?=\S)(?:(?!\s{2})[a-zA-ZÀ-ÿ\s]){10,}$/g.test(descripcion.value) && descripcion.value.length >
+                15 && descripcion.value.length < 256) {
                 descripcion.classList.remove('is-invalid')
                 validacionDescripcion = true
             } else {

@@ -1,10 +1,15 @@
 @php
     $materia = atributo($attributes, 'materia');
-
+    
     $info = !empty($materia->info) ? $materia->info->categoria : null;
     $categoria = !empty($info) ? $info->nom_categoria : 'Sin asignar';
     $id = $materia->id;
     $imagen = $materia->imagen_materia;
+    if (request()->secure()) {
+        $imagen = !empty($imagen) ? secure_asset('storage/' . $imagen) : secure_asset('vendor/img/defecto/materias.png');
+    } else {
+        $imagen = !empty($imagen) ? asset('vendor/img/defecto/materias.png') : asset('storage/' . $imagen);
+    }
     $nombre = $materia->nom_materia;
     $cupos = $materia->cupos_disponibles;
     $nro = $materia->trayecto->num_trayecto;
@@ -15,8 +20,8 @@
     <div class="mx-auto col-md-4 col-sm-12">
         <section class="card mt-3">
             <header class="card-img-top">
-                <img src="{{ asset('vendor/img/defecto/materias.png') }}" alt="Imagen de materia"
-                    class="card-img-top rounded" style="height: 15vh">
+                <img src="{{ request()->secure() ? secure_asset('vendor/img/defecto/materias.png') : asset('vendor/img/defecto/materias.png') }}"
+                    alt="Imagen de materia" class="card-img-top rounded" style="height: 15vh">
             </header>
 
             <main class="card-body">
@@ -31,8 +36,7 @@
 @else
     <section class="card mt-3">
         <header class="card-img-top">
-            <img src="{{ empty($imagen) ? asset('vendor/img/defecto/materias.png') : asset('storage/' . $imagen) }}"
-                alt="Imagen de materia"
+            <img src="{{ $imagen }}" alt="Imagen de materia"
                 class="card-img-top rounded {{ $imagen ? 'border border-outline-secondary' : '' }}"
                 style="height: 15vh">
         </header>

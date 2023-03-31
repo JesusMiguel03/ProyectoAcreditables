@@ -32,9 +32,12 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/descripcion.css') : asset('css/descripcion.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/iconos/lapiz.css') : asset('css/iconos/lapiz.css') }}">
 @stop
 
 @section('js')

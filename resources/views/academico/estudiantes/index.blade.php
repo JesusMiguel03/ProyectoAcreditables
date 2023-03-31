@@ -74,16 +74,15 @@
             </thead>
             <tbody>
                 @foreach ($usuarios as $usuario)
-
-                @php
-                    $CI = $usuario->nacionalidad . '-' . number_format($usuario->cedula, 0, '', '.');
-                    $nombre = $usuario->nombre;
-                    $apellido = $usuario->apellido;
-                    $pnf = $usuario->estudiante->pnf->nom_pnf ?? 'Sin asignar';
-                    $trayecto = $usuario->estudiante->trayecto->num_trayecto ?? 'Sin asignar';
-                    $inscrito = $usuario->estudiante->inscrito ?? null;
-                    $estudianteID = $usuario->estudiante->id ?? null;
-                @endphp
+                    @php
+                        $CI = $usuario->nacionalidad . '-' . number_format($usuario->cedula, 0, '', '.');
+                        $nombre = $usuario->nombre;
+                        $apellido = $usuario->apellido;
+                        $pnf = $usuario->estudiante->pnf->nom_pnf ?? 'Sin asignar';
+                        $trayecto = $usuario->estudiante->trayecto->num_trayecto ?? 'Sin asignar';
+                        $inscrito = $usuario->estudiante->inscrito ?? null;
+                        $estudianteID = $usuario->estudiante->id ?? null;
+                    @endphp
                     <tr>
                         <td>{{ $CI }}</td>
                         <td>{{ $nombre }}</td>
@@ -99,16 +98,15 @@
 
                                 @if ($inscrito && !$inscrito->isEmpty())
                                     @if (count($inscrito) === 1)
-                                        <a href="{{ route('comprobante', $estudianteID) }}"
-                                            class="btn btn-danger mr-2"
+                                        <a href="{{ route('comprobante', $estudianteID) }}" class="btn btn-danger mr-2"
                                             {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
                                             <i class="fas fa-file-pdf" style="width: 15px"></i>
                                         </a>
                                     @else
                                         <button class="btn btn-danger mr-2" data-listarComprobantes="true"
                                             data-estudiante="{{ $estudianteID }}"
-                                            data-comprobantes="{{ count($inscrito) }}"
-                                            data-toggle="modal" data-target="#comprobantes"
+                                            data-comprobantes="{{ count($inscrito) }}" data-toggle="modal"
+                                            data-target="#comprobantes"
                                             {{ Popper::arrow()->pop('Comprobante de inscripción') }}>
                                             <i class="fas fa-file-pdf" style="width: 15px"></i>
                                         </button>
@@ -124,21 +122,30 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.css') : asset('vendor/DataTables/datatables.min.css') }}" />
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.js') : asset('vendor/DataTables/datatables.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/listadoComprobantes.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/tablas.js') : asset('js/tablas.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('js/listadoComprobantes.js') : asset('js/listadoComprobantes.js') }}">
+    </script>
 
     {{-- Validaciones --}}
     <script>

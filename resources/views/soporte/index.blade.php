@@ -24,13 +24,17 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 @stop
 
 @section('js')
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
 
     {{-- Validaciones --}}
+    {{-- Recuperar contraseña --}}
     <script>
         const correo = document.getElementById('correoContrasena')
         const boton = document.getElementById('botonCorreoContrasena')
@@ -39,7 +43,8 @@
 
         let validacionCorreo = false
 
-        let regexCorreo = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        let regexCorreo =
+            /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 
         correo.addEventListener('input', (e) => {
             if (e.currentTarget.value.length > 40) {
@@ -62,6 +67,7 @@
         })
     </script>
 
+    {{-- Cambiar cedula --}}
     <script>
         const correoCedula = document.getElementById('correoCedula')
         const cedula = document.getElementById('cedula')
@@ -81,11 +87,11 @@
 
         cedula.addEventListener('input', (e) => {
             cedula.value = cedula.value.replace('e', '')
-            
+
             if (cedula.value.toString().length > 8) {
                 cedula.value = cedula.value.toString().slice(0, 8)
             }
-            
+
             if (cedula.value.toString().length > 6 && cedula.value.toString().length < 9) {
                 cedula.classList.remove('is-invalid')
                 validacionCedula = true

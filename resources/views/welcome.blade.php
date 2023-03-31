@@ -27,14 +27,21 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/carousel/slick.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/carousel/carousel.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/carousel/slick.css') : asset('vendor/carousel/slick.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/carousel/carousel.css') : asset('vendor/carousel/carousel.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/noticia.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/noticia.css') : asset('css/estilosVarios/noticia.css') }}">
 @stop
 
 @section('js')
-    <script src="{{ asset('vendor/carousel/slick.min.js') }}"></script>
-    <script src="{{ asset('vendor/carousel/carousel.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/carousel/slick.min.js') : asset('vendor/carousel/slick.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/carousel/carousel.js') : asset('vendor/carousel/carousel.js') }}">
+    </script>
 @stop

@@ -69,23 +69,38 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/input.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.css') : asset('vendor/DataTables/datatables.min.css') }}" />
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/select2/select2.min.css') : asset('vendor/select2/select2.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/input.css') : asset('css/estilosVarios/input.css') }}">
 @stop
 
 @section('js')
-    <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/tablas.js') : asset('js/tablas.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.js') : asset('vendor/DataTables/datatables.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/select2/select2.min.js') : asset('vendor/select2/select2.min.js') }}">
+    </script>
+
+    {{-- Multi select --}}
     <script>
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2();
         });
     </script>
+
+    {{-- Mensajes --}}
     <script>
         @if ($message = session('actualizado'))
             Swal.fire({

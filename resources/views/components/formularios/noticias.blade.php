@@ -6,6 +6,12 @@
         $descripcion = $noticia->desc_noticia;
         $activo = $noticia->activo;
         $imagen = $noticia->imagen_noticia;
+    
+        if (request()->secure()) {
+            $imagen = !empty($imagen) ? secure_asset('storage/' . $imagen) : secure_asset('vendor/img/defecto/noticias.png');
+        } else {
+            $imagen = !empty($imagen) ? asset('storage/' . $imagen) : asset('vendor/img/defecto/noticias.png');
+        }
     } else {
         $activo = '';
     }
@@ -40,8 +46,9 @@
     <label for="desc_noticia" class="control-label">Descripción</label>
 
     <div class="input-group">
-        <textarea id="descripcion" name="desc_noticia" class="form-control @error('desc_noticia') is-invalid @enderror descripcion"
-            spellcheck="false" placeholder="{{ __('Descripción, ej: Una nueva acreditable ha sido registrada') }}"
+        <textarea id="descripcion" name="desc_noticia"
+            class="form-control @error('desc_noticia') is-invalid @enderror descripcion" spellcheck="false"
+            placeholder="{{ __('Descripción, ej: Una nueva acreditable ha sido registrada') }}"
             maxlength="{{ config('variables.noticias.descripcion') }}" required pattern="[A-zÀ-ÿ0-9\s]+"
             title="Debe estar entre 15 y 100 letras.">{{ $descripcion ?? old('desc_noticia') }}</textarea>
 
@@ -64,7 +71,8 @@
     <label for="activo" class="control-label">¿Mostrar noticia?</label>
 
     <div class="input-group">
-        <select id="mostrar" name="activo" class="form-control @error('activo') is-invalid @enderror" title="Debe seleccionar una opción de la lista." required>
+        <select id="mostrar" name="activo" class="form-control @error('activo') is-invalid @enderror"
+            title="Debe seleccionar una opción de la lista." required>
             <option readonly>Seleccione...</option>
             <option value="1" {{ $activo === 1 ? 'selected' : '' }}>Si</option>
             <option value="0" {{ $activo === 0 ? 'selected' : '' }}>No</option>
@@ -110,9 +118,7 @@
 {{-- Previsualizar imagen --}}
 @if (Route::is('noticias.edit'))
     <div class="mb-3 text-center">
-        <img src="{{ !empty($imagen) ? asset('storage/' . $imagen) : asset('vendor/img/defecto/noticias.png') }}"
-            alt="{{ !empty($imagen) ? 'Imagen de la materia' : 'Imagen de materia por defecto' }}"
-            class="rounded img-fluid" id="previsualizar">
+        <img src="{{ $imagen }}" alt="{{ $imagen }}" class="rounded img-fluid" id="previsualizar">
     </div>
 @else
     <div class="card" style="max-width: 540px">
@@ -141,8 +147,7 @@
 @else
     <div class="row">
         <div class="col-6">
-            <button id="cancelar" type="button" class="btn btn-block btn-secondary"
-                data-dismiss="modal">
+            <button id="cancelar" type="button" class="btn btn-block btn-secondary" data-dismiss="modal">
                 <i class="fas fa-arrow-left mr-2"></i>
                 {{ __('Cancelar') }}
             </button>

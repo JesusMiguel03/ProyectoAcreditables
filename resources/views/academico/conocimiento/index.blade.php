@@ -79,24 +79,36 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.css') : asset('vendor/DataTables/datatables.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/iconos/lapiz.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/descripcion.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/iconos/lapiz.css') : asset('css/iconos/lapiz.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/descripcion.css') : asset('css/descripcion.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/anchoTabla.css') : asset('css/anchoTabla.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.js') : asset('vendor/DataTables/datatables.min.js') }}">
+    </script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('js/tablas.js') }}"></script>
-    <script src="{{ asset('js/borrar.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/tablas.js') : asset('js/tablas.js') }}">
+    </script>
+    <script src="{{ request()->secure() ? secure_asset('js/borrar.js') : asset('js/borrar.js') }}">
+    </script>
 
     {{-- Validaciones --}}
     <script>

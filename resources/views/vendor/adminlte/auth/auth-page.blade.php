@@ -20,8 +20,8 @@
 
         <div class="{{ $auth_type ?? 'login' }}-logo">
             <div class="card rounded-circle mx-auto" style="height: 120px; width: 120px; text-align: center;">
-                <img src="{{ asset('vendor/img/logo.png') }}" alt="Logo de la UPTA" style="margin: auto;" height="90"
-                    width="70">
+                <img src="{{ request()->secure() ? secure_asset('vendor/img/logo.png') : asset('vendor/img/logo.png') }}"
+                    alt="Logo de la UPTA" style="margin: auto;" height="90" width="70">
             </div>
 
             <h2 class="text-white">Coordinación de Acreditables</h2>

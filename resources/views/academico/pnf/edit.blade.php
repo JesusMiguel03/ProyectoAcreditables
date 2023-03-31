@@ -32,7 +32,8 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')

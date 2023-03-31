@@ -1,15 +1,15 @@
 @php
     $materia = atributo($attributes, 'materia');
-
+    
     $profesor = $materia->profesorEncargado();
-
+    
     if ($profesor) {
         $profesorID = $profesor->id;
         $profesorNombre = $profesor->nombreProfesor();
         $profesorAvatar = $profesor->avatar();
     }
-
-    $avatar = !empty($profesorAvatar) ? "vendor/img/avatares/{$profesorAvatar}.webp": 'vendor/img/defecto/usuario.webp';
+    
+    $avatar = !empty($profesorAvatar) ? "vendor/img/avatares/{$profesorAvatar}.webp" : 'vendor/img/defecto/usuario.webp';
     
     if (rol('Estudiante')) {
         $altura = '7.133rem';
@@ -28,8 +28,7 @@
         <main class="card-body box-profile">
             <div class="text-center {{ $margen }}" style="min-height:{{ $altura }}">
                 <img class="profile-user-img img-fluid img-circle"
-                    src="{{ asset($avatar) }}"
-                    alt="Avatar del profesor">
+                    src="{{ request()->secure() ? secure_asset($avatar) : asset($avatar) }}" alt="Avatar del profesor">
             </div>
 
             <h4 class="profile-username text-center">

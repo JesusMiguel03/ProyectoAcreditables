@@ -37,17 +37,24 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/avatar.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/avatar.css') : asset('css/estilosVarios/avatar.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('js/seleccionarAvatar.js') }}"></script>
-    <script src="{{ asset('js/descargarComprobante.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/seleccionarAvatar.js') : asset('js/seleccionarAvatar.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('js/descargarComprobante.js') : asset('js/descargarComprobante.js') }}">
+    </script>
 
     {{-- Validaciones --}}
     {{-- Información --}}

@@ -32,12 +32,15 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/iconos/x.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet" href="{{ request()->secure() ? secure_asset('css/iconos/x.css') : asset('css/iconos/x.css') }}">
 @stop
 
 @section('js')
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
 
     <script>
         const inputPeriodo = document.getElementById("periodo");

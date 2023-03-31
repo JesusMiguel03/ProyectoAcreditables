@@ -75,20 +75,33 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('/vendor/DataTables/datatables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.css') : asset('/vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') : asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
 
     {{-- Personalizados --}}
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')
     @include('popper::assets')
-    <script src="{{ asset('/vendor/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('vendor/moment/moment.js') }}"></script>
-    <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.js') : asset('vendor/DataTables/datatables.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
+    <script src="{{ request()->secure() ? secure_asset('vendor/moment/moment.js') : asset('vendor/moment/moment.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') : asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}">
+    </script>
+
+    {{-- Tiempo --}}
     <script>
         $(function() {
             $('#inicio').datetimepicker({
@@ -105,7 +118,7 @@
     </script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/tablas.js') : asset('js/tablas.js') }}"></script>
 
     {{-- Validaciones --}}
     <script>

@@ -32,7 +32,8 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')
@@ -41,7 +42,7 @@
         const boton = document.getElementById('formularioEnviar')
 
         let validacionTrayecto = trayecto.value > 0 && trayecto.value < 11
-        
+
         const validarFormulario = () => {
             if (validacionTrayecto) {
                 boton.removeAttribute('disabled')

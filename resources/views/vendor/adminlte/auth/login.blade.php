@@ -1,7 +1,8 @@
 @extends('adminlte::auth.auth-page', ['auth_type' => 'login'])
 
 @section('adminlte_css_pre')
-    <link rel="stylesheet" href="{{ asset('vendor/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/plugins/icheck-bootstrap/icheck-bootstrap.min.css') : asset('vendor/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 @stop
 
 @php($login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login'))
@@ -54,8 +55,8 @@
             <label for="password" class="control-label">Contraseña</label>
             <div class="input-group mb-3">
                 <input type="password" id="contrasena" name="password"
-                    class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Contraseña') }}" title="Debe contener entre 4 y 8 caracteres."
-                    required>
+                    class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Contraseña') }}"
+                    title="Debe contener entre 4 y 8 caracteres." required>
 
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -95,7 +96,8 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/required.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/required.css') : asset('css/estilosVarios/required.css') }}">
 @stop
 
 @section('js')
@@ -105,7 +107,8 @@
         const correo = document.getElementById('correo')
 
         // Expresión regular para validar el formato del correo electrónico
-        const validarCorreo = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        const validarCorreo =
+            /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
 
         correo.addEventListener('input', (e) => {
             // Validacion de correo y contraseña
@@ -127,9 +130,9 @@
             }
 
             // Si el correo y la contraseña son válidos, se habilita el botón
-            validacionCorreo && contrasenaValida
-                ? boton.removeAttribute('disabled')
-                : boton.disabled = true
+            validacionCorreo && contrasenaValida ?
+                boton.removeAttribute('disabled') :
+                boton.disabled = true
         })
 
         // Evento que se dispara cuando el usuario escribe en el campo de la contraseña
@@ -150,9 +153,9 @@
             }
 
             // Si el correo y la contraseña son válidos, se habilita el botón
-            validacionCorreo && contrasenaValida
-                ? boton.removeAttribute('disabled')
-                : boton.disabled = true
+            validacionCorreo && contrasenaValida ?
+                boton.removeAttribute('disabled') :
+                boton.disabled = true
         })
     </script>
 @stop

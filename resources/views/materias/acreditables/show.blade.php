@@ -322,21 +322,29 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.css') : asset('vendor/DataTables/datatables.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('vendor/sweetalert2/bootstrap-4.min.css') : asset('vendor/sweetalert2/bootstrap-4.min.css') }}">
 
     {{-- Personalizado --}}
-    <link rel="stylesheet" href="{{ asset('css/decoracion.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/cambiarAcreditables.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/estilosVarios/mensaje.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/iconos/x.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/anchoTabla.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/decoracion.css') : asset('css/decoracion.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/cambiarAcreditables.css') : asset('css/estilosVarios/cambiarAcreditables.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/estilosVarios/mensaje.css') : asset('css/estilosVarios/mensaje.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/iconos/x.css') : asset('css/iconos/x.css') }}">
+    <link rel="stylesheet"
+        href="{{ request()->secure() ? secure_asset('css/anchoTabla.css') : asset('css/anchoTabla.css') }}">
 @stop
 
 @section('js')
     @if (rol('Coordinador') || (rol('Profesor') && !empty($profesorDictaAcreditable)))
         @include('popper::assets')
 
+        {{-- Asignar nota --}}
         <script>
             const botones = document.querySelectorAll(".notas")
             const form = document.getElementById("asignarNota")
@@ -362,16 +370,20 @@
                 form.submit()
             })
         </script>
-        {{-- <script src="{{ asset('js/asignarNota.js') }}"></script> --}}
     @endif
-    <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/DataTables/datatables.min.js') : asset('vendor/DataTables/datatables.min.js') }}">
+    </script>
+    <script
+        src="{{ request()->secure() ? secure_asset('vendor/sweetalert2/sweetalert2.min.js') : asset('vendor/sweetalert2/sweetalert2.min.js') }}">
+    </script>
 
     {{-- Personalizados --}}
-    <script src="{{ asset('js/tablas.js') }}"></script>
+    <script src="{{ request()->secure() ? secure_asset('js/tablas.js') : asset('js/tablas.js') }}"></script>
 
     @if (rol('Estudiante'))
-        <script src="{{ asset('js/cambiarAcreditable.js') }}"></script>
+        <script src="{{ request()->secure() ? secure_asset('js/cambiarAcreditable.js') : asset('js/cambiarAcreditable.js') }}">
+        </script>
     @endif
 
     @if (rol('Coordinador'))
