@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Academico\Estudiante;
 use App\Models\Academico\Estudiante_materia;
 use App\Models\Academico\Periodo;
-use App\Models\Academico\Pnf;
+use App\Models\Academico\PNF;
 use App\Models\Academico\Trayecto;
 use App\Models\Informacion\Bitacora;
 use App\Models\Materia\Materia;

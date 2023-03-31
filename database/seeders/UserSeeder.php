@@ -133,7 +133,7 @@ class UserSeeder extends Seeder
         \App\Models\User::factory()->count(1000)->create()->each(function ($usuario) {
             $rol = rand(1, 2) === 1 ? 'Estudiante' : 'Profesor';
             $usuario->assignRole($rol);
-            
+
             if ($rol === 'Estudiante') {
                 $estudiante = Estudiante::create([
                     'pnf_id' => PNF::find(rand(4, 8))->id,

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Perfil;
 
 use App\Http\Controllers\Controller;
-use App\Models\Academico\Pnf;
+use App\Models\Academico\PNF;
 use App\Models\Academico\Trayecto;
 use App\Models\Informacion\Bitacora;
 use App\Models\User;
@@ -98,7 +98,7 @@ class PerfilController extends Controller
 
         if ($usuario->nombre !== $request['nombre']) {
             $cambios = true;
-            $usuario->update([ 'nombre' => $request['nombre'] ]);
+            $usuario->update(['nombre' => $request['nombre']]);
         }
         if ($usuario->apellido !== $request['apellido']) {
             $cambios = true;

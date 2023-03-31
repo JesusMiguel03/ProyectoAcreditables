@@ -35,7 +35,7 @@ class EstadisticasController extends Controller
         $periodos = Periodo::all();
         $periodoActual = Periodo::find($periodo_id);
         $materiaActual = Materia::find($materia_id);
-        
+
         // Si no se encuentra uno u otro regresa.
         if (!$periodoActual || !$materiaActual) {
             return redirect()->back()->with('noEncontrado', 'error');

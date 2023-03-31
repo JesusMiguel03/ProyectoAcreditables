@@ -176,7 +176,7 @@ class ProfesorController extends Controller
 
         // Busca y actualiza
         $profesor = Profesor::find($id);
-        $usuarioActualizar = User::where('id','=',$profesor->usuario_id)->first();
+        $usuarioActualizar = User::where('id', '=', $profesor->usuario_id)->first();
 
         // Valida los campos
         $validar = Validator::make($request->all(), [
@@ -190,7 +190,7 @@ class ProfesorController extends Controller
             'casa' => ['required', 'string', 'max:' . config('variables.profesores.casa')],
             'calle' => ['required', 'string', 'max:' . config('variables.profesores.calle')],
             'urb' => ['required', 'string', 'max:' . config('variables.profesores.urb')],
-            'ciudad' => ['required', 'string','regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.profesores.ciudad')],
+            'ciudad' => ['required', 'string', 'regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.profesores.ciudad')],
             'estado' => ['required', 'string', 'regex: ' . config('variables.regex.alfaespacio'), 'max:' . config('variables.profesores.estado')],
             'codigo' => ['required', 'not_in:0'],
             'telefono' => ['required', 'string', 'regex:/^[0-9]{7}$/'],
