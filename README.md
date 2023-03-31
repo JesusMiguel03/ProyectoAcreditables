@@ -124,3 +124,24 @@ El procedimiento de registrar todos los elementos necesarios para la apertura de
 14. [Obligatorio] (ACREDITABLES / Gestionar / Materias) Ver materia / Estudiante / Asignar nota, una vez se finalice la acreditable se debe colocar la nota del estudiante pues es un requisito para su aprobación. Esta puede ser asignada por el profesor correspondiente o coordinador.
 
 15. Una vez finalizado una fase, se registra un nuevo periodo, al hacerlo todas las materias se 'vaciarán', es decir, todos los estudiantes que se inscribieron en el periodo anterior serán ocultados y solo cargará a los nuevos inscritos del periodo actual. PD: Esta información se mantiene existente pero oculta en el componente, accesible por medio de gráficos y estadísticas.
+
+## Producción
+Para tener el componente disponible en producción se hizo uso de [railway](https://railway.app).
+
+Las variables de entorno fueron configuradas cambiandolas por las de la base de datos (un proyecto mysql en la plataforma). Adicionalmente se tuvo que añadir la variable "NIXPACKS_BUILD_CMD" con los siguientes comandos, para que funcionara:
+
+```
+NIXPACKS_BUILD_CMD
+```
+
+```
+composer install && composer update && php artisan optimize && php artisan migrate:fresh --force --seed && php artisan route:cache && php artisan config:cache && php artisan config:cache && php artisan storage:link
+```
+En estos se hace:
+1. Instalación de dependencias.
+2. Actualización de dependencias.
+3. Borrar caché.
+4. Vaciar la base de datos y cargar los datos.
+5. Borrar caché de rutas.
+6. Borrar caché del repositorio config.
+7. Enlazar la carpeta storage para guardar imagenes y acceder a archivo.
