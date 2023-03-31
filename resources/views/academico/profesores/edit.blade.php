@@ -45,6 +45,21 @@
     <script src="{{ asset('vendor/moment/moment.js') }}"></script>
     <script src="{{ asset('vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 
+    <script>
+        $(function() {
+            $('#fecha_nacimiento').datetimepicker({
+                locale: 'es',
+                format: 'YYYY-MM-DD'
+            });
+        });
+        $(function() {
+            $('#fecha_ingreso').datetimepicker({
+                locale: 'es',
+                format: 'YYYY-MM-DD'
+            });
+        });
+    </script>
+
     {{-- Validaciones --}}
     <script>
         const nombre = document.getElementById('nombre')
